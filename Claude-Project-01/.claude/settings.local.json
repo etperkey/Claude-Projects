@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:lh3.googleusercontent.com)",
+      "Bash(cmd /c \"cd /d C:\\\\Users\\\\ericp\\\\OneDrive\\\\Desktop\\\\Claude-Project-01 && npm install\")",
+      "WebFetch(domain:scholar.google.com)",
+      "WebFetch(domain:www.shinyapps.io)",
+      "WebFetch(domain:ericperkey.shinyapps.io)",
+      "Bash(powershell:*)",
+      "Bash(npm run build:*)",
+      "Bash(del \"C:\\\\Users\\\\ericp\\\\OneDrive\\\\Desktop\\\\Claude-Project-01\\\\extract-chats.ps1\")",
+      "Bash(del \"C:\\\\Users\\\\ericp\\\\OneDrive\\\\Desktop\\\\Claude-Project-01\\\\extracted-science-chats.json\")",
+      "WebFetch(domain:pubmed.ncbi.nlm.nih.gov)",
+      "WebSearch",
+      "Bash(curl:*)",
+      "Bash(npx create-react-app . --template cra-template)"
+    ]
+  }
+}

@@ -1,0 +1,481 @@
+/* Nature Immunology Style Illustrations */
+.project-illustration.nature-style {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: #FAFBFC;
+}
+
+/* Typography for illustrations */
+.illustration-title {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  fill: #2C3E50;
+  letter-spacing: 0.3px;
+}
+
+.cell-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  fill: #34495E;
+}
+
+.cell-label-sub {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  fill: #7F8C8D;
+  font-style: italic;
+}
+
+.cell-label-small {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  fill: #34495E;
+}
+
+.pathway-text {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  fill: #5D6D7E;
+}
+
+.pathway-header {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  fill: #1E8449;
+}
+
+.pathway-header-mut {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  fill: #922B21;
+}
+
+.pathway-node {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 7px;
+  font-weight: 600;
+  fill: white;
+}
+
+.pathway-node-mut {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 7px;
+  font-weight: 600;
+  fill: white;
+}
+
+.pathway-result {
+  font-size: 14px;
+  fill: #27AE60;
+  font-weight: bold;
+}
+
+.pathway-result-fail {
+  font-size: 14px;
+  fill: #C0392B;
+  font-weight: bold;
+}
+
+.zone-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  fill: #2980B9;
+}
+
+.zone-label-mut {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  fill: #C0392B;
+}
+
+.marker-text {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  fill: #922B21;
+}
+
+.marker-text-light {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 500;
+  fill: #A93226;
+}
+
+.bite-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  fill: white;
+}
+
+.molecule-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  fill: #B7950B;
+}
+
+.bacteria-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  fill: #1E8449;
+  font-style: italic;
+}
+
+.protein-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 500;
+  fill: #239B56;
+}
+
+.tfh-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  fill: white;
+}
+
+.signal-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 500;
+  fill: #76448A;
+}
+
+.interaction-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 500;
+  fill: #C0392B;
+  font-style: italic;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+/* Cell pulse - subtle breathing effect */
+@keyframes cellPulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.02); opacity: 1; }
+}
+
+.cell-pulse {
+  animation: cellPulse 3s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.cell-pulse-slow {
+  animation: cellPulse 4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Mutation flash */
+@keyframes mutationFlash {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; filter: drop-shadow(0 0 4px #FFD93D); }
+}
+
+.mutation-flash {
+  animation: mutationFlash 2s ease-in-out infinite;
+}
+
+/* MHC fade effect */
+@keyframes mhcFade {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.15; }
+}
+
+.mhc-fade {
+  animation: mhcFade 3s ease-in-out infinite;
+}
+
+/* Downregulation arrow pulse */
+@keyframes downArrowPulse {
+  0%, 100% { transform: translateX(0); opacity: 1; }
+  50% { transform: translateX(3px); opacity: 0.7; }
+}
+
+.down-arrow-pulse {
+  animation: downArrowPulse 1.5s ease-in-out infinite;
+}
+
+/* Dashed line animation */
+@keyframes dashedFlow {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -24; }
+}
+
+.dashed-animate {
+  animation: dashedFlow 2s linear infinite;
+}
+
+/* BiTE pulse */
+@keyframes bitePulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px #D4A84B); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 6px #D4A84B); }
+}
+
+.bite-pulse {
+  animation: bitePulse 2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Receptor glow */
+@keyframes receptorGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+.receptor-glow {
+  animation: receptorGlow 2s ease-in-out infinite;
+}
+
+/* Exhaustion markers fade in sequence */
+@keyframes markerFade {
+  0%, 20% { opacity: 0.5; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1); }
+  80%, 100% { opacity: 0.5; transform: scale(0.95); }
+}
+
+.marker-fade-1 { animation: markerFade 3s ease-in-out infinite; }
+.marker-fade-2 { animation: markerFade 3s ease-in-out 0.3s infinite; }
+.marker-fade-3 { animation: markerFade 3s ease-in-out 0.6s infinite; }
+.marker-fade-4 { animation: markerFade 3s ease-in-out 0.9s infinite; }
+
+/* Granule release */
+@keyframes granuleRelease {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  50% { transform: translate(-5px, -3px) scale(1.2); opacity: 1; }
+  100% { transform: translate(-10px, -6px) scale(0.8); opacity: 0.4; }
+}
+
+.granule-1 { animation: granuleRelease 2s ease-out infinite; }
+.granule-2 { animation: granuleRelease 2s ease-out 0.4s infinite; }
+.granule-3 { animation: granuleRelease 2s ease-out 0.8s infinite; }
+
+/* GC Zone pulse */
+@keyframes zonePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+.zone-pulse {
+  animation: zonePulse 4s ease-in-out infinite;
+}
+
+/* Escaping cells migration */
+@keyframes escapeMigrate1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(8px, -5px); }
+}
+
+@keyframes escapeMigrate2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10px, 3px); }
+}
+
+@keyframes escapeMigrate3 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(12px, -8px); }
+}
+
+@keyframes escapeMigrate4 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(6px, 5px); }
+}
+
+@keyframes escapeMigrate5 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(8px, -2px); }
+}
+
+.escape-cell-1 { animation: escapeMigrate1 3s ease-in-out infinite; }
+.escape-cell-2 { animation: escapeMigrate2 3.5s ease-in-out infinite; }
+.escape-cell-3 { animation: escapeMigrate3 2.8s ease-in-out infinite; }
+.escape-cell-4 { animation: escapeMigrate4 3.2s ease-in-out infinite; }
+.escape-cell-5 { animation: escapeMigrate5 3s ease-in-out 0.5s infinite; }
+
+/* Migration arrows flow */
+@keyframes arrowFlow {
+  0% { stroke-dashoffset: 20; opacity: 0.3; }
+  50% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: -20; opacity: 0.3; }
+}
+
+.migrate-arrow-1 {
+  stroke-dasharray: 5, 3;
+  animation: arrowFlow 2s ease-in-out infinite;
+}
+.migrate-arrow-2 {
+  stroke-dasharray: 5, 3;
+  animation: arrowFlow 2s ease-in-out 0.3s infinite;
+}
+.migrate-arrow-3 {
+  stroke-dasharray: 5, 3;
+  animation: arrowFlow 2s ease-in-out 0.6s infinite;
+}
+
+/* Pathway arrow flow */
+@keyframes pathwayArrowFlow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.arrow-flow { animation: pathwayArrowFlow 1.5s ease-in-out infinite; }
+.arrow-flow-2 { animation: pathwayArrowFlow 1.5s ease-in-out 0.2s infinite; }
+.arrow-flow-3 { animation: pathwayArrowFlow 1.5s ease-in-out 0.4s infinite; }
+
+/* Bacteria float */
+@keyframes bacteriaFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(2px, -3px) rotate(2deg); }
+  75% { transform: translate(-2px, 2px) rotate(-2deg); }
+}
+
+.bacteria-float {
+  animation: bacteriaFloat 4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* LP Cell morph (subtle shape change) */
+@keyframes cellMorph {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.01) rotate(0.5deg); }
+}
+
+.cell-morph {
+  animation: cellMorph 5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* IgD Receptor pulse */
+@keyframes receptorPulse {
+  0%, 100% { stroke-width: 4; }
+  50% { stroke-width: 5; filter: drop-shadow(0 0 3px #C4A43B); }
+}
+
+.receptor-pulse {
+  animation: receptorPulse 2s ease-in-out infinite;
+}
+
+/* Binding pulse */
+@keyframes bindingPulse {
+  0%, 100% { stroke-dashoffset: 0; opacity: 0.6; }
+  50% { stroke-dashoffset: 6; opacity: 1; }
+}
+
+.binding-pulse {
+  animation: bindingPulse 1s linear infinite;
+}
+
+/* Tfh cell pulses - staggered */
+@keyframes tfhPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.tfh-pulse-1 { animation: tfhPulse 3s ease-in-out infinite; transform-origin: center; }
+.tfh-pulse-2 { animation: tfhPulse 3s ease-in-out 0.5s infinite; transform-origin: center; }
+.tfh-pulse-3 { animation: tfhPulse 3s ease-in-out 1s infinite; transform-origin: center; }
+
+/* Signal flow */
+@keyframes signalFlow {
+  0% { stroke-dashoffset: 20; opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0.3; }
+}
+
+.signal-flow-1 {
+  stroke-dasharray: 4, 2;
+  animation: signalFlow 1.5s ease-in-out infinite;
+}
+.signal-flow-2 {
+  stroke-dasharray: 4, 2;
+  animation: signalFlow 1.5s ease-in-out 0.3s infinite;
+}
+.signal-flow-3 {
+  stroke-dasharray: 4, 2;
+  animation: signalFlow 1.5s ease-in-out 0.6s infinite;
+}
+
+/* Binding site pulse */
+@keyframes bindingSitePulse {
+  0%, 100% { r: 5; opacity: 0.8; }
+  50% { r: 7; opacity: 1; }
+}
+
+.binding-site {
+  animation: bindingSitePulse 1.5s ease-in-out infinite;
+}
+
+/* Illustration container enhancements */
+.illustration-container {
+  background: linear-gradient(135deg, #FAFBFC 0%, #F5F7FA 100%);
+  border: 1px solid #E8ECF0;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.illustration-container:hover .project-illustration {
+  filter: none;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .cell-pulse,
+  .cell-pulse-slow,
+  .mutation-flash,
+  .mhc-fade,
+  .down-arrow-pulse,
+  .dashed-animate,
+  .bite-pulse,
+  .receptor-glow,
+  .marker-fade-1,
+  .marker-fade-2,
+  .marker-fade-3,
+  .marker-fade-4,
+  .granule-1,
+  .granule-2,
+  .granule-3,
+  .zone-pulse,
+  .escape-cell-1,
+  .escape-cell-2,
+  .escape-cell-3,
+  .escape-cell-4,
+  .escape-cell-5,
+  .migrate-arrow-1,
+  .migrate-arrow-2,
+  .migrate-arrow-3,
+  .arrow-flow,
+  .arrow-flow-2,
+  .arrow-flow-3,
+  .bacteria-float,
+  .cell-morph,
+  .receptor-pulse,
+  .binding-pulse,
+  .tfh-pulse-1,
+  .tfh-pulse-2,
+  .tfh-pulse-3,
+  .signal-flow-1,
+  .signal-flow-2,
+  .signal-flow-3,
+  .binding-site {
+    animation: none;
+  }
+}

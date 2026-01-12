@@ -1,0 +1,920 @@
+/* Theme Switcher Button */
+.theme-switcher {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle-btn.modern {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+}
+
+.theme-toggle-btn.geocities {
+  background: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
+  color: #000;
+  font-family: 'Comic Sans MS', cursive;
+  animation: geocitiesButtonPulse 0.5s ease-in-out infinite;
+}
+
+.theme-toggle-btn.myspace {
+  background: linear-gradient(135deg, #000 0%, #330033 100%);
+  color: #ff69b4;
+  font-family: 'Trebuchet MS', sans-serif;
+  border: 2px solid #ff69b4;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.05);
+}
+
+.theme-icon {
+  font-size: 18px;
+}
+
+@keyframes geocitiesButtonPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* =============================================
+   GEOCITIES THEME - 90s Style
+   ============================================= */
+
+body.geocities-theme {
+  background-color: #000080 !important;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0L100 50L50 100L0 50Z' fill='%23000066'/%3E%3C/svg%3E") !important;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ctext y='24' font-size='24'%3E👆%3C/text%3E%3C/svg%3E"), auto;
+}
+
+.geocities-theme * {
+  font-family: 'Comic Sans MS', 'Chalkboard', cursive !important;
+}
+
+.geocities-theme .header {
+  background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00, #ff00ff) !important;
+  background-size: 400% 400% !important;
+  animation: geocitiesRainbow 3s ease infinite !important;
+  border-bottom: 5px dashed #ff0000 !important;
+}
+
+.geocities-theme .logo {
+  color: #ffff00 !important;
+  text-shadow: 2px 2px #000 !important;
+}
+
+.geocities-theme .nav-list a {
+  color: #00ff00 !important;
+  text-decoration: underline !important;
+  background-color: #000 !important;
+  padding: 5px 10px !important;
+}
+
+.geocities-theme .nav-list a:hover {
+  color: #ff00ff !important;
+  background-color: #ffff00 !important;
+}
+
+.geocities-theme .hero {
+  background: linear-gradient(180deg, #000080 0%, #800080 50%, #000080 100%) !important;
+  border: 10px ridge #c0c0c0 !important;
+}
+
+.geocities-theme .hero-content::before {
+  content: '🚧 UNDER CONSTRUCTION 🚧' !important;
+  display: block !important;
+  background: #ffff00 !important;
+  color: #ff0000 !important;
+  padding: 10px !important;
+  font-size: 24px !important;
+  animation: geocitiesMarquee 5s linear infinite !important;
+  margin-bottom: 20px !important;
+}
+
+.geocities-theme .hero-profile-image {
+  border: 5px double #ff00ff !important;
+  animation: geocitiesSpin 5s linear infinite !important;
+}
+
+.geocities-theme .hero-name {
+  background: none !important;
+  -webkit-text-fill-color: #00ffff !important;
+  color: #00ffff !important;
+  text-shadow: 2px 2px #000, -1px -1px #000 !important;
+}
+
+.geocities-theme .hero-title {
+  color: #fff !important;
+  background: #990000 !important;
+  padding: 10px !important;
+  border: 3px dashed #ffff00 !important;
+  text-shadow: 1px 1px #000 !important;
+}
+
+.geocities-theme .hero-description {
+  color: #00ff00 !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  padding: 15px !important;
+  border: 2px solid #00ff00 !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+}
+
+.geocities-theme .btn-primary {
+  background: #ff0000 !important;
+  color: #ffff00 !important;
+  border: 3px outset #c0c0c0 !important;
+  text-transform: uppercase !important;
+  animation: geocitiesPulse 0.3s ease-in-out infinite !important;
+}
+
+.geocities-theme .btn-secondary {
+  background: #00ff00 !important;
+  color: #000 !important;
+  border: 3px outset #c0c0c0 !important;
+}
+
+.geocities-theme .section-title {
+  color: #ffff00 !important;
+  text-shadow: 2px 2px #000 !important;
+  background: linear-gradient(90deg, transparent, rgba(0,0,128,0.8), transparent) !important;
+  padding: 10px !important;
+}
+
+.geocities-theme .section-title::after {
+  background: linear-gradient(90deg, #ff0000, #00ff00, #0000ff) !important;
+  height: 8px !important;
+}
+
+.geocities-theme .about,
+.geocities-theme .publications,
+.geocities-theme .projects,
+.geocities-theme .research-tools,
+.geocities-theme .contact {
+  background: rgba(0, 0, 100, 0.95) !important;
+  border: 5px ridge #c0c0c0 !important;
+  margin: 20px !important;
+}
+
+.geocities-theme .about-text p {
+  color: #fff !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  padding: 10px !important;
+  margin-bottom: 10px !important;
+  border-radius: 3px !important;
+  line-height: 1.6 !important;
+}
+
+.geocities-theme .skill-item {
+  color: #000 !important;
+  background: #00ff00 !important;
+  font-weight: bold !important;
+}
+
+.geocities-theme .research-card {
+  background: rgba(0, 0, 0, 0.85) !important;
+  border: 3px double #00ffff !important;
+  padding: 15px !important;
+}
+
+.geocities-theme .research-card-title {
+  color: #ffff00 !important;
+  text-shadow: 1px 1px #000 !important;
+}
+
+.geocities-theme .research-card-subtitle {
+  color: #ff69b4 !important;
+}
+
+.geocities-theme .hypothesis-text {
+  color: #00ff00 !important;
+  border-left-color: #ff00ff !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  padding: 10px !important;
+}
+
+.geocities-theme .mechanism-item {
+  background: rgba(0, 0, 0, 0.6) !important;
+  padding: 8px !important;
+  margin: 5px 0 !important;
+}
+
+.geocities-theme .mechanism-item h5 {
+  color: #ffff00 !important;
+}
+
+.geocities-theme .mechanism-item p {
+  color: #ccc !important;
+}
+
+.geocities-theme .publication-card {
+  background: rgba(0, 0, 0, 0.85) !important;
+  border: 2px solid #00ff00 !important;
+  padding: 12px !important;
+}
+
+.geocities-theme .publication-title a {
+  color: #00ffff !important;
+  text-shadow: 1px 1px #000 !important;
+}
+
+.geocities-theme .publication-authors {
+  color: #ccc !important;
+}
+
+.geocities-theme .publication-journal {
+  color: #ff69b4 !important;
+}
+
+.geocities-theme .publication-badge {
+  background: #ff00ff !important;
+  color: #fff !important;
+  text-shadow: none !important;
+}
+
+.geocities-theme .tool-card {
+  background: rgba(0, 0, 0, 0.85) !important;
+  border: 3px ridge #ff00ff !important;
+  padding: 15px !important;
+}
+
+.geocities-theme .tool-name {
+  color: #ffff00 !important;
+  text-shadow: 1px 1px #000 !important;
+}
+
+.geocities-theme .tool-description {
+  color: #ccc !important;
+  line-height: 1.5 !important;
+}
+
+.geocities-theme .tool-tags span {
+  background: #00ff00 !important;
+  color: #000 !important;
+  font-weight: bold !important;
+}
+
+.geocities-theme .contact-intro {
+  color: #fff !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  padding: 15px !important;
+  border-radius: 5px !important;
+}
+
+.geocities-theme .contact-item h3 {
+  color: #ffff00 !important;
+}
+
+.geocities-theme .contact-item a,
+.geocities-theme .contact-item p {
+  color: #00ffff !important;
+}
+
+.geocities-theme .form-group label {
+  color: #ffff00 !important;
+}
+
+.geocities-theme .form-group input,
+.geocities-theme .form-group textarea {
+  background: #000 !important;
+  color: #00ff00 !important;
+  border: 2px inset #c0c0c0 !important;
+}
+
+.geocities-theme .footer {
+  background: #000 !important;
+  border-top: 10px ridge #c0c0c0 !important;
+}
+
+.geocities-theme .footer::before {
+  content: '👁️ You are visitor #1337 | Best viewed in Netscape Navigator 4.0 | 800x600 resolution 👁️' !important;
+  display: block !important;
+  color: #00ff00 !important;
+  padding: 10px !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.geocities-theme .footer-text {
+  color: #00ffff !important;
+}
+
+/* Geocities Animations */
+@keyframes geocitiesRainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes geocitiesBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes geocitiesMarquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes geocitiesSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes geocitiesTextGlow {
+  0%, 100% { text-shadow: 3px 3px #ff00ff, -3px -3px #ffff00, 0 0 10px #00ffff; }
+  50% { text-shadow: 3px 3px #00ffff, -3px -3px #ff00ff, 0 0 20px #ffff00; }
+}
+
+@keyframes geocitiesPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* =============================================
+   MYSPACE THEME - 2000s Style
+   ============================================= */
+
+body.myspace-theme {
+  background-color: #1a1a2e !important;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(255, 105, 180, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff69b4' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") !important;
+}
+
+.myspace-theme * {
+  font-family: 'Trebuchet MS', 'Lucida Sans', Arial, sans-serif !important;
+}
+
+.myspace-theme .header {
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%) !important;
+  border-bottom: 2px solid #ff69b4 !important;
+}
+
+.myspace-theme .logo {
+  color: #ff69b4 !important;
+  text-shadow: 0 0 10px #ff69b4 !important;
+}
+
+.myspace-theme .nav-list a {
+  color: #fff !important;
+  text-transform: lowercase !important;
+}
+
+.myspace-theme .nav-list a:hover {
+  color: #ff69b4 !important;
+  text-shadow: 0 0 10px #ff69b4 !important;
+}
+
+.myspace-theme .hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f1a 100%) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.myspace-theme .hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ctext y='15' font-size='12' opacity='0.3'%3E✨%3C/text%3E%3C/svg%3E");
+  animation: myspaceSparkle 2s linear infinite;
+  pointer-events: none;
+}
+
+.myspace-theme .hero-content::before {
+  content: '~ welcome to my page ~ feel free to look around ~';
+  display: block;
+  background: rgba(0, 0, 0, 0.6);
+  color: #b19cd9;
+  padding: 8px 15px;
+  font-size: 12px;
+  border: 1px solid rgba(255, 105, 180, 0.3);
+  border-radius: 3px;
+  margin-bottom: 20px;
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+.myspace-theme .hero-profile-image {
+  border: 3px solid #ff69b4 !important;
+  box-shadow: 0 0 20px rgba(255, 105, 180, 0.5) !important;
+}
+
+.myspace-theme .hero-greeting {
+  color: #b19cd9 !important;
+  text-transform: lowercase !important;
+}
+
+.myspace-theme .hero-name {
+  background: linear-gradient(135deg, #ff69b4, #b19cd9, #ff69b4) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: myspaceGradient 3s linear infinite !important;
+}
+
+.myspace-theme .hero-title {
+  color: #b19cd9 !important;
+  font-style: italic !important;
+  letter-spacing: 2px !important;
+}
+
+.myspace-theme .hero-description {
+  color: #ccc !important;
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+}
+
+.myspace-theme .btn-primary {
+  background: transparent !important;
+  border: 2px solid #ff69b4 !important;
+  color: #ff69b4 !important;
+  text-transform: lowercase !important;
+  letter-spacing: 1px !important;
+}
+
+.myspace-theme .btn-primary:hover {
+  background: #ff69b4 !important;
+  color: #000 !important;
+  box-shadow: 0 0 20px rgba(255, 105, 180, 0.5) !important;
+}
+
+.myspace-theme .btn-secondary {
+  background: transparent !important;
+  border: 2px solid #b19cd9 !important;
+  color: #b19cd9 !important;
+}
+
+.myspace-theme .section-title {
+  color: #ff69b4 !important;
+  text-transform: lowercase !important;
+  letter-spacing: 3px !important;
+  font-weight: 300 !important;
+}
+
+.myspace-theme .section-title::after {
+  background: linear-gradient(90deg, transparent, #ff69b4, transparent) !important;
+}
+
+.myspace-theme .about,
+.myspace-theme .research-tools,
+.myspace-theme .contact {
+  background: rgba(26, 26, 46, 0.9) !important;
+}
+
+.myspace-theme .publications,
+.myspace-theme .projects {
+  background: rgba(22, 33, 62, 0.9) !important;
+}
+
+.myspace-theme .about-text p {
+  color: #ccc !important;
+}
+
+.myspace-theme .skill-item {
+  background: rgba(255, 105, 180, 0.1) !important;
+  border-left: 3px solid #ff69b4 !important;
+  color: #fff !important;
+}
+
+.myspace-theme .research-card {
+  background: rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 105, 180, 0.3) !important;
+  box-shadow: 0 0 15px rgba(255, 105, 180, 0.1) !important;
+}
+
+.myspace-theme .research-card:hover {
+  border-color: #ff69b4 !important;
+  box-shadow: 0 0 25px rgba(255, 105, 180, 0.3) !important;
+}
+
+.myspace-theme .research-card-title {
+  color: #ff69b4 !important;
+}
+
+.myspace-theme .research-card-subtitle {
+  color: #b19cd9 !important;
+  font-style: italic !important;
+}
+
+.myspace-theme .hypothesis-text {
+  color: #ddd !important;
+  border-left-color: #b19cd9 !important;
+}
+
+.myspace-theme .mechanism-item {
+  background: rgba(177, 156, 217, 0.1) !important;
+}
+
+.myspace-theme .mechanism-item h5 {
+  color: #ff69b4 !important;
+}
+
+.myspace-theme .mechanism-item p {
+  color: #ccc !important;
+}
+
+/* MySpace Top 8 Publications Style */
+.myspace-theme .publications .section-title::before {
+  content: "~ eric's top 8 papers ~";
+  display: block;
+  font-size: 14px;
+  color: #b19cd9;
+  letter-spacing: 2px;
+  margin-bottom: 5px;
+}
+
+.myspace-theme .publications .section-title {
+  font-size: 24px !important;
+}
+
+.myspace-theme .publications .section-title::after {
+  display: none !important;
+}
+
+.myspace-theme .publications-intro {
+  display: none !important;
+}
+
+.myspace-theme .publication-metrics {
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 2px solid #ff69b4 !important;
+  border-radius: 8px !important;
+  padding: 15px !important;
+  margin-bottom: 30px !important;
+  display: flex !important;
+  justify-content: center !important;
+  gap: 40px !important;
+}
+
+.myspace-theme .publication-metrics .metric {
+  text-align: center !important;
+}
+
+.myspace-theme .publication-metrics .metric-value {
+  color: #ff69b4 !important;
+  font-size: 28px !important;
+  font-weight: bold !important;
+  text-shadow: 0 0 10px rgba(255, 105, 180, 0.5) !important;
+}
+
+.myspace-theme .publication-metrics .metric-label {
+  color: #b19cd9 !important;
+  font-size: 11px !important;
+  text-transform: lowercase !important;
+  letter-spacing: 1px !important;
+}
+
+.myspace-theme .publications-list {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 15px !important;
+  max-width: 900px !important;
+  margin: 0 auto !important;
+}
+
+.myspace-theme .publication-card {
+  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%) !important;
+  border: 3px solid #ff69b4 !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  text-align: center !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+  box-shadow:
+    0 0 10px rgba(255, 105, 180, 0.3),
+    inset 0 0 20px rgba(255, 105, 180, 0.05) !important;
+}
+
+.myspace-theme .publication-card:hover {
+  transform: scale(1.05) !important;
+  border-color: #b19cd9 !important;
+  box-shadow:
+    0 0 25px rgba(255, 105, 180, 0.5),
+    inset 0 0 30px rgba(177, 156, 217, 0.1) !important;
+}
+
+.myspace-theme .publication-card::before {
+  content: counter(pub-counter);
+  counter-increment: pub-counter;
+  position: absolute !important;
+  top: -8px !important;
+  left: -8px !important;
+  background: linear-gradient(135deg, #ff69b4, #b19cd9) !important;
+  color: #000 !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: bold !important;
+  font-size: 12px !important;
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.5) !important;
+  z-index: 2 !important;
+}
+
+.myspace-theme .publications-list {
+  counter-reset: pub-counter;
+}
+
+.myspace-theme .publication-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+/* Create a "profile picture" effect using journal graphics */
+.myspace-theme .publication-card .publication-journal::before {
+  content: '';
+  display: block !important;
+  width: 60px !important;
+  height: 60px !important;
+  background: linear-gradient(135deg, #ff69b4 0%, #b19cd9 50%, #ff69b4 100%) !important;
+  background-size: 200% auto !important;
+  animation: myspaceGradient 3s linear infinite !important;
+  border-radius: 50% !important;
+  margin: 0 auto 8px auto !important;
+  border: 2px solid #fff !important;
+  box-shadow: 0 0 15px rgba(255, 105, 180, 0.4) !important;
+}
+
+/* Journal-specific graphics for Top 8 */
+/* 1. J Exp Med - Microscope */
+.myspace-theme .publications-list .publication-card:nth-child(1) .publication-journal::before {
+  background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%) !important;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='30' r='28' fill='%232c3e50'/%3E%3Ctext x='30' y='38' text-anchor='middle' font-size='28'%3E🔬%3C/text%3E%3C/svg%3E") !important;
+}
+
+/* 2. Sci Transl Med - DNA */
+.myspace-theme .publications-list .publication-card:nth-child(2) .publication-journal::before {
+  background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%) !important;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='30' r='28' fill='%238e44ad'/%3E%3Ctext x='30' y='38' text-anchor='middle' font-size='28'%3E🧬%3C/text%3E%3C/svg%3E") !important;
+}
+
+/* 3. Cell - Cell/Petri dish */
+.myspace-theme .publications-list .publication-card:nth-child(3) .publication-journal::before {
+  background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='30' r='28' fill='%2327ae60'/%3E%3Ctext x='30' y='38' text-anchor='middle' font-size='28'%3E🧫%3C/text%3E%3C/svg%3E") !important;
+}
+
+/* 4. J Immunol - Antibody/Shield */
+.myspace-theme .publications-list .publication-card:nth-child(4) .publication-journal::before {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='30' r='28' fill='%23e74c3c'/%3E%3Ctext x='30' y='38' text-anchor='middle' font-size='28'%3E🛡️%3C/text%3E%3C/svg%3E") !important;
+}
+
+/* 5. JCI - Medical/Stethoscope */
+.myspace-theme .publications-list .publication-card:nth-child(5) .publication-journal::before {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='30' r='28' fill='%23f39c12'/%3E%3Ctext x='30' y='38' text-anchor='middle' font-size='28'%3E🩺%3C/text%3E%3C/svg%3E") !important;
+}
+
+/* 6. Annual Review of Pathology - Book/Review */
+.myspace-theme .publications-list .publication-card:nth-child(6) .publication-journal::before {
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%) !important;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='30' r='28' fill='%239b59b6'/%3E%3Ctext x='30' y='38' text-anchor='middle' font-size='28'%3E📚%3C/text%3E%3C/svg%3E") !important;
+}
+
+/* 7. J Immunol - Test tube */
+.myspace-theme .publications-list .publication-card:nth-child(7) .publication-journal::before {
+  background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%) !important;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='30' r='28' fill='%231abc9c'/%3E%3Ctext x='30' y='38' text-anchor='middle' font-size='28'%3E🧪%3C/text%3E%3C/svg%3E") !important;
+}
+
+/* 8. J Immunol - Syringe/injection */
+.myspace-theme .publications-list .publication-card:nth-child(8) .publication-journal::before {
+  background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%) !important;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='30' r='28' fill='%23e91e63'/%3E%3Ctext x='30' y='38' text-anchor='middle' font-size='28'%3E💉%3C/text%3E%3C/svg%3E") !important;
+}
+
+.myspace-theme .publication-header {
+  order: 2 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  width: 100% !important;
+}
+
+.myspace-theme .publication-badge {
+  font-size: 8px !important;
+  padding: 2px 6px !important;
+  background: rgba(255, 105, 180, 0.2) !important;
+  border: 1px solid #ff69b4 !important;
+  color: #ff69b4 !important;
+  border-radius: 10px !important;
+}
+
+.myspace-theme .publication-year {
+  font-size: 10px !important;
+  color: #666 !important;
+}
+
+.myspace-theme .publication-title {
+  order: 3 !important;
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+  max-height: 40px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.myspace-theme .publication-title a {
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+.myspace-theme .publication-title a:hover {
+  color: #ff69b4 !important;
+  text-shadow: 0 0 5px rgba(255, 105, 180, 0.5) !important;
+}
+
+.myspace-theme .publication-authors {
+  display: none !important;
+}
+
+.myspace-theme .publication-journal {
+  order: 1 !important;
+  font-size: 9px !important;
+  color: #b19cd9 !important;
+  font-style: italic !important;
+  margin-bottom: 5px !important;
+}
+
+.myspace-theme .publications-footer {
+  margin-top: 30px !important;
+}
+
+.myspace-theme .publications-footer::before {
+  content: '~ click a paper 2 read more ~ add me on pubmed!! ~';
+  display: block !important;
+  font-size: 11px !important;
+  color: #b19cd9 !important;
+  margin-bottom: 15px !important;
+  font-style: italic !important;
+}
+
+/* Responsive Top 8 grid */
+@media (max-width: 900px) {
+  .myspace-theme .publications-list {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .myspace-theme .publications-list {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .myspace-theme .publication-card .publication-journal::before {
+    width: 50px !important;
+    height: 50px !important;
+  }
+}
+
+.myspace-theme .tool-card {
+  background: rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 105, 180, 0.3) !important;
+}
+
+.myspace-theme .tool-card:hover {
+  border-color: #ff69b4 !important;
+  box-shadow: 0 0 20px rgba(255, 105, 180, 0.2) !important;
+}
+
+.myspace-theme .tool-name {
+  color: #ff69b4 !important;
+}
+
+.myspace-theme .tool-description {
+  color: #ccc !important;
+}
+
+.myspace-theme .contact-intro {
+  color: #b19cd9 !important;
+}
+
+.myspace-theme .contact-item h3 {
+  color: #ff69b4 !important;
+}
+
+.myspace-theme .contact-item a,
+.myspace-theme .contact-item p {
+  color: #ccc !important;
+}
+
+.myspace-theme .form-group label {
+  color: #b19cd9 !important;
+}
+
+.myspace-theme .form-group input,
+.myspace-theme .form-group textarea {
+  background: rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 105, 180, 0.3) !important;
+  color: #fff !important;
+}
+
+.myspace-theme .form-group input:focus,
+.myspace-theme .form-group textarea:focus {
+  border-color: #ff69b4 !important;
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.3) !important;
+}
+
+.myspace-theme .footer {
+  background: #0f0f1a !important;
+  border-top: 1px solid rgba(255, 105, 180, 0.3) !important;
+}
+
+.myspace-theme .footer::before {
+  content: '✨ xoxo thanks 4 visiting my page!! leave me a comment~ ✨';
+  display: block;
+  color: #ff69b4;
+  font-size: 12px;
+  padding: 10px;
+  text-align: center;
+}
+
+.myspace-theme .footer-text {
+  color: #666 !important;
+}
+
+.myspace-theme .social-link {
+  color: #b19cd9 !important;
+}
+
+.myspace-theme .social-link:hover {
+  color: #ff69b4 !important;
+  text-shadow: 0 0 10px #ff69b4 !important;
+}
+
+/* MySpace specific elements */
+.myspace-theme .project-tech li {
+  background: rgba(255, 105, 180, 0.1) !important;
+  border: 1px solid rgba(255, 105, 180, 0.3) !important;
+  color: #ff69b4 !important;
+}
+
+.myspace-theme .expand-btn {
+  border-color: #ff69b4 !important;
+  color: #ff69b4 !important;
+}
+
+.myspace-theme .expand-btn:hover {
+  background: #ff69b4 !important;
+  color: #000 !important;
+}
+
+/* MySpace Animations */
+@keyframes myspaceSparkle {
+  0% { background-position: 0 0; }
+  100% { background-position: 100px 100px; }
+}
+
+@keyframes myspaceMarquee {
+  0% { transform: translateX(50%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(-50%); opacity: 0; }
+}
+
+@keyframes myspaceGradient {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .theme-toggle-btn {
+    padding: 10px 15px;
+    font-size: 12px;
+  }
+
+  .theme-label {
+    display: none;
+  }
+
+  .theme-icon {
+    font-size: 20px;
+  }
+}
