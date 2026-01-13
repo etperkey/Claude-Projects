@@ -4,12 +4,14 @@ import { getProjectById } from '../data/projects';
 import KanbanBoard from './KanbanBoard';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
+const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 
 function ProjectPage() {
   const { projectId } = useParams();
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState({});
   const [isCustomProject, setIsCustomProject] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     // First try to get from built-in projects
@@ -17,8 +19,25 @@ function ProjectPage() {
 
     if (foundProject) {
       setProject(foundProject);
-      setTasks(foundProject.tasks);
       setIsCustomProject(false);
+
+      // Check localStorage for saved tasks for this project
+      const savedTasks = localStorage.getItem(TASK_STORAGE_KEY);
+      if (savedTasks) {
+        try {
+          const allSavedTasks = JSON.parse(savedTasks);
+          if (allSavedTasks[projectId]) {
+            setTasks(allSavedTasks[projectId]);
+          } else {
+            setTasks(foundProject.tasks);
+          }
+        } catch (e) {
+          setTasks(foundProject.tasks);
+        }
+      } else {
+        setTasks(foundProject.tasks);
+      }
+      setIsLoaded(true);
     } else {
       // Try to get from custom projects in localStorage
       const saved = localStorage.getItem(CUSTOM_PROJECTS_KEY);
@@ -30,6 +49,7 @@ function ProjectPage() {
             setProject(foundProject);
             setTasks(foundProject.tasks);
             setIsCustomProject(true);
+            setIsLoaded(true);
           }
         } catch (e) {
           console.error('Failed to load custom projects:', e);
@@ -38,9 +58,12 @@ function ProjectPage() {
     }
   }, [projectId]);
 
-  // Save tasks to localStorage for custom projects
+  // Save tasks to localStorage whenever they change
   useEffect(() => {
-    if (isCustomProject && project) {
+    if (!isLoaded || !project) return;
+
+    if (isCustomProject) {
+      // Save to custom projects storage
       const saved = localStorage.getItem(CUSTOM_PROJECTS_KEY);
       if (saved) {
         try {
@@ -53,8 +76,21 @@ function ProjectPage() {
           console.error('Failed to save tasks:', e);
         }
       }
+    } else {
+      // Save to general task storage for built-in projects
+      const savedTasks = localStorage.getItem(TASK_STORAGE_KEY);
+      let allSavedTasks = {};
+      if (savedTasks) {
+        try {
+          allSavedTasks = JSON.parse(savedTasks);
+        } catch (e) {
+          allSavedTasks = {};
+        }
+      }
+      allSavedTasks[projectId] = tasks;
+      localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(allSavedTasks));
     }
-  }, [tasks, isCustomProject, project, projectId]);
+  }, [tasks, isCustomProject, project, projectId, isLoaded]);
 
   if (!project) {
     return (

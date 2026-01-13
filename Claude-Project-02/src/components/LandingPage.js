@@ -50,21 +50,34 @@ const getTaskStats = (tasks) => {
   return { total, done, inProgress, percentage: total > 0 ? Math.round((done / total) * 100) : 0 };
 };
 
-// localStorage key
+// localStorage keys
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
+const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 
 function LandingPage() {
   const [customProjects, setCustomProjects] = useState([]);
+  const [savedTasks, setSavedTasks] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Load custom projects from localStorage
+  // Load custom projects and saved tasks from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem(CUSTOM_PROJECTS_KEY);
-    if (saved) {
+    // Load custom projects
+    const savedCustom = localStorage.getItem(CUSTOM_PROJECTS_KEY);
+    if (savedCustom) {
       try {
-        setCustomProjects(JSON.parse(saved));
+        setCustomProjects(JSON.parse(savedCustom));
       } catch (e) {
         console.error('Failed to load custom projects:', e);
+      }
+    }
+
+    // Load saved task states for built-in projects
+    const savedTaskData = localStorage.getItem(TASK_STORAGE_KEY);
+    if (savedTaskData) {
+      try {
+        setSavedTasks(JSON.parse(savedTaskData));
+      } catch (e) {
+        console.error('Failed to load saved tasks:', e);
       }
     }
   }, []);
@@ -87,6 +100,14 @@ function LandingPage() {
       const updated = customProjects.filter(p => p.id !== projectId);
       saveCustomProjects(updated);
     }
+  };
+
+  // Get tasks for a project (use saved tasks if available)
+  const getProjectTasks = (project) => {
+    if (project.isCustom) {
+      return project.tasks;
+    }
+    return savedTasks[project.id] || project.tasks;
   };
 
   const allProjects = [...researchProjects, ...customProjects];
@@ -116,7 +137,8 @@ function LandingPage() {
 
           <div className="project-grid">
             {allProjects.map((project) => {
-              const stats = getTaskStats(project.tasks);
+              const projectTasks = getProjectTasks(project);
+              const stats = getTaskStats(projectTasks);
               return (
                 <Link
                   to={`/project/${project.id}`}
@@ -191,19 +213,19 @@ function LandingPage() {
             </div>
             <div className="stat-card">
               <span className="stat-value">
-                {allProjects.reduce((acc, p) => acc + Object.values(p.tasks).flat().length, 0)}
+                {allProjects.reduce((acc, p) => acc + Object.values(getProjectTasks(p)).flat().length, 0)}
               </span>
               <span className="stat-label">Total Tasks</span>
             </div>
             <div className="stat-card">
               <span className="stat-value">
-                {allProjects.reduce((acc, p) => acc + (p.tasks.inProgress?.length || 0), 0)}
+                {allProjects.reduce((acc, p) => acc + (getProjectTasks(p).inProgress?.length || 0), 0)}
               </span>
               <span className="stat-label">In Progress</span>
             </div>
             <div className="stat-card">
               <span className="stat-value">
-                {allProjects.reduce((acc, p) => acc + (p.tasks.done?.length || 0), 0)}
+                {allProjects.reduce((acc, p) => acc + (getProjectTasks(p).done?.length || 0), 0)}
               </span>
               <span className="stat-label">Completed</span>
             </div>
