@@ -4559,3 +4559,65 @@ body {
     flex-wrap: wrap;
   }
 }
+
+/* ==================== Navbar Google Auth Button ==================== */
+.google-auth-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.google-auth-btn .google-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #4285f4;
+  color: white;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.google-auth-btn.signed-in .google-icon {
+  background: #27ae60;
+}
+
+.google-auth-btn .google-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+/* Google Status Indicator (for components) */
+.google-status-indicator {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+}
+
+.google-status-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.google-status-text.connected {
+  color: #27ae60;
+}
+
+/* Notebook Google Status */
+.notebook-google-status .google-status-text {
+  font-size: 0.85rem;
+}
+
+/* Calendar Sign-in Hint */
+.gcal-signin-hint {
+  margin: 20px 0;
+  padding: 12px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  text-align: center;
+  color: var(--text-secondary);
+}

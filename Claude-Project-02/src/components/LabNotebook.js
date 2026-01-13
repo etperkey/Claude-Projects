@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useGoogleAuth } from '../context/GoogleAuthContext';
 import { researchProjects } from '../data/projects';
 
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
-const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
-const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY || '';
 
 function LabNotebook({ isOpen, onClose }) {
+  const { isSignedIn, createDoc, syncToDoc } = useGoogleAuth();
+
   const [entries, setEntries] = useState([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [newEntry, setNewEntry] = useState({
@@ -18,10 +19,6 @@ function LabNotebook({ isOpen, onClose }) {
   const [filterProject, setFilterProject] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEntry, setSelectedEntry] = useState(null);
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [gapiLoaded, setGapiLoaded] = useState(false);
-  const [gisLoaded, setGisLoaded] = useState(false);
-  const [tokenClient, setTokenClient] = useState(null);
   const [syncStatus, setSyncStatus] = useState({ message: '', type: '' });
 
   // Load custom projects
@@ -52,106 +49,6 @@ function LabNotebook({ isOpen, onClose }) {
   const saveEntries = (newEntries) => {
     localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(newEntries));
     setEntries(newEntries);
-  };
-
-  // Load Google API (gapi) for Docs/Drive
-  useEffect(() => {
-    if (!GOOGLE_CLIENT_ID || !isOpen) return;
-
-    const loadGapi = () => {
-      if (window.gapi && window.gapi.client) {
-        initGapi();
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = 'https://apis.google.com/js/api.js';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => {
-        window.gapi.load('client', initGapi);
-      };
-      document.body.appendChild(script);
-    };
-
-    const initGapi = async () => {
-      try {
-        await window.gapi.client.init({
-          apiKey: GOOGLE_API_KEY,
-          discoveryDocs: [
-            'https://docs.googleapis.com/$discovery/rest?version=v1',
-            'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'
-          ]
-        });
-        setGapiLoaded(true);
-      } catch (error) {
-        console.error('Error initializing gapi:', error);
-      }
-    };
-
-    loadGapi();
-  }, [isOpen]);
-
-  // Load Google Identity Services (GIS) for auth
-  useEffect(() => {
-    if (!GOOGLE_CLIENT_ID || !isOpen || gisLoaded) return;
-
-    const loadGis = () => {
-      if (window.google && window.google.accounts) {
-        initGis();
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      script.onload = initGis;
-      document.body.appendChild(script);
-    };
-
-    const initGis = () => {
-      try {
-        const client = window.google.accounts.oauth2.initTokenClient({
-          client_id: GOOGLE_CLIENT_ID,
-          scope: 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file',
-          callback: (tokenResponse) => {
-            if (tokenResponse && tokenResponse.access_token) {
-              setIsSignedIn(true);
-              setSyncStatus({ message: 'Signed in to Google!', type: 'success' });
-              setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
-            }
-          },
-          error_callback: (error) => {
-            console.error('GIS error:', error);
-            setSyncStatus({ message: 'Sign-in failed. Please try again.', type: 'error' });
-          }
-        });
-        setTokenClient(client);
-        setGisLoaded(true);
-      } catch (error) {
-        console.error('Error initializing GIS:', error);
-      }
-    };
-
-    loadGis();
-  }, [isOpen, gisLoaded]);
-
-  const handleSignIn = () => {
-    if (tokenClient) {
-      tokenClient.requestAccessToken();
-    }
-  };
-
-  const handleSignOut = () => {
-    if (window.google && window.google.accounts) {
-      window.google.accounts.oauth2.revoke(window.gapi.client.getToken()?.access_token, () => {
-        window.gapi.client.setToken(null);
-        setIsSignedIn(false);
-        setSyncStatus({ message: 'Signed out', type: 'info' });
-        setTimeout(() => setSyncStatus({ message: '', type: '' }), 2000);
-      });
-    }
   };
 
   // Format timestamp
@@ -244,61 +141,33 @@ function LabNotebook({ isOpen, onClose }) {
 
   // Create Google Doc from entry
   const handleCreateGoogleDoc = async (entry) => {
-    if (!gapiLoaded || !isSignedIn) {
-      setSyncStatus({ message: 'Please sign in to Google first', type: 'error' });
+    if (!isSignedIn) {
+      setSyncStatus({ message: 'Please sign in to Google first (use navbar button)', type: 'error' });
+      setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
       return;
     }
 
     setSyncStatus({ message: 'Creating Google Doc...', type: 'info' });
 
-    try {
-      // Create the document
-      const createResponse = await window.gapi.client.docs.documents.create({
-        resource: {
-          title: `[Lab Notebook] ${entry.title}`
-        }
-      });
+    const projectName = entry.projectId
+      ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
+      : 'No Project';
 
-      const docId = createResponse.result.documentId;
-      const docUrl = `https://docs.google.com/document/d/${docId}/edit`;
+    const contentText = `Lab Notebook Entry\n\nTitle: ${entry.title}\nDate: ${formatTimestamp(entry.createdAt)}\nProject: ${projectName}\nTags: ${entry.tags.join(', ') || 'None'}\n\n---\n\n${entry.content}`;
 
-      // Build the content
-      const projectName = entry.projectId
-        ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
-        : 'No Project';
+    const result = await createDoc(`[Lab Notebook] ${entry.title}`, contentText);
 
-      const contentText = `Lab Notebook Entry\n\nTitle: ${entry.title}\nDate: ${formatTimestamp(entry.createdAt)}\nProject: ${projectName}\nTags: ${entry.tags.join(', ') || 'None'}\n\n---\n\n${entry.content}`;
-
-      // Insert content into the document
-      await window.gapi.client.docs.documents.batchUpdate({
-        documentId: docId,
-        resource: {
-          requests: [
-            {
-              insertText: {
-                location: { index: 1 },
-                text: contentText
-              }
-            }
-          ]
-        }
-      });
-
-      // Update entry with Google Doc info
+    if (result) {
       handleUpdateEntry(entry.id, {
-        googleDocId: docId,
-        googleDocUrl: docUrl
+        googleDocId: result.docId,
+        googleDocUrl: result.docUrl
       });
-
       setSyncStatus({ message: 'Google Doc created successfully!', type: 'success' });
-
-      // Open the doc in a new tab
-      window.open(docUrl, '_blank');
-
-    } catch (error) {
-      console.error('Error creating Google Doc:', error);
+      window.open(result.docUrl, '_blank');
+    } else {
       setSyncStatus({ message: 'Failed to create Google Doc', type: 'error' });
     }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
   };
 
   // Sync entry to existing Google Doc
@@ -310,53 +179,20 @@ function LabNotebook({ isOpen, onClose }) {
 
     setSyncStatus({ message: 'Syncing to Google Doc...', type: 'info' });
 
-    try {
-      // Get current document to find content length
-      const doc = await window.gapi.client.docs.documents.get({
-        documentId: entry.googleDocId
-      });
+    const projectName = entry.projectId
+      ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
+      : 'No Project';
 
-      const endIndex = doc.result.body.content
-        .slice(-1)[0]?.endIndex || 1;
+    const contentText = `Lab Notebook Entry\n\nTitle: ${entry.title}\nDate: ${formatTimestamp(entry.createdAt)}\nLast Updated: ${formatTimestamp(entry.updatedAt)}\nProject: ${projectName}\nTags: ${entry.tags.join(', ') || 'None'}\n\n---\n\n${entry.content}`;
 
-      const projectName = entry.projectId
-        ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
-        : 'No Project';
+    const success = await syncToDoc(entry.googleDocId, contentText);
 
-      const contentText = `Lab Notebook Entry\n\nTitle: ${entry.title}\nDate: ${formatTimestamp(entry.createdAt)}\nLast Updated: ${formatTimestamp(entry.updatedAt)}\nProject: ${projectName}\nTags: ${entry.tags.join(', ') || 'None'}\n\n---\n\n${entry.content}`;
-
-      // Clear and rewrite document
-      const requests = [];
-
-      if (endIndex > 2) {
-        requests.push({
-          deleteContentRange: {
-            range: {
-              startIndex: 1,
-              endIndex: endIndex - 1
-            }
-          }
-        });
-      }
-
-      requests.push({
-        insertText: {
-          location: { index: 1 },
-          text: contentText
-        }
-      });
-
-      await window.gapi.client.docs.documents.batchUpdate({
-        documentId: entry.googleDocId,
-        resource: { requests }
-      });
-
+    if (success) {
       setSyncStatus({ message: 'Synced to Google Doc!', type: 'success' });
-
-    } catch (error) {
-      console.error('Error syncing to Google Doc:', error);
+    } else {
       setSyncStatus({ message: 'Failed to sync to Google Doc', type: 'error' });
     }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
   };
 
   // Filter entries
@@ -391,22 +227,12 @@ function LabNotebook({ isOpen, onClose }) {
       <div className="notebook-modal-content" onClick={e => e.stopPropagation()}>
         <div className="notebook-header">
           <div className="notebook-title-row">
-            <h2>📓 Lab Notebook</h2>
+            <h2>Lab Notebook</h2>
             <div className="notebook-google-status">
-              {GOOGLE_CLIENT_ID ? (
-                isSignedIn ? (
-                  <div className="google-connected">
-                    <span className="status-dot connected"></span>
-                    <span>Google Connected</span>
-                    <button className="signout-link" onClick={handleSignOut}>Sign out</button>
-                  </div>
-                ) : (
-                  <button className="google-signin-btn-small" onClick={handleSignIn} disabled={!gisLoaded}>
-                    {gisLoaded ? 'Sign in to Google' : 'Loading...'}
-                  </button>
-                )
+              {isSignedIn ? (
+                <span className="google-status-text connected">Google Connected</span>
               ) : (
-                <span className="no-google">Google Docs not configured</span>
+                <span className="google-status-text">Sign in via navbar for Google Docs</span>
               )}
             </div>
           </div>
@@ -416,7 +242,7 @@ function LabNotebook({ isOpen, onClose }) {
         {syncStatus.message && (
           <div className={`notebook-sync-status ${syncStatus.type}`}>
             {syncStatus.message}
-            <button onClick={() => setSyncStatus({ message: '', type: '' })}>×</button>
+            <button onClick={() => setSyncStatus({ message: '', type: '' })}>x</button>
           </div>
         )}
 
@@ -504,7 +330,7 @@ function LabNotebook({ isOpen, onClose }) {
                       <button onClick={() => setNewEntry({
                         ...newEntry,
                         tags: newEntry.tags.filter(t => t !== tag)
-                      })}>×</button>
+                      })}>x</button>
                     </span>
                   ))}
                 </div>
@@ -564,7 +390,7 @@ function LabNotebook({ isOpen, onClose }) {
                           )}
                           {entry.googleDocId && (
                             <span className="google-doc-badge" title="Linked to Google Doc">
-                              📄
+                              G
                             </span>
                           )}
                         </div>
@@ -607,13 +433,13 @@ function LabNotebook({ isOpen, onClose }) {
                                       rel="noopener noreferrer"
                                       className="btn-action"
                                     >
-                                      📄 Open in Google Docs
+                                      Open in Google Docs
                                     </a>
                                     <button
                                       className="btn-action"
                                       onClick={() => handleSyncToGoogleDoc(entry)}
                                     >
-                                      🔄 Sync to Doc
+                                      Sync to Doc
                                     </button>
                                   </>
                                 ) : (
@@ -621,7 +447,7 @@ function LabNotebook({ isOpen, onClose }) {
                                     className="btn-action primary"
                                     onClick={() => handleCreateGoogleDoc(entry)}
                                   >
-                                    📝 Create Google Doc
+                                    Create Google Doc
                                   </button>
                                 )}
                               </>
@@ -630,7 +456,7 @@ function LabNotebook({ isOpen, onClose }) {
                               className="btn-action danger"
                               onClick={() => handleDeleteEntry(entry.id)}
                             >
-                              🗑️ Delete
+                              Delete
                             </button>
                           </div>
 

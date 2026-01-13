@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import useGoogleDocs from '../hooks/useGoogleDocs';
+import { useGoogleAuth } from '../context/GoogleAuthContext';
 
 const RESEARCH_NOTES_KEY = 'research-dashboard-research-notes';
 
 function ResearchNotes({ projectId, projectTitle }) {
+  const { isSignedIn, createDoc, syncToDoc } = useGoogleAuth();
+
   const [activeTab, setActiveTab] = useState('background');
   const [notes, setNotes] = useState({
     background: '',
@@ -14,19 +16,7 @@ function ResearchNotes({ projectId, projectTitle }) {
   });
   const [isEditing, setIsEditing] = useState(null);
   const [editContent, setEditContent] = useState('');
-
-  // Google Docs integration
-  const {
-    isSignedIn,
-    gisLoaded,
-    hasCredentials,
-    syncStatus,
-    setSyncStatus,
-    signIn,
-    signOut,
-    createDoc,
-    syncToDoc
-  } = useGoogleDocs(true);
+  const [syncStatus, setSyncStatus] = useState({ message: '', type: '' });
 
   // Load notes from localStorage
   useEffect(() => {
@@ -292,22 +282,12 @@ Last Updated: ${new Date().toLocaleString()}`;
 
   return (
     <div className="research-notes">
-      {/* Google Auth Header */}
-      <div className="google-auth-bar">
-        {hasCredentials ? (
-          isSignedIn ? (
-            <div className="google-connected">
-              <span className="status-dot connected"></span>
-              <span>Google Connected</span>
-              <button className="signout-link" onClick={signOut}>Sign out</button>
-            </div>
-          ) : (
-            <button className="google-signin-btn-small" onClick={signIn} disabled={!gisLoaded}>
-              {gisLoaded ? 'Sign in to Google' : 'Loading...'}
-            </button>
-          )
+      {/* Google Status */}
+      <div className="google-status-indicator">
+        {isSignedIn ? (
+          <span className="google-status-text connected">Google Connected</span>
         ) : (
-          <span className="no-google">Google Docs not configured</span>
+          <span className="google-status-text">Sign in via navbar for Google Docs</span>
         )}
       </div>
 

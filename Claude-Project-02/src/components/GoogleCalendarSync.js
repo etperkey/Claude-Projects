@@ -1,18 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useGoogleAuth } from '../context/GoogleAuthContext';
 
 const GCAL_SETTINGS_KEY = 'research-dashboard-gcal-settings';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 
-// Google Calendar API configuration
-const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
-const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY || '';
-
 function GoogleCalendarSync({ isOpen, onClose }) {
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [gapiLoaded, setGapiLoaded] = useState(false);
-  const [gisLoaded, setGisLoaded] = useState(false);
-  const [tokenClient, setTokenClient] = useState(null);
+  const { isSignedIn, gapiLoaded, hasCredentials, getCalendarEvents, createCalendarEvent } = useGoogleAuth();
+
+  const [isLoading, setIsLoading] = useState(false);
   const [settings, setSettings] = useState({
     syncEnabled: false,
     calendarId: 'primary',
@@ -34,96 +29,18 @@ function GoogleCalendarSync({ isOpen, onClose }) {
     }
   }, []);
 
+  // Load calendars when signed in
+  useEffect(() => {
+    if (isSignedIn && gapiLoaded && window.gapi?.client?.calendar) {
+      loadCalendars();
+    }
+  }, [isSignedIn, gapiLoaded]);
+
   // Save settings to localStorage
   const saveSettings = (newSettings) => {
     localStorage.setItem(GCAL_SETTINGS_KEY, JSON.stringify(newSettings));
     setSettings(newSettings);
   };
-
-  // Load Google API (gapi) for Calendar
-  useEffect(() => {
-    if (!GOOGLE_CLIENT_ID || !isOpen) {
-      setIsLoading(false);
-      return;
-    }
-
-    const loadGapi = () => {
-      if (window.gapi && window.gapi.client) {
-        initGapi();
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = 'https://apis.google.com/js/api.js';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => {
-        window.gapi.load('client', initGapi);
-      };
-      document.body.appendChild(script);
-    };
-
-    const initGapi = async () => {
-      try {
-        await window.gapi.client.init({
-          apiKey: GOOGLE_API_KEY,
-          discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest']
-        });
-        setGapiLoaded(true);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error initializing gapi:', error);
-        setSyncStatus({ message: 'Failed to initialize Google API', type: 'error' });
-        setIsLoading(false);
-      }
-    };
-
-    loadGapi();
-  }, [isOpen]);
-
-  // Load Google Identity Services (GIS) for auth
-  useEffect(() => {
-    if (!GOOGLE_CLIENT_ID || !isOpen || gisLoaded) return;
-
-    const loadGis = () => {
-      if (window.google && window.google.accounts) {
-        initGis();
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      script.onload = initGis;
-      document.body.appendChild(script);
-    };
-
-    const initGis = () => {
-      try {
-        const client = window.google.accounts.oauth2.initTokenClient({
-          client_id: GOOGLE_CLIENT_ID,
-          scope: 'https://www.googleapis.com/auth/calendar.events',
-          callback: (tokenResponse) => {
-            if (tokenResponse && tokenResponse.access_token) {
-              setIsSignedIn(true);
-              loadCalendars();
-            }
-          },
-          error_callback: (error) => {
-            console.error('GIS error:', error);
-            setSyncStatus({ message: 'Sign-in failed. Please try again.', type: 'error' });
-          }
-        });
-        setTokenClient(client);
-        setGisLoaded(true);
-      } catch (error) {
-        console.error('Error initializing GIS:', error);
-      }
-    };
-
-    loadGis();
-  }, [isOpen, gisLoaded]);
 
   const loadCalendars = async () => {
     try {
@@ -131,22 +48,6 @@ function GoogleCalendarSync({ isOpen, onClose }) {
       setCalendars(response.result.items || []);
     } catch (error) {
       console.error('Error loading calendars:', error);
-    }
-  };
-
-  const handleSignIn = () => {
-    if (tokenClient) {
-      tokenClient.requestAccessToken();
-    }
-  };
-
-  const handleSignOut = () => {
-    if (window.google && window.google.accounts && window.gapi.client.getToken()) {
-      window.google.accounts.oauth2.revoke(window.gapi.client.getToken().access_token, () => {
-        window.gapi.client.setToken(null);
-        setIsSignedIn(false);
-        setCalendars([]);
-      });
     }
   };
 
@@ -179,7 +80,10 @@ function GoogleCalendarSync({ isOpen, onClose }) {
   }, []);
 
   const handleExportToCalendar = async () => {
-    if (!gapiLoaded || !isSignedIn) return;
+    if (!gapiLoaded || !isSignedIn) {
+      setSyncStatus({ message: 'Please sign in via the navbar first', type: 'error' });
+      return;
+    }
 
     setIsLoading(true);
     setSyncStatus({ message: 'Exporting tasks to Google Calendar...', type: 'info' });
@@ -201,15 +105,8 @@ function GoogleCalendarSync({ isOpen, onClose }) {
           colorId: task.priority === 'high' ? '11' : task.priority === 'medium' ? '5' : '10'
         };
 
-        try {
-          await window.gapi.client.calendar.events.insert({
-            calendarId: settings.calendarId,
-            resource: event
-          });
-          exported++;
-        } catch (e) {
-          console.error('Failed to create event:', e);
-        }
+        const result = await createCalendarEvent(event);
+        if (result) exported++;
       }
 
       saveSettings({ ...settings, lastSync: new Date().toISOString() });
@@ -226,7 +123,10 @@ function GoogleCalendarSync({ isOpen, onClose }) {
   };
 
   const handleImportFromCalendar = async () => {
-    if (!gapiLoaded || !isSignedIn) return;
+    if (!gapiLoaded || !isSignedIn) {
+      setSyncStatus({ message: 'Please sign in via the navbar first', type: 'error' });
+      return;
+    }
 
     setIsLoading(true);
     setSyncStatus({ message: 'Fetching events from Google Calendar...', type: 'info' });
@@ -235,16 +135,7 @@ function GoogleCalendarSync({ isOpen, onClose }) {
       const now = new Date();
       const oneMonthLater = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
-      const response = await window.gapi.client.calendar.events.list({
-        calendarId: settings.calendarId,
-        timeMin: now.toISOString(),
-        timeMax: oneMonthLater.toISOString(),
-        singleEvents: true,
-        orderBy: 'startTime',
-        maxResults: 50
-      });
-
-      const events = response.result.items || [];
+      const events = await getCalendarEvents(now, oneMonthLater);
       setSyncStatus({
         message: `Found ${events.length} upcoming events. Import feature coming soon!`,
         type: 'info'
@@ -259,13 +150,11 @@ function GoogleCalendarSync({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const hasCredentials = GOOGLE_CLIENT_ID && GOOGLE_API_KEY;
-
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="gcal-modal-content" onClick={e => e.stopPropagation()}>
         <div className="gcal-modal-header">
-          <h2>📅 Google Calendar Integration</h2>
+          <h2>Google Calendar Integration</h2>
           <button className="modal-close" onClick={onClose}>&times;</button>
         </div>
 
@@ -300,29 +189,29 @@ REACT_APP_GOOGLE_API_KEY=your-api-key`}
                 </button>
               </div>
             </div>
-          ) : isLoading && !gisLoaded ? (
-            <div className="gcal-loading">
-              <div className="spinner"></div>
-              <p>Loading...</p>
-            </div>
           ) : !isSignedIn ? (
             <div className="gcal-signin">
-              <p>Sign in with your Google account to sync tasks with Google Calendar.</p>
-              <button
-                className="google-signin-btn"
-                onClick={handleSignIn}
-                disabled={!gisLoaded}
-              >
-                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" />
-                {gisLoaded ? 'Sign in with Google' : 'Loading...'}
-              </button>
+              <p>Sign in with Google using the button in the navbar to sync tasks with Google Calendar.</p>
+              <div className="gcal-signin-hint">
+                <span>Look for the "G Sign In" button in the top navigation bar</span>
+              </div>
+
+              <div className="manual-sync-section">
+                <h4>Manual Export (No Sign-in Required)</h4>
+                <p>You can export your tasks as an ICS file to import into any calendar app:</p>
+                <button
+                  className="btn-export-ics"
+                  onClick={() => exportToICS(getAllTasksWithDueDates())}
+                >
+                  Download ICS File
+                </button>
+              </div>
             </div>
           ) : (
             <div className="gcal-connected">
               <div className="connection-status">
                 <span className="status-dot connected"></span>
                 <span>Connected to Google Calendar</span>
-                <button className="signout-link" onClick={handleSignOut}>Sign out</button>
               </div>
 
               <div className="gcal-settings">
@@ -332,11 +221,15 @@ REACT_APP_GOOGLE_API_KEY=your-api-key`}
                     value={settings.calendarId}
                     onChange={(e) => saveSettings({ ...settings, calendarId: e.target.value })}
                   >
-                    {calendars.map(cal => (
-                      <option key={cal.id} value={cal.id}>
-                        {cal.summary}
-                      </option>
-                    ))}
+                    {calendars.length > 0 ? (
+                      calendars.map(cal => (
+                        <option key={cal.id} value={cal.id}>
+                          {cal.summary}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="primary">Primary Calendar</option>
+                    )}
                   </select>
                 </div>
 
@@ -346,14 +239,14 @@ REACT_APP_GOOGLE_API_KEY=your-api-key`}
                     onClick={handleExportToCalendar}
                     disabled={isLoading}
                   >
-                    📤 Export Tasks to Calendar
+                    Export Tasks to Calendar
                   </button>
                   <button
                     className="sync-btn import"
                     onClick={handleImportFromCalendar}
                     disabled={isLoading}
                   >
-                    📥 Import from Calendar
+                    Import from Calendar
                   </button>
                 </div>
 

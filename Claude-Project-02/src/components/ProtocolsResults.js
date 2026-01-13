@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import useGoogleDocs from '../hooks/useGoogleDocs';
+import { useGoogleAuth } from '../context/GoogleAuthContext';
 
 const PROTOCOLS_KEY = 'research-dashboard-protocols';
 const RESULTS_KEY = 'research-dashboard-results';
@@ -31,6 +31,8 @@ const saveStoredData = (key, projectId, items) => {
 
 function ProtocolsResults({ projectId, projectTitle }) {
   const { logActivity } = useApp();
+  const { isSignedIn, createDoc, syncToDoc } = useGoogleAuth();
+
   const [activeTab, setActiveTab] = useState('protocols');
   const [protocols, setProtocols] = useState(() => getStoredData(PROTOCOLS_KEY, projectId));
   const [results, setResults] = useState(() => getStoredData(RESULTS_KEY, projectId));
@@ -43,19 +45,7 @@ function ProtocolsResults({ projectId, projectTitle }) {
     tags: ''
   });
   const [expandedItem, setExpandedItem] = useState(null);
-
-  // Google Docs integration
-  const {
-    isSignedIn,
-    gisLoaded,
-    hasCredentials,
-    syncStatus,
-    setSyncStatus,
-    signIn,
-    signOut,
-    createDoc,
-    syncToDoc
-  } = useGoogleDocs(true);
+  const [syncStatus, setSyncStatus] = useState({ message: '', type: '' });
 
   const handleAddItem = () => {
     if (!newItem.title.trim()) return;
@@ -187,22 +177,12 @@ Last Updated: ${new Date().toLocaleString()}`;
 
   return (
     <div className="protocols-results-section">
-      {/* Google Auth Header */}
-      <div className="google-auth-bar">
-        {hasCredentials ? (
-          isSignedIn ? (
-            <div className="google-connected">
-              <span className="status-dot connected"></span>
-              <span>Google Connected</span>
-              <button className="signout-link" onClick={signOut}>Sign out</button>
-            </div>
-          ) : (
-            <button className="google-signin-btn-small" onClick={signIn} disabled={!gisLoaded}>
-              {gisLoaded ? 'Sign in to Google' : 'Loading...'}
-            </button>
-          )
+      {/* Google Status */}
+      <div className="google-status-indicator">
+        {isSignedIn ? (
+          <span className="google-status-text connected">Google Connected</span>
         ) : (
-          <span className="no-google">Google Docs not configured</span>
+          <span className="google-status-text">Sign in via navbar for Google Docs</span>
         )}
       </div>
 
