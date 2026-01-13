@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
+import LiteratureManager from './LiteratureManager';
 
 const RESEARCH_NOTES_KEY = 'research-dashboard-research-notes';
 
@@ -403,6 +404,12 @@ Last Updated: ${new Date().toLocaleString()}`;
         >
           Miscellaneous Notes ({notes.miscNotes.length})
         </button>
+        <button
+          className={`notes-tab ${activeTab === 'literature' ? 'active' : ''}`}
+          onClick={() => setActiveTab('literature')}
+        >
+          📚 Literature
+        </button>
       </div>
 
       {/* Tab content */}
@@ -769,6 +776,14 @@ Include:
               </div>
             )}
           </div>
+        )}
+
+        {/* Literature Tab */}
+        {activeTab === 'literature' && (
+          <LiteratureManager
+            projectId={projectId}
+            projectTitle={projectTitle}
+          />
         )}
       </div>
     </div>
