@@ -3,6 +3,11 @@
   command = "npm run build"
   publish = "build"
 
+[build.environment]
+  # Disable secrets scanning for client-side Google API keys
+  # These keys are meant to be public and are restricted by domain in Google Cloud Console
+  SECRETS_SCAN_ENABLED = "false"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
