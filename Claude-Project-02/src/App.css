@@ -4364,3 +4364,198 @@ body {
     justify-content: center;
   }
 }
+
+/* ==================== Google Integration Styles for Dashboards ==================== */
+
+/* Google Auth Bar - Used in Protocols/Results and Research Notes */
+.google-auth-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* Sync Status Bar */
+.sync-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+.sync-status-bar.info {
+  background: rgba(52, 152, 219, 0.15);
+  color: #3498db;
+  border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.sync-status-bar.success {
+  background: rgba(39, 174, 96, 0.15);
+  color: #27ae60;
+  border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+.sync-status-bar.error {
+  background: rgba(231, 76, 60, 0.15);
+  color: #e74c3c;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.sync-status-bar button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+  padding: 0 4px;
+}
+
+.sync-status-bar button:hover {
+  opacity: 1;
+}
+
+/* Google Doc Indicator */
+.google-doc-indicator {
+  margin-left: 8px;
+  font-size: 0.9em;
+}
+
+/* Google Action Buttons */
+.btn-google-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-google-action:hover {
+  background: var(--border-color);
+}
+
+.btn-google-action.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-google-action.primary:hover {
+  filter: brightness(1.1);
+}
+
+.btn-google-action.small {
+  padding: 4px 8px;
+  font-size: 0.8rem;
+}
+
+/* Protocol/Results Google Actions */
+.pr-google-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Section Header with Actions */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.section-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Aim Header Actions */
+.aim-header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Note Header Actions */
+.note-header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Note Google Actions in Footer */
+.note-google-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Status Dot */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+.status-dot.connected {
+  background: #27ae60;
+}
+
+/* Sign Out Link */
+.signout-link {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.signout-link:hover {
+  color: var(--text-secondary);
+}
+
+/* Responsive adjustments for Google integration */
+@media (max-width: 768px) {
+  .google-auth-bar {
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .pr-google-actions {
+    flex-direction: column;
+  }
+
+  .aim-header-actions {
+    flex-wrap: wrap;
+  }
+}

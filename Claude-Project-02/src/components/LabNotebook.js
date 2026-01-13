@@ -4,7 +4,6 @@ import { researchProjects } from '../data/projects';
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY || '';
-const SCOPES = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file';
 
 function LabNotebook({ isOpen, onClose }) {
   const [entries, setEntries] = useState([]);
@@ -21,6 +20,8 @@ function LabNotebook({ isOpen, onClose }) {
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [gapiLoaded, setGapiLoaded] = useState(false);
+  const [gisLoaded, setGisLoaded] = useState(false);
+  const [tokenClient, setTokenClient] = useState(null);
   const [syncStatus, setSyncStatus] = useState({ message: '', type: '' });
 
   // Load custom projects
@@ -53,61 +54,103 @@ function LabNotebook({ isOpen, onClose }) {
     setEntries(newEntries);
   };
 
-  // Load Google API
+  // Load Google API (gapi) for Docs/Drive
   useEffect(() => {
     if (!GOOGLE_CLIENT_ID || !isOpen) return;
 
     const loadGapi = () => {
-      if (window.gapi) {
-        initClient();
+      if (window.gapi && window.gapi.client) {
+        initGapi();
         return;
       }
 
       const script = document.createElement('script');
       script.src = 'https://apis.google.com/js/api.js';
+      script.async = true;
+      script.defer = true;
       script.onload = () => {
-        window.gapi.load('client:auth2', initClient);
+        window.gapi.load('client', initGapi);
       };
       document.body.appendChild(script);
     };
 
-    const initClient = async () => {
+    const initGapi = async () => {
       try {
         await window.gapi.client.init({
           apiKey: GOOGLE_API_KEY,
-          clientId: GOOGLE_CLIENT_ID,
-          scope: SCOPES,
           discoveryDocs: [
             'https://docs.googleapis.com/$discovery/rest?version=v1',
             'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'
           ]
         });
-
         setGapiLoaded(true);
-        const authInstance = window.gapi.auth2.getAuthInstance();
-        setIsSignedIn(authInstance.isSignedIn.get());
-        authInstance.isSignedIn.listen(setIsSignedIn);
       } catch (error) {
-        console.error('Error initializing Google API:', error);
+        console.error('Error initializing gapi:', error);
       }
     };
 
     loadGapi();
   }, [isOpen]);
 
-  const handleSignIn = async () => {
-    try {
-      await window.gapi.auth2.getAuthInstance().signIn();
-    } catch (error) {
-      console.error('Error signing in:', error);
+  // Load Google Identity Services (GIS) for auth
+  useEffect(() => {
+    if (!GOOGLE_CLIENT_ID || !isOpen || gisLoaded) return;
+
+    const loadGis = () => {
+      if (window.google && window.google.accounts) {
+        initGis();
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = initGis;
+      document.body.appendChild(script);
+    };
+
+    const initGis = () => {
+      try {
+        const client = window.google.accounts.oauth2.initTokenClient({
+          client_id: GOOGLE_CLIENT_ID,
+          scope: 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file',
+          callback: (tokenResponse) => {
+            if (tokenResponse && tokenResponse.access_token) {
+              setIsSignedIn(true);
+              setSyncStatus({ message: 'Signed in to Google!', type: 'success' });
+              setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+            }
+          },
+          error_callback: (error) => {
+            console.error('GIS error:', error);
+            setSyncStatus({ message: 'Sign-in failed. Please try again.', type: 'error' });
+          }
+        });
+        setTokenClient(client);
+        setGisLoaded(true);
+      } catch (error) {
+        console.error('Error initializing GIS:', error);
+      }
+    };
+
+    loadGis();
+  }, [isOpen, gisLoaded]);
+
+  const handleSignIn = () => {
+    if (tokenClient) {
+      tokenClient.requestAccessToken();
     }
   };
 
-  const handleSignOut = async () => {
-    try {
-      await window.gapi.auth2.getAuthInstance().signOut();
-    } catch (error) {
-      console.error('Error signing out:', error);
+  const handleSignOut = () => {
+    if (window.google && window.google.accounts) {
+      window.google.accounts.oauth2.revoke(window.gapi.client.getToken()?.access_token, () => {
+        window.gapi.client.setToken(null);
+        setIsSignedIn(false);
+        setSyncStatus({ message: 'Signed out', type: 'info' });
+        setTimeout(() => setSyncStatus({ message: '', type: '' }), 2000);
+      });
     }
   };
 
@@ -283,26 +326,29 @@ function LabNotebook({ isOpen, onClose }) {
       const contentText = `Lab Notebook Entry\n\nTitle: ${entry.title}\nDate: ${formatTimestamp(entry.createdAt)}\nLast Updated: ${formatTimestamp(entry.updatedAt)}\nProject: ${projectName}\nTags: ${entry.tags.join(', ') || 'None'}\n\n---\n\n${entry.content}`;
 
       // Clear and rewrite document
+      const requests = [];
+
+      if (endIndex > 2) {
+        requests.push({
+          deleteContentRange: {
+            range: {
+              startIndex: 1,
+              endIndex: endIndex - 1
+            }
+          }
+        });
+      }
+
+      requests.push({
+        insertText: {
+          location: { index: 1 },
+          text: contentText
+        }
+      });
+
       await window.gapi.client.docs.documents.batchUpdate({
         documentId: entry.googleDocId,
-        resource: {
-          requests: [
-            {
-              deleteContentRange: {
-                range: {
-                  startIndex: 1,
-                  endIndex: endIndex - 1
-                }
-              }
-            },
-            {
-              insertText: {
-                location: { index: 1 },
-                text: contentText
-              }
-            }
-          ]
-        }
+        resource: { requests }
       });
 
       setSyncStatus({ message: 'Synced to Google Doc!', type: 'success' });
@@ -355,8 +401,8 @@ function LabNotebook({ isOpen, onClose }) {
                     <button className="signout-link" onClick={handleSignOut}>Sign out</button>
                   </div>
                 ) : (
-                  <button className="google-signin-btn-small" onClick={handleSignIn}>
-                    Sign in to Google
+                  <button className="google-signin-btn-small" onClick={handleSignIn} disabled={!gisLoaded}>
+                    {gisLoaded ? 'Sign in to Google' : 'Loading...'}
                   </button>
                 )
               ) : (
