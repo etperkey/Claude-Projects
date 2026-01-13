@@ -327,9 +327,24 @@ function LabNotebook({ isOpen, onClose }) {
     setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
   };
 
+  // Count inbox items (no project assigned or has 'inbox' tag)
+  const inboxCount = entries.filter(entry =>
+    !entry.projectId || entry.tags?.includes('inbox') || entry.isQuickCapture
+  ).length;
+
   // Filter entries
   const filteredEntries = entries.filter(entry => {
-    const matchesProject = filterProject === 'all' || entry.projectId === filterProject;
+    let matchesProject = filterProject === 'all';
+
+    if (filterProject === 'inbox') {
+      // Show entries with no project, or with 'inbox' tag, or quick captures
+      matchesProject = !entry.projectId || entry.tags?.includes('inbox') || entry.isQuickCapture;
+    } else if (filterProject === '') {
+      matchesProject = !entry.projectId;
+    } else if (filterProject !== 'all') {
+      matchesProject = entry.projectId === filterProject;
+    }
+
     const matchesSearch = !searchTerm ||
       entry.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       entry.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -400,8 +415,9 @@ function LabNotebook({ isOpen, onClose }) {
               value={filterProject}
               onChange={(e) => setFilterProject(e.target.value)}
             >
-              <option value="all">All Projects</option>
-              <option value="">No Project</option>
+              <option value="all">All Entries</option>
+              <option value="inbox">Inbox ({inboxCount})</option>
+              <option value="">Unassigned</option>
               {allProjects.map(p => (
                 <option key={p.id} value={p.id}>{p.title}</option>
               ))}
@@ -512,12 +528,21 @@ function LabNotebook({ isOpen, onClose }) {
                               minute: '2-digit'
                             })}
                           </span>
-                          {entry.projectId && (
+                          {entry.projectId ? (
                             <span
                               className="entry-project-badge"
                               style={{ backgroundColor: getProjectColor(entry.projectId) }}
                             >
                               {allProjects.find(p => p.id === entry.projectId)?.title || 'Project'}
+                            </span>
+                          ) : (
+                            <span className="entry-inbox-badge" title="In inbox - assign to project">
+                              Inbox
+                            </span>
+                          )}
+                          {entry.isQuickCapture && (
+                            <span className="quick-capture-badge" title="Quick Capture">
+                              Quick
                             </span>
                           )}
                           {entry.googleDocId && (
@@ -557,6 +582,35 @@ function LabNotebook({ isOpen, onClose }) {
                               onChange={(e) => handleUpdateEntry(entry.id, { content: e.target.value })}
                               rows={10}
                             />
+                          </div>
+
+                          {/* Project Assignment */}
+                          <div className="entry-assignment">
+                            <label>Assign to Project:</label>
+                            <select
+                              className="entry-project-assign"
+                              value={entry.projectId || ''}
+                              onChange={(e) => {
+                                const newProjectId = e.target.value || null;
+                                // Remove 'inbox' tag when assigning to a project
+                                const newTags = newProjectId
+                                  ? entry.tags?.filter(t => t !== 'inbox') || []
+                                  : entry.tags || [];
+                                handleUpdateEntry(entry.id, {
+                                  projectId: newProjectId,
+                                  tags: newTags,
+                                  isQuickCapture: newProjectId ? false : entry.isQuickCapture
+                                });
+                              }}
+                            >
+                              <option value="">No Project (Inbox)</option>
+                              {allProjects.map(p => (
+                                <option key={p.id} value={p.id}>{p.title}</option>
+                              ))}
+                            </select>
+                            {!entry.projectId && (
+                              <span className="assignment-hint">Select a project to organize this entry</span>
+                            )}
                           </div>
 
                           <div className="entry-actions">

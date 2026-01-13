@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import LandingPage from './components/LandingPage';
 import ProjectPage from './components/ProjectPage';
 import GoogleSignInPrompt from './components/GoogleSignInPrompt';
+import QuickCapture from './components/QuickCapture';
 import './App.css';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
               <Route path="/project/:projectId" element={<ProjectPage />} />
             </Routes>
             <GoogleSignInPrompt />
+            <QuickCapture />
           </div>
         </Router>
       </AppProvider>
