@@ -135,6 +135,17 @@ function ProjectPage() {
     }));
   };
 
+  const handleUpdateTask = (taskId, column, updatedData) => {
+    setTasks(prevTasks => ({
+      ...prevTasks,
+      [column]: prevTasks[column].map(task =>
+        task.id === taskId
+          ? { ...task, ...updatedData }
+          : task
+      )
+    }));
+  };
+
   const totalTasks = Object.values(tasks).flat().length;
   const completedTasks = tasks.done?.length || 0;
   const progressPercent = totalTasks > 0 ? Math.round((completedTasks/totalTasks)*100) : 0;
@@ -178,6 +189,7 @@ function ProjectPage() {
           onTaskMove={handleTaskMove}
           onAddTask={handleAddTask}
           onDeleteTask={handleDeleteTask}
+          onUpdateTask={handleUpdateTask}
         />
       </main>
     </div>
