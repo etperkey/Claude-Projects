@@ -20,7 +20,8 @@
       "Bash(git commit:*)",
       "Bash(gh repo view:*)",
       "Bash(gh api:*)",
-      "WebFetch(domain:etperkey.github.io)"
+      "WebFetch(domain:etperkey.github.io)",
+      "WebFetch(domain:orcid.org)"
     ]
   }
 }
