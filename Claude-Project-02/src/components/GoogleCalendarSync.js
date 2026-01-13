@@ -250,8 +250,8 @@ function GoogleCalendarSync({ isOpen, onClose }) {
                 <li>Add the following to your <code>.env</code> file:</li>
               </ol>
               <pre className="env-example">
-{`REACT_APP_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
-REACT_APP_GOOGLE_API_KEY=your-api-key`}
+{`REACT_APP_GOOGLE_CLIENT_ID=<your-oauth-client-id>
+REACT_APP_GOOGLE_API_KEY=<your-api-key>`}
               </pre>
               <p className="setup-note">After adding credentials, restart the development server.</p>
 
