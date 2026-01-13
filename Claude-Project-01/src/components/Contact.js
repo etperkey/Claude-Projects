@@ -35,7 +35,9 @@ function Contact() {
         <div className="contact-info">
           <div className="contact-item">
             <h3>Email</h3>
-            <a href="mailto:eric.perkey@uchicagomedicine.org">eric.perkey@uchicagomedicine.org</a>
+            <a href="mailto:eric.perkey@uchicagomedicine.org">eric.perkey@uchicagomedicine.org</a><br />
+            <a href="mailto:ericperkey@gmail.com">ericperkey@gmail.com</a><br />
+            <a href="mailto:eperkey@umich.edu">eperkey@umich.edu</a>
           </div>
           <div className="contact-item">
             <h3>Institution</h3>

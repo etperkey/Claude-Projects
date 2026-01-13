@@ -16,11 +16,29 @@ function Footer() {
             >
               Google Scholar
             </a>
-            <a href="#" aria-label="LinkedIn" className="social-link">
-              LinkedIn
-            </a>
-            <a href="#" aria-label="GitHub" className="social-link">
+            <a
+              href="https://github.com/etperkey"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-link"
+            >
               GitHub
+            </a>
+            <a
+              href="https://orcid.org/0000-0003-3275-3181"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-link"
+            >
+              ORCID
+            </a>
+            <a
+              href="https://honcfellowship.uchicago.edu/our-fellows/eric-perkey/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-link"
+            >
+              UChicago
             </a>
           </div>
           <p className="footer-text">
