@@ -255,10 +255,11 @@
         /* Main Container */
         .game-container {
             position: relative;
-            z-index: 1;
+            z-index: 10;
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+            padding-bottom: 220px; /* Space for runner scene below */
         }
 
         /* Header - Pipe style */
@@ -272,6 +273,7 @@
             border-bottom: none;
             position: relative;
             box-shadow: inset 0 10px 20px rgba(255,255,255,0.2);
+            z-index: 15;
         }
 
         .header::before, .header::after {
@@ -392,6 +394,7 @@
                 inset -4px -4px 0 rgba(0,0,0,0.3),
                 8px 8px 0 rgba(0,0,0,0.4);
             position: relative;
+            z-index: 15;
         }
 
         /* Question types - Power-up themed */
@@ -1132,7 +1135,7 @@
             left: 0;
             width: 100%;
             height: 180px;
-            z-index: 5;
+            z-index: 2;
             overflow: visible;
             pointer-events: none;
         }
