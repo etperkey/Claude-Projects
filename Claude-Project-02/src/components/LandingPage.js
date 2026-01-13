@@ -116,7 +116,7 @@ function LandingPage() {
     <div className="landing-page">
       <header className="landing-header">
         <div className="header-content">
-          <h1>Research Project Hub</h1>
+          <h1>Eric Perkey's Research Project Dashboard</h1>
           <p className="subtitle">Lymphoma Biology & Immunotherapy Research</p>
         </div>
       </header>
