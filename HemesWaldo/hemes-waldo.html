@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heme's Waldo - Spot the Finding!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --waldo-red: #cc0000;
+            --waldo-white: #ffffff;
+            --waldo-dark: #1a0a0a;
+            --waldo-cream: #fff5e6;
+            --waldo-gold: #ffd700;
+            --stripe-size: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: var(--waldo-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="12" cy="12" r="10" fill="none" stroke="%23cc0000" stroke-width="3"/><line x1="19" y1="19" x2="28" y2="28" stroke="%23cc0000" stroke-width="4" stroke-linecap="round"/></svg>') 12 12, crosshair;
+        }
+
+        /* Striped background */
+        .waldo-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                var(--waldo-red) 0px,
+                var(--waldo-red) var(--stripe-size),
+                var(--waldo-white) var(--stripe-size),
+                var(--waldo-white) calc(var(--stripe-size) * 2)
+            );
+            opacity: 0.1;
+        }
+
+        /* Animated magnifying glasses */
+        .magnifier {
+            position: fixed;
+            font-size: 40px;
+            animation: float-magnifier 15s ease-in-out infinite;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        @keyframes float-magnifier {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-30px) rotate(10deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(30px) rotate(-10deg); }
+        }
+
+        /* Main container */
+        .game-container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .main-title {
+            font-family: 'Bangers', cursive;
+            font-size: 4em;
+            color: var(--waldo-red);
+            text-shadow:
+                4px 4px 0 var(--waldo-white),
+                8px 8px 0 rgba(0,0,0,0.3);
+            letter-spacing: 4px;
+            animation: title-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes title-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: var(--waldo-cream);
+            margin-top: 10px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+        }
+
+        /* Title Screen */
+        .title-screen {
+            background: linear-gradient(180deg,
+                rgba(204, 0, 0, 0.9) 0%,
+                rgba(150, 0, 0, 0.95) 100%);
+            border: 8px solid var(--waldo-white);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .waldo-character {
+            font-size: 100px;
+            margin: 20px 0;
+            animation: wave 1s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .instructions {
+            color: var(--waldo-cream);
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin: 20px 0;
+            text-align: left;
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .instructions h3 {
+            text-align: center;
+            color: var(--waldo-gold);
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        .instructions li {
+            margin: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .instructions li::before {
+            content: '🔍';
+            position: absolute;
+            left: 0;
+        }
+
+        .start-btn {
+            font-family: 'Bangers', cursive;
+            font-size: 2em;
+            padding: 20px 60px;
+            background: linear-gradient(180deg, var(--waldo-gold), #cc9900);
+            border: 4px solid var(--waldo-white);
+            border-radius: 50px;
+            color: var(--waldo-dark);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 0 #996600;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 0 #996600;
+        }
+
+        .start-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #996600;
+        }
+
+        /* Game Screen */
+        .game-screen {
+            display: none;
+        }
+
+        .game-screen.active {
+            display: block;
+        }
+
+        /* Score bar */
+        .score-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, var(--waldo-red), #990000);
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 4px solid var(--waldo-white);
+        }
+
+        .score-item {
+            color: var(--waldo-white);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .score-value {
+            color: var(--waldo-gold);
+            font-size: 1.4em;
+        }
+
+        /* Question card */
+        .question-card {
+            background: var(--waldo-cream);
+            border: 6px solid var(--waldo-red);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            background: repeating-linear-gradient(
+                90deg,
+                var(--waldo-red) 0px,
+                var(--waldo-red) 15px,
+                var(--waldo-white) 15px,
+                var(--waldo-white) 30px
+            );
+            padding: 15px;
+            text-align: center;
+        }
+
+        .card-header h2 {
+            background: var(--waldo-white);
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 10px;
+            color: var(--waldo-red);
+            font-family: 'Bangers', cursive;
+            font-size: 1.8em;
+            border: 3px solid var(--waldo-red);
+        }
+
+        /* Image container */
+        .image-container {
+            padding: 20px;
+            background: #f5f5f5;
+            text-align: center;
+        }
+
+        .specimen-frame {
+            position: relative;
+            display: inline-block;
+            border: 8px solid #8B4513;
+            border-radius: 5px;
+            box-shadow:
+                inset 0 0 20px rgba(0,0,0,0.3),
+                0 5px 15px rgba(0,0,0,0.4);
+            background: #2a2a2a;
+            padding: 10px;
+            max-width: 100%;
+        }
+
+        .specimen-frame::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #8B4513;
+            padding: 5px 20px;
+            border-radius: 5px 5px 0 0;
+            font-size: 0.7em;
+            color: var(--waldo-cream);
+        }
+
+        .specimen-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 3px;
+            display: block;
+            cursor: zoom-in;
+            transition: transform 0.2s;
+        }
+
+        .specimen-image:hover {
+            transform: scale(1.02);
+        }
+
+        /* Zoom Modal */
+        .zoom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .zoom-modal.active {
+            display: flex;
+        }
+
+        .zoom-container {
+            position: relative;
+            max-width: 95vw;
+            max-height: 80vh;
+            overflow: auto;
+            border: 4px solid var(--waldo-red);
+            border-radius: 10px;
+            background: #1a1a1a;
+        }
+
+        .zoom-image {
+            display: block;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            cursor: grab;
+        }
+
+        .zoom-image:active {
+            cursor: grabbing;
+        }
+
+        .zoom-image.zoom-1x { max-width: 90vw; max-height: 75vh; }
+        .zoom-image.zoom-2x { max-width: none; max-height: none; width: 150vw; }
+        .zoom-image.zoom-3x { max-width: none; max-height: none; width: 250vw; }
+
+        .zoom-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .zoom-btn {
+            font-family: 'Bangers', cursive;
+            font-size: 1.5em;
+            padding: 12px 25px;
+            background: linear-gradient(180deg, var(--waldo-red), #990000);
+            border: 3px solid var(--waldo-white);
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .zoom-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(204, 0, 0, 0.5);
+        }
+
+        .zoom-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .zoom-level {
+            font-family: 'Bangers', cursive;
+            font-size: 1.3em;
+            color: var(--waldo-gold);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .close-zoom {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2em;
+            background: var(--waldo-red);
+            border: 3px solid var(--waldo-white);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 2001;
+        }
+
+        .close-zoom:hover {
+            transform: scale(1.1);
+            background: #ff0000;
+        }
+
+        .zoom-hint {
+            color: var(--waldo-cream);
+            font-size: 0.9em;
+            margin-top: 15px;
+            opacity: 0.8;
+        }
+
+        .image-caption {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .magnify-hint {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            color: var(--waldo-red);
+            font-weight: bold;
+            animation: pulse-hint 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-hint {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Question section */
+        .question-section {
+            padding: 25px;
+            background: var(--waldo-cream);
+        }
+
+        .question-text {
+            font-size: 1.4em;
+            color: var(--waldo-dark);
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        /* Options */
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 20px;
+            background: linear-gradient(180deg, #fff, #f0f0f0);
+            border: 3px solid #ccc;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .option-btn:hover {
+            border-color: var(--waldo-red);
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(204, 0, 0, 0.2);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(180deg, #90EE90, #32CD32);
+            border-color: #228B22;
+            color: white;
+        }
+
+        .option-btn.incorrect {
+            background: linear-gradient(180deg, #ffcccc, #ff6666);
+            border-color: var(--waldo-red);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-letter {
+            width: 35px;
+            height: 35px;
+            background: var(--waldo-red);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .option-btn.correct .option-letter {
+            background: #228B22;
+        }
+
+        /* Explanation */
+        .explanation-box {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(180deg, #fffbf0, #fff5e6);
+            border: 3px dashed var(--waldo-red);
+            border-radius: 15px;
+        }
+
+        .explanation-box.show {
+            display: block;
+            animation: reveal 0.3s ease-out;
+        }
+
+        @keyframes reveal {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .explanation-box h4 {
+            color: var(--waldo-red);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .explanation-text {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .key-point {
+            background: var(--waldo-gold);
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: var(--waldo-dark);
+            margin: 10px 0;
+        }
+
+        .citation {
+            font-size: 0.85em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .next-btn {
+            font-family: 'Bangers', cursive;
+            font-size: 1.5em;
+            padding: 15px 40px;
+            background: linear-gradient(180deg, var(--waldo-red), #990000);
+            border: 3px solid var(--waldo-white);
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(204, 0, 0, 0.4);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .results-screen.active {
+            display: block;
+        }
+
+        .results-card {
+            background: linear-gradient(180deg, var(--waldo-cream), #ffe6cc);
+            border: 8px solid var(--waldo-red);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+        }
+
+        .results-title {
+            font-family: 'Bangers', cursive;
+            font-size: 3em;
+            color: var(--waldo-red);
+            text-shadow: 3px 3px 0 var(--waldo-gold);
+            margin-bottom: 20px;
+        }
+
+        .results-waldo {
+            font-size: 80px;
+            margin: 20px 0;
+        }
+
+        .final-score {
+            font-size: 4em;
+            color: var(--waldo-red);
+            font-family: 'Bangers', cursive;
+            margin: 20px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid var(--waldo-red);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            color: var(--waldo-red);
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .play-again-btn {
+            font-family: 'Bangers', cursive;
+            font-size: 2em;
+            padding: 20px 50px;
+            background: linear-gradient(180deg, var(--waldo-gold), #cc9900);
+            border: 4px solid var(--waldo-white);
+            border-radius: 50px;
+            color: var(--waldo-dark);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 0 #996600;
+        }
+
+        .play-again-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 0 #996600;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: rgba(0,0,0,0.2);
+            border: 2px solid var(--waldo-red);
+            border-radius: 25px;
+            color: var(--waldo-red);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--waldo-red);
+            color: white;
+        }
+
+        /* Volume toggle */
+        .volume-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--waldo-red);
+            border: 3px solid var(--waldo-white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .volume-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .volume-toggle.muted {
+            background: #666;
+        }
+
+        /* Home button */
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            padding: 10px 20px;
+            background: var(--waldo-red);
+            border: 3px solid var(--waldo-white);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .home-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Found animation */
+        .found-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 255, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: found-flash 0.5s ease-out;
+        }
+
+        .found-overlay.show {
+            display: flex;
+        }
+
+        @keyframes found-flash {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .found-text {
+            font-family: 'Bangers', cursive;
+            font-size: 5em;
+            color: white;
+            text-shadow:
+                4px 4px 0 #228B22,
+                8px 8px 0 rgba(0,0,0,0.3);
+            animation: found-bounce 0.5s ease-out;
+        }
+
+        @keyframes found-bounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .main-title { font-size: 2.5em; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .specimen-image { max-height: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="waldo-bg"></div>
+
+    <!-- Floating magnifiers -->
+    <div class="magnifier" style="top: 10%; left: 5%;">🔍</div>
+    <div class="magnifier" style="top: 30%; right: 8%; animation-delay: -3s;">🔬</div>
+    <div class="magnifier" style="top: 60%; left: 3%; animation-delay: -7s;">🔍</div>
+    <div class="magnifier" style="top: 80%; right: 5%; animation-delay: -11s;">🔬</div>
+
+    <a href="../HematologyArcade/index.html" class="home-btn">🏠 ARCADE</a>
+
+    <button class="volume-toggle" id="volumeToggle" onclick="toggleVolume()">
+        <span id="volumeIcon">🔊</span>
+    </button>
+
+    <div class="game-container">
+        <header class="game-header">
+            <h1 class="main-title">HEME'S WALDO</h1>
+            <p class="subtitle">🔍 Spot the Finding! 🔬</p>
+        </header>
+
+        <!-- Title Screen -->
+        <div class="title-screen" id="titleScreen">
+            <div class="waldo-character">🧑‍🔬</div>
+            <h2 style="color: var(--waldo-gold); font-size: 2em; margin-bottom: 20px;">
+                Can You Find the Hematology Finding?
+            </h2>
+
+            <div class="instructions">
+                <h3>📋 HOW TO PLAY</h3>
+                <ul>
+                    <li>Examine real ASH Image Bank specimens</li>
+                    <li>Identify the key hematologic finding</li>
+                    <li>Both malignant AND benign findings included</li>
+                    <li>Learn morphology from actual clinical images</li>
+                    <li>10 random images per game</li>
+                </ul>
+            </div>
+
+            <p style="color: var(--waldo-cream); margin: 20px 0; font-size: 1.1em;">
+                Images courtesy of ASH Image Bank (imagebank.hematology.org)
+            </p>
+
+            <button class="start-btn" onclick="startGame()">
+                🔍 START SEARCHING!
+            </button>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="game-screen" id="gameScreen">
+            <div class="score-bar">
+                <div class="score-item">
+                    SCORE: <span class="score-value" id="score">0</span>
+                </div>
+                <div class="score-item">
+                    FOUND: <span class="score-value" id="found">0</span>/10
+                </div>
+                <div class="score-item">
+                    STREAK: <span class="score-value" id="streak">0</span>🔥
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="card-header">
+                    <h2>🔍 SPOT THE FINDING!</h2>
+                </div>
+
+                <div class="image-container">
+                    <div class="specimen-frame">
+                        <img id="specimenImage" class="specimen-image" src="" alt="Hematology specimen" onclick="openZoom()">
+                    </div>
+                    <p class="image-caption" id="imageCaption">ASH Image Bank</p>
+                    <div class="magnify-hint">
+                        <span>🔍</span>
+                        <span>Click image to magnify!</span>
+                        <span>🔍</span>
+                    </div>
+                </div>
+
+                <div class="question-section">
+                    <p class="question-text" id="questionText">What is the key finding in this specimen?</p>
+
+                    <div class="options-grid" id="optionsGrid"></div>
+
+                    <div class="explanation-box" id="explanationBox">
+                        <h4>🎯 FOUND IT!</h4>
+                        <p class="explanation-text" id="explanationText"></p>
+                        <div class="key-point" id="keyPoint"></div>
+                        <p class="citation" id="citation"></p>
+                        <button class="next-btn" onclick="nextQuestion()">NEXT SPECIMEN →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen">
+            <div class="results-card">
+                <h2 class="results-title" id="resultsTitle">GREAT SEARCHING!</h2>
+                <div class="results-waldo" id="resultsEmoji">🧑‍🔬</div>
+
+                <div class="final-score">
+                    <span id="finalScore">0</span> POINTS
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value" id="correctCount">0</div>
+                        <div class="stat-label">Findings Found</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="accuracy">0%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="bestStreak">0</div>
+                        <div class="stat-label">Best Streak</div>
+                    </div>
+                </div>
+
+                <button class="play-again-btn" onclick="startGame()">
+                    🔍 SEARCH AGAIN!
+                </button>
+
+                <br>
+                <a href="../HematologyArcade/index.html" class="back-btn">← Back to Arcade</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Found overlay -->
+    <div class="found-overlay" id="foundOverlay">
+        <div class="found-text">FOUND IT! 🎯</div>
+    </div>
+
+    <!-- Zoom Modal -->
+    <div class="zoom-modal" id="zoomModal">
+        <button class="close-zoom" onclick="closeZoom()">✕</button>
+        <div class="zoom-container" id="zoomContainer">
+            <img id="zoomImage" class="zoom-image zoom-1x" src="" alt="Magnified specimen">
+        </div>
+        <div class="zoom-controls">
+            <button class="zoom-btn" id="zoomOutBtn" onclick="zoomOut()">➖ Zoom Out</button>
+            <span class="zoom-level" id="zoomLevel">1x</span>
+            <button class="zoom-btn" id="zoomInBtn" onclick="zoomIn()">➕ Zoom In</button>
+        </div>
+        <p class="zoom-hint">Scroll or drag to pan when zoomed in • Press ESC or click ✕ to close</p>
+    </div>
+
+    <script>
+        // ASH Image Bank Questions - Mix of Malignant and Benign Findings
+        // Questions designed for second-order clinical reasoning
+        const questions = [
+            // ============ MALIGNANT FINDINGS ============
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60924?size=3",
+                imageSource: "ASH Image Bank #60924",
+                question: "A 45-year-old presents with fatigue and WBC 45,000. This finding confirms what diagnosis?",
+                options: [
+                    "Myelodysplastic syndrome - cannot confirm lineage",
+                    "Acute myeloid leukemia - Auer rod confirms myeloid lineage",
+                    "Acute lymphoblastic leukemia",
+                    "Chronic myeloid leukemia blast crisis"
+                ],
+                correct: 1,
+                explanation: "The Auer rod (pink rod-like inclusion) is PATHOGNOMONIC for myeloid neoplasms. Its presence confirms the blast is myeloid, not lymphoid, establishing an AML diagnosis. This eliminates the need for some confirmatory testing.",
+                keyPoint: "Auer rods are DIAGNOSTIC - they confirm myeloid lineage and can establish AML diagnosis even before flow cytometry.",
+                citation: "ASH Image Bank - Teresa Scordino"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60569?size=3",
+                imageSource: "ASH Image Bank #60569",
+                question: "A 25-year-old has mediastinal mass and night sweats. This cell's immunophenotype would show:",
+                options: [
+                    "CD19+, CD20+, CD10+ (B-cell markers)",
+                    "CD15+, CD30+, PAX5 weak (Reed-Sternberg phenotype)",
+                    "CD3+, CD4+ or CD8+ (T-cell markers)",
+                    "CD38+, CD138+ (plasma cell markers)"
+                ],
+                correct: 1,
+                explanation: "This Reed-Sternberg cell with 'owl-eye' nucleoli is diagnostic for classic Hodgkin lymphoma. RS cells have a characteristic phenotype: CD15+, CD30+, with weak/absent PAX5, and negative for most B-cell markers despite B-cell origin.",
+                keyPoint: "RS cells: CD30+, CD15+, PAX5 weak, CD45-. This PARADOXICAL phenotype (B-cell origin, lost B markers) is diagnostically useful.",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/61346?size=3",
+                imageSource: "ASH Image Bank #61346",
+                question: "This 'starry sky' pattern has Ki-67 of 99%. What translocation drives this lymphoma?",
+                options: [
+                    "t(14;18) - BCL2/IGH",
+                    "t(8;14) - MYC/IGH",
+                    "t(11;14) - CCND1/IGH",
+                    "t(9;22) - BCR/ABL1"
+                ],
+                correct: 1,
+                explanation: "The starry sky pattern with near-100% Ki-67 is Burkitt lymphoma. It's driven by MYC translocation, most commonly t(8;14) putting MYC under IGH enhancer control. This causes uncontrolled proliferation.",
+                keyPoint: "Burkitt = MYC translocation. The 'starry sky' is from macrophages clearing apoptotic debris from extremely rapid turnover.",
+                citation: "ASH Image Bank - Timothy C Carll, MD"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/61459?size=3",
+                imageSource: "ASH Image Bank #61459",
+                question: "These plasma cells are 35% of marrow. What additional finding would indicate ACTIVE myeloma vs MGUS?",
+                options: [
+                    "Presence of M-protein alone",
+                    "CRAB criteria: hypercalcemia, renal failure, anemia, or bone lesions",
+                    "Age over 65 years",
+                    "Family history of plasma cell neoplasm"
+                ],
+                correct: 1,
+                explanation: "Plasma cells ≥10% suggests a plasma cell neoplasm, but distinguishing myeloma from MGUS/smoldering myeloma requires end-organ damage (CRAB) OR myeloma-defining events (≥60% plasma cells, FLC ratio ≥100, >1 MRI lesion).",
+                keyPoint: "CRAB criteria convert smoldering to active myeloma: Calcium >11, Renal (Cr>2), Anemia (Hgb<10), Bone lesions.",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/63988?size=3",
+                imageSource: "ASH Image Bank #63988",
+                question: "This follicular pattern lymphoma is grade 1-2. Why might you AVOID immediate treatment?",
+                options: [
+                    "It's always rapidly fatal regardless of treatment",
+                    "Low-grade FL is indolent; watch-and-wait is appropriate for asymptomatic patients",
+                    "Chemotherapy is contraindicated in all lymphomas",
+                    "Surgery is the only curative option"
+                ],
+                correct: 1,
+                explanation: "Low-grade (grade 1-2) follicular lymphoma is INDOLENT. Multiple studies show no survival benefit to early treatment in asymptomatic patients. Watch-and-wait avoids treatment toxicity until symptoms develop.",
+                keyPoint: "Follicular lymphoma grade 1-2: 'Watch and wait' is standard for asymptomatic patients. Treat when symptomatic or high tumor burden.",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/64130?size=3",
+                imageSource: "ASH Image Bank #64130",
+                question: "This blast morphology suggests t(8;21) AML. What is the PROGNOSIS and treatment implication?",
+                options: [
+                    "Poor prognosis - requires allogeneic transplant in CR1",
+                    "Favorable prognosis - consolidation chemotherapy preferred over transplant in CR1",
+                    "Intermediate prognosis - transplant based on MRD",
+                    "Very poor prognosis - palliative care only"
+                ],
+                correct: 1,
+                explanation: "The salmon-pink cytoplasm, perinuclear hof, and long thin Auer rod suggest t(8;21) AML, which is FAVORABLE risk per ELN 2022. These patients do well with chemotherapy consolidation and don't need transplant in first remission.",
+                keyPoint: "t(8;21) = ELN favorable risk. Consolidation chemo preferred over allo-transplant in CR1. Cure rate ~65% with chemo alone.",
+                citation: "ASH Image Bank - Deepika V, DNB"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/4234?size=3",
+                imageSource: "ASH Image Bank #4234",
+                question: "These cells with 'hairy' projections are from a patient with pancytopenia and splenomegaly. What mutation is present in >95% of cases?",
+                options: [
+                    "JAK2 V617F",
+                    "BRAF V600E",
+                    "NPM1",
+                    "FLT3-ITD"
+                ],
+                correct: 1,
+                explanation: "These are hairy cells showing characteristic cytoplasmic projections. Hairy cell leukemia has BRAF V600E mutation in >95% of cases, making it essentially pathognomonic and a therapeutic target for BRAF inhibitors (vemurafenib).",
+                keyPoint: "Hairy cell leukemia: BRAF V600E in >95%. Also TRAP+, Annexin A1+. Responds dramatically to purine analogs or BRAF inhibitors.",
+                citation: "ASH Image Bank - Peter Maslak"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/5912?size=3",
+                imageSource: "ASH Image Bank #5912",
+                question: "You see these 'faggot cells' on a stat peripheral smear. What is your IMMEDIATE action before genetic confirmation?",
+                options: [
+                    "Wait for FISH results before any treatment",
+                    "Start ATRA immediately - this morphology alone warrants empiric treatment",
+                    "Begin standard AML induction chemotherapy",
+                    "Order bone marrow biopsy first"
+                ],
+                correct: 1,
+                explanation: "Multiple Auer rods ('faggot cells') are virtually diagnostic of APL. Due to life-threatening DIC risk, ATRA should be started IMMEDIATELY on morphologic suspicion alone - don't wait for genetic confirmation of t(15;17).",
+                keyPoint: "APL is a MEDICAL EMERGENCY. Start ATRA on morphologic suspicion. DIC can be rapidly fatal. 'See faggots, start ATRA.'",
+                citation: "ASH Image Bank - Marco Gambassi"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/1023?size=3",
+                imageSource: "ASH Image Bank #1023",
+                question: "These fragile lymphocytes with 'smudge cells' have what characteristic immunophenotype?",
+                options: [
+                    "CD5+, CD19+, CD23+, CD200+ (CLL phenotype)",
+                    "CD5-, CD10+, CD19+ (follicular lymphoma)",
+                    "CD5+, CD19+, CD23-, cyclin D1+ (mantle cell)",
+                    "CD103+, CD25+, CD11c+ (hairy cell)"
+                ],
+                correct: 0,
+                explanation: "The smudge cells are a classic artifact of CLL - the cells are fragile and rupture during smear preparation. CLL has a characteristic phenotype: CD5+, CD19+, CD23+, CD200+, with weak surface immunoglobulin.",
+                keyPoint: "CLL smudge cells = fragile lymphocytes. CLL score: CD5+, CD23+, weak sIg, CD79b weak, FMC7-. Score ≥4 = CLL.",
+                citation: "ASH Image Bank - Peter Maslak"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/62419?size=3",
+                imageSource: "ASH Image Bank #62419",
+                question: "Congo red shows apple-green birefringence. In a myeloma patient, what is the NEXT test to type this amyloid?",
+                options: [
+                    "Repeat Congo red stain",
+                    "Mass spectrometry of amyloid deposits",
+                    "Serum free light chains only",
+                    "PET scan"
+                ],
+                correct: 1,
+                explanation: "Congo red confirms AMYLOID but doesn't tell you the TYPE. In myeloma patients, it could be AL (light chain) or rarely AA. Mass spectrometry of the deposits is now gold standard for typing, as it directly identifies the amyloid protein.",
+                keyPoint: "Amyloid typing is CRITICAL: AL (myeloma-related) vs AA vs ATTR. Mass spec > immunohistochemistry for accuracy. Treatment differs completely.",
+                citation: "ASH Image Bank"
+            },
+
+            // ============ BENIGN/REACTIVE FINDINGS ============
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60046?size=3",
+                imageSource: "ASH Image Bank #60046",
+                question: "A septic patient shows these neutrophil changes. What additional findings often accompany this?",
+                options: [
+                    "Auer rods and blasts",
+                    "Döhle bodies and cytoplasmic vacuolation",
+                    "Hypersegmentation",
+                    "Pelger-Huët anomaly"
+                ],
+                correct: 1,
+                explanation: "Toxic granulation (dark azurophilic granules) is part of the 'toxic changes' triad seen in severe infection: toxic granulation + Döhle bodies (blue cytoplasmic inclusions) + cytoplasmic vacuolation. This is a REACTIVE finding.",
+                keyPoint: "Toxic triad: granulation + Döhle bodies + vacuoles = severe infection/inflammation. NOT a neoplastic process.",
+                citation: "ASH Image Bank - Teresa Scordino"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/64671?size=3",
+                imageSource: "ASH Image Bank #64671",
+                question: "A college student has fever, pharyngitis, and these atypical lymphocytes. What test confirms the diagnosis?",
+                options: [
+                    "Bone marrow biopsy",
+                    "Heterophile antibody (Monospot) or EBV serologies",
+                    "Flow cytometry for lymphoma",
+                    "Lumbar puncture"
+                ],
+                correct: 1,
+                explanation: "These atypical lymphocytes (Downey cells) with abundant blue cytoplasm 'hugging' RBCs are classic for infectious mononucleosis. Monospot (heterophile antibody) confirms EBV. These are reactive CD8+ T cells, NOT malignant.",
+                keyPoint: "Atypical lymphocytes + pharyngitis + lymphadenopathy = think EBV mono. Monospot for quick diagnosis. Avoid contact sports (spleen rupture risk).",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60310?size=3",
+                imageSource: "ASH Image Bank #60310",
+                question: "These target cells are seen with microcytosis. What is the MOST likely underlying condition?",
+                options: [
+                    "Liver cirrhosis (target cells are macrocytic)",
+                    "Thalassemia trait (target cells with microcytosis)",
+                    "G6PD deficiency",
+                    "Autoimmune hemolytic anemia"
+                ],
+                correct: 1,
+                explanation: "Target cells with MICROCYTOSIS points to thalassemia or hemoglobin C/E disease. In liver disease, target cells are typically macrocytic. The MCV helps differentiate: low MCV + targets = thalassemia; high MCV + targets = liver disease.",
+                keyPoint: "Target cells + microcytosis = thalassemia. Target cells + macrocytosis = liver disease. MCV is the key discriminator.",
+                citation: "ASH Image Bank - Teresa Scordino"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60307?size=3",
+                imageSource: "ASH Image Bank #60307",
+                question: "A patient has platelet 15K, Hgb 7, Cr 2.0, and these RBC fragments. What is the CRITICAL next test?",
+                options: [
+                    "Iron studies",
+                    "ADAMTS13 activity level",
+                    "Vitamin B12 level",
+                    "Direct Coombs test"
+                ],
+                correct: 1,
+                explanation: "Schistocytes + thrombocytopenia + anemia + renal dysfunction = MAHA. Must rule out TTP (ADAMTS13 <10%) vs HUS. This is a MEDICAL EMERGENCY - TTP requires urgent plasma exchange. Don't wait for results to start treatment if high suspicion.",
+                keyPoint: "Schistocytes + low platelets = TTP until proven otherwise. Check ADAMTS13 but START PLEX empirically if high suspicion. Mortality >90% untreated.",
+                citation: "ASH Image Bank - Teresa Scordino"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/63694?size=3",
+                imageSource: "ASH Image Bank #63694",
+                question: "This nuclear remnant is seen in a sickle cell patient. Why are these normally absent in healthy individuals?",
+                options: [
+                    "They don't form in healthy bone marrow",
+                    "The spleen normally removes them from circulating RBCs",
+                    "They dissolve spontaneously in plasma",
+                    "The liver filters them out"
+                ],
+                correct: 1,
+                explanation: "Howell-Jolly bodies are nuclear remnants that form normally but are REMOVED BY THE SPLEEN. Their presence indicates asplenia (surgical) or functional hyposplenism (sickle cell autoinfarction, celiac disease, etc.).",
+                keyPoint: "Howell-Jolly bodies = asplenia/hyposplenism. In sickle cell, indicates auto-splenectomy. These patients need vaccinations against encapsulated organisms.",
+                citation: "ASH Image Bank - Perla Vicari"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/64380?size=3",
+                imageSource: "ASH Image Bank #64380",
+                question: "This neutrophil has 8 lobes. MCV is 125 fL. What TWO nutrients should be checked?",
+                options: [
+                    "Iron and copper",
+                    "Vitamin B12 and folate",
+                    "Zinc and selenium",
+                    "Vitamin D and calcium"
+                ],
+                correct: 1,
+                explanation: "Hypersegmented neutrophils (≥6 lobes) + macrocytosis (high MCV) = MEGALOBLASTIC ANEMIA. This results from impaired DNA synthesis due to B12 or folate deficiency. Both should be checked as treatment differs.",
+                keyPoint: "Hypersegmented PMNs + high MCV = check B12 AND folate. Treat folate deficiency alone in B12 deficiency can precipitate neuro damage.",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60308?size=3",
+                imageSource: "ASH Image Bank #60308",
+                question: "These spherocytes lack central pallor. DAT is negative. What inherited condition is most likely?",
+                options: [
+                    "Sickle cell disease",
+                    "Hereditary spherocytosis (membrane defect)",
+                    "G6PD deficiency",
+                    "Pyruvate kinase deficiency"
+                ],
+                correct: 1,
+                explanation: "Spherocytes + negative DAT rules out autoimmune hemolysis. Hereditary spherocytosis is caused by RBC membrane protein defects (spectrin, ankyrin, band 3). EMA binding test and osmotic fragility confirm diagnosis.",
+                keyPoint: "Spherocytes + DAT negative = likely hereditary spherocytosis. Confirm with EMA binding (flow) or osmotic fragility. Splenectomy is curative.",
+                citation: "ASH Image Bank - Teresa Scordino"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/61072?size=3",
+                imageSource: "ASH Image Bank #61072",
+                question: "Coarse basophilic stippling in a patient taking herbal supplements. What toxin should be tested?",
+                options: [
+                    "Mercury",
+                    "Lead",
+                    "Arsenic",
+                    "Thallium"
+                ],
+                correct: 1,
+                explanation: "COARSE basophilic stippling is classic for lead poisoning. Lead inhibits pyrimidine-5'-nucleotidase, causing RNA precipitation. Fine stippling is seen in thalassemia. Herbal supplements are an increasingly recognized source of lead toxicity.",
+                keyPoint: "COARSE basophilic stippling = lead poisoning. Fine stippling = thalassemia. Lead level + zinc protoporphyrin to confirm.",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/3958?size=3",
+                imageSource: "ASH Image Bank #3958",
+                question: "This sickle cell patient also shows target cells and Howell-Jolly bodies. What does this combination indicate?",
+                options: [
+                    "Concurrent liver disease",
+                    "Functional asplenia from repeated splenic infarcts",
+                    "Vitamin B12 deficiency",
+                    "Concurrent thalassemia trait"
+                ],
+                correct: 1,
+                explanation: "In sickle cell disease, repeated vaso-occlusive crises cause splenic infarction leading to AUTO-SPLENECTOMY by adulthood. Howell-Jolly bodies appear because the spleen no longer removes nuclear remnants. This increases infection risk.",
+                keyPoint: "SCD + Howell-Jolly bodies = auto-splenectomy. These patients need prophylactic penicillin and vaccines against encapsulated organisms (pneumococcus, H. flu, meningococcus).",
+                citation: "ASH Image Bank - John Lazarchick"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/61365?size=3",
+                imageSource: "ASH Image Bank #61365",
+                question: "This Prussian blue stain finding is associated with what mutation in neoplastic cases?",
+                options: [
+                    "JAK2 V617F",
+                    "SF3B1",
+                    "CALR",
+                    "TP53"
+                ],
+                correct: 1,
+                explanation: "Ringed sideroblasts (iron-laden mitochondria circling ≥1/3 of nucleus) in MDS are strongly associated with SF3B1 mutation (>80% of MDS-RS cases). SF3B1 mutation actually confers BETTER prognosis within MDS and may predict luspatercept response.",
+                keyPoint: "Ringed sideroblasts + MDS = likely SF3B1 mutation. This is actually favorable within MDS. Also consider acquired causes: alcohol, isoniazid, copper deficiency.",
+                citation: "ASH Image Bank - Timothy C Carll"
+            },
+
+            // ============ ADDITIONAL QUESTIONS - IMAGE INTERPRETATION FOCUS ============
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60268?size=3",
+                imageSource: "ASH Image Bank #60268",
+                question: "A 68-year-old with back pain has this peripheral smear finding. What serum test would likely be abnormal?",
+                options: [
+                    "Ferritin",
+                    "Serum protein electrophoresis (SPEP)",
+                    "TSH",
+                    "Vitamin D"
+                ],
+                correct: 1,
+                explanation: "This shows rouleaux formation - RBCs stacked like coins due to increased plasma proteins (immunoglobulins or fibrinogen) neutralizing RBC surface charge. In a patient with back pain, think multiple myeloma - SPEP would show M-spike.",
+                keyPoint: "Rouleaux = increased plasma proteins. With bone pain, suspect myeloma. Also seen in Waldenström's, inflammatory states.",
+                citation: "ASH Image Bank - Teresa Scordino"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60311?size=3",
+                imageSource: "ASH Image Bank #60311",
+                question: "A patient with massive splenomegaly and anemia shows this RBC morphology. What would bone marrow biopsy likely show?",
+                options: [
+                    "Hypercellular with erythroid hyperplasia",
+                    "Fibrosis - 'dry tap' on aspiration",
+                    "Aplastic marrow",
+                    "Megaloblastic changes"
+                ],
+                correct: 1,
+                explanation: "These are teardrop cells (dacrocytes) - RBCs squeezed through fibrotic marrow or extramedullary hematopoiesis. With splenomegaly, think myelofibrosis. The marrow is fibrotic, yielding a 'dry tap' on aspiration.",
+                keyPoint: "Dacrocytes + splenomegaly + leukoerythroblastic picture = myelofibrosis until proven otherwise. Also marrow infiltration (mets, granulomas).",
+                citation: "ASH Image Bank - Teresa Scordino"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/61505?size=3",
+                imageSource: "ASH Image Bank #61505",
+                question: "A patient given rasburicase develops acute hemolysis. This smear finding suggests what underlying condition?",
+                options: [
+                    "Sickle cell trait",
+                    "G6PD deficiency",
+                    "Hereditary spherocytosis",
+                    "Paroxysmal nocturnal hemoglobinuria"
+                ],
+                correct: 1,
+                explanation: "These bite cells (degmacytes) result from splenic removal of Heinz bodies (denatured hemoglobin). Rasburicase produces hydrogen peroxide, causing oxidative hemolysis in G6PD-deficient patients - a CONTRAINDICATION.",
+                keyPoint: "Bite/blister cells = oxidative hemolysis. Think G6PD deficiency. Triggers: fava beans, rasburicase, dapsone, sulfa drugs, primaquine.",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60045?size=3",
+                imageSource: "ASH Image Bank #60045",
+                question: "A patient on valproic acid has these neutrophils. What diagnosis should be considered?",
+                options: [
+                    "Bacterial infection",
+                    "MDS or drug-induced pseudo-Pelger-Huët anomaly",
+                    "CML",
+                    "Vitamin B12 deficiency"
+                ],
+                correct: 1,
+                explanation: "These bilobed 'pince-nez' neutrophils show Pelger-Huët anomaly. In this patient on valproic acid, it's likely drug-induced (pseudo-Pelger-Huët). Also seen in MDS. Congenital form is benign.",
+                keyPoint: "Bilobed neutrophils = Pelger-Huët. If acquired: think MDS or drugs (valproate, mycophenolate, ganciclovir, tacrolimus).",
+                citation: "ASH Image Bank - Teresa Scordino"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/2672?size=3",
+                imageSource: "ASH Image Bank #2672",
+                question: "This cell type appearing in peripheral blood with immature granulocytes suggests what pattern?",
+                options: [
+                    "Reactive lymphocytosis",
+                    "Leukoerythroblastic picture - marrow infiltration",
+                    "Iron deficiency anemia",
+                    "Pure red cell aplasia"
+                ],
+                correct: 1,
+                explanation: "This nucleated RBC (NRBC) in peripheral blood, combined with immature granulocytes, indicates a leukoerythroblastic picture - suggesting marrow infiltration (fibrosis, metastatic cancer, granulomas) or severe stress.",
+                keyPoint: "NRBCs + immature WBCs = leukoerythroblastic. Think marrow infiltration: myelofibrosis, metastatic cancer, severe sepsis, massive hemorrhage.",
+                citation: "ASH Image Bank - Peter Maslak"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60266?size=3",
+                imageSource: "ASH Image Bank #60266",
+                question: "A patient with alcoholic cirrhosis and Hgb 7 has this smear. What is the prognosis associated with this finding?",
+                options: [
+                    "Excellent - will resolve with abstinence",
+                    "Poor - median survival <3 months without transplant",
+                    "Moderate - responds to steroids",
+                    "Dependent on platelet count only"
+                ],
+                correct: 1,
+                explanation: "These acanthocytes (spur cells) result from abnormal lipid metabolism in liver failure. ≥5% spur cells indicates advanced cirrhosis with median survival <3 months. Only liver transplant is definitive treatment.",
+                keyPoint: "Spur cell anemia = end-stage liver disease. Very poor prognosis. Irregular spicules (vs. echinocytes/burr cells which are uniform).",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/61016?size=3",
+                imageSource: "ASH Image Bank #61016",
+                question: "A febrile traveler from Africa has these inclusions. Multiple organisms per RBC suggests which species?",
+                options: [
+                    "P. vivax",
+                    "P. falciparum",
+                    "P. malariae",
+                    "P. ovale"
+                ],
+                correct: 1,
+                explanation: "These ring forms with multiple parasites per RBC and 'headphone' double-dot forms are characteristic of P. falciparum - the most severe form. P. vivax/ovale enlarge RBCs and rarely have multiple rings per cell.",
+                keyPoint: "Multiple rings per RBC + normal RBC size = P. falciparum. Medical emergency - can cause cerebral malaria, >5% parasitemia is severe.",
+                citation: "ASH Image Bank - Girish Venkataraman"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60270?size=3",
+                imageSource: "ASH Image Bank #60270",
+                question: "An asymptomatic patient has >25% of RBCs with this morphology. Family history reveals similar findings. What is this?",
+                options: [
+                    "Iron deficiency",
+                    "Hereditary elliptocytosis",
+                    "Artifact from slide preparation",
+                    "Thalassemia"
+                ],
+                correct: 1,
+                explanation: "These elliptocytes (oval-shaped RBCs) in >25% of cells with family history indicates hereditary elliptocytosis - an autosomal dominant membrane protein defect. Usually asymptomatic; some have mild hemolysis.",
+                keyPoint: "Elliptocytes >25% + family history = hereditary elliptocytosis. Usually benign. Severe form (pyropoikilocytosis) causes significant hemolysis.",
+                citation: "ASH Image Bank - Teresa Scordino"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/3378?size=3",
+                imageSource: "ASH Image Bank #3378",
+                question: "A patient with diffuse erythroderma has these lymphocytes. What is the characteristic nuclear morphology?",
+                options: [
+                    "Blast-like with nucleoli",
+                    "Cerebriform (brain-like) convolutions",
+                    "Cleaved/buttock-shaped",
+                    "Lobulated with flower-like appearance"
+                ],
+                correct: 1,
+                explanation: "These Sézary cells have characteristic cerebriform (brain-like) nuclear convolutions. With erythroderma, this is Sézary syndrome - the leukemic phase of mycosis fungoides (cutaneous T-cell lymphoma).",
+                keyPoint: "Cerebriform lymphocytes + erythroderma = Sézary syndrome. CD4+ T-cells. Requires skin, blood, and node involvement for diagnosis.",
+                citation: "ASH Image Bank - Julia Braza"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/61458?size=3",
+                imageSource: "ASH Image Bank #61458",
+                question: "A patient presents with pathologic vertebral fracture. This smear finding correlates with what lab abnormality?",
+                options: [
+                    "Low albumin",
+                    "Elevated ESR and serum viscosity",
+                    "Low LDH",
+                    "Elevated haptoglobin"
+                ],
+                correct: 1,
+                explanation: "This shows rouleaux formation with a circulating plasma cell. The excess immunoglobulin causes markedly elevated ESR and can cause hyperviscosity. Pathologic fracture suggests myeloma with lytic bone disease.",
+                keyPoint: "Rouleaux → elevated ESR, may have hyperviscosity. If symptomatic hyperviscosity: plasmapheresis. Common in myeloma, Waldenström's.",
+                citation: "ASH Image Bank - Heather Smith"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/64882?size=3",
+                imageSource: "ASH Image Bank #64882",
+                question: "A patient has splenomegaly, constitutional symptoms, and this blood smear. What mutation testing is indicated?",
+                options: [
+                    "BCR-ABL1",
+                    "JAK2, CALR, and MPL",
+                    "NPM1 and FLT3",
+                    "MYD88"
+                ],
+                correct: 1,
+                explanation: "These prominent teardrop cells with clinical features suggest primary myelofibrosis. MPN driver mutation testing (JAK2 V617F, CALR, MPL) is essential. ~90% of PMF has one of these mutations.",
+                keyPoint: "Teardrops + splenomegaly + cytopenias = test for MPN mutations. JAK2 in ~60% PMF, CALR ~25%, MPL ~5%. Triple-negative has worst prognosis.",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/65343?size=3",
+                imageSource: "ASH Image Bank #65343",
+                question: "A returned traveler is critically ill with 15% parasitemia. What medication is CONTRAINDICATED for prophylaxis in this region?",
+                options: [
+                    "Doxycycline",
+                    "Chloroquine (if resistant area)",
+                    "Atovaquone-proguanil",
+                    "Mefloquine"
+                ],
+                correct: 1,
+                explanation: "These P. falciparum ring forms with high parasitemia (>5% = severe malaria) indicate a chloroquine-resistant area (most of Africa, SE Asia). Chloroquine resistance is widespread in P. falciparum - use artemisinin-based therapy.",
+                keyPoint: "P. falciparum is chloroquine-resistant in most endemic areas. Severe malaria (>5% parasitemia) = IV artesunate. Exchange transfusion if >10%.",
+                citation: "ASH Image Bank - Shaun Bhardwaj"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/62747?size=3",
+                imageSource: "ASH Image Bank #62747",
+                question: "This smear is from a patient with Child-Pugh C cirrhosis. What RBC morphology predominates?",
+                options: [
+                    "Target cells",
+                    "Acanthocytes (spur cells)",
+                    "Spherocytes",
+                    "Schistocytes"
+                ],
+                correct: 1,
+                explanation: "These acanthocytes have irregular, pointed projections due to abnormal membrane lipids in severe liver failure. Unlike burr cells (uniform projections from uremia), spur cells indicate end-stage liver disease.",
+                keyPoint: "Spur cells vs burr cells: Spur = irregular spicules (liver), Burr = uniform crenations (uremia). Both are acanthocytes but different mechanisms.",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60723?size=3",
+                imageSource: "ASH Image Bank #60723",
+                question: "An asymptomatic patient's CBC shows WBC differential with >80% bilobed neutrophils. Family history is similar. This is likely:",
+                options: [
+                    "MDS requiring treatment",
+                    "Congenital Pelger-Huët anomaly (benign)",
+                    "Acute infection",
+                    "CML"
+                ],
+                correct: 1,
+                explanation: "With >80% bilobed neutrophils and family history, this is congenital Pelger-Huët anomaly - a benign autosomal dominant condition (LBR gene). Neutrophil function is NORMAL. No treatment needed.",
+                keyPoint: "Congenital Pelger-Huët: benign, autosomal dominant, >50-95% cells affected, normal function. Pseudo (acquired): MDS, drugs, only 25-50% affected.",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/61022?size=3",
+                imageSource: "ASH Image Bank #61022",
+                question: "This peripheral smear finding with massive splenomegaly suggests what WHO-classified neoplasm?",
+                options: [
+                    "Essential thrombocythemia",
+                    "Primary myelofibrosis",
+                    "Polycythemia vera",
+                    "CML"
+                ],
+                correct: 1,
+                explanation: "Multiple teardrop cells (dacrocytes) with massive splenomegaly and constitutional symptoms points to primary myelofibrosis. The marrow fibrosis forces extramedullary hematopoiesis in the spleen.",
+                keyPoint: "PMF triad: dacrocytes, leukoerythroblastic picture, splenomegaly. Marrow shows megakaryocyte atypia and fibrosis (reticulin/collagen).",
+                citation: "ASH Image Bank - Girish Venkataraman"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/64410?size=3",
+                imageSource: "ASH Image Bank #64410",
+                question: "A patient develops acute anemia 2 days after eating fava beans for the first time. This RBC finding confirms what diagnosis?",
+                options: [
+                    "Autoimmune hemolytic anemia",
+                    "G6PD deficiency (favism)",
+                    "Hereditary spherocytosis",
+                    "PNH"
+                ],
+                correct: 1,
+                explanation: "This blister cell (hemoglobin retracted to one side with a clear vacuole) indicates oxidative hemolysis. Fava beans trigger hemolysis in G6PD deficiency (favism). Mediterranean variant has most severe phenotype.",
+                keyPoint: "Favism: fava beans → oxidative stress → hemolysis in G6PD deficiency. Test G6PD level AFTER acute episode resolves (young RBCs have more G6PD).",
+                citation: "ASH Image Bank"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/2045?size=3",
+                imageSource: "ASH Image Bank #2045",
+                question: "A 72-year-old has lymphocytosis of 85,000 discovered incidentally. This smear appearance is most consistent with:",
+                options: [
+                    "Acute lymphoblastic leukemia",
+                    "Chronic lymphocytic leukemia",
+                    "Mantle cell lymphoma",
+                    "Hairy cell leukemia"
+                ],
+                correct: 1,
+                explanation: "This shows mature-appearing small lymphocytes with smudge cells (ruptured fragile CLL cells). Incidental lymphocytosis in an elderly patient with this morphology is classic CLL. Many patients never need treatment.",
+                keyPoint: "CLL: mature small lymphocytes + smudge cells. Monoclonal B-cells >5K. Rai/Binet staging guides treatment. Many have indolent course.",
+                citation: "ASH Image Bank - Peter Maslak"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/63688?size=3",
+                imageSource: "ASH Image Bank #63688",
+                question: "A patient with monoclonal IgM and lymphadenopathy has this smear. What syndrome should be considered?",
+                options: [
+                    "Multiple myeloma",
+                    "Waldenström macroglobulinemia",
+                    "MGUS",
+                    "Light chain deposition disease"
+                ],
+                correct: 1,
+                explanation: "Rouleaux formation with IgM monoclonal protein and lymphadenopathy suggests Waldenström macroglobulinemia (lymphoplasmacytic lymphoma with IgM). MYD88 L265P mutation present in >90%.",
+                keyPoint: "Waldenström = IgM M-protein + lymphoplasmacytic infiltrate. Can cause hyperviscosity (more common than myeloma due to IgM pentamer size).",
+                citation: "ASH Image Bank - Perla Vicari"
+            },
+            {
+                imageUrl: "https://imagebank.hematology.org/getimagebyid/60517?size=3",
+                imageSource: "ASH Image Bank #60517",
+                question: "A patient with anorexia nervosa has severe anemia with this RBC morphology. What nutritional deficiency may contribute?",
+                options: [
+                    "B12 deficiency",
+                    "Vitamin E deficiency",
+                    "Iron deficiency",
+                    "Folate deficiency"
+                ],
+                correct: 1,
+                explanation: "These acanthocytes can be seen in anorexia nervosa due to vitamin E deficiency and altered lipid metabolism. Vitamin E deficiency impairs RBC membrane integrity. Also seen in abetalipoproteinemia.",
+                keyPoint: "Acanthocytes: liver disease (most common), abetalipoproteinemia, neuroacanthocytosis, vitamin E deficiency, anorexia nervosa, post-splenectomy.",
+                citation: "ASH Image Bank"
+            }
+        ];
+
+        // Game state
+        let gameState = {
+            currentQuestion: 0,
+            score: 0,
+            streak: 0,
+            bestStreak: 0,
+            correct: 0,
+            total: 10,
+            answered: false,
+            shuffledQuestions: []
+        };
+
+        // Audio
+        let isMuted = false;
+        let audioContext = null;
+
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        function playSound(frequencies, duration = 0.1) {
+            if (isMuted) return;
+            try {
+                const ctx = initAudio();
+                frequencies.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime + i * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.08 + duration);
+                    osc.start(ctx.currentTime + i * 0.08);
+                    osc.stop(ctx.currentTime + i * 0.08 + duration);
+                });
+            } catch(e) {}
+        }
+
+        function playCorrectSound() {
+            playSound([523, 659, 784, 1047], 0.12);
+        }
+
+        function playWrongSound() {
+            playSound([200, 150], 0.2);
+        }
+
+        function playStartSound() {
+            playSound([262, 330, 392, 523], 0.1);
+        }
+
+        function toggleVolume() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('volumeToggle');
+            const icon = document.getElementById('volumeIcon');
+            if (isMuted) {
+                btn.classList.add('muted');
+                icon.textContent = '🔇';
+            } else {
+                btn.classList.remove('muted');
+                icon.textContent = '🔊';
+            }
+        }
+
+        // Zoom functionality
+        let currentZoom = 1;
+        const zoomLevels = [1, 2, 3];
+
+        function openZoom() {
+            const specimenImg = document.getElementById('specimenImage');
+            const zoomImg = document.getElementById('zoomImage');
+            const modal = document.getElementById('zoomModal');
+
+            zoomImg.src = specimenImg.src;
+            currentZoom = 1;
+            updateZoomDisplay();
+            modal.classList.add('active');
+
+            playSound([440, 880], 0.05);
+        }
+
+        function closeZoom() {
+            document.getElementById('zoomModal').classList.remove('active');
+            playSound([880, 440], 0.05);
+        }
+
+        function zoomIn() {
+            const currentIndex = zoomLevels.indexOf(currentZoom);
+            if (currentIndex < zoomLevels.length - 1) {
+                currentZoom = zoomLevels[currentIndex + 1];
+                updateZoomDisplay();
+                playSound([523], 0.05);
+            }
+        }
+
+        function zoomOut() {
+            const currentIndex = zoomLevels.indexOf(currentZoom);
+            if (currentIndex > 0) {
+                currentZoom = zoomLevels[currentIndex - 1];
+                updateZoomDisplay();
+                playSound([392], 0.05);
+            }
+        }
+
+        function updateZoomDisplay() {
+            const zoomImg = document.getElementById('zoomImage');
+            const zoomLevel = document.getElementById('zoomLevel');
+            const zoomInBtn = document.getElementById('zoomInBtn');
+            const zoomOutBtn = document.getElementById('zoomOutBtn');
+
+            // Remove all zoom classes
+            zoomImg.classList.remove('zoom-1x', 'zoom-2x', 'zoom-3x');
+            zoomImg.classList.add(`zoom-${currentZoom}x`);
+
+            zoomLevel.textContent = `${currentZoom}x`;
+
+            // Update button states
+            zoomInBtn.disabled = currentZoom >= 3;
+            zoomOutBtn.disabled = currentZoom <= 1;
+
+            // Center scroll position when zooming
+            const container = document.getElementById('zoomContainer');
+            if (currentZoom > 1) {
+                setTimeout(() => {
+                    container.scrollLeft = (container.scrollWidth - container.clientWidth) / 2;
+                    container.scrollTop = (container.scrollHeight - container.clientHeight) / 2;
+                }, 50);
+            }
+        }
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeZoom();
+            }
+        });
+
+        // Close modal when clicking outside the image
+        document.getElementById('zoomModal').addEventListener('click', (e) => {
+            if (e.target.id === 'zoomModal') {
+                closeZoom();
+            }
+        });
+
+        // Shuffle array
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Start game
+        function startGame() {
+            playStartSound();
+
+            gameState = {
+                currentQuestion: 0,
+                score: 0,
+                streak: 0,
+                bestStreak: 0,
+                correct: 0,
+                total: 10,
+                answered: false,
+                shuffledQuestions: shuffleArray(questions).slice(0, 10)
+            };
+
+            document.getElementById('titleScreen').style.display = 'none';
+            document.getElementById('gameScreen').classList.add('active');
+            document.getElementById('resultsScreen').classList.remove('active');
+
+            updateScoreDisplay();
+            loadQuestion();
+        }
+
+        // Load question
+        function loadQuestion() {
+            if (gameState.currentQuestion >= gameState.total) {
+                endGame();
+                return;
+            }
+
+            gameState.answered = false;
+            const q = gameState.shuffledQuestions[gameState.currentQuestion];
+
+            // Set image
+            document.getElementById('specimenImage').src = q.imageUrl;
+            document.getElementById('imageCaption').textContent = q.imageSource;
+            document.getElementById('questionText').textContent = q.question;
+
+            // Create options
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `
+                    <span class="option-letter">${letters[index]}</span>
+                    <span class="option-text">${option}</span>
+                `;
+                btn.onclick = () => selectAnswer(index);
+                optionsGrid.appendChild(btn);
+            });
+
+            // Hide explanation
+            document.getElementById('explanationBox').classList.remove('show');
+        }
+
+        // Select answer
+        function selectAnswer(index) {
+            if (gameState.answered) return;
+            gameState.answered = true;
+
+            const q = gameState.shuffledQuestions[gameState.currentQuestion];
+            const options = document.querySelectorAll('.option-btn');
+
+            options.forEach(btn => btn.disabled = true);
+
+            if (index === q.correct) {
+                // Correct!
+                options[index].classList.add('correct');
+                gameState.correct++;
+                gameState.streak++;
+                if (gameState.streak > gameState.bestStreak) {
+                    gameState.bestStreak = gameState.streak;
+                }
+                gameState.score += 100 * gameState.streak;
+
+                playCorrectSound();
+                showFoundAnimation();
+            } else {
+                // Wrong
+                options[index].classList.add('incorrect');
+                options[q.correct].classList.add('correct');
+                gameState.streak = 0;
+
+                playWrongSound();
+            }
+
+            // Show explanation
+            document.getElementById('explanationText').textContent = q.explanation;
+            document.getElementById('keyPoint').textContent = '🔑 ' + q.keyPoint;
+            document.getElementById('citation').textContent = '📚 ' + q.citation;
+            document.getElementById('explanationBox').classList.add('show');
+
+            updateScoreDisplay();
+        }
+
+        // Show found animation
+        function showFoundAnimation() {
+            const overlay = document.getElementById('foundOverlay');
+            overlay.classList.add('show');
+            setTimeout(() => {
+                overlay.classList.remove('show');
+            }, 600);
+        }
+
+        // Next question
+        function nextQuestion() {
+            gameState.currentQuestion++;
+            loadQuestion();
+        }
+
+        // Update score display
+        function updateScoreDisplay() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('found').textContent = gameState.correct;
+            document.getElementById('streak').textContent = gameState.streak;
+        }
+
+        // End game
+        function endGame() {
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('resultsScreen').classList.add('active');
+
+            const accuracy = Math.round((gameState.correct / gameState.total) * 100);
+
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('correctCount').textContent = gameState.correct + '/10';
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            document.getElementById('bestStreak').textContent = gameState.bestStreak;
+
+            // Set title and emoji based on performance
+            let title, emoji;
+            if (accuracy >= 90) {
+                title = "MASTER DETECTIVE!";
+                emoji = "🏆";
+            } else if (accuracy >= 70) {
+                title = "SHARP EYES!";
+                emoji = "🔍";
+            } else if (accuracy >= 50) {
+                title = "GOOD SEARCHING!";
+                emoji = "👀";
+            } else {
+                title = "KEEP PRACTICING!";
+                emoji = "📚";
+            }
+
+            document.getElementById('resultsTitle').textContent = title;
+            document.getElementById('resultsEmoji').textContent = emoji;
+
+            // Save high score
+            const savedScore = localStorage.getItem('hemesWaldoHighScore') || 0;
+            if (gameState.score > savedScore) {
+                localStorage.setItem('hemesWaldoHighScore', gameState.score);
+            }
+
+            playSound([523, 587, 659, 698, 784], 0.15);
+        }
+    </script>
+</body>
+</html>
