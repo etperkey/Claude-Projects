@@ -11,8 +11,14 @@ export function GoogleAuthProvider({ children }) {
   const [gisLoaded, setGisLoaded] = useState(false);
   const [tokenClient, setTokenClient] = useState(null);
   const [user, setUser] = useState(null);
+  const [showSignInPrompt, setShowSignInPrompt] = useState(false);
 
   const hasCredentials = Boolean(GOOGLE_CLIENT_ID && GOOGLE_API_KEY);
+
+  // Check if user dismissed the prompt this session
+  const [promptDismissed, setPromptDismissed] = useState(() => {
+    return sessionStorage.getItem('google-signin-dismissed') === 'true';
+  });
 
   // Load Google API (gapi) for Docs/Drive/Calendar
   useEffect(() => {
@@ -79,7 +85,7 @@ export function GoogleAuthProvider({ children }) {
           callback: (tokenResponse) => {
             if (tokenResponse && tokenResponse.access_token) {
               setIsSignedIn(true);
-              // Try to get user info
+              setShowSignInPrompt(false);
               fetchUserInfo(tokenResponse.access_token);
             }
           },
@@ -96,6 +102,17 @@ export function GoogleAuthProvider({ children }) {
 
     loadGis();
   }, [gisLoaded]);
+
+  // Show sign-in prompt when GIS is loaded and user is not signed in
+  useEffect(() => {
+    if (gisLoaded && hasCredentials && !isSignedIn && !promptDismissed) {
+      // Small delay to let the app render first
+      const timer = setTimeout(() => {
+        setShowSignInPrompt(true);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [gisLoaded, hasCredentials, isSignedIn, promptDismissed]);
 
   const fetchUserInfo = async (accessToken) => {
     try {
@@ -127,6 +144,12 @@ export function GoogleAuthProvider({ children }) {
         setUser(null);
       });
     }
+  }, []);
+
+  const dismissPrompt = useCallback(() => {
+    setShowSignInPrompt(false);
+    setPromptDismissed(true);
+    sessionStorage.setItem('google-signin-dismissed', 'true');
   }, []);
 
   // Google Docs functions
@@ -204,6 +227,41 @@ export function GoogleAuthProvider({ children }) {
     }
   }, [gapiLoaded, isSignedIn]);
 
+  // Import content from a Google Doc
+  const importFromDoc = useCallback(async (docId) => {
+    if (!gapiLoaded || !isSignedIn || !docId) {
+      return null;
+    }
+
+    try {
+      const doc = await window.gapi.client.docs.documents.get({
+        documentId: docId
+      });
+
+      // Extract plain text from the document
+      let textContent = '';
+      const content = doc.result.body.content;
+
+      for (const element of content) {
+        if (element.paragraph) {
+          for (const textRun of element.paragraph.elements || []) {
+            if (textRun.textRun && textRun.textRun.content) {
+              textContent += textRun.textRun.content;
+            }
+          }
+        }
+      }
+
+      return {
+        title: doc.result.title,
+        content: textContent.trim()
+      };
+    } catch (error) {
+      console.error('Error importing from Google Doc:', error);
+      return null;
+    }
+  }, [gapiLoaded, isSignedIn]);
+
   // Google Calendar functions
   const getCalendarEvents = useCallback(async (timeMin, timeMax) => {
     if (!gapiLoaded || !isSignedIn) {
@@ -250,10 +308,13 @@ export function GoogleAuthProvider({ children }) {
     gisLoaded,
     hasCredentials,
     user,
+    showSignInPrompt,
     signIn,
     signOut,
+    dismissPrompt,
     createDoc,
     syncToDoc,
+    importFromDoc,
     getCalendarEvents,
     createCalendarEvent
   };

@@ -5,7 +5,7 @@ import { researchProjects } from '../data/projects';
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
 
 function LabNotebook({ isOpen, onClose }) {
-  const { isSignedIn, createDoc, syncToDoc } = useGoogleAuth();
+  const { isSignedIn, createDoc, syncToDoc, importFromDoc } = useGoogleAuth();
 
   const [entries, setEntries] = useState([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
@@ -191,6 +191,33 @@ function LabNotebook({ isOpen, onClose }) {
       setSyncStatus({ message: 'Synced to Google Doc!', type: 'success' });
     } else {
       setSyncStatus({ message: 'Failed to sync to Google Doc', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  // Import content from Google Doc
+  const handleImportFromGoogleDoc = async (entry) => {
+    if (!entry.googleDocId) {
+      setSyncStatus({ message: 'No Google Doc linked to this entry', type: 'error' });
+      return;
+    }
+
+    setSyncStatus({ message: 'Importing from Google Doc...', type: 'info' });
+
+    const result = await importFromDoc(entry.googleDocId);
+
+    if (result) {
+      // Extract the main content (after the "---" separator)
+      let importedContent = result.content;
+      const separatorIndex = importedContent.indexOf('---');
+      if (separatorIndex !== -1) {
+        importedContent = importedContent.substring(separatorIndex + 3).trim();
+      }
+
+      handleUpdateEntry(entry.id, { content: importedContent });
+      setSyncStatus({ message: 'Imported from Google Doc!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to import from Google Doc', type: 'error' });
     }
     setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
   };
@@ -439,7 +466,13 @@ function LabNotebook({ isOpen, onClose }) {
                                       className="btn-action"
                                       onClick={() => handleSyncToGoogleDoc(entry)}
                                     >
-                                      Sync to Doc
+                                      Push to Doc
+                                    </button>
+                                    <button
+                                      className="btn-action"
+                                      onClick={() => handleImportFromGoogleDoc(entry)}
+                                    >
+                                      Pull from Doc
                                     </button>
                                   </>
                                 ) : (
