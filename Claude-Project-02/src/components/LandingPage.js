@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { researchProjects } from '../data/projects';
+import AddProjectModal from './AddProjectModal';
 
 // Project icons
 const ProjectIcons = {
@@ -31,18 +32,65 @@ const ProjectIcons = {
       <ellipse cx="32" cy="20" rx="12" ry="8" fill="#5A8A4A"/>
       <line x1="32" y1="28" x2="32" y2="32" stroke="#8ABA7A" strokeWidth="2"/>
     </svg>
+  ),
+  custom: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <rect x="12" y="12" width="40" height="40" rx="8" fill="currentColor"/>
+      <circle cx="32" cy="28" r="8" fill="white" opacity="0.3"/>
+      <rect x="24" y="40" width="16" height="4" rx="2" fill="white" opacity="0.3"/>
+    </svg>
   )
 };
 
 // Calculate task stats
 const getTaskStats = (tasks) => {
   const total = Object.values(tasks).flat().length;
-  const done = tasks.done.length;
-  const inProgress = tasks.inProgress.length;
-  return { total, done, inProgress, percentage: Math.round((done / total) * 100) };
+  const done = tasks.done?.length || 0;
+  const inProgress = tasks.inProgress?.length || 0;
+  return { total, done, inProgress, percentage: total > 0 ? Math.round((done / total) * 100) : 0 };
 };
 
+// localStorage key
+const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
+
 function LandingPage() {
+  const [customProjects, setCustomProjects] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Load custom projects from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem(CUSTOM_PROJECTS_KEY);
+    if (saved) {
+      try {
+        setCustomProjects(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to load custom projects:', e);
+      }
+    }
+  }, []);
+
+  // Save custom projects to localStorage
+  const saveCustomProjects = (projects) => {
+    localStorage.setItem(CUSTOM_PROJECTS_KEY, JSON.stringify(projects));
+    setCustomProjects(projects);
+  };
+
+  const handleAddProject = (newProject) => {
+    const updated = [...customProjects, newProject];
+    saveCustomProjects(updated);
+  };
+
+  const handleDeleteProject = (e, projectId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this project?')) {
+      const updated = customProjects.filter(p => p.id !== projectId);
+      saveCustomProjects(updated);
+    }
+  };
+
+  const allProjects = [...researchProjects, ...customProjects];
+
   return (
     <div className="landing-page">
       <header className="landing-header">
@@ -54,13 +102,20 @@ function LandingPage() {
 
       <main className="landing-main">
         <section className="projects-overview">
-          <h2>Active Research Projects</h2>
-          <p className="section-description">
-            Click on a project to view detailed Kanban board and manage tasks
-          </p>
+          <div className="section-header">
+            <div>
+              <h2>Active Research Projects</h2>
+              <p className="section-description">
+                Click on a project to view detailed Kanban board and manage tasks
+              </p>
+            </div>
+            <button className="add-project-btn" onClick={() => setIsModalOpen(true)}>
+              + New Project
+            </button>
+          </div>
 
           <div className="project-grid">
-            {researchProjects.map((project) => {
+            {allProjects.map((project) => {
               const stats = getTaskStats(project.tasks);
               return (
                 <Link
@@ -69,9 +124,18 @@ function LandingPage() {
                   className="project-card"
                   style={{ '--project-color': project.color }}
                 >
+                  {project.isCustom && (
+                    <button
+                      className="delete-project-btn"
+                      onClick={(e) => handleDeleteProject(e, project.id)}
+                      title="Delete project"
+                    >
+                      &times;
+                    </button>
+                  )}
                   <div className="project-card-header">
                     <div className="project-icon" style={{ color: project.color }}>
-                      {ProjectIcons[project.icon]}
+                      {ProjectIcons[project.icon] || ProjectIcons.custom}
                     </div>
                     <div className="project-status-badge">
                       {stats.percentage}% Complete
@@ -122,24 +186,24 @@ function LandingPage() {
           <h2>Overview</h2>
           <div className="stats-grid">
             <div className="stat-card">
-              <span className="stat-value">{researchProjects.length}</span>
+              <span className="stat-value">{allProjects.length}</span>
               <span className="stat-label">Active Projects</span>
             </div>
             <div className="stat-card">
               <span className="stat-value">
-                {researchProjects.reduce((acc, p) => acc + Object.values(p.tasks).flat().length, 0)}
+                {allProjects.reduce((acc, p) => acc + Object.values(p.tasks).flat().length, 0)}
               </span>
               <span className="stat-label">Total Tasks</span>
             </div>
             <div className="stat-card">
               <span className="stat-value">
-                {researchProjects.reduce((acc, p) => acc + p.tasks.inProgress.length, 0)}
+                {allProjects.reduce((acc, p) => acc + (p.tasks.inProgress?.length || 0), 0)}
               </span>
               <span className="stat-label">In Progress</span>
             </div>
             <div className="stat-card">
               <span className="stat-value">
-                {researchProjects.reduce((acc, p) => acc + p.tasks.done.length, 0)}
+                {allProjects.reduce((acc, p) => acc + (p.tasks.done?.length || 0), 0)}
               </span>
               <span className="stat-label">Completed</span>
             </div>
@@ -150,6 +214,12 @@ function LandingPage() {
       <footer className="landing-footer">
         <p>Research Project Management Dashboard</p>
       </footer>
+
+      <AddProjectModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddProject={handleAddProject}
+      />
     </div>
   );
 }
