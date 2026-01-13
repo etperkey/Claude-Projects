@@ -1,14 +1,19 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from './components/LandingPage';
+import ProjectPage from './components/ProjectPage';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Claude Project 02</h1>
-        <p>Welcome to your new project!</p>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/project/:projectId" element={<ProjectPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
