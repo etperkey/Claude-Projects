@@ -893,3 +893,579 @@ body {
     width: 100%;
   }
 }
+
+/* ==================== Task Detail Modal ==================== */
+.task-modal-content {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.task-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  min-height: 52px;
+}
+
+.task-modal-labels {
+  display: flex;
+  gap: 6px;
+}
+
+.task-label-pill {
+  width: 40px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.task-modal-body {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.task-section {
+  margin-bottom: 24px;
+}
+
+.task-section > label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.section-header-row label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.task-title-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.task-title-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.task-description-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.9rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.task-description-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Priority selector */
+.task-meta-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.task-meta-item {
+  flex: 1;
+}
+
+.task-meta-item label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.priority-selector {
+  display: flex;
+  gap: 8px;
+}
+
+.priority-option {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid var(--priority-color);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--priority-color);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.priority-option:hover {
+  background: var(--priority-color);
+  color: white;
+}
+
+.priority-option.selected {
+  background: var(--priority-color);
+  color: white;
+}
+
+.date-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.date-input.overdue {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* Labels */
+.label-picker {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.label-option {
+  width: 36px;
+  height: 24px;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.label-option:hover {
+  transform: scale(1.1);
+}
+
+.label-option.selected {
+  border-color: white;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.selected-labels {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.label-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: white;
+  font-weight: 500;
+}
+
+.label-tag button {
+  background: none;
+  border: none;
+  color: white;
+  opacity: 0.7;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.label-tag button:hover {
+  opacity: 1;
+}
+
+.add-btn-small {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-btn-small:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+/* Checklist */
+.checklist-progress {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.checklist-progress-bar {
+  height: 4px;
+  background: var(--bg-card);
+  border-radius: 2px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.checklist-progress-fill {
+  height: 100%;
+  background: var(--success);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--bg-card);
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.checklist-item:hover {
+  background: var(--border-color);
+}
+
+.checklist-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--success);
+}
+
+.checklist-text {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.checklist-item.completed .checklist-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  padding: 0 4px;
+}
+
+.checklist-item:hover .remove-btn,
+.link-item:hover .remove-btn {
+  opacity: 1;
+}
+
+.remove-btn:hover {
+  color: var(--danger);
+}
+
+.add-checklist-form {
+  display: flex;
+  gap: 8px;
+}
+
+.add-checklist-form input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+}
+
+.add-checklist-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.add-checklist-form button {
+  padding: 8px 16px;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-checklist-form button:hover {
+  background: #2563eb;
+}
+
+/* Links */
+.add-link-form {
+  background: var(--bg-card);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.add-link-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.add-link-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.link-form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.link-form-actions button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.link-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--bg-card);
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.link-item:hover {
+  background: var(--border-color);
+}
+
+.link-item a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link-item a:hover {
+  text-decoration: underline;
+}
+
+.link-icon {
+  font-size: 0.85rem;
+}
+
+/* Modal Footer */
+.task-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  border-radius: 0 0 16px 16px;
+}
+
+.btn-delete {
+  padding: 10px 16px;
+  background: transparent;
+  border: 1px solid var(--danger);
+  border-radius: 6px;
+  color: var(--danger);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-delete:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ==================== Enhanced Task Card ==================== */
+.task-card {
+  cursor: pointer;
+}
+
+.task-labels-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.task-label-mini {
+  width: 32px;
+  height: 6px;
+  border-radius: 3px;
+}
+
+.task-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.due-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  color: var(--text-secondary);
+}
+
+.due-badge.overdue {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.due-badge.due-today {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.due-badge.due-soon {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.due-icon {
+  font-size: 0.75rem;
+}
+
+.meta-icon {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.checklist-badge {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  color: var(--text-secondary);
+}
+
+.checklist-badge.complete {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+/* Task card hover effect improvements */
+.task-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .task-modal-content {
+    max-width: 100%;
+    margin: 10px;
+    max-height: calc(100vh - 20px);
+  }
+
+  .task-meta-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .priority-selector {
+    flex-wrap: wrap;
+  }
+}
