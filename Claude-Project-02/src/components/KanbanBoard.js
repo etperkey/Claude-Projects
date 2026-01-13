@@ -322,6 +322,7 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
         onClose={handleCloseModal}
         onSave={handleSaveTask}
         onDelete={onDeleteTask}
+        allTasks={tasks}
       />
     </>
   );

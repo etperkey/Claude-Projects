@@ -4,6 +4,7 @@ import GlobalSearch from './GlobalSearch';
 import CalendarView from './CalendarView';
 import QuickAddModal from './QuickAddModal';
 import ActivityTimeline from './ActivityTimeline';
+import GoogleCalendarSync from './GoogleCalendarSync';
 import { researchProjects } from '../data/projects';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
@@ -15,6 +16,7 @@ function Navbar() {
   const [showCalendar, setShowCalendar] = useState(false);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
+  const [showGoogleCalendar, setShowGoogleCalendar] = useState(false);
 
   // Keyboard shortcut for search
   useEffect(() => {
@@ -28,6 +30,7 @@ function Navbar() {
         setShowCalendar(false);
         setShowQuickAdd(false);
         setShowActivity(false);
+        setShowGoogleCalendar(false);
       }
     };
 
@@ -125,6 +128,14 @@ function Navbar() {
           </button>
 
           <button
+            className="nav-btn gcal-btn"
+            onClick={() => setShowGoogleCalendar(true)}
+            title="Google Calendar Sync"
+          >
+            📆 <span className="btn-label">G-Cal</span>
+          </button>
+
+          <button
             className="nav-btn"
             onClick={handleExportCSV}
             title="Export to CSV"
@@ -146,6 +157,7 @@ function Navbar() {
       <CalendarView isOpen={showCalendar} onClose={() => setShowCalendar(false)} />
       <QuickAddModal isOpen={showQuickAdd} onClose={() => setShowQuickAdd(false)} />
       <ActivityTimeline isOpen={showActivity} onClose={() => setShowActivity(false)} />
+      <GoogleCalendarSync isOpen={showGoogleCalendar} onClose={() => setShowGoogleCalendar(false)} />
     </>
   );
 }
