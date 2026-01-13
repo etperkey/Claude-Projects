@@ -756,7 +756,7 @@ function Projects() {
             to mastering blood smear morphology and clinical reasoning.
           </p>
           <a
-            href="https://etperkey.github.io/Claude-Projects/HematologyArcade/index.html"
+            href="/HematologyArcade/index.html"
             target="_blank"
             rel="noopener noreferrer"
             className="arcade-link-card"

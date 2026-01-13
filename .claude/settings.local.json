@@ -17,7 +17,10 @@
       "Bash(git add:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd Heme''s Waldo game and update Hematology Arcade\n\n- Create HemesWaldo game with Where''s Waldo theme\n- 40 ASH Image Bank questions \\(malignant + benign findings\\)\n- Image magnification feature with 3x zoom levels\n- Second-order clinical reasoning questions\n- Integrate into Hematology Arcade wrapper\n- Update MS-AML-Man histopathology images\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git push:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh api:*)",
+      "WebFetch(domain:etperkey.github.io)"
     ]
   }
 }
