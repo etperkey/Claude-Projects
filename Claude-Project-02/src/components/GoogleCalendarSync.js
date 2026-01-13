@@ -4,19 +4,19 @@ const GCAL_SETTINGS_KEY = 'research-dashboard-gcal-settings';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 
 // Google Calendar API configuration
-// Users need to set up their own Google Cloud project and OAuth credentials
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY || '';
-const SCOPES = 'https://www.googleapis.com/auth/calendar.events';
 
 function GoogleCalendarSync({ isOpen, onClose }) {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [gapiLoaded, setGapiLoaded] = useState(false);
+  const [gisLoaded, setGisLoaded] = useState(false);
+  const [tokenClient, setTokenClient] = useState(null);
   const [settings, setSettings] = useState({
     syncEnabled: false,
     calendarId: 'primary',
-    syncDirection: 'export', // 'export' | 'import' | 'both'
+    syncDirection: 'export',
     lastSync: null
   });
   const [syncStatus, setSyncStatus] = useState({ message: '', type: '' });
@@ -40,53 +40,90 @@ function GoogleCalendarSync({ isOpen, onClose }) {
     setSettings(newSettings);
   };
 
-  // Load Google API
+  // Load Google API (gapi) for Calendar
   useEffect(() => {
-    if (!GOOGLE_CLIENT_ID) {
+    if (!GOOGLE_CLIENT_ID || !isOpen) {
       setIsLoading(false);
       return;
     }
 
     const loadGapi = () => {
+      if (window.gapi && window.gapi.client) {
+        initGapi();
+        return;
+      }
+
       const script = document.createElement('script');
       script.src = 'https://apis.google.com/js/api.js';
+      script.async = true;
+      script.defer = true;
       script.onload = () => {
-        window.gapi.load('client:auth2', initClient);
+        window.gapi.load('client', initGapi);
       };
       document.body.appendChild(script);
     };
 
-    const initClient = async () => {
+    const initGapi = async () => {
       try {
         await window.gapi.client.init({
           apiKey: GOOGLE_API_KEY,
-          clientId: GOOGLE_CLIENT_ID,
-          scope: SCOPES,
           discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest']
         });
-
         setGapiLoaded(true);
-
-        // Check if already signed in
-        const authInstance = window.gapi.auth2.getAuthInstance();
-        setIsSignedIn(authInstance.isSignedIn.get());
-
-        // Listen for sign-in state changes
-        authInstance.isSignedIn.listen(setIsSignedIn);
-
-        if (authInstance.isSignedIn.get()) {
-          loadCalendars();
-        }
+        setIsLoading(false);
       } catch (error) {
-        console.error('Error initializing Google API:', error);
+        console.error('Error initializing gapi:', error);
         setSyncStatus({ message: 'Failed to initialize Google API', type: 'error' });
-      } finally {
         setIsLoading(false);
       }
     };
 
     loadGapi();
-  }, []);
+  }, [isOpen]);
+
+  // Load Google Identity Services (GIS) for auth
+  useEffect(() => {
+    if (!GOOGLE_CLIENT_ID || !isOpen || gisLoaded) return;
+
+    const loadGis = () => {
+      if (window.google && window.google.accounts) {
+        initGis();
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = initGis;
+      document.body.appendChild(script);
+    };
+
+    const initGis = () => {
+      try {
+        const client = window.google.accounts.oauth2.initTokenClient({
+          client_id: GOOGLE_CLIENT_ID,
+          scope: 'https://www.googleapis.com/auth/calendar.events',
+          callback: (tokenResponse) => {
+            if (tokenResponse && tokenResponse.access_token) {
+              setIsSignedIn(true);
+              loadCalendars();
+            }
+          },
+          error_callback: (error) => {
+            console.error('GIS error:', error);
+            setSyncStatus({ message: 'Sign-in failed. Please try again.', type: 'error' });
+          }
+        });
+        setTokenClient(client);
+        setGisLoaded(true);
+      } catch (error) {
+        console.error('Error initializing GIS:', error);
+      }
+    };
+
+    loadGis();
+  }, [isOpen, gisLoaded]);
 
   const loadCalendars = async () => {
     try {
@@ -97,22 +134,19 @@ function GoogleCalendarSync({ isOpen, onClose }) {
     }
   };
 
-  const handleSignIn = async () => {
-    try {
-      await window.gapi.auth2.getAuthInstance().signIn();
-      loadCalendars();
-    } catch (error) {
-      console.error('Error signing in:', error);
-      setSyncStatus({ message: 'Failed to sign in', type: 'error' });
+  const handleSignIn = () => {
+    if (tokenClient) {
+      tokenClient.requestAccessToken();
     }
   };
 
-  const handleSignOut = async () => {
-    try {
-      await window.gapi.auth2.getAuthInstance().signOut();
-      setCalendars([]);
-    } catch (error) {
-      console.error('Error signing out:', error);
+  const handleSignOut = () => {
+    if (window.google && window.google.accounts && window.gapi.client.getToken()) {
+      window.google.accounts.oauth2.revoke(window.gapi.client.getToken().access_token, () => {
+        window.gapi.client.setToken(null);
+        setIsSignedIn(false);
+        setCalendars([]);
+      });
     }
   };
 
@@ -266,7 +300,7 @@ REACT_APP_GOOGLE_API_KEY=your-api-key`}
                 </button>
               </div>
             </div>
-          ) : isLoading ? (
+          ) : isLoading && !gisLoaded ? (
             <div className="gcal-loading">
               <div className="spinner"></div>
               <p>Loading...</p>
@@ -274,9 +308,13 @@ REACT_APP_GOOGLE_API_KEY=your-api-key`}
           ) : !isSignedIn ? (
             <div className="gcal-signin">
               <p>Sign in with your Google account to sync tasks with Google Calendar.</p>
-              <button className="google-signin-btn" onClick={handleSignIn}>
+              <button
+                className="google-signin-btn"
+                onClick={handleSignIn}
+                disabled={!gisLoaded}
+              >
                 <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" />
-                Sign in with Google
+                {gisLoaded ? 'Sign in with Google' : 'Loading...'}
               </button>
             </div>
           ) : (
