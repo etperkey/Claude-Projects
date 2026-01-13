@@ -4892,6 +4892,313 @@ body {
   }
 }
 
+/* ==================== Quick Capture ==================== */
+.quick-capture-fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quick-capture-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5);
+}
+
+.quick-capture-fab.active {
+  background: var(--danger);
+  transform: rotate(45deg);
+}
+
+.quick-capture-toast {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  background: var(--success);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  animation: slideIn 0.3s ease;
+  z-index: 1001;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.quick-capture-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1002;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.quick-capture-modal {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  animation: scaleIn 0.2s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.quick-capture-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.quick-capture-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.quick-capture-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.quick-capture-body {
+  padding: 20px;
+}
+
+.quick-capture-title {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.quick-capture-title:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.quick-capture-content {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 100px;
+  margin-bottom: 12px;
+}
+
+.quick-capture-content:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.quick-capture-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.quick-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(52, 152, 219, 0.1);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.quick-tag button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.quick-tag-input input {
+  padding: 4px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  width: 100px;
+}
+
+.quick-tag-input input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.quick-capture-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+  text-align: center;
+}
+
+.quick-capture-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-card);
+}
+
+/* Inbox Badge Styles */
+.entry-inbox-badge {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  background: rgba(241, 196, 15, 0.2);
+  color: #f1c40f;
+  border: 1px solid #f1c40f;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.quick-capture-badge {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  background: rgba(155, 89, 182, 0.2);
+  color: #9b59b6;
+  border: 1px solid #9b59b6;
+  border-radius: 10px;
+}
+
+/* Entry Assignment Styles */
+.entry-assignment {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.entry-assignment label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.entry-project-assign {
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  min-width: 200px;
+}
+
+.entry-project-assign:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.assignment-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Responsive Quick Capture */
+@media (max-width: 768px) {
+  .quick-capture-fab {
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    font-size: 1.8rem;
+  }
+
+  .quick-capture-toast {
+    bottom: 90px;
+    right: 20px;
+    left: 20px;
+    text-align: center;
+  }
+
+  .quick-capture-modal {
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .entry-assignment {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .entry-project-assign {
+    width: 100%;
+  }
+}
+
 /* ==================== Google Integration Styles for Dashboards ==================== */
 
 /* Google Auth Bar - Used in Protocols/Results and Research Notes */
