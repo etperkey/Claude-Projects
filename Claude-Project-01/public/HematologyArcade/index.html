@@ -424,13 +424,68 @@
             color: var(--neon-yellow);
         }
 
-        /* Responsive */
+        /* Responsive - Tablet */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .arcade-container { padding: 30px 15px; }
+            .main-title { font-size: 2.5em; }
+            .games-grid { gap: 30px; max-width: 800px; }
+        }
+
+        /* Responsive - Mobile */
         @media (max-width: 768px) {
             .main-title { font-size: 1.8em; }
-            .games-grid { gap: 25px; }
+            .games-grid { gap: 25px; grid-template-columns: 1fr; }
             .game-card { padding: 20px; }
             .game-icon { width: 80px; height: 80px; font-size: 2.5em; }
             .game-title { font-size: 1em; }
+            .subtitle { font-size: 0.6em; }
+            .tagline { font-size: 0.4em; }
+            .arcade-header { margin-bottom: 40px; }
+            .volume-toggle { width: 40px; height: 40px; font-size: 1.2em; top: 10px; right: 10px; }
+        }
+
+        /* Responsive - Small Mobile */
+        @media (max-width: 480px) {
+            .main-title { font-size: 1.4em; letter-spacing: 2px; }
+            .arcade-container { padding: 20px 10px; }
+            .game-card { padding: 15px; border-radius: 15px; }
+            .game-icon { width: 60px; height: 60px; font-size: 2em; }
+            .game-title { font-size: 0.9em; }
+            .game-description { font-size: 0.45em; }
+            .play-btn { font-size: 0.6em; padding: 12px 24px; }
+            .high-scores { padding: 15px; }
+            .high-scores h3 { font-size: 0.7em; }
+            .score-row { font-size: 0.45em; }
+        }
+
+        /* Device info badge */
+        .device-info {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 0.4em;
+            color: var(--neon-blue);
+            z-index: 100;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .device-info:hover {
+            opacity: 1;
+        }
+
+        .device-info .device-type {
+            color: var(--neon-green);
+            text-transform: uppercase;
+        }
+
+        .device-info .resolution {
+            color: var(--neon-yellow);
+            margin-left: 10px;
         }
 
         /* Volume toggle */
@@ -472,6 +527,11 @@
     <button class="volume-toggle" id="volumeToggle" onclick="toggleVolume()">
         <span id="volumeIcon">&#128266;</span>
     </button>
+
+    <div class="device-info" id="deviceInfo">
+        <span class="device-type" id="deviceType">--</span>
+        <span class="resolution" id="resolution">--</span>
+    </div>
 
     <div class="arcade-container">
         <header class="arcade-header">
@@ -584,6 +644,72 @@
     </div>
 
     <script>
+        // Device Detection System
+        const DeviceDetector = {
+            getDeviceType: function() {
+                const width = window.innerWidth;
+                const userAgent = navigator.userAgent.toLowerCase();
+
+                // Check user agent for mobile devices
+                const isMobileUA = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+                const isTabletUA = /ipad|tablet|playbook|silk/i.test(userAgent) ||
+                                   (isMobileUA && width >= 768);
+
+                // Determine device type based on width and user agent
+                if (width <= 480 || (isMobileUA && !isTabletUA && width < 768)) {
+                    return 'mobile';
+                } else if (width <= 1024 || isTabletUA) {
+                    return 'tablet';
+                } else {
+                    return 'desktop';
+                }
+            },
+
+            getResolution: function() {
+                return `${window.innerWidth}x${window.innerHeight}`;
+            },
+
+            getPixelRatio: function() {
+                return window.devicePixelRatio || 1;
+            },
+
+            getOrientation: function() {
+                return window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+            },
+
+            getFullInfo: function() {
+                return {
+                    type: this.getDeviceType(),
+                    resolution: this.getResolution(),
+                    pixelRatio: this.getPixelRatio(),
+                    orientation: this.getOrientation(),
+                    screenWidth: window.screen.width,
+                    screenHeight: window.screen.height
+                };
+            },
+
+            updateDisplay: function() {
+                const info = this.getFullInfo();
+                document.getElementById('deviceType').textContent = info.type;
+                document.getElementById('resolution').textContent = info.resolution;
+
+                // Add device class to body for CSS targeting
+                document.body.classList.remove('device-mobile', 'device-tablet', 'device-desktop');
+                document.body.classList.add('device-' + info.type);
+            },
+
+            init: function() {
+                this.updateDisplay();
+                window.addEventListener('resize', () => this.updateDisplay());
+                window.addEventListener('orientationchange', () => {
+                    setTimeout(() => this.updateDisplay(), 100);
+                });
+            }
+        };
+
+        // Initialize device detection
+        DeviceDetector.init();
+
         // Create floating particles
         function createParticles() {
             const container = document.getElementById('particles');

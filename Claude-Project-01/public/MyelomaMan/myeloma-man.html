@@ -2421,13 +2421,44 @@
             }
         }
 
-        /* Responsive */
+        /* Responsive - Tablet */
+        @media (max-width: 1024px) and (min-width: 601px) {
+            .game-container { padding: 15px; }
+            .title { font-size: 1.5em; }
+        }
+
+        /* Responsive - Mobile */
         @media (max-width: 600px) {
             .title { font-size: 1.2em; }
             .question-text { font-size: 0.6em; }
             .option-text { font-size: 0.5em; }
             .difficulty-btn { padding: 8px 12px; font-size: 0.4em; }
         }
+
+        /* Responsive - Small Mobile */
+        @media (max-width: 400px) {
+            .title { font-size: 1em; }
+            .question-text { font-size: 0.55em; }
+        }
+
+        /* Device info badge */
+        .device-info {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--mario-red);
+            border-radius: 5px;
+            padding: 6px 10px;
+            font-size: 0.5em;
+            color: white;
+            z-index: 100;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        .device-info:hover { opacity: 1; }
+        .device-info .device-type { color: var(--mario-yellow); text-transform: uppercase; }
+        .device-info .resolution { color: var(--mario-red); margin-left: 8px; }
     </style>
 </head>
 <body>
@@ -2443,6 +2474,11 @@
     <div class="hell-flames" id="hellFlames"></div>
 
     <div class="brick-pattern"></div>
+
+    <div class="device-info" id="deviceInfo">
+        <span class="device-type" id="deviceType">--</span>
+        <span class="resolution" id="resolution">--</span>
+    </div>
 
     <!-- Lives Display (Bone Marrow Icons) -->
     <div class="lives-container" id="livesContainer" style="display: none;">
@@ -2627,6 +2663,32 @@
     </div>
 
     <script>
+        // Device Detection System
+        const DeviceDetector = {
+            getDeviceType: function() {
+                const width = window.innerWidth;
+                const userAgent = navigator.userAgent.toLowerCase();
+                const isMobileUA = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+                const isTabletUA = /ipad|tablet|playbook|silk/i.test(userAgent) || (isMobileUA && width >= 768);
+                if (width <= 480 || (isMobileUA && !isTabletUA && width < 768)) return 'mobile';
+                else if (width <= 1024 || isTabletUA) return 'tablet';
+                else return 'desktop';
+            },
+            getResolution: function() { return `${window.innerWidth}x${window.innerHeight}`; },
+            updateDisplay: function() {
+                document.getElementById('deviceType').textContent = this.getDeviceType();
+                document.getElementById('resolution').textContent = this.getResolution();
+                document.body.classList.remove('device-mobile', 'device-tablet', 'device-desktop');
+                document.body.classList.add('device-' + this.getDeviceType());
+            },
+            init: function() {
+                this.updateDisplay();
+                window.addEventListener('resize', () => this.updateDisplay());
+                window.addEventListener('orientationchange', () => setTimeout(() => this.updateDisplay(), 100));
+            }
+        };
+        DeviceDetector.init();
+
         // Audio Context for Mario-style sounds
         let audioCtx = null;
         let musicPlaying = false;
