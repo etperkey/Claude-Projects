@@ -1,93 +1,10 @@
 // Research project data
+
+// Kline Lab Info:
+// Address: 900 E. 57th St., KCBD 6230A, Chicago IL 60637
+// Website: https://klinelab.uchicago.edu/
+
 export const researchProjects = [
-  {
-    id: 'training',
-    title: 'Research Training & Resources',
-    subtitle: 'Lab Onboarding & Compliance',
-    color: '#2E7D32',
-    icon: 'training',
-    description: 'Lab training requirements, resources, and important reference information for the Kline Lab at UChicago.',
-    hypothesis: '',
-    approaches: ['Flow Cytometry', 'Animal Work', 'Lab Safety', 'Data Management'],
-    tasks: {
-      backlog: [
-        {
-          id: 'train-1',
-          title: 'Flow Cytometry Training Course',
-          priority: 'high',
-          description: 'Complete UC Flow training courses',
-          links: [{ title: 'UC Flow Training', url: 'https://voices.uchicago.edu/ucflow/training-courses/' }]
-        },
-        {
-          id: 'train-2',
-          title: 'Working with Rodents Training',
-          priority: 'high',
-          description: 'Required for animal room access',
-          links: [{ title: 'Rodent Training', url: 'https://voices.uchicago.edu/animalresources/project/working-with-rodents-in-the-arc/' }]
-        },
-        {
-          id: 'train-3',
-          title: 'KCBD Virtual Tour',
-          priority: 'medium',
-          description: 'Complete AALAS virtual facility tour',
-          links: [{ title: 'AALAS Learning Library', url: 'https://aalaslearninglibrary.org/' }]
-        },
-        {
-          id: 'train-4',
-          title: 'Basic Lab Safety Training',
-          priority: 'high',
-          description: 'Required for all lab members',
-          links: [{ title: 'EHSA Training Portal', url: 'https://ehsa-prd-01.uchicago.edu/ehsa/public/webtraining/webtrainingindex' }]
-        },
-        {
-          id: 'train-5',
-          title: 'Optional Hands-on Rodent Training',
-          priority: 'low',
-          description: 'Request hands-on technique training',
-          links: [{ title: 'Request Training', url: 'https://voices.uchicago.edu/animalresources/rodent-technique-training-request/' }]
-        },
-        {
-          id: 'train-6',
-          title: 'HDID Training',
-          priority: 'medium',
-          description: 'Contact Cezary for training: cciszews@bsd.uchicago.edu'
-        }
-      ],
-      inProgress: [
-        {
-          id: 'train-7',
-          title: 'Set up FileZilla for Flow Data',
-          priority: 'high',
-          description: 'Flow data automatically saved when using flowcore instruments',
-          links: [{ title: 'Data Server Guide', url: 'https://voices.uchicago.edu/ucflow/2025/01/07/new-online-data-server-portal-tips-and-tricks/' }]
-        },
-        {
-          id: 'train-8',
-          title: 'Register for iLab Flow Scheduler',
-          priority: 'high',
-          description: 'Use UChicago ID & Pass to login',
-          links: [{ title: 'iLab Login', url: 'https://my.ilabsolutions.com/account/login' }]
-        }
-      ],
-      review: [
-        {
-          id: 'train-9',
-          title: 'Verify Animal Room Access (KCBD 2259)',
-          priority: 'medium',
-          description: '2nd floor in KCBD, Room 2259'
-        }
-      ],
-      done: [
-        {
-          id: 'train-10',
-          title: 'Note Kline Lab Location',
-          priority: 'low',
-          description: '900 E. 57th St., KCBD 6230A, Chicago IL 60637',
-          links: [{ title: 'Kline Lab Website', url: 'https://klinelab.uchicago.edu/' }]
-        }
-      ]
-    }
-  },
   {
     id: 'tp53',
     title: 'TP53 Loss-of-Function in DLBCL',
