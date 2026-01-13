@@ -922,7 +922,13 @@
             border-color: #666;
         }
 
-        /* Responsive */
+        /* Responsive - Tablet */
+        @media (max-width: 1024px) and (min-width: 601px) {
+            .game-container { padding: 15px; }
+            .logo-text { font-size: 2em; }
+        }
+
+        /* Responsive - Mobile */
         @media (max-width: 600px) {
             .logo-text { font-size: 1.5em; }
             .difficulty-grid { grid-template-columns: 1fr 1fr; }
@@ -931,10 +937,40 @@
             .pac-dots { padding: 20px 60px; }
             .volume-toggle { width: 40px; height: 40px; font-size: 1.2em; }
         }
+
+        /* Responsive - Small Mobile */
+        @media (max-width: 400px) {
+            .logo-text { font-size: 1.2em; }
+            .difficulty-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Device info badge */
+        .device-info {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #ffff00;
+            border-radius: 5px;
+            padding: 6px 10px;
+            font-size: 0.7em;
+            color: white;
+            z-index: 100;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        .device-info:hover { opacity: 1; }
+        .device-info .device-type { color: #ffff00; text-transform: uppercase; }
+        .device-info .resolution { color: #ffcc00; margin-left: 8px; }
     </style>
 </head>
 <body>
     <div class="starfield" id="starfield"></div>
+
+    <div class="device-info" id="deviceInfo">
+        <span class="device-type" id="deviceType">--</span>
+        <span class="resolution" id="resolution">--</span>
+    </div>
 
     <!-- Volume Toggle -->
     <button class="volume-toggle" id="volumeToggle" onclick="toggleVolume()">
@@ -1170,6 +1206,32 @@
     </div>
 
     <script>
+        // Device Detection System
+        const DeviceDetector = {
+            getDeviceType: function() {
+                const width = window.innerWidth;
+                const userAgent = navigator.userAgent.toLowerCase();
+                const isMobileUA = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+                const isTabletUA = /ipad|tablet|playbook|silk/i.test(userAgent) || (isMobileUA && width >= 768);
+                if (width <= 480 || (isMobileUA && !isTabletUA && width < 768)) return 'mobile';
+                else if (width <= 1024 || isTabletUA) return 'tablet';
+                else return 'desktop';
+            },
+            getResolution: function() { return `${window.innerWidth}x${window.innerHeight}`; },
+            updateDisplay: function() {
+                document.getElementById('deviceType').textContent = this.getDeviceType();
+                document.getElementById('resolution').textContent = this.getResolution();
+                document.body.classList.remove('device-mobile', 'device-tablet', 'device-desktop');
+                document.body.classList.add('device-' + this.getDeviceType());
+            },
+            init: function() {
+                this.updateDisplay();
+                window.addEventListener('resize', () => this.updateDisplay());
+                window.addEventListener('orientationchange', () => setTimeout(() => this.updateDisplay(), 100));
+            }
+        };
+        DeviceDetector.init();
+
         let selectedDifficulty = null;
         let currentQuestion = 0;
         let score = 0;

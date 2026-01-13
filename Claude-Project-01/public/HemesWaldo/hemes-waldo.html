@@ -846,12 +846,52 @@
             100% { transform: scale(1); }
         }
 
-        /* Responsive */
+        /* Responsive - Tablet */
+        @media (max-width: 1024px) and (min-width: 601px) {
+            .game-container { padding: 15px; }
+            .main-title { font-size: 3em; }
+            .title-screen { padding: 30px; }
+        }
+
+        /* Responsive - Mobile */
         @media (max-width: 600px) {
             .main-title { font-size: 2.5em; }
             .stats-grid { grid-template-columns: 1fr; }
             .specimen-image { max-height: 200px; }
+            .game-container { padding: 10px; }
+            .title-screen { padding: 20px; }
+            .instructions { padding: 15px; font-size: 1em; }
+            .difficulty-grid { grid-template-columns: 1fr 1fr; }
         }
+
+        /* Responsive - Small Mobile */
+        @media (max-width: 400px) {
+            .main-title { font-size: 2em; }
+            .subtitle { font-size: 1.1em; }
+            .difficulty-grid { grid-template-columns: 1fr; }
+            .difficulty-btn { padding: 12px; font-size: 0.9em; }
+            .start-btn { font-size: 1.2em; padding: 15px 30px; }
+        }
+
+        /* Device info badge */
+        .device-info {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--waldo-red);
+            border-radius: 5px;
+            padding: 6px 10px;
+            font-size: 0.7em;
+            color: var(--waldo-cream);
+            z-index: 100;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .device-info:hover { opacity: 1; }
+        .device-info .device-type { color: var(--waldo-gold); text-transform: uppercase; }
+        .device-info .resolution { color: var(--waldo-red); margin-left: 8px; }
     </style>
 </head>
 <body>
@@ -868,6 +908,11 @@
     <button class="volume-toggle" id="volumeToggle" onclick="toggleVolume()">
         <span id="volumeIcon">🔊</span>
     </button>
+
+    <div class="device-info" id="deviceInfo">
+        <span class="device-type" id="deviceType">--</span>
+        <span class="resolution" id="resolution">--</span>
+    </div>
 
     <div class="game-container">
         <header class="game-header">
@@ -1029,6 +1074,32 @@
     </div>
 
     <script>
+        // Device Detection System
+        const DeviceDetector = {
+            getDeviceType: function() {
+                const width = window.innerWidth;
+                const userAgent = navigator.userAgent.toLowerCase();
+                const isMobileUA = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+                const isTabletUA = /ipad|tablet|playbook|silk/i.test(userAgent) || (isMobileUA && width >= 768);
+                if (width <= 480 || (isMobileUA && !isTabletUA && width < 768)) return 'mobile';
+                else if (width <= 1024 || isTabletUA) return 'tablet';
+                else return 'desktop';
+            },
+            getResolution: function() { return `${window.innerWidth}x${window.innerHeight}`; },
+            updateDisplay: function() {
+                document.getElementById('deviceType').textContent = this.getDeviceType();
+                document.getElementById('resolution').textContent = this.getResolution();
+                document.body.classList.remove('device-mobile', 'device-tablet', 'device-desktop');
+                document.body.classList.add('device-' + this.getDeviceType());
+            },
+            init: function() {
+                this.updateDisplay();
+                window.addEventListener('resize', () => this.updateDisplay());
+                window.addEventListener('orientationchange', () => setTimeout(() => this.updateDisplay(), 100));
+            }
+        };
+        DeviceDetector.init();
+
         // ASH Image Bank Questions - Organized by Difficulty Level
         // intern: Basic morphology identification
         // fellow: Clinical correlation and workup
