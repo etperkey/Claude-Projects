@@ -4353,6 +4353,37 @@ body {
   border: 1px solid var(--accent) !important;
 }
 
+/* Project Lab Notebook (inline version) */
+.project-lab-notebook {
+  padding: 20px;
+}
+
+.notebook-toolbar.inline {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+.notebook-toolbar.inline .notebook-search {
+  flex: 1;
+  max-width: 400px;
+}
+
+.new-entry-form.inline {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.notebook-entries.inline {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .notebook-modal-content {
