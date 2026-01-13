@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useGoogleDocs from '../hooks/useGoogleDocs';
 
 const RESEARCH_NOTES_KEY = 'research-dashboard-research-notes';
 
@@ -6,11 +7,26 @@ function ResearchNotes({ projectId, projectTitle }) {
   const [activeTab, setActiveTab] = useState('background');
   const [notes, setNotes] = useState({
     background: '',
+    backgroundGoogleDocId: null,
+    backgroundGoogleDocUrl: null,
     specificAims: [],
     miscNotes: []
   });
   const [isEditing, setIsEditing] = useState(null);
   const [editContent, setEditContent] = useState('');
+
+  // Google Docs integration
+  const {
+    isSignedIn,
+    gisLoaded,
+    hasCredentials,
+    syncStatus,
+    setSyncStatus,
+    signIn,
+    signOut,
+    createDoc,
+    syncToDoc
+  } = useGoogleDocs(true);
 
   // Load notes from localStorage
   useEffect(() => {
@@ -60,7 +76,9 @@ function ResearchNotes({ projectId, projectTitle }) {
       hypothesis: '',
       approach: '',
       expectedOutcomes: '',
-      status: 'planned' // planned, in-progress, completed
+      status: 'planned',
+      googleDocId: null,
+      googleDocUrl: null
     };
     saveNotes({ ...notes, specificAims: [...notes.specificAims, newAim] });
     setIsEditing(`aim-${newAim.id}`);
@@ -89,7 +107,9 @@ function ResearchNotes({ projectId, projectTitle }) {
       content: '',
       category: 'general',
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
+      googleDocId: null,
+      googleDocUrl: null
     };
     saveNotes({ ...notes, miscNotes: [...notes.miscNotes, newNote] });
     setIsEditing(`note-${newNote.id}`);
@@ -109,6 +129,152 @@ function ResearchNotes({ projectId, projectTitle }) {
     }
   };
 
+  // Google Docs handlers
+  const handleCreateBackgroundDoc = async () => {
+    const title = `[Research Background] ${projectTitle}`;
+    const content = `Research Background
+Project: ${projectTitle}
+
+---
+
+${notes.background || 'No background content yet.'}
+
+---
+Last Updated: ${new Date().toLocaleString()}`;
+
+    const result = await createDoc(title, content);
+    if (result) {
+      saveNotes({
+        ...notes,
+        backgroundGoogleDocId: result.docId,
+        backgroundGoogleDocUrl: result.docUrl
+      });
+      window.open(result.docUrl, '_blank');
+    }
+  };
+
+  const handleSyncBackgroundDoc = async () => {
+    if (!notes.backgroundGoogleDocId) return;
+
+    const content = `Research Background
+Project: ${projectTitle}
+
+---
+
+${notes.background || 'No background content yet.'}
+
+---
+Last Updated: ${new Date().toLocaleString()}`;
+
+    await syncToDoc(notes.backgroundGoogleDocId, content);
+  };
+
+  const handleCreateAimDoc = async (aim, index) => {
+    const title = `[Specific Aim ${index + 1}] ${aim.title || 'Untitled'} - ${projectTitle}`;
+    const content = `Specific Aim ${index + 1}: ${aim.title || 'Untitled'}
+Project: ${projectTitle}
+Status: ${aim.status}
+
+---
+
+DESCRIPTION:
+${aim.description || 'Not specified'}
+
+RATIONALE:
+${aim.rationale || 'Not specified'}
+
+HYPOTHESIS:
+${aim.hypothesis || 'Not specified'}
+
+EXPERIMENTAL APPROACH:
+${aim.approach || 'Not specified'}
+
+EXPECTED OUTCOMES:
+${aim.expectedOutcomes || 'Not specified'}
+
+---
+Last Updated: ${new Date().toLocaleString()}`;
+
+    const result = await createDoc(title, content);
+    if (result) {
+      handleUpdateAim(aim.id, 'googleDocId', result.docId);
+      handleUpdateAim(aim.id, 'googleDocUrl', result.docUrl);
+      window.open(result.docUrl, '_blank');
+    }
+  };
+
+  const handleSyncAimDoc = async (aim, index) => {
+    if (!aim.googleDocId) return;
+
+    const content = `Specific Aim ${index + 1}: ${aim.title || 'Untitled'}
+Project: ${projectTitle}
+Status: ${aim.status}
+
+---
+
+DESCRIPTION:
+${aim.description || 'Not specified'}
+
+RATIONALE:
+${aim.rationale || 'Not specified'}
+
+HYPOTHESIS:
+${aim.hypothesis || 'Not specified'}
+
+EXPERIMENTAL APPROACH:
+${aim.approach || 'Not specified'}
+
+EXPECTED OUTCOMES:
+${aim.expectedOutcomes || 'Not specified'}
+
+---
+Last Updated: ${new Date().toLocaleString()}`;
+
+    await syncToDoc(aim.googleDocId, content);
+  };
+
+  const handleCreateNoteDoc = async (note) => {
+    const title = `[Note] ${note.title} - ${projectTitle}`;
+    const content = `Note: ${note.title}
+Project: ${projectTitle}
+Category: ${NOTE_CATEGORIES.find(c => c.id === note.category)?.label || note.category}
+
+---
+
+${note.content || 'No content yet.'}
+
+---
+Created: ${new Date(note.createdAt).toLocaleString()}
+Last Updated: ${new Date().toLocaleString()}`;
+
+    const result = await createDoc(title, content);
+    if (result) {
+      handleUpdateNote(note.id, {
+        googleDocId: result.docId,
+        googleDocUrl: result.docUrl
+      });
+      window.open(result.docUrl, '_blank');
+    }
+  };
+
+  const handleSyncNoteDoc = async (note) => {
+    if (!note.googleDocId) return;
+
+    const content = `Note: ${note.title}
+Project: ${projectTitle}
+Category: ${NOTE_CATEGORIES.find(c => c.id === note.category)?.label || note.category}
+
+---
+
+${note.content || 'No content yet.'}
+
+---
+Created: ${new Date(note.createdAt).toLocaleString()}
+Last Updated: ${new Date().toLocaleString()}`;
+
+    await syncToDoc(note.googleDocId, content);
+  };
+
   const NOTE_CATEGORIES = [
     { id: 'general', label: 'General', color: '#888' },
     { id: 'idea', label: 'Ideas', color: '#f1c40f' },
@@ -126,25 +292,51 @@ function ResearchNotes({ projectId, projectTitle }) {
 
   return (
     <div className="research-notes">
+      {/* Google Auth Header */}
+      <div className="google-auth-bar">
+        {hasCredentials ? (
+          isSignedIn ? (
+            <div className="google-connected">
+              <span className="status-dot connected"></span>
+              <span>Google Connected</span>
+              <button className="signout-link" onClick={signOut}>Sign out</button>
+            </div>
+          ) : (
+            <button className="google-signin-btn-small" onClick={signIn} disabled={!gisLoaded}>
+              {gisLoaded ? 'Sign in to Google' : 'Loading...'}
+            </button>
+          )
+        ) : (
+          <span className="no-google">Google Docs not configured</span>
+        )}
+      </div>
+
+      {syncStatus.message && (
+        <div className={`sync-status-bar ${syncStatus.type}`}>
+          {syncStatus.message}
+          <button onClick={() => setSyncStatus({ message: '', type: '' })}>x</button>
+        </div>
+      )}
+
       {/* Tab navigation */}
       <div className="notes-tabs">
         <button
           className={`notes-tab ${activeTab === 'background' ? 'active' : ''}`}
           onClick={() => setActiveTab('background')}
         >
-          📖 Research Background
+          Research Background
         </button>
         <button
           className={`notes-tab ${activeTab === 'aims' ? 'active' : ''}`}
           onClick={() => setActiveTab('aims')}
         >
-          🎯 Specific Aims ({notes.specificAims.length})
+          Specific Aims ({notes.specificAims.length})
         </button>
         <button
           className={`notes-tab ${activeTab === 'misc' ? 'active' : ''}`}
           onClick={() => setActiveTab('misc')}
         >
-          📝 Miscellaneous Notes ({notes.miscNotes.length})
+          Miscellaneous Notes ({notes.miscNotes.length})
         </button>
       </div>
 
@@ -154,18 +346,52 @@ function ResearchNotes({ projectId, projectTitle }) {
         {activeTab === 'background' && (
           <div className="background-section">
             <div className="section-header">
-              <h3>Research Background</h3>
-              {isEditing !== 'background' && (
-                <button
-                  className="edit-btn"
-                  onClick={() => {
-                    setIsEditing('background');
-                    setEditContent(notes.background);
-                  }}
-                >
-                  ✏️ Edit
-                </button>
-              )}
+              <h3>
+                Research Background
+                {notes.backgroundGoogleDocId && (
+                  <span className="google-doc-indicator" title="Linked to Google Doc">📄</span>
+                )}
+              </h3>
+              <div className="section-actions">
+                {isEditing !== 'background' && (
+                  <button
+                    className="edit-btn"
+                    onClick={() => {
+                      setIsEditing('background');
+                      setEditContent(notes.background);
+                    }}
+                  >
+                    Edit
+                  </button>
+                )}
+                {isSignedIn && notes.background && (
+                  notes.backgroundGoogleDocId ? (
+                    <>
+                      <a
+                        href={notes.backgroundGoogleDocUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-google-action"
+                      >
+                        📄 Open Doc
+                      </a>
+                      <button
+                        className="btn-google-action"
+                        onClick={handleSyncBackgroundDoc}
+                      >
+                        🔄 Sync
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      className="btn-google-action primary"
+                      onClick={handleCreateBackgroundDoc}
+                    >
+                      📝 Create Doc
+                    </button>
+                  )
+                )}
+              </div>
             </div>
 
             {isEditing === 'background' ? (
@@ -176,11 +402,11 @@ function ResearchNotes({ projectId, projectTitle }) {
                   placeholder="Enter research background, context, and significance...
 
 Include:
-• Scientific context and rationale
-• Current state of knowledge
-• Gap in existing research
-• Significance and innovation
-• Preliminary data (if any)"
+- Scientific context and rationale
+- Current state of knowledge
+- Gap in existing research
+- Significance and innovation
+- Preliminary data (if any)"
                   rows={15}
                 />
                 <div className="editor-actions">
@@ -233,22 +459,56 @@ Include:
                 {notes.specificAims.map((aim, index) => (
                   <div key={aim.id} className="aim-card">
                     <div className="aim-header">
-                      <span className="aim-number">Aim {index + 1}</span>
-                      <select
-                        className={`aim-status ${aim.status}`}
-                        value={aim.status}
-                        onChange={(e) => handleUpdateAim(aim.id, 'status', e.target.value)}
-                      >
-                        {AIM_STATUSES.map(s => (
-                          <option key={s.id} value={s.id}>{s.label}</option>
-                        ))}
-                      </select>
-                      <button
-                        className="delete-aim-btn"
-                        onClick={() => handleDeleteAim(aim.id)}
-                      >
-                        ×
-                      </button>
+                      <span className="aim-number">
+                        Aim {index + 1}
+                        {aim.googleDocId && (
+                          <span className="google-doc-indicator" title="Linked to Google Doc">📄</span>
+                        )}
+                      </span>
+                      <div className="aim-header-actions">
+                        <select
+                          className={`aim-status ${aim.status}`}
+                          value={aim.status}
+                          onChange={(e) => handleUpdateAim(aim.id, 'status', e.target.value)}
+                        >
+                          {AIM_STATUSES.map(s => (
+                            <option key={s.id} value={s.id}>{s.label}</option>
+                          ))}
+                        </select>
+                        {isSignedIn && (
+                          aim.googleDocId ? (
+                            <>
+                              <a
+                                href={aim.googleDocUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-google-action small"
+                              >
+                                📄
+                              </a>
+                              <button
+                                className="btn-google-action small"
+                                onClick={() => handleSyncAimDoc(aim, index)}
+                              >
+                                🔄
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              className="btn-google-action small primary"
+                              onClick={() => handleCreateAimDoc(aim, index)}
+                            >
+                              📝
+                            </button>
+                          )
+                        )}
+                        <button
+                          className="delete-aim-btn"
+                          onClick={() => handleDeleteAim(aim.id)}
+                        >
+                          x
+                        </button>
+                      </div>
                     </div>
 
                     <div className="aim-field">
@@ -349,12 +609,17 @@ Include:
                           <option key={cat.id} value={cat.id}>{cat.label}</option>
                         ))}
                       </select>
-                      <button
-                        className="delete-note-btn"
-                        onClick={() => handleDeleteNote(note.id)}
-                      >
-                        ×
-                      </button>
+                      <div className="note-header-actions">
+                        {note.googleDocId && (
+                          <span className="google-doc-indicator" title="Linked to Google Doc">📄</span>
+                        )}
+                        <button
+                          className="delete-note-btn"
+                          onClick={() => handleDeleteNote(note.id)}
+                        >
+                          x
+                        </button>
+                      </div>
                     </div>
 
                     <input
@@ -377,6 +642,36 @@ Include:
                       <span className="note-date">
                         Updated: {new Date(note.updatedAt).toLocaleDateString()}
                       </span>
+                      {isSignedIn && (
+                        <div className="note-google-actions">
+                          {note.googleDocId ? (
+                            <>
+                              <a
+                                href={note.googleDocUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-google-action small"
+                              >
+                                📄
+                              </a>
+                              <button
+                                className="btn-google-action small"
+                                onClick={() => handleSyncNoteDoc(note)}
+                              >
+                                🔄
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              className="btn-google-action small primary"
+                              onClick={() => handleCreateNoteDoc(note)}
+                            >
+                              📝
+                            </button>
+                          )
+                        }
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
