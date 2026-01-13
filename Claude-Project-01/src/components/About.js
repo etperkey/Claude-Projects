@@ -45,7 +45,8 @@ function About() {
               BiTE therapy, and understanding lymphoma dissemination through chemokine signaling.
             </p>
             <p>
-              <strong>Prior Work:</strong> My PhD at the University of Michigan uncovered how
+              <strong>Prior Work:</strong> My PhD training with <strong>Dr. Ivan Maillard</strong> at
+              the University of Michigan and University of Pennsylvania uncovered how
               stromal cells in lymph nodes regulate T cell responses through Notch signaling,
               with applications to graft-versus-host disease and T cell aging. This work was
               published in JCI, JEM, and Science Translational Medicine.
