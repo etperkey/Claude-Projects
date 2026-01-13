@@ -47,7 +47,8 @@ export function GoogleAuthProvider({ children }) {
           discoveryDocs: [
             'https://docs.googleapis.com/$discovery/rest?version=v1',
             'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
-            'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'
+            'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
+            'https://sheets.googleapis.com/$discovery/rest?version=v4'
           ]
         });
         setGapiLoaded(true);
@@ -81,7 +82,7 @@ export function GoogleAuthProvider({ children }) {
       try {
         const client = window.google.accounts.oauth2.initTokenClient({
           client_id: GOOGLE_CLIENT_ID,
-          scope: 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events',
+          scope: 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/spreadsheets',
           callback: (tokenResponse) => {
             if (tokenResponse && tokenResponse.access_token) {
               setIsSignedIn(true);
@@ -302,6 +303,103 @@ export function GoogleAuthProvider({ children }) {
     }
   }, [gapiLoaded, isSignedIn]);
 
+  // Google Sheets functions
+  const createSheet = useCallback(async (title, headers = [], data = []) => {
+    if (!gapiLoaded || !isSignedIn) {
+      return null;
+    }
+
+    try {
+      // Create the spreadsheet
+      const createResponse = await window.gapi.client.sheets.spreadsheets.create({
+        resource: {
+          properties: { title },
+          sheets: [{
+            properties: { title: 'Sheet1' }
+          }]
+        }
+      });
+
+      const spreadsheetId = createResponse.result.spreadsheetId;
+      const sheetUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
+
+      // Add headers and data if provided
+      if (headers.length > 0 || data.length > 0) {
+        const values = [];
+        if (headers.length > 0) {
+          values.push(headers);
+        }
+        if (data.length > 0) {
+          values.push(...data);
+        }
+
+        if (values.length > 0) {
+          await window.gapi.client.sheets.spreadsheets.values.update({
+            spreadsheetId,
+            range: 'Sheet1!A1',
+            valueInputOption: 'RAW',
+            resource: { values }
+          });
+        }
+      }
+
+      return { spreadsheetId, sheetUrl };
+    } catch (error) {
+      console.error('Error creating Google Sheet:', error);
+      return null;
+    }
+  }, [gapiLoaded, isSignedIn]);
+
+  const syncToSheet = useCallback(async (spreadsheetId, headers, data) => {
+    if (!gapiLoaded || !isSignedIn || !spreadsheetId) {
+      return false;
+    }
+
+    try {
+      // Clear existing data
+      await window.gapi.client.sheets.spreadsheets.values.clear({
+        spreadsheetId,
+        range: 'Sheet1'
+      });
+
+      // Write new data
+      const values = [headers, ...data];
+      await window.gapi.client.sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: 'Sheet1!A1',
+        valueInputOption: 'RAW',
+        resource: { values }
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Error syncing to Google Sheet:', error);
+      return false;
+    }
+  }, [gapiLoaded, isSignedIn]);
+
+  const importFromSheet = useCallback(async (spreadsheetId) => {
+    if (!gapiLoaded || !isSignedIn || !spreadsheetId) {
+      return null;
+    }
+
+    try {
+      const response = await window.gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: 'Sheet1'
+      });
+
+      const values = response.result.values || [];
+      const headers = values[0] || [];
+      const data = values.slice(1);
+
+      return { headers, data };
+    } catch (error) {
+      console.error('Error importing from Google Sheet:', error);
+      return null;
+    }
+  }, [gapiLoaded, isSignedIn]);
+
   const value = {
     isSignedIn,
     gapiLoaded,
@@ -315,6 +413,9 @@ export function GoogleAuthProvider({ children }) {
     createDoc,
     syncToDoc,
     importFromDoc,
+    createSheet,
+    syncToSheet,
+    importFromSheet,
     getCalendarEvents,
     createCalendarEvent
   };
