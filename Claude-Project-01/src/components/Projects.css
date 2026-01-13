@@ -479,3 +479,100 @@
     animation: none;
   }
 }
+
+/* Educational Games Section */
+.educational-games-section {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.games-section-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #2C3E50;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.games-intro {
+  text-align: center;
+  color: #5D6D7E;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.arcade-link-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2D1B4E 100%);
+  border-radius: 12px;
+  text-decoration: none;
+  color: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(45, 27, 78, 0.3);
+}
+
+.arcade-link-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(45, 27, 78, 0.4);
+}
+
+.arcade-icon {
+  flex-shrink: 0;
+}
+
+.arcade-icon-svg {
+  width: 64px;
+  height: 64px;
+}
+
+.arcade-link-content {
+  flex: 1;
+}
+
+.arcade-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  color: #F39C12;
+}
+
+.arcade-description {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #BDC3C7;
+  margin: 0 0 0.75rem;
+}
+
+.arcade-cta {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #27AE60;
+  transition: color 0.2s ease;
+}
+
+.arcade-link-card:hover .arcade-cta {
+  color: #2ECC71;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .arcade-link-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .arcade-icon-svg {
+    width: 80px;
+    height: 80px;
+  }
+}

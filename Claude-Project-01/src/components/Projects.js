@@ -747,6 +747,43 @@ function Projects() {
             </article>
           ))}
         </div>
+
+        {/* Educational Games Section */}
+        <div className="educational-games-section">
+          <h3 className="games-section-title">Educational Games</h3>
+          <p className="games-intro">
+            Interactive learning tools for hematology education, featuring gamified approaches
+            to mastering blood smear morphology and clinical reasoning.
+          </p>
+          <a
+            href="https://etperkey.github.io/Claude-Projects/HematologyArcade/index.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="arcade-link-card"
+          >
+            <div className="arcade-icon">
+              <svg viewBox="0 0 64 64" className="project-icon arcade-icon-svg">
+                <rect x="8" y="16" width="48" height="40" rx="4" fill="#2D1B4E"/>
+                <rect x="12" y="20" width="40" height="24" rx="2" fill="#1a1a2e"/>
+                <circle cx="20" cy="32" r="6" fill="#E74C3C"/>
+                <circle cx="32" cy="32" r="6" fill="#F39C12"/>
+                <circle cx="44" cy="32" r="6" fill="#27AE60"/>
+                <rect x="16" y="48" width="8" height="4" rx="1" fill="#555"/>
+                <rect x="28" y="48" width="8" height="4" rx="1" fill="#555"/>
+                <rect x="40" y="48" width="8" height="4" rx="1" fill="#555"/>
+                <text x="32" y="14" textAnchor="middle" fill="#F39C12" fontSize="8" fontWeight="bold">ARCADE</text>
+              </svg>
+            </div>
+            <div className="arcade-link-content">
+              <h4 className="arcade-title">Hematology Arcade</h4>
+              <p className="arcade-description">
+                A collection of retro-styled educational games including MyelomaMan, Ms. AML-Man,
+                LymphoMaster, and Heme's Waldo - learn hematology while having fun!
+              </p>
+              <span className="arcade-cta">Play Now →</span>
+            </div>
+          </a>
+        </div>
       </div>
     </section>
   );
