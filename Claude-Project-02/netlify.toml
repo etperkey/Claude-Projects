@@ -1,6 +1,8 @@
 [build]
   base = "Claude-Project-02"
-  command = "npm run build"
+  # Set SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES to exclude Google OAuth credentials
+  # These are designed to be public and secured by domain/referrer restrictions
+  command = "SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES=\"${REACT_APP_GOOGLE_API_KEY},${REACT_APP_GOOGLE_CLIENT_ID}\" npm run build"
   publish = "build"
 
 [[redirects]]
