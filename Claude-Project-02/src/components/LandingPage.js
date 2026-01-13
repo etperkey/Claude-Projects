@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { researchProjects } from '../data/projects';
 import AddProjectModal from './AddProjectModal';
+import { useApp } from '../context/AppContext';
 
 // Project icons
 const ProjectIcons = {
@@ -55,9 +56,11 @@ const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 
 function LandingPage() {
+  const { isProjectArchived, archiveProject, unarchiveProject, archivedProjects, logActivity } = useApp();
   const [customProjects, setCustomProjects] = useState([]);
   const [savedTasks, setSavedTasks] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showArchived, setShowArchived] = useState(false);
 
   // Load custom projects and saved tasks from localStorage
   useEffect(() => {
@@ -91,6 +94,10 @@ function LandingPage() {
   const handleAddProject = (newProject) => {
     const updated = [...customProjects, newProject];
     saveCustomProjects(updated);
+    logActivity('project_created', {
+      projectId: newProject.id,
+      projectTitle: newProject.title
+    });
   };
 
   const handleDeleteProject = (e, projectId) => {
@@ -102,6 +109,18 @@ function LandingPage() {
     }
   };
 
+  const handleArchiveProject = (e, projectId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    archiveProject(projectId);
+  };
+
+  const handleUnarchiveProject = (e, projectId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    unarchiveProject(projectId);
+  };
+
   // Get tasks for a project (use saved tasks if available)
   const getProjectTasks = (project) => {
     if (project.isCustom) {
@@ -111,6 +130,8 @@ function LandingPage() {
   };
 
   const allProjects = [...researchProjects, ...customProjects];
+  const activeProjects = allProjects.filter(p => !isProjectArchived(p.id));
+  const archivedProjectsList = allProjects.filter(p => isProjectArchived(p.id));
 
   return (
     <div className="landing-page">
@@ -130,13 +151,23 @@ function LandingPage() {
                 Click on a project to view detailed Kanban board and manage tasks
               </p>
             </div>
-            <button className="add-project-btn" onClick={() => setIsModalOpen(true)}>
-              + New Project
-            </button>
+            <div className="header-actions">
+              {archivedProjects.length > 0 && (
+                <button
+                  className="show-archived-btn"
+                  onClick={() => setShowArchived(!showArchived)}
+                >
+                  📦 {showArchived ? 'Hide' : 'Show'} Archived ({archivedProjects.length})
+                </button>
+              )}
+              <button className="add-project-btn" onClick={() => setIsModalOpen(true)}>
+                + New Project
+              </button>
+            </div>
           </div>
 
           <div className="project-grid">
-            {allProjects.map((project) => {
+            {activeProjects.map((project) => {
               const projectTasks = getProjectTasks(project);
               const stats = getTaskStats(projectTasks);
               return (
@@ -146,15 +177,24 @@ function LandingPage() {
                   className="project-card"
                   style={{ '--project-color': project.color }}
                 >
-                  {project.isCustom && (
+                  <div className="project-card-actions">
                     <button
-                      className="delete-project-btn"
-                      onClick={(e) => handleDeleteProject(e, project.id)}
-                      title="Delete project"
+                      className="archive-project-btn"
+                      onClick={(e) => handleArchiveProject(e, project.id)}
+                      title="Archive project"
                     >
-                      &times;
+                      📦
                     </button>
-                  )}
+                    {project.isCustom && (
+                      <button
+                        className="delete-project-btn"
+                        onClick={(e) => handleDeleteProject(e, project.id)}
+                        title="Delete project"
+                      >
+                        &times;
+                      </button>
+                    )}
+                  </div>
                   <div className="project-card-header">
                     <div className="project-icon" style={{ color: project.color }}>
                       {ProjectIcons[project.icon] || ProjectIcons.custom}
@@ -202,30 +242,73 @@ function LandingPage() {
               );
             })}
           </div>
+
+          {/* Archived Projects Section */}
+          {showArchived && archivedProjectsList.length > 0 && (
+            <div className="archived-section">
+              <h3>📦 Archived Projects</h3>
+              <div className="project-grid archived-grid">
+                {archivedProjectsList.map((project) => {
+                  const projectTasks = getProjectTasks(project);
+                  const stats = getTaskStats(projectTasks);
+                  return (
+                    <div
+                      key={project.id}
+                      className="project-card archived"
+                      style={{ '--project-color': project.color }}
+                    >
+                      <div className="project-card-actions">
+                        <button
+                          className="unarchive-project-btn"
+                          onClick={(e) => handleUnarchiveProject(e, project.id)}
+                          title="Restore project"
+                        >
+                          📂 Restore
+                        </button>
+                      </div>
+                      <div className="project-card-header">
+                        <div className="project-icon" style={{ color: project.color, opacity: 0.5 }}>
+                          {ProjectIcons[project.icon] || ProjectIcons.custom}
+                        </div>
+                        <div className="project-status-badge">
+                          {stats.percentage}% Complete
+                        </div>
+                      </div>
+
+                      <div className="project-card-body">
+                        <h3 className="project-title">{project.title}</h3>
+                        <p className="project-subtitle">{project.subtitle}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </section>
 
         <section className="quick-stats">
           <h2>Overview</h2>
           <div className="stats-grid">
             <div className="stat-card">
-              <span className="stat-value">{allProjects.length}</span>
+              <span className="stat-value">{activeProjects.length}</span>
               <span className="stat-label">Active Projects</span>
             </div>
             <div className="stat-card">
               <span className="stat-value">
-                {allProjects.reduce((acc, p) => acc + Object.values(getProjectTasks(p)).flat().length, 0)}
+                {activeProjects.reduce((acc, p) => acc + Object.values(getProjectTasks(p)).flat().length, 0)}
               </span>
               <span className="stat-label">Total Tasks</span>
             </div>
             <div className="stat-card">
               <span className="stat-value">
-                {allProjects.reduce((acc, p) => acc + (getProjectTasks(p).inProgress?.length || 0), 0)}
+                {activeProjects.reduce((acc, p) => acc + (getProjectTasks(p).inProgress?.length || 0), 0)}
               </span>
               <span className="stat-label">In Progress</span>
             </div>
             <div className="stat-card">
               <span className="stat-value">
-                {allProjects.reduce((acc, p) => acc + (getProjectTasks(p).done?.length || 0), 0)}
+                {activeProjects.reduce((acc, p) => acc + (getProjectTasks(p).done?.length || 0), 0)}
               </span>
               <span className="stat-label">Completed</span>
             </div>
