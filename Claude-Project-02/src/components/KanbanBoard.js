@@ -25,9 +25,10 @@ const LABEL_COLORS = {
   teal: '#00bcd4'
 };
 
-function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask, onUpdateTask }) {
+function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask, onUpdateTask, onReorderTask }) {
   const [draggedTask, setDraggedTask] = useState(null);
   const [draggedFrom, setDraggedFrom] = useState(null);
+  const [dragOverTask, setDragOverTask] = useState(null);
   const [newTaskText, setNewTaskText] = useState({});
   const [showAddForm, setShowAddForm] = useState({});
   const [selectedTask, setSelectedTask] = useState(null);
@@ -37,6 +38,17 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
     setDraggedTask(task);
     setDraggedFrom(columnId);
     e.dataTransfer.effectAllowed = 'move';
+    // Add a small delay for visual feedback
+    setTimeout(() => {
+      e.target.classList.add('dragging');
+    }, 0);
+  };
+
+  const handleDragEnd = (e) => {
+    e.target.classList.remove('dragging');
+    setDraggedTask(null);
+    setDraggedFrom(null);
+    setDragOverTask(null);
   };
 
   const handleDragOver = (e) => {
@@ -44,13 +56,61 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
     e.dataTransfer.dropEffect = 'move';
   };
 
-  const handleDrop = (e, targetColumnId) => {
+  const handleTaskDragOver = (e, task, columnId) => {
     e.preventDefault();
-    if (draggedTask && draggedFrom !== targetColumnId) {
-      onTaskMove(draggedTask.id, draggedFrom, targetColumnId);
+    e.stopPropagation();
+    if (draggedTask && draggedTask.id !== task.id) {
+      setDragOverTask({ taskId: task.id, columnId });
     }
+  };
+
+  const handleTaskDragLeave = () => {
+    setDragOverTask(null);
+  };
+
+  const handleDrop = (e, targetColumnId, targetIndex = null) => {
+    e.preventDefault();
+
+    if (!draggedTask) return;
+
+    // If dropping on a different column
+    if (draggedFrom !== targetColumnId) {
+      onTaskMove(draggedTask.id, draggedFrom, targetColumnId, targetIndex);
+    } else if (targetIndex !== null && onReorderTask) {
+      // Reordering within the same column
+      const currentIndex = tasks[targetColumnId]?.findIndex(t => t.id === draggedTask.id);
+      if (currentIndex !== -1 && currentIndex !== targetIndex) {
+        onReorderTask(draggedTask.id, targetColumnId, currentIndex, targetIndex);
+      }
+    }
+
     setDraggedTask(null);
     setDraggedFrom(null);
+    setDragOverTask(null);
+  };
+
+  const handleTaskDrop = (e, targetTask, columnId) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!draggedTask || draggedTask.id === targetTask.id) return;
+
+    const targetIndex = tasks[columnId]?.findIndex(t => t.id === targetTask.id);
+
+    if (draggedFrom !== columnId) {
+      // Moving to different column at specific position
+      onTaskMove(draggedTask.id, draggedFrom, columnId, targetIndex);
+    } else if (onReorderTask) {
+      // Reordering within same column
+      const currentIndex = tasks[columnId]?.findIndex(t => t.id === draggedTask.id);
+      if (currentIndex !== -1 && currentIndex !== targetIndex) {
+        onReorderTask(draggedTask.id, columnId, currentIndex, targetIndex);
+      }
+    }
+
+    setDraggedTask(null);
+    setDraggedFrom(null);
+    setDragOverTask(null);
   };
 
   const handleAddTaskSubmit = (columnId) => {
@@ -61,7 +121,9 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
     }
   };
 
-  const handleTaskClick = (task, columnId) => {
+  const handleTaskClick = (e, task, columnId) => {
+    // Don't open modal if we're dragging
+    if (e.defaultPrevented) return;
     setSelectedTask(task);
     setSelectedColumn(columnId);
   };
@@ -160,19 +222,24 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
                 </div>
               )}
 
-              {tasks[column.id]?.map((task) => {
+              {tasks[column.id]?.map((task, index) => {
                 const dueInfo = formatDueDate(task.dueDate);
                 const checklistProgress = getChecklistProgress(task.checklist);
                 const hasDescription = task.description && task.description.trim().length > 0;
                 const hasLinks = task.links && task.links.length > 0;
+                const isDragOver = dragOverTask?.taskId === task.id && dragOverTask?.columnId === column.id;
 
                 return (
                   <div
                     key={task.id}
-                    className={`task-card ${draggedTask?.id === task.id ? 'dragging' : ''}`}
+                    className={`task-card ${draggedTask?.id === task.id ? 'dragging' : ''} ${isDragOver ? 'drag-over' : ''}`}
                     draggable
                     onDragStart={(e) => handleDragStart(e, task, column.id)}
-                    onClick={() => handleTaskClick(task, column.id)}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={(e) => handleTaskDragOver(e, task, column.id)}
+                    onDragLeave={handleTaskDragLeave}
+                    onDrop={(e) => handleTaskDrop(e, task, column.id)}
+                    onClick={(e) => handleTaskClick(e, task, column.id)}
                   >
                     {/* Labels bar at top */}
                     {task.labels && task.labels.length > 0 && (

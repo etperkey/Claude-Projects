@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProjectById } from '../data/projects';
 import KanbanBoard from './KanbanBoard';
+import ProtocolsResults from './ProtocolsResults';
+import { useApp } from '../context/AppContext';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 
 function ProjectPage() {
   const { projectId } = useParams();
+  const { logActivity, isProjectArchived } = useApp();
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState({});
   const [isCustomProject, setIsCustomProject] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [activeTab, setActiveTab] = useState('kanban'); // kanban or protocols
 
   useEffect(() => {
     // First try to get from built-in projects
@@ -101,7 +105,18 @@ function ProjectPage() {
     );
   }
 
-  const handleTaskMove = (taskId, fromColumn, toColumn) => {
+  // Check if archived
+  if (isProjectArchived(projectId)) {
+    return (
+      <div className="project-page not-found">
+        <h1>Project Archived</h1>
+        <p>This project has been archived and is not visible.</p>
+        <Link to="/">← Back to Dashboard</Link>
+      </div>
+    );
+  }
+
+  const handleTaskMove = (taskId, fromColumn, toColumn, targetIndex = null) => {
     setTasks(prevTasks => {
       const newTasks = { ...prevTasks };
       const taskIndex = newTasks[fromColumn].findIndex(t => t.id === taskId);
@@ -109,8 +124,43 @@ function ProjectPage() {
       if (taskIndex === -1) return prevTasks;
 
       const [task] = newTasks[fromColumn].splice(taskIndex, 1);
-      newTasks[toColumn] = [...newTasks[toColumn], task];
 
+      if (targetIndex !== null && targetIndex >= 0) {
+        newTasks[toColumn] = [
+          ...newTasks[toColumn].slice(0, targetIndex),
+          task,
+          ...newTasks[toColumn].slice(targetIndex)
+        ];
+      } else {
+        newTasks[toColumn] = [...newTasks[toColumn], task];
+      }
+
+      // Log activity
+      logActivity('task_moved', {
+        taskId,
+        taskTitle: task.title,
+        projectId,
+        projectTitle: project.title,
+        fromColumn,
+        toColumn
+      });
+
+      return newTasks;
+    });
+  };
+
+  const handleReorderTask = (taskId, columnId, fromIndex, toIndex) => {
+    setTasks(prevTasks => {
+      const newTasks = { ...prevTasks };
+      const columnTasks = [...newTasks[columnId]];
+
+      // Remove from old position
+      const [task] = columnTasks.splice(fromIndex, 1);
+
+      // Insert at new position
+      columnTasks.splice(toIndex, 0, task);
+
+      newTasks[columnId] = columnTasks;
       return newTasks;
     });
   };
@@ -119,20 +169,44 @@ function ProjectPage() {
     const newTask = {
       id: `${project.id}-${Date.now()}`,
       title: taskTitle,
-      priority
+      priority,
+      description: '',
+      labels: [],
+      checklist: [],
+      links: []
     };
 
     setTasks(prevTasks => ({
       ...prevTasks,
       [column]: [...prevTasks[column], newTask]
     }));
+
+    logActivity('task_created', {
+      taskId: newTask.id,
+      taskTitle,
+      projectId,
+      projectTitle: project.title,
+      column
+    });
   };
 
   const handleDeleteTask = (taskId, column) => {
+    const task = tasks[column]?.find(t => t.id === taskId);
+
     setTasks(prevTasks => ({
       ...prevTasks,
       [column]: prevTasks[column].filter(t => t.id !== taskId)
     }));
+
+    if (task) {
+      logActivity('task_deleted', {
+        taskId,
+        taskTitle: task.title,
+        projectId,
+        projectTitle: project.title,
+        column
+      });
+    }
   };
 
   const handleUpdateTask = (taskId, column, updatedData) => {
@@ -144,6 +218,14 @@ function ProjectPage() {
           : task
       )
     }));
+
+    logActivity('task_updated', {
+      taskId,
+      taskTitle: updatedData.title || tasks[column]?.find(t => t.id === taskId)?.title,
+      projectId,
+      projectTitle: project.title,
+      column
+    });
   };
 
   const totalTasks = Object.values(tasks).flat().length;
@@ -182,15 +264,39 @@ function ProjectPage() {
         </div>
       </header>
 
+      {/* Tab navigation */}
+      <div className="project-tabs">
+        <button
+          className={`project-tab ${activeTab === 'kanban' ? 'active' : ''}`}
+          onClick={() => setActiveTab('kanban')}
+        >
+          📋 Kanban Board
+        </button>
+        <button
+          className={`project-tab ${activeTab === 'protocols' ? 'active' : ''}`}
+          onClick={() => setActiveTab('protocols')}
+        >
+          🧪 Protocols & Results
+        </button>
+      </div>
+
       <main className="project-main">
-        <KanbanBoard
-          tasks={tasks}
-          projectColor={project.color}
-          onTaskMove={handleTaskMove}
-          onAddTask={handleAddTask}
-          onDeleteTask={handleDeleteTask}
-          onUpdateTask={handleUpdateTask}
-        />
+        {activeTab === 'kanban' ? (
+          <KanbanBoard
+            tasks={tasks}
+            projectColor={project.color}
+            onTaskMove={handleTaskMove}
+            onAddTask={handleAddTask}
+            onDeleteTask={handleDeleteTask}
+            onUpdateTask={handleUpdateTask}
+            onReorderTask={handleReorderTask}
+          />
+        ) : (
+          <ProtocolsResults
+            projectId={projectId}
+            projectTitle={project.title}
+          />
+        )}
       </main>
     </div>
   );
