@@ -5,6 +5,7 @@ import CalendarView from './CalendarView';
 import QuickAddModal from './QuickAddModal';
 import ActivityTimeline from './ActivityTimeline';
 import GoogleCalendarSync from './GoogleCalendarSync';
+import LabNotebook from './LabNotebook';
 import { researchProjects } from '../data/projects';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
@@ -17,6 +18,7 @@ function Navbar() {
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
   const [showGoogleCalendar, setShowGoogleCalendar] = useState(false);
+  const [showLabNotebook, setShowLabNotebook] = useState(false);
 
   // Keyboard shortcut for search
   useEffect(() => {
@@ -31,6 +33,7 @@ function Navbar() {
         setShowQuickAdd(false);
         setShowActivity(false);
         setShowGoogleCalendar(false);
+        setShowLabNotebook(false);
       }
     };
 
@@ -100,6 +103,14 @@ function Navbar() {
             🔍 <span className="btn-label">Search</span>
             <span className="shortcut">⌘K</span>
           </button>
+
+          <button
+            className="nav-btn notebook-btn"
+            onClick={() => setShowLabNotebook(true)}
+            title="Lab Notebook"
+          >
+            📓 <span className="btn-label">Notebook</span>
+          </button>
         </div>
 
         <div className="navbar-right">
@@ -158,6 +169,7 @@ function Navbar() {
       <QuickAddModal isOpen={showQuickAdd} onClose={() => setShowQuickAdd(false)} />
       <ActivityTimeline isOpen={showActivity} onClose={() => setShowActivity(false)} />
       <GoogleCalendarSync isOpen={showGoogleCalendar} onClose={() => setShowGoogleCalendar(false)} />
+      <LabNotebook isOpen={showLabNotebook} onClose={() => setShowLabNotebook(false)} />
     </>
   );
 }
