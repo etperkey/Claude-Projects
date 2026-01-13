@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import TaskDependencySelector from './TaskDependencySelector';
 
 const PRIORITY_OPTIONS = [
   { id: 'high', label: 'High', color: '#e74c3c' },
@@ -17,7 +18,7 @@ const LABEL_COLORS = [
   { id: 'teal', color: '#00bcd4', name: 'Teal' }
 ];
 
-function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete }) {
+function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete, allTasks }) {
   const [editedTask, setEditedTask] = useState({
     title: '',
     description: '',
@@ -25,7 +26,8 @@ function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete }) 
     dueDate: '',
     links: [],
     labels: [],
-    checklist: []
+    checklist: [],
+    dependencies: []
   });
   const [newLink, setNewLink] = useState({ title: '', url: '' });
   const [newChecklistItem, setNewChecklistItem] = useState('');
@@ -41,7 +43,8 @@ function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete }) 
         dueDate: task.dueDate || '',
         links: task.links || [],
         labels: task.labels || [],
-        checklist: task.checklist || []
+        checklist: task.checklist || [],
+        dependencies: task.dependencies || []
       });
     }
   }, [task]);
@@ -226,6 +229,16 @@ function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete }) 
                 ) : null;
               })}
             </div>
+          </div>
+
+          {/* Dependencies */}
+          <div className="task-section">
+            <TaskDependencySelector
+              currentTaskId={task.id}
+              allTasks={allTasks}
+              selectedDependencies={editedTask.dependencies}
+              onUpdate={(deps) => setEditedTask({ ...editedTask, dependencies: deps })}
+            />
           </div>
 
           {/* Description/Notes */}

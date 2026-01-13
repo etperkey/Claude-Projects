@@ -3,6 +3,9 @@ import { useParams, Link } from 'react-router-dom';
 import { getProjectById } from '../data/projects';
 import KanbanBoard from './KanbanBoard';
 import ProtocolsResults from './ProtocolsResults';
+import ResearchNotes from './ResearchNotes';
+import RecurringTasksManager from './RecurringTasksManager';
+import TaskTemplatesManager from './TaskTemplatesManager';
 import { useApp } from '../context/AppContext';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
@@ -15,7 +18,9 @@ function ProjectPage() {
   const [tasks, setTasks] = useState({});
   const [isCustomProject, setIsCustomProject] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [activeTab, setActiveTab] = useState('kanban'); // kanban or protocols
+  const [activeTab, setActiveTab] = useState('kanban'); // kanban, protocols, or notes
+  const [showRecurringModal, setShowRecurringModal] = useState(false);
+  const [showTemplatesModal, setShowTemplatesModal] = useState(false);
 
   useEffect(() => {
     // First try to get from built-in projects
@@ -266,22 +271,46 @@ function ProjectPage() {
 
       {/* Tab navigation */}
       <div className="project-tabs">
-        <button
-          className={`project-tab ${activeTab === 'kanban' ? 'active' : ''}`}
-          onClick={() => setActiveTab('kanban')}
-        >
-          📋 Kanban Board
-        </button>
-        <button
-          className={`project-tab ${activeTab === 'protocols' ? 'active' : ''}`}
-          onClick={() => setActiveTab('protocols')}
-        >
-          🧪 Protocols & Results
-        </button>
+        <div className="tabs-left">
+          <button
+            className={`project-tab ${activeTab === 'kanban' ? 'active' : ''}`}
+            onClick={() => setActiveTab('kanban')}
+          >
+            📋 Kanban Board
+          </button>
+          <button
+            className={`project-tab ${activeTab === 'protocols' ? 'active' : ''}`}
+            onClick={() => setActiveTab('protocols')}
+          >
+            🧪 Protocols & Results
+          </button>
+          <button
+            className={`project-tab ${activeTab === 'notes' ? 'active' : ''}`}
+            onClick={() => setActiveTab('notes')}
+          >
+            📖 Research Notes
+          </button>
+        </div>
+        <div className="tabs-right">
+          <button
+            className="tab-action-btn"
+            onClick={() => setShowRecurringModal(true)}
+            title="Recurring Tasks"
+          >
+            🔄 Recurring
+          </button>
+          <button
+            className="tab-action-btn"
+            onClick={() => setShowTemplatesModal(true)}
+            title="Task Templates"
+          >
+            📑 Templates
+          </button>
+        </div>
       </div>
 
       <main className="project-main">
-        {activeTab === 'kanban' ? (
+        {activeTab === 'kanban' && (
           <KanbanBoard
             tasks={tasks}
             projectColor={project.color}
@@ -291,13 +320,37 @@ function ProjectPage() {
             onUpdateTask={handleUpdateTask}
             onReorderTask={handleReorderTask}
           />
-        ) : (
+        )}
+        {activeTab === 'protocols' && (
           <ProtocolsResults
             projectId={projectId}
             projectTitle={project.title}
           />
         )}
+        {activeTab === 'notes' && (
+          <ResearchNotes
+            projectId={projectId}
+            projectTitle={project.title}
+          />
+        )}
       </main>
+
+      {/* Recurring Tasks Modal */}
+      <RecurringTasksManager
+        projectId={projectId}
+        projectTitle={project.title}
+        onCreateTask={handleAddTask}
+        isOpen={showRecurringModal}
+        onClose={() => setShowRecurringModal(false)}
+      />
+
+      {/* Task Templates Modal */}
+      <TaskTemplatesManager
+        projectId={projectId}
+        onApplyTemplate={handleAddTask}
+        isOpen={showTemplatesModal}
+        onClose={() => setShowTemplatesModal(false)}
+      />
     </div>
   );
 }
