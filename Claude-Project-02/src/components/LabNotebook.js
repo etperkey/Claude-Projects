@@ -5,7 +5,7 @@ import { researchProjects } from '../data/projects';
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
 
 function LabNotebook({ isOpen, onClose }) {
-  const { isSignedIn, createDoc, syncToDoc, importFromDoc } = useGoogleAuth();
+  const { isSignedIn, createDoc, syncToDoc, importFromDoc, createSheet, syncToSheet, importFromSheet } = useGoogleAuth();
 
   const [entries, setEntries] = useState([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
@@ -96,7 +96,9 @@ function LabNotebook({ isOpen, onClose }) {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       googleDocId: null,
-      googleDocUrl: null
+      googleDocUrl: null,
+      googleSheetId: null,
+      googleSheetUrl: null
     };
 
     saveEntries([entry, ...entries]);
@@ -218,6 +220,109 @@ function LabNotebook({ isOpen, onClose }) {
       setSyncStatus({ message: 'Imported from Google Doc!', type: 'success' });
     } else {
       setSyncStatus({ message: 'Failed to import from Google Doc', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  // Create Google Sheet from entry
+  const handleCreateGoogleSheet = async (entry) => {
+    if (!isSignedIn) {
+      setSyncStatus({ message: 'Please sign in to Google first (use navbar button)', type: 'error' });
+      setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+      return;
+    }
+
+    setSyncStatus({ message: 'Creating Google Sheet...', type: 'info' });
+
+    const projectName = entry.projectId
+      ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
+      : 'No Project';
+
+    const headers = ['Field', 'Value'];
+    const data = [
+      ['Title', entry.title],
+      ['Date', formatTimestamp(entry.createdAt)],
+      ['Project', projectName],
+      ['Tags', entry.tags.join(', ') || 'None'],
+      ['Content', entry.content],
+      ['Last Updated', formatTimestamp(entry.updatedAt)]
+    ];
+
+    const result = await createSheet(`[Lab Notebook] ${entry.title}`, headers, data);
+
+    if (result) {
+      handleUpdateEntry(entry.id, {
+        googleSheetId: result.spreadsheetId,
+        googleSheetUrl: result.sheetUrl
+      });
+      setSyncStatus({ message: 'Google Sheet created!', type: 'success' });
+      window.open(result.sheetUrl, '_blank');
+    } else {
+      setSyncStatus({ message: 'Failed to create Google Sheet', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  // Sync entry to existing Google Sheet
+  const handleSyncToGoogleSheet = async (entry) => {
+    if (!entry.googleSheetId) {
+      setSyncStatus({ message: 'No Google Sheet linked to this entry', type: 'error' });
+      return;
+    }
+
+    setSyncStatus({ message: 'Syncing to Google Sheet...', type: 'info' });
+
+    const projectName = entry.projectId
+      ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
+      : 'No Project';
+
+    const headers = ['Field', 'Value'];
+    const data = [
+      ['Title', entry.title],
+      ['Date', formatTimestamp(entry.createdAt)],
+      ['Project', projectName],
+      ['Tags', entry.tags.join(', ') || 'None'],
+      ['Content', entry.content],
+      ['Last Updated', formatTimestamp(entry.updatedAt)]
+    ];
+
+    const success = await syncToSheet(entry.googleSheetId, headers, data);
+
+    if (success) {
+      setSyncStatus({ message: 'Synced to Google Sheet!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to sync to Google Sheet', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  // Import content from Google Sheet
+  const handleImportFromGoogleSheet = async (entry) => {
+    if (!entry.googleSheetId) {
+      setSyncStatus({ message: 'No Google Sheet linked to this entry', type: 'error' });
+      return;
+    }
+
+    setSyncStatus({ message: 'Importing from Google Sheet...', type: 'info' });
+
+    const result = await importFromSheet(entry.googleSheetId);
+
+    if (result && result.data) {
+      // Parse the sheet data (Field, Value format)
+      const updates = {};
+      result.data.forEach(row => {
+        const field = row[0]?.toLowerCase();
+        const value = row[1] || '';
+        if (field === 'content') updates.content = value;
+        if (field === 'tags') updates.tags = value.split(',').map(t => t.trim()).filter(Boolean);
+      });
+
+      if (Object.keys(updates).length > 0) {
+        handleUpdateEntry(entry.id, updates);
+      }
+      setSyncStatus({ message: 'Imported from Google Sheet!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to import from Google Sheet', type: 'error' });
     }
     setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
   };
@@ -420,6 +525,11 @@ function LabNotebook({ isOpen, onClose }) {
                               G
                             </span>
                           )}
+                          {entry.googleSheetId && (
+                            <span className="google-sheet-badge" title="Linked to Google Sheet">
+                              S
+                            </span>
+                          )}
                         </div>
 
                         <h4 className="entry-title">{entry.title}</h4>
@@ -452,37 +562,78 @@ function LabNotebook({ isOpen, onClose }) {
                           <div className="entry-actions">
                             {isSignedIn && (
                               <>
-                                {entry.googleDocId ? (
-                                  <>
-                                    <a
-                                      href={entry.googleDocUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="btn-action"
-                                    >
-                                      Open in Google Docs
-                                    </a>
+                                <div className="google-actions-row">
+                                  <span className="google-action-label">Docs:</span>
+                                  {entry.googleDocId ? (
+                                    <>
+                                      <a
+                                        href={entry.googleDocUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn-action small"
+                                      >
+                                        Open
+                                      </a>
+                                      <button
+                                        className="btn-action small"
+                                        onClick={() => handleSyncToGoogleDoc(entry)}
+                                        title="Push to Google Doc"
+                                      >
+                                        ⬆
+                                      </button>
+                                      <button
+                                        className="btn-action small"
+                                        onClick={() => handleImportFromGoogleDoc(entry)}
+                                        title="Pull from Google Doc"
+                                      >
+                                        ⬇
+                                      </button>
+                                    </>
+                                  ) : (
                                     <button
-                                      className="btn-action"
-                                      onClick={() => handleSyncToGoogleDoc(entry)}
+                                      className="btn-action small primary"
+                                      onClick={() => handleCreateGoogleDoc(entry)}
                                     >
-                                      Push to Doc
+                                      + Create
                                     </button>
+                                  )}
+                                </div>
+                                <div className="google-actions-row">
+                                  <span className="google-action-label">Sheets:</span>
+                                  {entry.googleSheetId ? (
+                                    <>
+                                      <a
+                                        href={entry.googleSheetUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn-action small"
+                                      >
+                                        Open
+                                      </a>
+                                      <button
+                                        className="btn-action small"
+                                        onClick={() => handleSyncToGoogleSheet(entry)}
+                                        title="Push to Google Sheet"
+                                      >
+                                        ⬆
+                                      </button>
+                                      <button
+                                        className="btn-action small"
+                                        onClick={() => handleImportFromGoogleSheet(entry)}
+                                        title="Pull from Google Sheet"
+                                      >
+                                        ⬇
+                                      </button>
+                                    </>
+                                  ) : (
                                     <button
-                                      className="btn-action"
-                                      onClick={() => handleImportFromGoogleDoc(entry)}
+                                      className="btn-action small primary"
+                                      onClick={() => handleCreateGoogleSheet(entry)}
                                     >
-                                      Pull from Doc
+                                      + Create
                                     </button>
-                                  </>
-                                ) : (
-                                  <button
-                                    className="btn-action primary"
-                                    onClick={() => handleCreateGoogleDoc(entry)}
-                                  >
-                                    Create Google Doc
-                                  </button>
-                                )}
+                                  )}
+                                </div>
                               </>
                             )}
                             <button
