@@ -31,7 +31,7 @@ const saveStoredData = (key, projectId, items) => {
 
 function ProtocolsResults({ projectId, projectTitle }) {
   const { logActivity } = useApp();
-  const { isSignedIn, createDoc, syncToDoc } = useGoogleAuth();
+  const { isSignedIn, createDoc, syncToDoc, importFromDoc } = useGoogleAuth();
 
   const [activeTab, setActiveTab] = useState('protocols');
   const [protocols, setProtocols] = useState(() => getStoredData(PROTOCOLS_KEY, projectId));
@@ -171,6 +171,37 @@ Created: ${new Date(item.createdAt).toLocaleString()}
 Last Updated: ${new Date().toLocaleString()}`;
 
     await syncToDoc(item.googleDocId, content);
+  };
+
+  // Import content from Google Doc
+  const handleImportFromGoogleDoc = async (item) => {
+    if (!item.googleDocId) {
+      setSyncStatus({ message: 'No Google Doc linked to this item', type: 'error' });
+      return;
+    }
+
+    setSyncStatus({ message: 'Importing from Google Doc...', type: 'info' });
+
+    const result = await importFromDoc(item.googleDocId);
+
+    if (result) {
+      // Extract the description content (between the two "---" separators)
+      let importedContent = result.content;
+      const firstSep = importedContent.indexOf('---');
+      const secondSep = importedContent.lastIndexOf('---');
+
+      if (firstSep !== -1 && secondSep !== -1 && firstSep !== secondSep) {
+        importedContent = importedContent.substring(firstSep + 3, secondSep).trim();
+        // Remove the "Attached File/Link:" line if present
+        importedContent = importedContent.replace(/\nAttached File\/Link:.*$/m, '').trim();
+      }
+
+      handleUpdateItem(item.id, { description: importedContent });
+      setSyncStatus({ message: 'Imported from Google Doc!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to import from Google Doc', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
   };
 
   const currentItems = activeTab === 'protocols' ? protocols : results;
@@ -351,13 +382,19 @@ Last Updated: ${new Date().toLocaleString()}`;
                               rel="noopener noreferrer"
                               className="btn-google-action"
                             >
-                              📄 Open in Google Docs
+                              Open Doc
                             </a>
                             <button
                               className="btn-google-action"
                               onClick={() => handleSyncToGoogleDoc(item)}
                             >
-                              🔄 Sync to Doc
+                              Push
+                            </button>
+                            <button
+                              className="btn-google-action"
+                              onClick={() => handleImportFromGoogleDoc(item)}
+                            >
+                              Pull
                             </button>
                           </>
                         ) : (

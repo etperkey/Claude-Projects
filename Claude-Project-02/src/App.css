@@ -4621,3 +4621,178 @@ body {
   text-align: center;
   color: var(--text-secondary);
 }
+
+/* ==================== Google Sign-In Prompt Modal ==================== */
+.google-prompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.google-prompt-modal {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 440px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.google-prompt-header {
+  padding: 24px 24px 0;
+  text-align: center;
+}
+
+.google-prompt-header h2 {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.google-prompt-body {
+  padding: 24px;
+}
+
+.google-prompt-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.google-g-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335);
+  color: white;
+  border-radius: 50%;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.google-prompt-message {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  font-size: 1rem;
+}
+
+.google-features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+}
+
+.google-features-list li {
+  padding: 8px 0 8px 28px;
+  position: relative;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.google-features-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.google-prompt-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.google-signin-btn-large {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 24px;
+  background: #4285f4;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.google-signin-btn-large:hover {
+  background: #3367d6;
+}
+
+.google-signin-btn-large:disabled {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.google-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: white;
+  color: #4285f4;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.google-skip-btn {
+  padding: 12px 24px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.google-skip-btn:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.google-prompt-note {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Import from Doc button */
+.btn-import-doc {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-import-doc:hover {
+  background: var(--border-color);
+}
