@@ -40,6 +40,14 @@ function Footer() {
             >
               UChicago
             </a>
+            <a
+              href="https://www.doximity.com/pub/eric-perkey-md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-link"
+            >
+              Doximity
+            </a>
           </div>
           <p className="footer-text">
             &copy; {currentYear} Eric Perkey, MD. All rights reserved.
