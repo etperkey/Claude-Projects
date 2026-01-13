@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import useGoogleDocs from '../hooks/useGoogleDocs';
+import { useGoogleAuth } from '../context/GoogleAuthContext';
 
 const PROTOCOLS_KEY = 'research-dashboard-protocols';
 const RESULTS_KEY = 'research-dashboard-results';
@@ -31,6 +31,8 @@ const saveStoredData = (key, projectId, items) => {
 
 function ProtocolsResults({ projectId, projectTitle }) {
   const { logActivity } = useApp();
+  const { isSignedIn, createDoc, syncToDoc, importFromDoc, createSheet, syncToSheet, importFromSheet } = useGoogleAuth();
+
   const [activeTab, setActiveTab] = useState('protocols');
   const [protocols, setProtocols] = useState(() => getStoredData(PROTOCOLS_KEY, projectId));
   const [results, setResults] = useState(() => getStoredData(RESULTS_KEY, projectId));
@@ -43,19 +45,7 @@ function ProtocolsResults({ projectId, projectTitle }) {
     tags: ''
   });
   const [expandedItem, setExpandedItem] = useState(null);
-
-  // Google Docs integration
-  const {
-    isSignedIn,
-    gisLoaded,
-    hasCredentials,
-    syncStatus,
-    setSyncStatus,
-    signIn,
-    signOut,
-    createDoc,
-    syncToDoc
-  } = useGoogleDocs(true);
+  const [syncStatus, setSyncStatus] = useState({ message: '', type: '' });
 
   const handleAddItem = () => {
     if (!newItem.title.trim()) return;
@@ -66,7 +56,9 @@ function ProtocolsResults({ projectId, projectTitle }) {
       tags: newItem.tags.split(',').map(t => t.trim()).filter(Boolean),
       createdAt: new Date().toISOString(),
       googleDocId: null,
-      googleDocUrl: null
+      googleDocUrl: null,
+      googleSheetId: null,
+      googleSheetUrl: null
     };
 
     if (activeTab === 'protocols') {
@@ -183,26 +175,144 @@ Last Updated: ${new Date().toLocaleString()}`;
     await syncToDoc(item.googleDocId, content);
   };
 
+  // Import content from Google Doc
+  const handleImportFromGoogleDoc = async (item) => {
+    if (!item.googleDocId) {
+      setSyncStatus({ message: 'No Google Doc linked to this item', type: 'error' });
+      return;
+    }
+
+    setSyncStatus({ message: 'Importing from Google Doc...', type: 'info' });
+
+    const result = await importFromDoc(item.googleDocId);
+
+    if (result) {
+      // Extract the description content (between the two "---" separators)
+      let importedContent = result.content;
+      const firstSep = importedContent.indexOf('---');
+      const secondSep = importedContent.lastIndexOf('---');
+
+      if (firstSep !== -1 && secondSep !== -1 && firstSep !== secondSep) {
+        importedContent = importedContent.substring(firstSep + 3, secondSep).trim();
+        // Remove the "Attached File/Link:" line if present
+        importedContent = importedContent.replace(/\nAttached File\/Link:.*$/m, '').trim();
+      }
+
+      handleUpdateItem(item.id, { description: importedContent });
+      setSyncStatus({ message: 'Imported from Google Doc!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to import from Google Doc', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  // Google Sheets handlers
+  const handleCreateGoogleSheet = async (item) => {
+    const type = activeTab === 'protocols' ? 'Protocol' : 'Result';
+    const title = `[${type}] ${item.title} - ${projectTitle}`;
+
+    const headers = ['Field', 'Value'];
+    const data = [
+      ['Title', item.title],
+      ['Type', type],
+      ['Project', projectTitle],
+      ['Date', new Date(item.date).toLocaleDateString()],
+      ['Tags', item.tags?.join(', ') || 'None'],
+      ['Description', item.description || ''],
+      ['File/Link', item.fileUrl || ''],
+      ['Created', new Date(item.createdAt).toLocaleString()],
+      ['Last Updated', new Date().toLocaleString()]
+    ];
+
+    setSyncStatus({ message: 'Creating Google Sheet...', type: 'info' });
+
+    const result = await createSheet(title, headers, data);
+
+    if (result) {
+      handleUpdateItem(item.id, {
+        googleSheetId: result.spreadsheetId,
+        googleSheetUrl: result.sheetUrl
+      });
+      setSyncStatus({ message: 'Google Sheet created!', type: 'success' });
+      window.open(result.sheetUrl, '_blank');
+    } else {
+      setSyncStatus({ message: 'Failed to create Google Sheet', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  const handleSyncToGoogleSheet = async (item) => {
+    if (!item.googleSheetId) {
+      setSyncStatus({ message: 'No Google Sheet linked', type: 'error' });
+      return;
+    }
+
+    const type = activeTab === 'protocols' ? 'Protocol' : 'Result';
+    const headers = ['Field', 'Value'];
+    const data = [
+      ['Title', item.title],
+      ['Type', type],
+      ['Project', projectTitle],
+      ['Date', new Date(item.date).toLocaleDateString()],
+      ['Tags', item.tags?.join(', ') || 'None'],
+      ['Description', item.description || ''],
+      ['File/Link', item.fileUrl || ''],
+      ['Created', new Date(item.createdAt).toLocaleString()],
+      ['Last Updated', new Date().toLocaleString()]
+    ];
+
+    setSyncStatus({ message: 'Syncing to Google Sheet...', type: 'info' });
+
+    const success = await syncToSheet(item.googleSheetId, headers, data);
+
+    if (success) {
+      setSyncStatus({ message: 'Synced to Google Sheet!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to sync to Google Sheet', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  const handleImportFromGoogleSheet = async (item) => {
+    if (!item.googleSheetId) {
+      setSyncStatus({ message: 'No Google Sheet linked', type: 'error' });
+      return;
+    }
+
+    setSyncStatus({ message: 'Importing from Google Sheet...', type: 'info' });
+
+    const result = await importFromSheet(item.googleSheetId);
+
+    if (result && result.data) {
+      // Parse the sheet data (Field, Value format)
+      const updates = {};
+      result.data.forEach(row => {
+        const field = row[0]?.toLowerCase();
+        const value = row[1] || '';
+        if (field === 'description') updates.description = value;
+        if (field === 'tags') updates.tags = value.split(',').map(t => t.trim()).filter(Boolean);
+      });
+
+      if (Object.keys(updates).length > 0) {
+        handleUpdateItem(item.id, updates);
+      }
+      setSyncStatus({ message: 'Imported from Google Sheet!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to import from Google Sheet', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
   const currentItems = activeTab === 'protocols' ? protocols : results;
 
   return (
     <div className="protocols-results-section">
-      {/* Google Auth Header */}
-      <div className="google-auth-bar">
-        {hasCredentials ? (
-          isSignedIn ? (
-            <div className="google-connected">
-              <span className="status-dot connected"></span>
-              <span>Google Connected</span>
-              <button className="signout-link" onClick={signOut}>Sign out</button>
-            </div>
-          ) : (
-            <button className="google-signin-btn-small" onClick={signIn} disabled={!gisLoaded}>
-              {gisLoaded ? 'Sign in to Google' : 'Loading...'}
-            </button>
-          )
+      {/* Google Status */}
+      <div className="google-status-indicator">
+        {isSignedIn ? (
+          <span className="google-status-text connected">Google Connected</span>
         ) : (
-          <span className="no-google">Google Docs not configured</span>
+          <span className="google-status-text">Sign in via navbar for Google Docs</span>
         )}
       </div>
 
@@ -300,6 +410,9 @@ Last Updated: ${new Date().toLocaleString()}`;
                         {item.googleDocId && (
                           <span className="google-doc-indicator" title="Linked to Google Doc">📄</span>
                         )}
+                        {item.googleSheetId && (
+                          <span className="google-sheet-indicator" title="Linked to Google Sheet">📊</span>
+                        )}
                       </h4>
                       <span className="pr-item-date">
                         {new Date(item.date).toLocaleDateString('en-US', {
@@ -363,6 +476,7 @@ Last Updated: ${new Date().toLocaleString()}`;
                     {/* Google Docs Actions */}
                     {isSignedIn && (
                       <div className="pr-google-actions">
+                        <span className="google-action-label">Docs:</span>
                         {item.googleDocId ? (
                           <>
                             <a
@@ -371,13 +485,21 @@ Last Updated: ${new Date().toLocaleString()}`;
                               rel="noopener noreferrer"
                               className="btn-google-action"
                             >
-                              📄 Open in Google Docs
+                              Open
                             </a>
                             <button
                               className="btn-google-action"
                               onClick={() => handleSyncToGoogleDoc(item)}
+                              title="Push to Google Doc"
                             >
-                              🔄 Sync to Doc
+                              ⬆
+                            </button>
+                            <button
+                              className="btn-google-action"
+                              onClick={() => handleImportFromGoogleDoc(item)}
+                              title="Pull from Google Doc"
+                            >
+                              ⬇
                             </button>
                           </>
                         ) : (
@@ -385,7 +507,47 @@ Last Updated: ${new Date().toLocaleString()}`;
                             className="btn-google-action primary"
                             onClick={() => handleCreateGoogleDoc(item)}
                           >
-                            📝 Create Google Doc
+                            + Create
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Google Sheets Actions */}
+                    {isSignedIn && (
+                      <div className="pr-google-actions">
+                        <span className="google-action-label">Sheets:</span>
+                        {item.googleSheetId ? (
+                          <>
+                            <a
+                              href={item.googleSheetUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-google-action"
+                            >
+                              Open
+                            </a>
+                            <button
+                              className="btn-google-action"
+                              onClick={() => handleSyncToGoogleSheet(item)}
+                              title="Push to Google Sheet"
+                            >
+                              ⬆
+                            </button>
+                            <button
+                              className="btn-google-action"
+                              onClick={() => handleImportFromGoogleSheet(item)}
+                              title="Pull from Google Sheet"
+                            >
+                              ⬇
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            className="btn-google-action primary"
+                            onClick={() => handleCreateGoogleSheet(item)}
+                          >
+                            + Create
                           </button>
                         )}
                       </div>

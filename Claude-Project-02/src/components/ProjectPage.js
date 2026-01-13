@@ -4,6 +4,7 @@ import { getProjectById } from '../data/projects';
 import KanbanBoard from './KanbanBoard';
 import ProtocolsResults from './ProtocolsResults';
 import ResearchNotes from './ResearchNotes';
+import ProjectLabNotebook from './ProjectLabNotebook';
 import RecurringTasksManager from './RecurringTasksManager';
 import TaskTemplatesManager from './TaskTemplatesManager';
 import { useApp } from '../context/AppContext';
@@ -290,6 +291,12 @@ function ProjectPage() {
           >
             📖 Research Notes
           </button>
+          <button
+            className={`project-tab ${activeTab === 'notebook' ? 'active' : ''}`}
+            onClick={() => setActiveTab('notebook')}
+          >
+            📓 Lab Notebook
+          </button>
         </div>
         <div className="tabs-right">
           <button
@@ -329,6 +336,12 @@ function ProjectPage() {
         )}
         {activeTab === 'notes' && (
           <ResearchNotes
+            projectId={projectId}
+            projectTitle={project.title}
+          />
+        )}
+        {activeTab === 'notebook' && (
+          <ProjectLabNotebook
             projectId={projectId}
             projectTitle={project.title}
           />

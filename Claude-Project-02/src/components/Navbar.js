@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { useGoogleAuth } from '../context/GoogleAuthContext';
 import GlobalSearch from './GlobalSearch';
 import CalendarView from './CalendarView';
 import QuickAddModal from './QuickAddModal';
@@ -13,6 +14,7 @@ const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 
 function Navbar() {
   const { theme, toggleTheme } = useApp();
+  const { isSignedIn, gisLoaded, hasCredentials, user, signIn, signOut } = useGoogleAuth();
   const [showSearch, setShowSearch] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
@@ -153,6 +155,33 @@ function Navbar() {
           >
             📥 <span className="btn-label">Export</span>
           </button>
+
+          {hasCredentials && (
+            isSignedIn ? (
+              <button
+                className="nav-btn google-auth-btn signed-in"
+                onClick={signOut}
+                title={user ? `Signed in as ${user.email}` : 'Sign out of Google'}
+              >
+                {user?.picture ? (
+                  <img src={user.picture} alt="" className="google-avatar" />
+                ) : (
+                  <span className="google-icon">G</span>
+                )}
+                <span className="btn-label">{user?.name?.split(' ')[0] || 'Google'}</span>
+              </button>
+            ) : (
+              <button
+                className="nav-btn google-auth-btn"
+                onClick={signIn}
+                disabled={!gisLoaded}
+                title="Sign in with Google"
+              >
+                <span className="google-icon">G</span>
+                <span className="btn-label">{gisLoaded ? 'Sign In' : '...'}</span>
+              </button>
+            )
+          )}
 
           <button
             className="nav-btn theme-toggle"

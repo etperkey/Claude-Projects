@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import useGoogleDocs from '../hooks/useGoogleDocs';
+import { useGoogleAuth } from '../context/GoogleAuthContext';
+import LiteratureManager from './LiteratureManager';
 
 const RESEARCH_NOTES_KEY = 'research-dashboard-research-notes';
 
 function ResearchNotes({ projectId, projectTitle }) {
+  const { isSignedIn, createDoc, syncToDoc, importFromDoc } = useGoogleAuth();
+
   const [activeTab, setActiveTab] = useState('background');
   const [notes, setNotes] = useState({
     background: '',
@@ -14,19 +17,7 @@ function ResearchNotes({ projectId, projectTitle }) {
   });
   const [isEditing, setIsEditing] = useState(null);
   const [editContent, setEditContent] = useState('');
-
-  // Google Docs integration
-  const {
-    isSignedIn,
-    gisLoaded,
-    hasCredentials,
-    syncStatus,
-    setSyncStatus,
-    signIn,
-    signOut,
-    createDoc,
-    syncToDoc
-  } = useGoogleDocs(true);
+  const [syncStatus, setSyncStatus] = useState({ message: '', type: '' });
 
   // Load notes from localStorage
   useEffect(() => {
@@ -275,6 +266,91 @@ Last Updated: ${new Date().toLocaleString()}`;
     await syncToDoc(note.googleDocId, content);
   };
 
+  // Import functions
+  const handleImportBackgroundDoc = async () => {
+    if (!notes.backgroundGoogleDocId) return;
+
+    setSyncStatus({ message: 'Importing from Google Doc...', type: 'info' });
+
+    const result = await importFromDoc(notes.backgroundGoogleDocId);
+
+    if (result) {
+      let importedContent = result.content;
+      const firstSep = importedContent.indexOf('---');
+      const secondSep = importedContent.lastIndexOf('---');
+
+      if (firstSep !== -1 && secondSep !== -1 && firstSep !== secondSep) {
+        importedContent = importedContent.substring(firstSep + 3, secondSep).trim();
+      }
+
+      saveNotes({ ...notes, background: importedContent });
+      setSyncStatus({ message: 'Imported from Google Doc!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to import', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  const handleImportAimDoc = async (aim) => {
+    if (!aim.googleDocId) return;
+
+    setSyncStatus({ message: 'Importing from Google Doc...', type: 'info' });
+
+    const result = await importFromDoc(aim.googleDocId);
+
+    if (result) {
+      let importedContent = result.content;
+      const firstSep = importedContent.indexOf('---');
+      const secondSep = importedContent.lastIndexOf('---');
+
+      if (firstSep !== -1 && secondSep !== -1 && firstSep !== secondSep) {
+        const sectionContent = importedContent.substring(firstSep + 3, secondSep);
+
+        // Parse sections
+        const descMatch = sectionContent.match(/DESCRIPTION:\n([\s\S]*?)(?=\n[A-Z]+:|$)/);
+        const ratMatch = sectionContent.match(/RATIONALE:\n([\s\S]*?)(?=\n[A-Z]+:|$)/);
+        const hypMatch = sectionContent.match(/HYPOTHESIS:\n([\s\S]*?)(?=\n[A-Z]+:|$)/);
+        const appMatch = sectionContent.match(/EXPERIMENTAL APPROACH:\n([\s\S]*?)(?=\n[A-Z]+:|$)/);
+        const outMatch = sectionContent.match(/EXPECTED OUTCOMES:\n([\s\S]*?)(?=\n[A-Z]+:|$)/);
+
+        if (descMatch) handleUpdateAim(aim.id, 'description', descMatch[1].trim());
+        if (ratMatch) handleUpdateAim(aim.id, 'rationale', ratMatch[1].trim());
+        if (hypMatch) handleUpdateAim(aim.id, 'hypothesis', hypMatch[1].trim());
+        if (appMatch) handleUpdateAim(aim.id, 'approach', appMatch[1].trim());
+        if (outMatch) handleUpdateAim(aim.id, 'expectedOutcomes', outMatch[1].trim());
+      }
+
+      setSyncStatus({ message: 'Imported from Google Doc!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to import', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  const handleImportNoteDoc = async (note) => {
+    if (!note.googleDocId) return;
+
+    setSyncStatus({ message: 'Importing from Google Doc...', type: 'info' });
+
+    const result = await importFromDoc(note.googleDocId);
+
+    if (result) {
+      let importedContent = result.content;
+      const firstSep = importedContent.indexOf('---');
+      const secondSep = importedContent.lastIndexOf('---');
+
+      if (firstSep !== -1 && secondSep !== -1 && firstSep !== secondSep) {
+        importedContent = importedContent.substring(firstSep + 3, secondSep).trim();
+      }
+
+      handleUpdateNote(note.id, { content: importedContent });
+      setSyncStatus({ message: 'Imported from Google Doc!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to import', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
   const NOTE_CATEGORIES = [
     { id: 'general', label: 'General', color: '#888' },
     { id: 'idea', label: 'Ideas', color: '#f1c40f' },
@@ -292,22 +368,12 @@ Last Updated: ${new Date().toLocaleString()}`;
 
   return (
     <div className="research-notes">
-      {/* Google Auth Header */}
-      <div className="google-auth-bar">
-        {hasCredentials ? (
-          isSignedIn ? (
-            <div className="google-connected">
-              <span className="status-dot connected"></span>
-              <span>Google Connected</span>
-              <button className="signout-link" onClick={signOut}>Sign out</button>
-            </div>
-          ) : (
-            <button className="google-signin-btn-small" onClick={signIn} disabled={!gisLoaded}>
-              {gisLoaded ? 'Sign in to Google' : 'Loading...'}
-            </button>
-          )
+      {/* Google Status */}
+      <div className="google-status-indicator">
+        {isSignedIn ? (
+          <span className="google-status-text connected">Google Connected</span>
         ) : (
-          <span className="no-google">Google Docs not configured</span>
+          <span className="google-status-text">Sign in via navbar for Google Docs</span>
         )}
       </div>
 
@@ -337,6 +403,12 @@ Last Updated: ${new Date().toLocaleString()}`;
           onClick={() => setActiveTab('misc')}
         >
           Miscellaneous Notes ({notes.miscNotes.length})
+        </button>
+        <button
+          className={`notes-tab ${activeTab === 'literature' ? 'active' : ''}`}
+          onClick={() => setActiveTab('literature')}
+        >
+          📚 Literature
         </button>
       </div>
 
@@ -373,13 +445,19 @@ Last Updated: ${new Date().toLocaleString()}`;
                         rel="noopener noreferrer"
                         className="btn-google-action"
                       >
-                        📄 Open Doc
+                        Open Doc
                       </a>
                       <button
                         className="btn-google-action"
                         onClick={handleSyncBackgroundDoc}
                       >
-                        🔄 Sync
+                        Push
+                      </button>
+                      <button
+                        className="btn-google-action"
+                        onClick={handleImportBackgroundDoc}
+                      >
+                        Pull
                       </button>
                     </>
                   ) : (
@@ -387,7 +465,7 @@ Last Updated: ${new Date().toLocaleString()}`;
                       className="btn-google-action primary"
                       onClick={handleCreateBackgroundDoc}
                     >
-                      📝 Create Doc
+                      Create Doc
                     </button>
                   )
                 )}
@@ -483,20 +561,30 @@ Include:
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn-google-action small"
+                                title="Open Doc"
                               >
                                 📄
                               </a>
                               <button
                                 className="btn-google-action small"
                                 onClick={() => handleSyncAimDoc(aim, index)}
+                                title="Push to Doc"
                               >
-                                🔄
+                                ⬆
+                              </button>
+                              <button
+                                className="btn-google-action small"
+                                onClick={() => handleImportAimDoc(aim)}
+                                title="Pull from Doc"
+                              >
+                                ⬇
                               </button>
                             </>
                           ) : (
                             <button
                               className="btn-google-action small primary"
                               onClick={() => handleCreateAimDoc(aim, index)}
+                              title="Create Doc"
                             >
                               📝
                             </button>
@@ -651,20 +739,30 @@ Include:
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn-google-action small"
+                                title="Open Doc"
                               >
                                 📄
                               </a>
                               <button
                                 className="btn-google-action small"
                                 onClick={() => handleSyncNoteDoc(note)}
+                                title="Push to Doc"
                               >
-                                🔄
+                                ⬆
+                              </button>
+                              <button
+                                className="btn-google-action small"
+                                onClick={() => handleImportNoteDoc(note)}
+                                title="Pull from Doc"
+                              >
+                                ⬇
                               </button>
                             </>
                           ) : (
                             <button
                               className="btn-google-action small primary"
                               onClick={() => handleCreateNoteDoc(note)}
+                              title="Create Doc"
                             >
                               📝
                             </button>
@@ -678,6 +776,14 @@ Include:
               </div>
             )}
           </div>
+        )}
+
+        {/* Literature Tab */}
+        {activeTab === 'literature' && (
+          <LiteratureManager
+            projectId={projectId}
+            projectTitle={projectTitle}
+          />
         )}
       </div>
     </div>

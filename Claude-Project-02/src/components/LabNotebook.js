@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useGoogleAuth } from '../context/GoogleAuthContext';
 import { researchProjects } from '../data/projects';
 
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
-const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
-const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY || '';
 
 function LabNotebook({ isOpen, onClose }) {
+  const { isSignedIn, createDoc, syncToDoc, importFromDoc, createSheet, syncToSheet, importFromSheet } = useGoogleAuth();
+
   const [entries, setEntries] = useState([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [newEntry, setNewEntry] = useState({
@@ -18,10 +19,6 @@ function LabNotebook({ isOpen, onClose }) {
   const [filterProject, setFilterProject] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEntry, setSelectedEntry] = useState(null);
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [gapiLoaded, setGapiLoaded] = useState(false);
-  const [gisLoaded, setGisLoaded] = useState(false);
-  const [tokenClient, setTokenClient] = useState(null);
   const [syncStatus, setSyncStatus] = useState({ message: '', type: '' });
 
   // Load custom projects
@@ -52,106 +49,6 @@ function LabNotebook({ isOpen, onClose }) {
   const saveEntries = (newEntries) => {
     localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(newEntries));
     setEntries(newEntries);
-  };
-
-  // Load Google API (gapi) for Docs/Drive
-  useEffect(() => {
-    if (!GOOGLE_CLIENT_ID || !isOpen) return;
-
-    const loadGapi = () => {
-      if (window.gapi && window.gapi.client) {
-        initGapi();
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = 'https://apis.google.com/js/api.js';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => {
-        window.gapi.load('client', initGapi);
-      };
-      document.body.appendChild(script);
-    };
-
-    const initGapi = async () => {
-      try {
-        await window.gapi.client.init({
-          apiKey: GOOGLE_API_KEY,
-          discoveryDocs: [
-            'https://docs.googleapis.com/$discovery/rest?version=v1',
-            'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'
-          ]
-        });
-        setGapiLoaded(true);
-      } catch (error) {
-        console.error('Error initializing gapi:', error);
-      }
-    };
-
-    loadGapi();
-  }, [isOpen]);
-
-  // Load Google Identity Services (GIS) for auth
-  useEffect(() => {
-    if (!GOOGLE_CLIENT_ID || !isOpen || gisLoaded) return;
-
-    const loadGis = () => {
-      if (window.google && window.google.accounts) {
-        initGis();
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      script.onload = initGis;
-      document.body.appendChild(script);
-    };
-
-    const initGis = () => {
-      try {
-        const client = window.google.accounts.oauth2.initTokenClient({
-          client_id: GOOGLE_CLIENT_ID,
-          scope: 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file',
-          callback: (tokenResponse) => {
-            if (tokenResponse && tokenResponse.access_token) {
-              setIsSignedIn(true);
-              setSyncStatus({ message: 'Signed in to Google!', type: 'success' });
-              setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
-            }
-          },
-          error_callback: (error) => {
-            console.error('GIS error:', error);
-            setSyncStatus({ message: 'Sign-in failed. Please try again.', type: 'error' });
-          }
-        });
-        setTokenClient(client);
-        setGisLoaded(true);
-      } catch (error) {
-        console.error('Error initializing GIS:', error);
-      }
-    };
-
-    loadGis();
-  }, [isOpen, gisLoaded]);
-
-  const handleSignIn = () => {
-    if (tokenClient) {
-      tokenClient.requestAccessToken();
-    }
-  };
-
-  const handleSignOut = () => {
-    if (window.google && window.google.accounts) {
-      window.google.accounts.oauth2.revoke(window.gapi.client.getToken()?.access_token, () => {
-        window.gapi.client.setToken(null);
-        setIsSignedIn(false);
-        setSyncStatus({ message: 'Signed out', type: 'info' });
-        setTimeout(() => setSyncStatus({ message: '', type: '' }), 2000);
-      });
-    }
   };
 
   // Format timestamp
@@ -199,7 +96,9 @@ function LabNotebook({ isOpen, onClose }) {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       googleDocId: null,
-      googleDocUrl: null
+      googleDocUrl: null,
+      googleSheetId: null,
+      googleSheetUrl: null
     };
 
     saveEntries([entry, ...entries]);
@@ -244,61 +143,33 @@ function LabNotebook({ isOpen, onClose }) {
 
   // Create Google Doc from entry
   const handleCreateGoogleDoc = async (entry) => {
-    if (!gapiLoaded || !isSignedIn) {
-      setSyncStatus({ message: 'Please sign in to Google first', type: 'error' });
+    if (!isSignedIn) {
+      setSyncStatus({ message: 'Please sign in to Google first (use navbar button)', type: 'error' });
+      setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
       return;
     }
 
     setSyncStatus({ message: 'Creating Google Doc...', type: 'info' });
 
-    try {
-      // Create the document
-      const createResponse = await window.gapi.client.docs.documents.create({
-        resource: {
-          title: `[Lab Notebook] ${entry.title}`
-        }
-      });
+    const projectName = entry.projectId
+      ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
+      : 'No Project';
 
-      const docId = createResponse.result.documentId;
-      const docUrl = `https://docs.google.com/document/d/${docId}/edit`;
+    const contentText = `Lab Notebook Entry\n\nTitle: ${entry.title}\nDate: ${formatTimestamp(entry.createdAt)}\nProject: ${projectName}\nTags: ${entry.tags.join(', ') || 'None'}\n\n---\n\n${entry.content}`;
 
-      // Build the content
-      const projectName = entry.projectId
-        ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
-        : 'No Project';
+    const result = await createDoc(`[Lab Notebook] ${entry.title}`, contentText);
 
-      const contentText = `Lab Notebook Entry\n\nTitle: ${entry.title}\nDate: ${formatTimestamp(entry.createdAt)}\nProject: ${projectName}\nTags: ${entry.tags.join(', ') || 'None'}\n\n---\n\n${entry.content}`;
-
-      // Insert content into the document
-      await window.gapi.client.docs.documents.batchUpdate({
-        documentId: docId,
-        resource: {
-          requests: [
-            {
-              insertText: {
-                location: { index: 1 },
-                text: contentText
-              }
-            }
-          ]
-        }
-      });
-
-      // Update entry with Google Doc info
+    if (result) {
       handleUpdateEntry(entry.id, {
-        googleDocId: docId,
-        googleDocUrl: docUrl
+        googleDocId: result.docId,
+        googleDocUrl: result.docUrl
       });
-
       setSyncStatus({ message: 'Google Doc created successfully!', type: 'success' });
-
-      // Open the doc in a new tab
-      window.open(docUrl, '_blank');
-
-    } catch (error) {
-      console.error('Error creating Google Doc:', error);
+      window.open(result.docUrl, '_blank');
+    } else {
       setSyncStatus({ message: 'Failed to create Google Doc', type: 'error' });
     }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
   };
 
   // Sync entry to existing Google Doc
@@ -310,58 +181,170 @@ function LabNotebook({ isOpen, onClose }) {
 
     setSyncStatus({ message: 'Syncing to Google Doc...', type: 'info' });
 
-    try {
-      // Get current document to find content length
-      const doc = await window.gapi.client.docs.documents.get({
-        documentId: entry.googleDocId
-      });
+    const projectName = entry.projectId
+      ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
+      : 'No Project';
 
-      const endIndex = doc.result.body.content
-        .slice(-1)[0]?.endIndex || 1;
+    const contentText = `Lab Notebook Entry\n\nTitle: ${entry.title}\nDate: ${formatTimestamp(entry.createdAt)}\nLast Updated: ${formatTimestamp(entry.updatedAt)}\nProject: ${projectName}\nTags: ${entry.tags.join(', ') || 'None'}\n\n---\n\n${entry.content}`;
 
-      const projectName = entry.projectId
-        ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
-        : 'No Project';
+    const success = await syncToDoc(entry.googleDocId, contentText);
 
-      const contentText = `Lab Notebook Entry\n\nTitle: ${entry.title}\nDate: ${formatTimestamp(entry.createdAt)}\nLast Updated: ${formatTimestamp(entry.updatedAt)}\nProject: ${projectName}\nTags: ${entry.tags.join(', ') || 'None'}\n\n---\n\n${entry.content}`;
-
-      // Clear and rewrite document
-      const requests = [];
-
-      if (endIndex > 2) {
-        requests.push({
-          deleteContentRange: {
-            range: {
-              startIndex: 1,
-              endIndex: endIndex - 1
-            }
-          }
-        });
-      }
-
-      requests.push({
-        insertText: {
-          location: { index: 1 },
-          text: contentText
-        }
-      });
-
-      await window.gapi.client.docs.documents.batchUpdate({
-        documentId: entry.googleDocId,
-        resource: { requests }
-      });
-
+    if (success) {
       setSyncStatus({ message: 'Synced to Google Doc!', type: 'success' });
-
-    } catch (error) {
-      console.error('Error syncing to Google Doc:', error);
+    } else {
       setSyncStatus({ message: 'Failed to sync to Google Doc', type: 'error' });
     }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
   };
+
+  // Import content from Google Doc
+  const handleImportFromGoogleDoc = async (entry) => {
+    if (!entry.googleDocId) {
+      setSyncStatus({ message: 'No Google Doc linked to this entry', type: 'error' });
+      return;
+    }
+
+    setSyncStatus({ message: 'Importing from Google Doc...', type: 'info' });
+
+    const result = await importFromDoc(entry.googleDocId);
+
+    if (result) {
+      // Extract the main content (after the "---" separator)
+      let importedContent = result.content;
+      const separatorIndex = importedContent.indexOf('---');
+      if (separatorIndex !== -1) {
+        importedContent = importedContent.substring(separatorIndex + 3).trim();
+      }
+
+      handleUpdateEntry(entry.id, { content: importedContent });
+      setSyncStatus({ message: 'Imported from Google Doc!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to import from Google Doc', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  // Create Google Sheet from entry
+  const handleCreateGoogleSheet = async (entry) => {
+    if (!isSignedIn) {
+      setSyncStatus({ message: 'Please sign in to Google first (use navbar button)', type: 'error' });
+      setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+      return;
+    }
+
+    setSyncStatus({ message: 'Creating Google Sheet...', type: 'info' });
+
+    const projectName = entry.projectId
+      ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
+      : 'No Project';
+
+    const headers = ['Field', 'Value'];
+    const data = [
+      ['Title', entry.title],
+      ['Date', formatTimestamp(entry.createdAt)],
+      ['Project', projectName],
+      ['Tags', entry.tags.join(', ') || 'None'],
+      ['Content', entry.content],
+      ['Last Updated', formatTimestamp(entry.updatedAt)]
+    ];
+
+    const result = await createSheet(`[Lab Notebook] ${entry.title}`, headers, data);
+
+    if (result) {
+      handleUpdateEntry(entry.id, {
+        googleSheetId: result.spreadsheetId,
+        googleSheetUrl: result.sheetUrl
+      });
+      setSyncStatus({ message: 'Google Sheet created!', type: 'success' });
+      window.open(result.sheetUrl, '_blank');
+    } else {
+      setSyncStatus({ message: 'Failed to create Google Sheet', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  // Sync entry to existing Google Sheet
+  const handleSyncToGoogleSheet = async (entry) => {
+    if (!entry.googleSheetId) {
+      setSyncStatus({ message: 'No Google Sheet linked to this entry', type: 'error' });
+      return;
+    }
+
+    setSyncStatus({ message: 'Syncing to Google Sheet...', type: 'info' });
+
+    const projectName = entry.projectId
+      ? allProjects.find(p => p.id === entry.projectId)?.title || 'Unknown Project'
+      : 'No Project';
+
+    const headers = ['Field', 'Value'];
+    const data = [
+      ['Title', entry.title],
+      ['Date', formatTimestamp(entry.createdAt)],
+      ['Project', projectName],
+      ['Tags', entry.tags.join(', ') || 'None'],
+      ['Content', entry.content],
+      ['Last Updated', formatTimestamp(entry.updatedAt)]
+    ];
+
+    const success = await syncToSheet(entry.googleSheetId, headers, data);
+
+    if (success) {
+      setSyncStatus({ message: 'Synced to Google Sheet!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to sync to Google Sheet', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  // Import content from Google Sheet
+  const handleImportFromGoogleSheet = async (entry) => {
+    if (!entry.googleSheetId) {
+      setSyncStatus({ message: 'No Google Sheet linked to this entry', type: 'error' });
+      return;
+    }
+
+    setSyncStatus({ message: 'Importing from Google Sheet...', type: 'info' });
+
+    const result = await importFromSheet(entry.googleSheetId);
+
+    if (result && result.data) {
+      // Parse the sheet data (Field, Value format)
+      const updates = {};
+      result.data.forEach(row => {
+        const field = row[0]?.toLowerCase();
+        const value = row[1] || '';
+        if (field === 'content') updates.content = value;
+        if (field === 'tags') updates.tags = value.split(',').map(t => t.trim()).filter(Boolean);
+      });
+
+      if (Object.keys(updates).length > 0) {
+        handleUpdateEntry(entry.id, updates);
+      }
+      setSyncStatus({ message: 'Imported from Google Sheet!', type: 'success' });
+    } else {
+      setSyncStatus({ message: 'Failed to import from Google Sheet', type: 'error' });
+    }
+    setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+  };
+
+  // Count inbox items (no project assigned or has 'inbox' tag)
+  const inboxCount = entries.filter(entry =>
+    !entry.projectId || entry.tags?.includes('inbox') || entry.isQuickCapture
+  ).length;
 
   // Filter entries
   const filteredEntries = entries.filter(entry => {
-    const matchesProject = filterProject === 'all' || entry.projectId === filterProject;
+    let matchesProject = filterProject === 'all';
+
+    if (filterProject === 'inbox') {
+      // Show entries with no project, or with 'inbox' tag, or quick captures
+      matchesProject = !entry.projectId || entry.tags?.includes('inbox') || entry.isQuickCapture;
+    } else if (filterProject === '') {
+      matchesProject = !entry.projectId;
+    } else if (filterProject !== 'all') {
+      matchesProject = entry.projectId === filterProject;
+    }
+
     const matchesSearch = !searchTerm ||
       entry.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       entry.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -391,22 +374,12 @@ function LabNotebook({ isOpen, onClose }) {
       <div className="notebook-modal-content" onClick={e => e.stopPropagation()}>
         <div className="notebook-header">
           <div className="notebook-title-row">
-            <h2>📓 Lab Notebook</h2>
+            <h2>Lab Notebook</h2>
             <div className="notebook-google-status">
-              {GOOGLE_CLIENT_ID ? (
-                isSignedIn ? (
-                  <div className="google-connected">
-                    <span className="status-dot connected"></span>
-                    <span>Google Connected</span>
-                    <button className="signout-link" onClick={handleSignOut}>Sign out</button>
-                  </div>
-                ) : (
-                  <button className="google-signin-btn-small" onClick={handleSignIn} disabled={!gisLoaded}>
-                    {gisLoaded ? 'Sign in to Google' : 'Loading...'}
-                  </button>
-                )
+              {isSignedIn ? (
+                <span className="google-status-text connected">Google Connected</span>
               ) : (
-                <span className="no-google">Google Docs not configured</span>
+                <span className="google-status-text">Sign in via navbar for Google Docs</span>
               )}
             </div>
           </div>
@@ -416,7 +389,7 @@ function LabNotebook({ isOpen, onClose }) {
         {syncStatus.message && (
           <div className={`notebook-sync-status ${syncStatus.type}`}>
             {syncStatus.message}
-            <button onClick={() => setSyncStatus({ message: '', type: '' })}>×</button>
+            <button onClick={() => setSyncStatus({ message: '', type: '' })}>x</button>
           </div>
         )}
 
@@ -442,8 +415,9 @@ function LabNotebook({ isOpen, onClose }) {
               value={filterProject}
               onChange={(e) => setFilterProject(e.target.value)}
             >
-              <option value="all">All Projects</option>
-              <option value="">No Project</option>
+              <option value="all">All Entries</option>
+              <option value="inbox">Inbox ({inboxCount})</option>
+              <option value="">Unassigned</option>
               {allProjects.map(p => (
                 <option key={p.id} value={p.id}>{p.title}</option>
               ))}
@@ -504,7 +478,7 @@ function LabNotebook({ isOpen, onClose }) {
                       <button onClick={() => setNewEntry({
                         ...newEntry,
                         tags: newEntry.tags.filter(t => t !== tag)
-                      })}>×</button>
+                      })}>x</button>
                     </span>
                   ))}
                 </div>
@@ -554,17 +528,31 @@ function LabNotebook({ isOpen, onClose }) {
                               minute: '2-digit'
                             })}
                           </span>
-                          {entry.projectId && (
+                          {entry.projectId ? (
                             <span
                               className="entry-project-badge"
                               style={{ backgroundColor: getProjectColor(entry.projectId) }}
                             >
                               {allProjects.find(p => p.id === entry.projectId)?.title || 'Project'}
                             </span>
+                          ) : (
+                            <span className="entry-inbox-badge" title="In inbox - assign to project">
+                              Inbox
+                            </span>
+                          )}
+                          {entry.isQuickCapture && (
+                            <span className="quick-capture-badge" title="Quick Capture">
+                              Quick
+                            </span>
                           )}
                           {entry.googleDocId && (
                             <span className="google-doc-badge" title="Linked to Google Doc">
-                              📄
+                              G
+                            </span>
+                          )}
+                          {entry.googleSheetId && (
+                            <span className="google-sheet-badge" title="Linked to Google Sheet">
+                              S
                             </span>
                           )}
                         </div>
@@ -596,41 +584,117 @@ function LabNotebook({ isOpen, onClose }) {
                             />
                           </div>
 
+                          {/* Project Assignment */}
+                          <div className="entry-assignment">
+                            <label>Assign to Project:</label>
+                            <select
+                              className="entry-project-assign"
+                              value={entry.projectId || ''}
+                              onChange={(e) => {
+                                const newProjectId = e.target.value || null;
+                                // Remove 'inbox' tag when assigning to a project
+                                const newTags = newProjectId
+                                  ? entry.tags?.filter(t => t !== 'inbox') || []
+                                  : entry.tags || [];
+                                handleUpdateEntry(entry.id, {
+                                  projectId: newProjectId,
+                                  tags: newTags,
+                                  isQuickCapture: newProjectId ? false : entry.isQuickCapture
+                                });
+                              }}
+                            >
+                              <option value="">No Project (Inbox)</option>
+                              {allProjects.map(p => (
+                                <option key={p.id} value={p.id}>{p.title}</option>
+                              ))}
+                            </select>
+                            {!entry.projectId && (
+                              <span className="assignment-hint">Select a project to organize this entry</span>
+                            )}
+                          </div>
+
                           <div className="entry-actions">
                             {isSignedIn && (
                               <>
-                                {entry.googleDocId ? (
-                                  <>
-                                    <a
-                                      href={entry.googleDocUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="btn-action"
-                                    >
-                                      📄 Open in Google Docs
-                                    </a>
+                                <div className="google-actions-row">
+                                  <span className="google-action-label">Docs:</span>
+                                  {entry.googleDocId ? (
+                                    <>
+                                      <a
+                                        href={entry.googleDocUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn-action small"
+                                      >
+                                        Open
+                                      </a>
+                                      <button
+                                        className="btn-action small"
+                                        onClick={() => handleSyncToGoogleDoc(entry)}
+                                        title="Push to Google Doc"
+                                      >
+                                        ⬆
+                                      </button>
+                                      <button
+                                        className="btn-action small"
+                                        onClick={() => handleImportFromGoogleDoc(entry)}
+                                        title="Pull from Google Doc"
+                                      >
+                                        ⬇
+                                      </button>
+                                    </>
+                                  ) : (
                                     <button
-                                      className="btn-action"
-                                      onClick={() => handleSyncToGoogleDoc(entry)}
+                                      className="btn-action small primary"
+                                      onClick={() => handleCreateGoogleDoc(entry)}
                                     >
-                                      🔄 Sync to Doc
+                                      + Create
                                     </button>
-                                  </>
-                                ) : (
-                                  <button
-                                    className="btn-action primary"
-                                    onClick={() => handleCreateGoogleDoc(entry)}
-                                  >
-                                    📝 Create Google Doc
-                                  </button>
-                                )}
+                                  )}
+                                </div>
+                                <div className="google-actions-row">
+                                  <span className="google-action-label">Sheets:</span>
+                                  {entry.googleSheetId ? (
+                                    <>
+                                      <a
+                                        href={entry.googleSheetUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn-action small"
+                                      >
+                                        Open
+                                      </a>
+                                      <button
+                                        className="btn-action small"
+                                        onClick={() => handleSyncToGoogleSheet(entry)}
+                                        title="Push to Google Sheet"
+                                      >
+                                        ⬆
+                                      </button>
+                                      <button
+                                        className="btn-action small"
+                                        onClick={() => handleImportFromGoogleSheet(entry)}
+                                        title="Pull from Google Sheet"
+                                      >
+                                        ⬇
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <button
+                                      className="btn-action small primary"
+                                      onClick={() => handleCreateGoogleSheet(entry)}
+                                    >
+                                      + Create
+                                    </button>
+                                  )}
+                                </div>
                               </>
                             )}
                             <button
                               className="btn-action danger"
                               onClick={() => handleDeleteEntry(entry.id)}
                             >
-                              🗑️ Delete
+                              Delete
                             </button>
                           </div>
 
