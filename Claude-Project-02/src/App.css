@@ -1,14 +1,669 @@
-.App {
-  text-align: center;
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-header {
-  background-color: #282c34;
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #475569;
+  --accent: #3b82f6;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.App {
   min-height: 100vh;
+}
+
+/* ==================== Landing Page ==================== */
+.landing-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-header {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  padding: 60px 40px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.landing-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.landing-header .subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.landing-main {
+  flex: 1;
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.projects-overview h2,
+.quick-stats h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.section-description {
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+/* Project Grid */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-bottom: 50px;
+}
+
+.project-card {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--project-color);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--project-color);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.project-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.project-card-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.project-status-badge {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  background: var(--bg-card);
+  border-radius: 20px;
+  color: var(--text-secondary);
+}
+
+.project-card-body {
+  margin-bottom: 20px;
+}
+
+.project-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.project-subtitle {
+  font-size: 0.9rem;
+  color: var(--project-color);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.project-description {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.project-card-footer {
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
+
+.progress-bar {
+  height: 6px;
+  background: var(--bg-card);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.task-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.task-stats .stat {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.task-stats .stat-number {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.approaches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.approach-tag {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  background: var(--bg-card);
+  border-radius: 4px;
+  color: var(--text-secondary);
+}
+
+.card-hover-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
+  background: var(--project-color);
+  color: white;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover .card-hover-indicator {
+  transform: translateY(0);
+}
+
+/* Quick Stats */
+.quick-stats {
+  margin-top: 20px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+}
+
+.stat-card .stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  display: block;
+}
+
+.stat-card .stat-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.landing-footer {
+  padding: 20px 40px;
+  text-align: center;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* ==================== Project Page ==================== */
+.project-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-page.not-found {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 20px;
+}
+
+.project-page.not-found a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.project-header {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0;
+}
+
+.header-nav {
+  padding: 16px 40px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.back-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+}
+
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 30px 40px;
+  gap: 40px;
+}
+
+.header-info {
+  flex: 1;
+}
+
+.project-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
   color: white;
+  margin-bottom: 12px;
+}
+
+.header-info h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.project-hypothesis {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+.header-stats {
+  display: flex;
+  gap: 30px;
+}
+
+.header-stat {
+  text-align: center;
+}
+
+.header-stat .stat-value {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--project-color);
+}
+
+.header-stat .stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.approaches-bar {
+  display: flex;
+  gap: 8px;
+  padding: 16px 40px;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.approach-chip {
+  padding: 6px 14px;
+  background: var(--bg-card);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.project-main {
+  flex: 1;
+  padding: 30px 40px;
+  background: var(--bg-primary);
+}
+
+/* ==================== Kanban Board ==================== */
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  min-height: calc(100vh - 300px);
+}
+
+.kanban-column {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.kanban-column.drop-target {
+  border-color: var(--accent);
+  border-style: dashed;
+}
+
+.column-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.column-icon {
+  font-size: 1rem;
+}
+
+.column-title h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.task-count {
+  background: var(--bg-card);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.add-task-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-task-btn:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.column-content {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Add Task Form */
+.add-task-form {
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.add-task-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.add-task-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.add-task-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.add-task-actions button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submit-btn {
+  background: var(--accent);
+  color: white;
+}
+
+.submit-btn:hover {
+  background: #2563eb;
+}
+
+.cancel-btn {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.cancel-btn:hover {
+  background: var(--border-color);
+}
+
+/* Task Card */
+.task-card {
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: grab;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.task-card:hover {
+  border-color: var(--border-color);
+}
+
+.task-card.dragging {
+  opacity: 0.5;
+  transform: rotate(3deg);
+}
+
+.task-card:active {
+  cursor: grabbing;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.priority-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.delete-task-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.task-card:hover .delete-task-btn {
+  opacity: 1;
+}
+
+.delete-task-btn:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.task-title {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.task-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.priority-badge {
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.priority-badge.high {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+
+.priority-badge.medium {
+  background: rgba(243, 156, 18, 0.2);
+  color: #f39c12;
+}
+
+.priority-badge.low {
+  background: rgba(39, 174, 96, 0.2);
+  color: #27ae60;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .kanban-board {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .landing-header,
+  .landing-main {
+    padding: 30px 20px;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kanban-board {
+    grid-template-columns: 1fr;
+  }
+
+  .header-main {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .header-stats {
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .approaches-bar {
+    padding: 12px 20px;
+  }
+
+  .project-main {
+    padding: 20px;
+  }
 }
