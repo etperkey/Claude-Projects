@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import useGoogleDocs from '../hooks/useGoogleDocs';
 
 const PROTOCOLS_KEY = 'research-dashboard-protocols';
 const RESULTS_KEY = 'research-dashboard-results';
@@ -43,6 +44,19 @@ function ProtocolsResults({ projectId, projectTitle }) {
   });
   const [expandedItem, setExpandedItem] = useState(null);
 
+  // Google Docs integration
+  const {
+    isSignedIn,
+    gisLoaded,
+    hasCredentials,
+    syncStatus,
+    setSyncStatus,
+    signIn,
+    signOut,
+    createDoc,
+    syncToDoc
+  } = useGoogleDocs(true);
+
   const handleAddItem = () => {
     if (!newItem.title.trim()) return;
 
@@ -50,7 +64,9 @@ function ProtocolsResults({ projectId, projectTitle }) {
       id: Date.now(),
       ...newItem,
       tags: newItem.tags.split(',').map(t => t.trim()).filter(Boolean),
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      googleDocId: null,
+      googleDocUrl: null
     };
 
     if (activeTab === 'protocols') {
@@ -97,22 +113,118 @@ function ProtocolsResults({ projectId, projectTitle }) {
     }
   };
 
+  const handleUpdateItem = (itemId, updates) => {
+    if (activeTab === 'protocols') {
+      const updated = protocols.map(p => p.id === itemId ? { ...p, ...updates } : p);
+      setProtocols(updated);
+      saveStoredData(PROTOCOLS_KEY, projectId, updated);
+    } else {
+      const updated = results.map(r => r.id === itemId ? { ...r, ...updates } : r);
+      setResults(updated);
+      saveStoredData(RESULTS_KEY, projectId, updated);
+    }
+  };
+
+  // Create Google Doc for an item
+  const handleCreateGoogleDoc = async (item) => {
+    const type = activeTab === 'protocols' ? 'Protocol' : 'Result';
+    const title = `[${type}] ${item.title} - ${projectTitle}`;
+
+    const content = `${type}: ${item.title}
+Project: ${projectTitle}
+Date: ${new Date(item.date).toLocaleDateString()}
+Tags: ${item.tags?.join(', ') || 'None'}
+
+---
+
+${item.description || 'No description provided.'}
+
+${item.fileUrl ? `\nAttached File/Link: ${item.fileUrl}` : ''}
+
+---
+Created: ${new Date(item.createdAt).toLocaleString()}
+Last Updated: ${new Date().toLocaleString()}`;
+
+    const result = await createDoc(title, content);
+
+    if (result) {
+      handleUpdateItem(item.id, {
+        googleDocId: result.docId,
+        googleDocUrl: result.docUrl
+      });
+      window.open(result.docUrl, '_blank');
+    }
+  };
+
+  // Sync item to existing Google Doc
+  const handleSyncToGoogleDoc = async (item) => {
+    if (!item.googleDocId) {
+      setSyncStatus({ message: 'No Google Doc linked to this item', type: 'error' });
+      return;
+    }
+
+    const type = activeTab === 'protocols' ? 'Protocol' : 'Result';
+
+    const content = `${type}: ${item.title}
+Project: ${projectTitle}
+Date: ${new Date(item.date).toLocaleDateString()}
+Tags: ${item.tags?.join(', ') || 'None'}
+
+---
+
+${item.description || 'No description provided.'}
+
+${item.fileUrl ? `\nAttached File/Link: ${item.fileUrl}` : ''}
+
+---
+Created: ${new Date(item.createdAt).toLocaleString()}
+Last Updated: ${new Date().toLocaleString()}`;
+
+    await syncToDoc(item.googleDocId, content);
+  };
+
   const currentItems = activeTab === 'protocols' ? protocols : results;
 
   return (
     <div className="protocols-results-section">
+      {/* Google Auth Header */}
+      <div className="google-auth-bar">
+        {hasCredentials ? (
+          isSignedIn ? (
+            <div className="google-connected">
+              <span className="status-dot connected"></span>
+              <span>Google Connected</span>
+              <button className="signout-link" onClick={signOut}>Sign out</button>
+            </div>
+          ) : (
+            <button className="google-signin-btn-small" onClick={signIn} disabled={!gisLoaded}>
+              {gisLoaded ? 'Sign in to Google' : 'Loading...'}
+            </button>
+          )
+        ) : (
+          <span className="no-google">Google Docs not configured</span>
+        )}
+      </div>
+
+      {syncStatus.message && (
+        <div className={`sync-status-bar ${syncStatus.type}`}>
+          {syncStatus.message}
+          <button onClick={() => setSyncStatus({ message: '', type: '' })}>x</button>
+        </div>
+      )}
+
       <div className="pr-tabs">
         <button
           className={`pr-tab ${activeTab === 'protocols' ? 'active' : ''}`}
           onClick={() => setActiveTab('protocols')}
         >
-          📋 Protocols ({protocols.length})
+          Protocols ({protocols.length})
         </button>
         <button
           className={`pr-tab ${activeTab === 'results' ? 'active' : ''}`}
           onClick={() => setActiveTab('results')}
         >
-          📊 Data & Results ({results.length})
+          Data & Results ({results.length})
         </button>
       </div>
 
@@ -183,7 +295,12 @@ function ProtocolsResults({ projectId, projectTitle }) {
                       {activeTab === 'protocols' ? '📋' : '📊'}
                     </span>
                     <div className="pr-item-info">
-                      <h4>{item.title}</h4>
+                      <h4>
+                        {item.title}
+                        {item.googleDocId && (
+                          <span className="google-doc-indicator" title="Linked to Google Doc">📄</span>
+                        )}
+                      </h4>
                       <span className="pr-item-date">
                         {new Date(item.date).toLocaleDateString('en-US', {
                           month: 'short',
@@ -241,6 +358,37 @@ function ProtocolsResults({ projectId, projectTitle }) {
                       >
                         📎 Open attached file/link
                       </a>
+                    )}
+
+                    {/* Google Docs Actions */}
+                    {isSignedIn && (
+                      <div className="pr-google-actions">
+                        {item.googleDocId ? (
+                          <>
+                            <a
+                              href={item.googleDocUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-google-action"
+                            >
+                              📄 Open in Google Docs
+                            </a>
+                            <button
+                              className="btn-google-action"
+                              onClick={() => handleSyncToGoogleDoc(item)}
+                            >
+                              🔄 Sync to Doc
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            className="btn-google-action primary"
+                            onClick={() => handleCreateGoogleDoc(item)}
+                          >
+                            📝 Create Google Doc
+                          </button>
+                        )}
+                      </div>
                     )}
                   </div>
                 )}
