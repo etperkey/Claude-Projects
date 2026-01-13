@@ -1,4 +1,9 @@
 // Research project data
+
+// Kline Lab Info:
+// Address: 900 E. 57th St., KCBD 6230A, Chicago IL 60637
+// Website: https://klinelab.uchicago.edu/
+
 export const researchProjects = [
   {
     id: 'tp53',
