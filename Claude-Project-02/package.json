@@ -2,6 +2,7 @@
   "name": "claude-project-02",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://etperkey.github.io/Claude-Projects/Claude-Project-02",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -25,5 +26,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }
