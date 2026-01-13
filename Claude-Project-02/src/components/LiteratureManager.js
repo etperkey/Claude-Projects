@@ -193,30 +193,55 @@ function LiteratureManager({ projectId, projectTitle }) {
     }
   };
 
-  // Format citation (APA style)
+  // Format citation (AMA style)
+  // Format: Author(s). Title. Journal. Year;Volume(Issue):Pages. doi:DOI
   const formatCitation = (ref) => {
-    const parts = [];
+    let citation = '';
 
+    // Authors - AMA uses "et al" after 6 authors, but commonly after 3
     if (ref.authors) {
-      // Shorten to "First Author et al." if more than 3 authors
       const authorList = ref.authors.split(', ');
       if (authorList.length > 3) {
-        parts.push(`${authorList[0]} et al.`);
+        citation += `${authorList.slice(0, 3).join(', ')}, et al`;
       } else {
-        parts.push(ref.authors);
+        citation += ref.authors;
       }
+      citation += '. ';
     }
 
-    if (ref.year) parts.push(`(${ref.year})`);
-    if (ref.title) parts.push(ref.title);
+    // Title
+    if (ref.title) {
+      citation += ref.title;
+      // Ensure title ends with period
+      if (!ref.title.endsWith('.') && !ref.title.endsWith('?')) {
+        citation += '.';
+      }
+      citation += ' ';
+    }
+
+    // Journal
     if (ref.journal) {
-      let journalPart = ref.journal;
-      if (ref.volume) journalPart += `, ${ref.volume}`;
-      if (ref.pages) journalPart += `, ${ref.pages}`;
-      parts.push(journalPart);
+      citation += `${ref.journal}. `;
     }
 
-    return parts.join('. ');
+    // Year;Volume:Pages
+    if (ref.year) {
+      citation += ref.year;
+      if (ref.volume) {
+        citation += `;${ref.volume}`;
+        if (ref.pages) {
+          citation += `:${ref.pages}`;
+        }
+      }
+      citation += '.';
+    }
+
+    // DOI
+    if (ref.doi) {
+      citation += ` doi:${ref.doi}`;
+    }
+
+    return citation.trim();
   };
 
   // Generate Google Scholar search link
