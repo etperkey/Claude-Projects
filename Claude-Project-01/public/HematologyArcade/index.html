@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hematology Arcade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-blue: #00ffff;
+            --neon-green: #00ff00;
+            --neon-yellow: #ffff00;
+            --neon-orange: #ff8800;
+            --arcade-purple: #8B008B;
+            --arcade-dark: #0a0a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: var(--arcade-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white;
+        }
+
+        /* Animated background */
+        .arcade-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse at top, #1a0a2e 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, #0a1a2e 0%, transparent 50%),
+                var(--arcade-dark);
+            overflow: hidden;
+        }
+
+        /* Grid lines */
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 20s linear infinite;
+        }
+
+        @keyframes grid-move {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: float-up 10s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+        }
+
+        /* Main container */
+        .arcade-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header */
+        .arcade-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .main-title {
+            font-size: 3em;
+            background: linear-gradient(180deg,
+                var(--neon-pink) 0%,
+                var(--neon-blue) 50%,
+                var(--neon-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            animation: title-glow 3s ease-in-out infinite;
+            letter-spacing: 4px;
+        }
+
+        @keyframes title-glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 10px var(--neon-pink)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 20px var(--neon-blue)); }
+        }
+
+        .subtitle {
+            font-size: 0.8em;
+            color: var(--neon-blue);
+            margin-top: 20px;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .tagline {
+            font-size: 0.5em;
+            color: #888;
+            margin-top: 15px;
+            letter-spacing: 2px;
+        }
+
+        /* Game cards container */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* Game card */
+        .game-card {
+            background: linear-gradient(180deg,
+                rgba(20, 20, 40, 0.9) 0%,
+                rgba(10, 10, 30, 0.95) 100%);
+            border: 3px solid;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .game-card:hover::before {
+            opacity: 1;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* MyelomaMan card */
+        .game-card.myeloma {
+            border-color: #ff4444;
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+        }
+
+        .game-card.myeloma:hover {
+            box-shadow: 0 0 40px rgba(255, 68, 68, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.myeloma .game-icon {
+            background: linear-gradient(135deg, #ff4444, #ff8888);
+        }
+
+        /* MS-AML-Man card */
+        .game-card.aml {
+            border-color: var(--neon-yellow);
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+        }
+
+        .game-card.aml:hover {
+            box-shadow: 0 0 40px rgba(255, 255, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.aml .game-icon {
+            background: linear-gradient(135deg, #ffff00, #ffcc00);
+        }
+
+        /* LymphoMaster card */
+        .game-card.lymphoma {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+
+        .game-card.lymphoma:hover {
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.lymphoma .game-icon {
+            background: linear-gradient(135deg, #00ff00, #88ff88);
+        }
+
+        /* HemesWaldo card */
+        .game-card.waldo {
+            border-color: #cc0000;
+            box-shadow: 0 0 20px rgba(204, 0, 0, 0.3);
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(204, 0, 0, 0.1) 0px,
+                rgba(204, 0, 0, 0.1) 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            ), linear-gradient(180deg,
+                rgba(20, 20, 40, 0.9) 0%,
+                rgba(10, 10, 30, 0.95) 100%);
+        }
+
+        .game-card.waldo:hover {
+            box-shadow: 0 0 40px rgba(204, 0, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.waldo .game-icon {
+            background: linear-gradient(135deg, #cc0000, #ff4444);
+        }
+
+        .game-card.waldo .game-title { color: #ff4444; }
+
+        .game-card.waldo .play-btn {
+            background: linear-gradient(180deg, #cc0000, #990000);
+            color: white;
+            box-shadow: 0 5px 0 #660000;
+        }
+
+        .game-card.waldo .diff-dot.active { background: #cc0000; }
+
+        /* Game icon */
+        .game-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            animation: icon-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes icon-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .game-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: white;
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        .game-card.myeloma .game-title { color: #ff6666; }
+        .game-card.aml .game-title { color: var(--neon-yellow); }
+        .game-card.lymphoma .game-title { color: var(--neon-green); }
+
+        .game-theme {
+            font-size: 0.6em;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .game-description {
+            font-size: 0.5em;
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .play-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .game-card.myeloma .play-btn {
+            background: linear-gradient(180deg, #ff4444, #cc0000);
+            color: white;
+            box-shadow: 0 5px 0 #990000;
+        }
+
+        .game-card.aml .play-btn {
+            background: linear-gradient(180deg, #ffff00, #cccc00);
+            color: black;
+            box-shadow: 0 5px 0 #999900;
+        }
+
+        .game-card.lymphoma .play-btn {
+            background: linear-gradient(180deg, #00ff00, #00cc00);
+            color: black;
+            box-shadow: 0 5px 0 #009900;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.2);
+        }
+
+        .play-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 currentColor;
+        }
+
+        /* Difficulty indicators */
+        .difficulty-levels {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .diff-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+        }
+
+        .diff-dot.active { background: currentColor; }
+
+        .game-card.myeloma .diff-dot.active { background: #ff4444; }
+        .game-card.aml .diff-dot.active { background: var(--neon-yellow); }
+        .game-card.lymphoma .diff-dot.active { background: var(--neon-green); }
+
+        /* Footer */
+        .arcade-footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 0.5em;
+            color: #666;
+        }
+
+        .arcade-footer a {
+            color: var(--neon-blue);
+            text-decoration: none;
+        }
+
+        .arcade-footer a:hover {
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Insert coin animation */
+        .insert-coin {
+            font-size: 0.7em;
+            color: var(--neon-yellow);
+            margin-top: 40px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* High scores section */
+        .high-scores {
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-blue);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .high-scores h3 {
+            font-size: 0.8em;
+            color: var(--neon-blue);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.5em;
+            padding: 8px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .score-row:last-child {
+            border-bottom: none;
+        }
+
+        .score-game {
+            color: #888;
+        }
+
+        .score-value {
+            color: var(--neon-yellow);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-title { font-size: 1.8em; }
+            .games-grid { gap: 25px; }
+            .game-card { padding: 20px; }
+            .game-icon { width: 80px; height: 80px; font-size: 2.5em; }
+            .game-title { font-size: 1em; }
+        }
+
+        /* Volume toggle */
+        .volume-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid var(--neon-blue);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            transition: all 0.3s;
+        }
+
+        .volume-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        .volume-toggle.muted {
+            background: rgba(100, 100, 100, 0.3);
+            border-color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="arcade-bg">
+        <div class="grid-lines"></div>
+        <div id="particles"></div>
+    </div>
+
+    <button class="volume-toggle" id="volumeToggle" onclick="toggleVolume()">
+        <span id="volumeIcon">&#128266;</span>
+    </button>
+
+    <div class="arcade-container">
+        <header class="arcade-header">
+            <h1 class="main-title">HEMATOLOGY ARCADE</h1>
+            <p class="subtitle">Master Blood Cancers Through Play</p>
+            <p class="tagline">Educational Gaming for Hematology/Oncology</p>
+        </header>
+
+        <div class="games-grid">
+            <!-- MyelomaMan -->
+            <div class="game-card myeloma" onclick="launchGame('myeloma')">
+                <div class="game-icon">&#127812;</div>
+                <h2 class="game-title">MyelomaMan</h2>
+                <p class="game-theme">Super Mario Style</p>
+                <p class="game-description">
+                    Jump through plasma cell challenges! Test your multiple myeloma knowledge from diagnosis to treatment.
+                </p>
+                <button class="play-btn">PLAY</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                </div>
+            </div>
+
+            <!-- MS-AML-Man -->
+            <div class="game-card aml" onclick="launchGame('aml')">
+                <div class="game-icon">&#128308;</div>
+                <h2 class="game-title">Ms. AML-Man</h2>
+                <p class="game-theme">Pac-Man Style</p>
+                <p class="game-description">
+                    Chomp through AML blasts! Navigate ELN 2022 risk stratification and treatment decisions.
+                </p>
+                <button class="play-btn">PLAY</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                </div>
+            </div>
+
+            <!-- LymphoMaster -->
+            <div class="game-card lymphoma" onclick="launchGame('lymphoma')">
+                <div class="game-icon">&#129516;</div>
+                <h2 class="game-title">LymphoMaster</h2>
+                <p class="game-theme">Challenge Mode</p>
+                <p class="game-description">
+                    Battle lymphoma knowledge! From Hodgkin to NHL, test your lymphoproliferative expertise.
+                </p>
+                <button class="play-btn">PLAY</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                </div>
+            </div>
+
+            <!-- HemesWaldo -->
+            <div class="game-card waldo" onclick="launchGame('waldo')">
+                <div class="game-icon">&#128269;</div>
+                <h2 class="game-title">Heme's Waldo</h2>
+                <p class="game-theme">Spot the Finding</p>
+                <p class="game-description">
+                    Where's the pathology? Identify malignant and benign findings in ASH Image Bank cases.
+                </p>
+                <button class="play-btn">FIND IT</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot"></div>
+                    <div class="diff-dot"></div>
+                    <div class="diff-dot"></div>
+                    <div class="diff-dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <p class="insert-coin">SELECT A GAME TO BEGIN</p>
+
+        <!-- High Scores -->
+        <div class="high-scores">
+            <h3>HIGH SCORES</h3>
+            <div class="score-row">
+                <span class="score-game">MyelomaMan</span>
+                <span class="score-value" id="myelomaScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">Ms. AML-Man</span>
+                <span class="score-value" id="amlScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">LymphoMaster</span>
+                <span class="score-value" id="lymphomaScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">Heme's Waldo</span>
+                <span class="score-value" id="waldoScore">---</span>
+            </div>
+        </div>
+
+        <footer class="arcade-footer">
+            <p>Educational Use Only | Not Medical Advice</p>
+            <p style="margin-top: 10px;">Created with retro gaming love for hematology education</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const colors = ['#ff00ff', '#00ffff', '#00ff00', '#ffff00', '#ff8800'];
+
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 6) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Audio
+        let audioContext = null;
+        let isMuted = false;
+        let musicPlaying = false;
+        let musicInterval = null;
+
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        // Arcade-style background music
+        const arcadeMelody = [
+            523, 587, 659, 698, 784, 698, 659, 587,
+            523, 494, 440, 392, 440, 494, 523, 587,
+            659, 698, 784, 880, 784, 698, 659, 587,
+            523, 587, 659, 698, 659, 587, 523, 494
+        ];
+
+        const arcadeBass = [
+            262, 262, 294, 294, 330, 330, 349, 349,
+            392, 392, 349, 349, 330, 330, 294, 294,
+            262, 262, 247, 247, 220, 220, 196, 196,
+            220, 220, 247, 247, 262, 262, 294, 294
+        ];
+
+        let currentBeat = 0;
+
+        function startMusic() {
+            if (musicPlaying || isMuted) return;
+            musicPlaying = true;
+
+            musicInterval = setInterval(() => {
+                if (!musicPlaying || isMuted) return;
+
+                try {
+                    const ctx = initAudio();
+
+                    // Melody
+                    const osc1 = ctx.createOscillator();
+                    const gain1 = ctx.createGain();
+                    osc1.type = 'square';
+                    osc1.connect(gain1);
+                    gain1.connect(ctx.destination);
+                    osc1.frequency.value = arcadeMelody[currentBeat % arcadeMelody.length];
+                    gain1.gain.setValueAtTime(0.05, ctx.currentTime);
+                    gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+                    osc1.start(ctx.currentTime);
+                    osc1.stop(ctx.currentTime + 0.12);
+
+                    // Bass
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.type = 'triangle';
+                    osc2.connect(gain2);
+                    gain2.connect(ctx.destination);
+                    osc2.frequency.value = arcadeBass[currentBeat % arcadeBass.length];
+                    gain2.gain.setValueAtTime(0.07, ctx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.14);
+                    osc2.start(ctx.currentTime);
+                    osc2.stop(ctx.currentTime + 0.14);
+
+                    // Percussion
+                    if (currentBeat % 4 === 0) {
+                        const perc = ctx.createOscillator();
+                        const percGain = ctx.createGain();
+                        perc.type = 'square';
+                        perc.connect(percGain);
+                        percGain.connect(ctx.destination);
+                        perc.frequency.value = 80;
+                        percGain.gain.setValueAtTime(0.04, ctx.currentTime);
+                        percGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                        perc.start(ctx.currentTime);
+                        perc.stop(ctx.currentTime + 0.05);
+                    }
+
+                    currentBeat++;
+                } catch(e) {}
+            }, 160);
+        }
+
+        function stopMusic() {
+            musicPlaying = false;
+            if (musicInterval) {
+                clearInterval(musicInterval);
+                musicInterval = null;
+            }
+        }
+
+        function toggleVolume() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('volumeToggle');
+            const icon = document.getElementById('volumeIcon');
+
+            if (isMuted) {
+                btn.classList.add('muted');
+                icon.innerHTML = '&#128263;';
+                stopMusic();
+            } else {
+                btn.classList.remove('muted');
+                icon.innerHTML = '&#128266;';
+                startMusic();
+            }
+        }
+
+        // Start music on first interaction
+        document.addEventListener('click', function initMusic() {
+            if (!musicPlaying && !isMuted) {
+                startMusic();
+            }
+            document.removeEventListener('click', initMusic);
+        });
+
+        // Play selection sound
+        function playSelectSound() {
+            if (isMuted) return;
+            try {
+                const ctx = initAudio();
+                [523, 659, 784, 1047].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime + i * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.08 + 0.1);
+                    osc.start(ctx.currentTime + i * 0.08);
+                    osc.stop(ctx.currentTime + i * 0.08 + 0.1);
+                });
+            } catch(e) {}
+        }
+
+        // Launch game
+        function launchGame(game) {
+            playSelectSound();
+            stopMusic();
+
+            setTimeout(() => {
+                switch(game) {
+                    case 'myeloma':
+                        window.location.href = '../MyelomaMan/myeloma-man.html';
+                        break;
+                    case 'aml':
+                        window.location.href = '../MS-AML-Man/ms-aml-man.html';
+                        break;
+                    case 'lymphoma':
+                        window.location.href = '../LymphoMaster/lymphoma-challenge.html';
+                        break;
+                    case 'waldo':
+                        window.location.href = '../HemesWaldo/hemes-waldo.html';
+                        break;
+                }
+            }, 400);
+        }
+
+        // Load high scores from localStorage
+        function loadHighScores() {
+            const myelomaScore = localStorage.getItem('myelomaManHighScore');
+            const amlScore = localStorage.getItem('msAmlManHighScore');
+            const lymphomaScore = localStorage.getItem('lymphoMasterHighScore') || localStorage.getItem('lymphomaChallengeHighScore');
+            const waldoScore = localStorage.getItem('hemesWaldoHighScore');
+
+            if (myelomaScore) {
+                document.getElementById('myelomaScore').textContent = myelomaScore;
+            }
+            if (amlScore) {
+                document.getElementById('amlScore').textContent = amlScore;
+            }
+            if (lymphomaScore) {
+                document.getElementById('lymphomaScore').textContent = lymphomaScore;
+            }
+            if (waldoScore) {
+                document.getElementById('waldoScore').textContent = waldoScore;
+            }
+        }
+        loadHighScores();
+
+        // Hover sound effect
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                if (isMuted) return;
+                try {
+                    const ctx = initAudio();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = 880;
+                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.1);
+                } catch(e) {}
+            });
+        });
+    </script>
+</body>
+</html>
