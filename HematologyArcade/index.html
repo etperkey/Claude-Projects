@@ -220,6 +220,39 @@
             background: linear-gradient(135deg, #00ff00, #88ff88);
         }
 
+        /* HemesWaldo card */
+        .game-card.waldo {
+            border-color: #cc0000;
+            box-shadow: 0 0 20px rgba(204, 0, 0, 0.3);
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(204, 0, 0, 0.1) 0px,
+                rgba(204, 0, 0, 0.1) 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            ), linear-gradient(180deg,
+                rgba(20, 20, 40, 0.9) 0%,
+                rgba(10, 10, 30, 0.95) 100%);
+        }
+
+        .game-card.waldo:hover {
+            box-shadow: 0 0 40px rgba(204, 0, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.waldo .game-icon {
+            background: linear-gradient(135deg, #cc0000, #ff4444);
+        }
+
+        .game-card.waldo .game-title { color: #ff4444; }
+
+        .game-card.waldo .play-btn {
+            background: linear-gradient(180deg, #cc0000, #990000);
+            color: white;
+            box-shadow: 0 5px 0 #660000;
+        }
+
+        .game-card.waldo .diff-dot.active { background: #cc0000; }
+
         /* Game icon */
         .game-icon {
             width: 100px;
@@ -501,6 +534,24 @@
                     <div class="diff-dot active"></div>
                 </div>
             </div>
+
+            <!-- HemesWaldo -->
+            <div class="game-card waldo" onclick="launchGame('waldo')">
+                <div class="game-icon">&#128269;</div>
+                <h2 class="game-title">Heme's Waldo</h2>
+                <p class="game-theme">Spot the Finding</p>
+                <p class="game-description">
+                    Where's the pathology? Identify malignant and benign findings in ASH Image Bank cases.
+                </p>
+                <button class="play-btn">FIND IT</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot"></div>
+                    <div class="diff-dot"></div>
+                    <div class="diff-dot"></div>
+                    <div class="diff-dot"></div>
+                </div>
+            </div>
         </div>
 
         <p class="insert-coin">SELECT A GAME TO BEGIN</p>
@@ -519,6 +570,10 @@
             <div class="score-row">
                 <span class="score-game">LymphoMaster</span>
                 <span class="score-value" id="lymphomaScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">Heme's Waldo</span>
+                <span class="score-value" id="waldoScore">---</span>
             </div>
         </div>
 
@@ -697,6 +752,9 @@
                     case 'lymphoma':
                         window.location.href = '../LymphoMaster/lymphoma-challenge.html';
                         break;
+                    case 'waldo':
+                        window.location.href = '../HemesWaldo/hemes-waldo.html';
+                        break;
                 }
             }, 400);
         }
@@ -706,6 +764,7 @@
             const myelomaScore = localStorage.getItem('myelomaManHighScore');
             const amlScore = localStorage.getItem('msAmlManHighScore');
             const lymphomaScore = localStorage.getItem('lymphoMasterHighScore') || localStorage.getItem('lymphomaChallengeHighScore');
+            const waldoScore = localStorage.getItem('hemesWaldoHighScore');
 
             if (myelomaScore) {
                 document.getElementById('myelomaScore').textContent = myelomaScore;
@@ -715,6 +774,9 @@
             }
             if (lymphomaScore) {
                 document.getElementById('lymphomaScore').textContent = lymphomaScore;
+            }
+            if (waldoScore) {
+                document.getElementById('waldoScore').textContent = waldoScore;
             }
         }
         loadHighScores();
