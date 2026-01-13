@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Claude-Projects/Claude-Project-02/static/css/main.66f3a360.css",
+    "main.js": "/Claude-Projects/Claude-Project-02/static/js/main.c58732e7.js",
+    "index.html": "/Claude-Projects/Claude-Project-02/index.html",
+    "main.66f3a360.css.map": "/Claude-Projects/Claude-Project-02/static/css/main.66f3a360.css.map",
+    "main.c58732e7.js.map": "/Claude-Projects/Claude-Project-02/static/js/main.c58732e7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.66f3a360.css",
+    "static/js/main.c58732e7.js"
+  ]
+}
