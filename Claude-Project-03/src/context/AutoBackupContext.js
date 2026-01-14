@@ -8,6 +8,30 @@ const BACKUP_SETTINGS_KEY = 'kanlab-backup-settings';
 const LAST_BACKUP_KEY = 'kanlab-last-backup';
 const DRIVE_BACKUP_FOLDER = 'KanLab Backups';
 
+// Get browser and machine info for backup filename
+const getDeviceInfo = () => {
+  const ua = navigator.userAgent;
+
+  // Detect browser
+  let browser = 'Unknown';
+  if (ua.includes('Edg/')) browser = 'Edge';
+  else if (ua.includes('Chrome/')) browser = 'Chrome';
+  else if (ua.includes('Firefox/')) browser = 'Firefox';
+  else if (ua.includes('Safari/') && !ua.includes('Chrome')) browser = 'Safari';
+  else if (ua.includes('Opera') || ua.includes('OPR/')) browser = 'Opera';
+
+  // Detect OS/Machine
+  let machine = 'Unknown';
+  if (ua.includes('Windows')) machine = 'Windows';
+  else if (ua.includes('Mac OS')) machine = 'Mac';
+  else if (ua.includes('Linux')) machine = 'Linux';
+  else if (ua.includes('Android')) machine = 'Android';
+  else if (ua.includes('iPhone') || ua.includes('iPad')) machine = 'iOS';
+  else if (ua.includes('CrOS')) machine = 'ChromeOS';
+
+  return { browser, machine };
+};
+
 // Helper to emit toast events
 const emitToast = (message, type = TOAST_TYPES.INFO, duration = 5000) => {
   window.dispatchEvent(new CustomEvent('show-toast', {
@@ -175,11 +199,17 @@ export function AutoBackupProvider({ children }) {
   // Create local backup (download)
   const createLocalBackup = useCallback(() => {
     const exportData = getAllAppData();
+    const { browser, machine } = getDeviceInfo();
+
+    // Format: MANUAL-YYYY-MM-DD-HHmmss-Browser-Machine.json
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const filename = `MANUAL-${timestamp}-${browser}-${machine}.json`;
+
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `kanlab-backup-${new Date().toISOString().split('T')[0]}.json`);
+    link.setAttribute('download', filename);
     link.click();
     URL.revokeObjectURL(url);
 
@@ -195,9 +225,9 @@ export function AutoBackupProvider({ children }) {
     if (!gapiLoaded || !isSignedIn || !folderId) return;
 
     try {
-      // List all auto-backups (files starting with "auto-")
+      // List all auto-backups (files starting with "AUTO-")
       const response = await window.gapi.client.drive.files.list({
-        q: `'${folderId}' in parents and name contains 'auto-' and mimeType = 'application/json' and trashed = false`,
+        q: `'${folderId}' in parents and name contains 'AUTO-' and mimeType = 'application/json' and trashed = false`,
         spaces: 'drive',
         fields: 'files(id, name, createdTime)',
         orderBy: 'createdTime desc',
@@ -241,9 +271,13 @@ export function AutoBackupProvider({ children }) {
       const folderId = await getOrCreateBackupFolder();
       const exportData = getAllAppData();
 
-      // Use different prefix for auto vs manual backups
-      const prefix = isAuto ? 'auto-backup' : 'manual-backup';
-      const filename = `${prefix}-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+      // Get device info for filename
+      const { browser, machine } = getDeviceInfo();
+
+      // Format: [AUTO/MANUAL]-YYYY-MM-DD-HHmmss-Browser-Machine.json
+      const saveType = isAuto ? 'AUTO' : 'MANUAL';
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+      const filename = `${saveType}-${timestamp}-${browser}-${machine}.json`;
 
       // Create file blob
       const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
