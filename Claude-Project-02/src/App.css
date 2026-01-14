@@ -1844,6 +1844,11 @@ body {
   color: white;
 }
 
+.btn-export-cal.expanded {
+  background: var(--accent);
+  color: white;
+}
+
 /* iCal Export Section */
 .ical-export-section {
   padding: 16px 20px;
@@ -1852,13 +1857,32 @@ body {
 }
 
 .ical-export-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 12px;
 }
 
 .ical-export-header h4 {
-  margin: 0 0 4px 0;
+  margin: 0;
   font-size: 1rem;
   color: var(--text-primary);
+}
+
+.collapse-export-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.collapse-export-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-card);
 }
 
 .ical-export-header p {
