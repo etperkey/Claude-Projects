@@ -179,16 +179,17 @@ export function DataSyncProvider({ children }) {
     }
   }, [gapiLoaded, isSignedIn]);
 
-  // Merge remote and local data (simple strategy: use most recent per key)
+  // Merge remote and local data (prefer local to avoid overwriting user's work)
   const mergeData = useCallback((localData, remoteData) => {
     if (!remoteData || !remoteData.keys) return localData;
     if (!localData || !localData.keys) return remoteData;
 
-    // For now, prefer remote data but keep local-only keys
+    // Prefer local data over remote - local is what the user is actively working on
+    // Remote data fills in any keys that don't exist locally
     const merged = {
       version: 1,
       lastModified: new Date().toISOString(),
-      keys: { ...localData.keys, ...remoteData.keys }
+      keys: { ...remoteData.keys, ...localData.keys }
     };
 
     return merged;
