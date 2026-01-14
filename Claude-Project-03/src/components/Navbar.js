@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
-import { useDataSync } from '../context/DataSyncContext';
 import { useAutoBackup } from '../context/AutoBackupContext';
 import { useApiKeys } from '../context/ApiKeysContext';
 import { useTrash } from '../context/TrashContext';
@@ -19,7 +18,6 @@ const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 function Navbar() {
   const { theme, toggleTheme } = useApp();
   const { isSignedIn, gisLoaded, hasCredentials, user, signIn, signOut } = useGoogleAuth();
-  const { syncStatus, lastSynced, syncNow, syncError } = useDataSync();
   const {
     createLocalBackup,
     exportToGoogleDrive,
@@ -355,30 +353,32 @@ function Navbar() {
           </button>
 
           {isSignedIn && (
-            <button
-              className={`nav-btn sync-btn ${syncStatus}`}
-              onClick={syncNow}
-              disabled={syncStatus === 'syncing'}
-              title={
-                syncStatus === 'syncing' ? 'Syncing...' :
-                syncStatus === 'error' ? `Sync error: ${syncError}` :
-                lastSynced ? `Last synced: ${lastSynced.toLocaleTimeString()}` :
-                'Click to sync with Google Drive'
-              }
-            >
-              {syncStatus === 'syncing' ? (
-                <span className="sync-icon spinning">↻</span>
-              ) : syncStatus === 'success' ? (
-                <span className="sync-icon">✓</span>
-              ) : syncStatus === 'error' ? (
-                <span className="sync-icon error">!</span>
-              ) : (
-                <span className="sync-icon">☁</span>
-              )}
-              <span className="btn-label">
-                {syncStatus === 'syncing' ? 'Syncing' : 'Sync'}
-              </span>
-            </button>
+            <>
+              <button
+                className={`nav-btn cloud-btn ${isBackingUp ? 'backing-up' : ''}`}
+                onClick={() => exportToGoogleDrive(false, false)}
+                disabled={isBackingUp}
+                title={lastBackup ? `Save to Cloud (Last: ${lastBackup.toLocaleString()})` : 'Save backup to Google Drive'}
+              >
+                {isBackingUp ? (
+                  <span className="cloud-icon spinning">↻</span>
+                ) : (
+                  <span className="cloud-icon">☁↑</span>
+                )}
+                <span className="btn-label">Save</span>
+                {backupSettings.enabled && (
+                  <span className="auto-backup-indicator" title="Auto-backup enabled">●</span>
+                )}
+              </button>
+              <button
+                className="nav-btn cloud-btn"
+                onClick={importFromGoogleDrive}
+                title="Restore from Google Drive backup"
+              >
+                <span className="cloud-icon">☁↓</span>
+                <span className="btn-label">Load</span>
+              </button>
+            </>
           )}
 
           {hasCredentials && (

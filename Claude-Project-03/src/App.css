@@ -6261,6 +6261,33 @@ body {
   to { transform: rotate(360deg); }
 }
 
+/* Cloud Save/Load Buttons */
+.nav-btn.cloud-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-btn.cloud-btn .cloud-icon {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.nav-btn.cloud-btn .cloud-icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+.nav-btn.cloud-btn.backing-up {
+  opacity: 0.8;
+  cursor: wait;
+}
+
+.nav-btn.cloud-btn .auto-backup-indicator {
+  color: var(--success);
+  font-size: 8px;
+  margin-left: 2px;
+}
+
 /* Google Status Indicator (for components) */
 .google-status-indicator {
   display: flex;
