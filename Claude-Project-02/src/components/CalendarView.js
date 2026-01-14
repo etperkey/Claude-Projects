@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { researchProjects } from '../data/projects';
+import CalendarPublish from './CalendarPublish';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
@@ -81,6 +82,7 @@ function CalendarView({ isOpen, onClose }) {
   const [tasks, setTasks] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [showExport, setShowExport] = useState(false);
+  const [showPublish, setShowPublish] = useState(false);
   const [exportStatus, setExportStatus] = useState('');
   const navigate = useNavigate();
 
@@ -257,22 +259,52 @@ function CalendarView({ isOpen, onClose }) {
         {showExport && (
           <div className="ical-export-section">
             <div className="ical-export-header">
-              <h4>Export to Google Calendar</h4>
-              <p>Download the .ics file and import it into Google Calendar</p>
+              <h4>Calendar Export Options</h4>
             </div>
-            <div className="ical-export-actions">
-              <button className="btn-download-ical" onClick={handleDownloadIcal}>
-                Download .ics File
-              </button>
-              <button className="btn-copy-ical-content" onClick={handleCopyIcal}>
-                Copy iCal Data
+
+            {/* Subscribe Option */}
+            <div className="export-option subscribe-option">
+              <div className="option-header">
+                <span className="option-icon">🔄</span>
+                <div>
+                  <strong>Subscribe (Recommended)</strong>
+                  <p>Create a subscription URL that Google Calendar can auto-update</p>
+                </div>
+              </div>
+              <button className="btn-subscribe" onClick={() => setShowPublish(true)}>
+                Set Up Subscription
               </button>
             </div>
+
+            <div className="export-divider">
+              <span>or</span>
+            </div>
+
+            {/* One-time Export Option */}
+            <div className="export-option download-option">
+              <div className="option-header">
+                <span className="option-icon">📥</span>
+                <div>
+                  <strong>One-time Download</strong>
+                  <p>Download .ics file to manually import (won't auto-update)</p>
+                </div>
+              </div>
+              <div className="ical-export-actions">
+                <button className="btn-download-ical" onClick={handleDownloadIcal}>
+                  Download .ics File
+                </button>
+                <button className="btn-copy-ical-content" onClick={handleCopyIcal}>
+                  Copy iCal Data
+                </button>
+              </div>
+            </div>
+
             {exportStatus && (
               <div className="ical-export-status">{exportStatus}</div>
             )}
-            <div className="ical-instructions">
-              <strong>How to import into Google Calendar:</strong>
+
+            <details className="import-instructions">
+              <summary>How to manually import into Google Calendar</summary>
               <ol>
                 <li>Click "Download .ics File" above</li>
                 <li>Open <a href="https://calendar.google.com" target="_blank" rel="noopener noreferrer">Google Calendar</a></li>
@@ -281,9 +313,10 @@ function CalendarView({ isOpen, onClose }) {
                 <li>Click "Select file from your computer" and choose the downloaded file</li>
                 <li>Select the calendar to add events to and click "Import"</li>
               </ol>
-            </div>
+            </details>
+
             <div className="ical-task-count">
-              {tasks.length} task{tasks.length !== 1 ? 's' : ''} with due dates will be exported
+              {tasks.length} task{tasks.length !== 1 ? 's' : ''} with due dates
             </div>
           </div>
         )}
@@ -338,6 +371,13 @@ function CalendarView({ isOpen, onClose }) {
           </div>
         )}
       </div>
+
+      {/* Calendar Publish Modal */}
+      <CalendarPublish
+        isOpen={showPublish}
+        onClose={() => setShowPublish(false)}
+        tasks={tasks}
+      />
     </div>
   );
 }
