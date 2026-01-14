@@ -14,6 +14,8 @@ import { useToast } from '../context/ToastContext';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
+const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
+const LITERATURE_KEY = 'research-dashboard-literature';
 
 function ProjectPage() {
   const { projectId } = useParams();
@@ -30,6 +32,8 @@ function ProjectPage() {
   const [showTemplatesModal, setShowTemplatesModal] = useState(false);
   const [isEditingProject, setIsEditingProject] = useState(false);
   const [editedProject, setEditedProject] = useState(null);
+  const [notebookCount, setNotebookCount] = useState(0);
+  const [citationsCount, setCitationsCount] = useState(0);
 
   useEffect(() => {
     // First try to get from built-in projects
@@ -111,6 +115,47 @@ function ProjectPage() {
       triggerSync();
     }
   }, [tasks, isCustomProject, project, projectId, isLoaded, triggerSync]);
+
+  // Load notebook entries and citations counts
+  useEffect(() => {
+    if (!project) return;
+
+    // Count notebook entries for this project
+    const notebookSaved = localStorage.getItem(NOTEBOOK_KEY);
+    if (notebookSaved) {
+      try {
+        const allEntries = JSON.parse(notebookSaved);
+        const projectTitleLower = project.title.toLowerCase();
+        const projectIdLower = projectId.toLowerCase();
+
+        const projectEntries = allEntries.filter(entry => {
+          if (entry.projectId === projectId) return true;
+          return entry.tags?.some(tag => {
+            const tagLower = tag.toLowerCase();
+            return tagLower === projectTitleLower ||
+                   tagLower === projectIdLower ||
+                   projectTitleLower.includes(tagLower) ||
+                   tagLower.includes(projectTitleLower);
+          });
+        });
+        setNotebookCount(projectEntries.length);
+      } catch (e) {
+        setNotebookCount(0);
+      }
+    }
+
+    // Count citations/literature for this project
+    const literatureSaved = localStorage.getItem(LITERATURE_KEY);
+    if (literatureSaved) {
+      try {
+        const all = JSON.parse(literatureSaved);
+        const projectRefs = all[projectId] || [];
+        setCitationsCount(projectRefs.length);
+      } catch (e) {
+        setCitationsCount(0);
+      }
+    }
+  }, [project, projectId, activeTab]); // Re-count when tab changes (in case user added entries)
 
   // Start editing project
   const handleEditProject = () => {
@@ -403,6 +448,14 @@ function ProjectPage() {
                 <div className="header-stat">
                   <span className="stat-value">{progressPercent}%</span>
                   <span className="stat-label">Progress</span>
+                </div>
+                <div className="header-stat">
+                  <span className="stat-value">{notebookCount}</span>
+                  <span className="stat-label">Notebook Entries</span>
+                </div>
+                <div className="header-stat">
+                  <span className="stat-value">{citationsCount}</span>
+                  <span className="stat-label">Citations</span>
                 </div>
               </div>
             </div>
