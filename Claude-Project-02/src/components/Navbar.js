@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
 import { useDataSync } from '../context/DataSyncContext';
+import { useApiKeys } from '../context/ApiKeysContext';
+import { useTrash } from '../context/TrashContext';
 import GlobalSearch from './GlobalSearch';
 import CalendarView from './CalendarView';
 import QuickAddModal from './QuickAddModal';
@@ -16,6 +18,8 @@ function Navbar() {
   const { theme, toggleTheme } = useApp();
   const { isSignedIn, gisLoaded, hasCredentials, user, signIn, signOut } = useGoogleAuth();
   const { syncStatus, lastSynced, syncNow, syncError } = useDataSync();
+  const { openSettings, hasClaudeKey, hasOpenaiKey } = useApiKeys();
+  const { trashedItems, openTrash } = useTrash();
   const [showSearch, setShowSearch] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
@@ -103,6 +107,132 @@ function Navbar() {
     URL.revokeObjectURL(url);
   };
 
+  // Export full workspace as JSON
+  const handleExportJSON = () => {
+    // All localStorage keys used by the app
+    const APP_KEYS = [
+      'research-dashboard-custom-projects',
+      'research-dashboard-tasks',
+      'research-lab-notebook',
+      'research-dashboard-literature',
+      'research-dashboard-recurring',
+      'research-dashboard-templates',
+      'research-dashboard-activity',
+      'research-dashboard-archived',
+      'research-dashboard-theme',
+      'research-dashboard-trash'
+    ];
+
+    // Project-specific key prefixes
+    const PROJECT_PREFIXES = [
+      'research-dashboard-research-notes-',
+      'research-dashboard-protocols-',
+      'research-dashboard-results-',
+      'research-dashboard-lab-notebook-'
+    ];
+
+    const exportData = {
+      exportVersion: '1.0',
+      exportDate: new Date().toISOString(),
+      appName: 'Research Dashboard',
+      data: {}
+    };
+
+    // Export standard keys
+    APP_KEYS.forEach(key => {
+      try {
+        const value = localStorage.getItem(key);
+        if (value) {
+          exportData.data[key] = JSON.parse(value);
+        }
+      } catch (e) {
+        console.warn(`Failed to export ${key}:`, e);
+      }
+    });
+
+    // Export project-specific keys
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (PROJECT_PREFIXES.some(prefix => key.startsWith(prefix))) {
+        try {
+          const value = localStorage.getItem(key);
+          if (value) {
+            exportData.data[key] = JSON.parse(value);
+          }
+        } catch (e) {
+          console.warn(`Failed to export ${key}:`, e);
+        }
+      }
+    }
+
+    // Create and download JSON file
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `research-dashboard-backup-${new Date().toISOString().split('T')[0]}.json`);
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Import workspace from JSON backup
+  const handleImportJSON = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const importData = JSON.parse(event.target.result);
+
+          // Validate the import file
+          if (!importData.appName || importData.appName !== 'Research Dashboard') {
+            alert('Invalid backup file. Please select a valid Research Dashboard backup.');
+            return;
+          }
+
+          if (!importData.data || typeof importData.data !== 'object') {
+            alert('Invalid backup file format. Missing data section.');
+            return;
+          }
+
+          // Confirm before overwriting
+          const keyCount = Object.keys(importData.data).length;
+          const confirmMsg = `This will import ${keyCount} data entries from your backup dated ${new Date(importData.exportDate).toLocaleDateString()}.\n\nExisting data will be merged with the backup. Continue?`;
+
+          if (!window.confirm(confirmMsg)) return;
+
+          // Import each key to localStorage
+          let importedCount = 0;
+          Object.entries(importData.data).forEach(([key, value]) => {
+            try {
+              localStorage.setItem(key, JSON.stringify(value));
+              importedCount++;
+            } catch (e) {
+              console.error(`Failed to import ${key}:`, e);
+            }
+          });
+
+          alert(`Successfully imported ${importedCount} data entries. The page will now reload to apply changes.`);
+
+          // Reload to apply imported data
+          window.location.reload();
+        } catch (e) {
+          console.error('Import error:', e);
+          alert('Failed to import backup file. Please ensure it is a valid JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
+
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
   return (
     <>
       <nav className="global-navbar">
@@ -150,12 +280,40 @@ function Navbar() {
             📜 <span className="btn-label">Activity</span>
           </button>
 
+          <div className="export-dropdown">
+            <button
+              className="nav-btn"
+              onClick={() => setShowExportMenu(!showExportMenu)}
+              title="Export / Import data"
+            >
+              📥 <span className="btn-label">Data</span>
+            </button>
+            {showExportMenu && (
+              <div className="export-menu">
+                <div className="export-menu-section">Export</div>
+                <button onClick={() => { handleExportCSV(); setShowExportMenu(false); }}>
+                  📄 Tasks CSV
+                </button>
+                <button onClick={() => { handleExportJSON(); setShowExportMenu(false); }}>
+                  💾 Full Backup (JSON)
+                </button>
+                <div className="export-menu-section">Import</div>
+                <button onClick={() => { handleImportJSON(); setShowExportMenu(false); }}>
+                  📤 Restore from Backup
+                </button>
+              </div>
+            )}
+          </div>
+
           <button
-            className="nav-btn"
-            onClick={handleExportCSV}
-            title="Export to CSV"
+            className={`nav-btn trash-btn ${trashedItems.length > 0 ? 'has-items' : ''}`}
+            onClick={openTrash}
+            title={trashedItems.length > 0 ? `Trash (${trashedItems.length} items)` : 'Trash'}
           >
-            📥 <span className="btn-label">Export</span>
+            🗑️ <span className="btn-label">Trash</span>
+            {trashedItems.length > 0 && (
+              <span className="trash-count-badge">{trashedItems.length}</span>
+            )}
           </button>
 
           {isSignedIn && (
@@ -211,6 +369,15 @@ function Navbar() {
               </button>
             )
           )}
+
+          <button
+            className={`nav-btn settings-btn ${hasClaudeKey || hasOpenaiKey ? 'configured' : ''}`}
+            onClick={openSettings}
+            title={hasClaudeKey && hasOpenaiKey ? 'API Settings (configured)' : 'Configure API Keys'}
+          >
+            ⚙️ <span className="btn-label">Settings</span>
+            {(!hasClaudeKey || !hasOpenaiKey) && <span className="settings-dot"></span>}
+          </button>
 
           <button
             className="nav-btn theme-toggle"

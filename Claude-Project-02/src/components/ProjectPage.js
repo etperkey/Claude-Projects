@@ -9,6 +9,8 @@ import RecurringTasksManager from './RecurringTasksManager';
 import TaskTemplatesManager from './TaskTemplatesManager';
 import { useApp } from '../context/AppContext';
 import { useSyncTrigger } from '../context/DataSyncContext';
+import { useTrash, TRASH_ITEM_TYPES } from '../context/TrashContext';
+import { useToast } from '../context/ToastContext';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
@@ -17,6 +19,8 @@ function ProjectPage() {
   const { projectId } = useParams();
   const { logActivity, isProjectArchived } = useApp();
   const triggerSync = useSyncTrigger();
+  const { moveToTrash } = useTrash();
+  const { showSuccess } = useToast();
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState({});
   const [isCustomProject, setIsCustomProject] = useState(false);
@@ -202,21 +206,30 @@ function ProjectPage() {
 
   const handleDeleteTask = (taskId, column) => {
     const task = tasks[column]?.find(t => t.id === taskId);
+    if (!task) return;
 
+    // Move to trash instead of permanent deletion
+    moveToTrash(TRASH_ITEM_TYPES.TASK, { ...task, column }, {
+      projectId,
+      projectTitle: project.title,
+      column
+    });
+
+    // Remove from active tasks
     setTasks(prevTasks => ({
       ...prevTasks,
       [column]: prevTasks[column].filter(t => t.id !== taskId)
     }));
 
-    if (task) {
-      logActivity('task_deleted', {
-        taskId,
-        taskTitle: task.title,
-        projectId,
-        projectTitle: project.title,
-        column
-      });
-    }
+    logActivity('task_deleted', {
+      taskId,
+      taskTitle: task.title,
+      projectId,
+      projectTitle: project.title,
+      column
+    });
+
+    showSuccess(`"${task.title}" moved to trash`);
   };
 
   const handleUpdateTask = (taskId, column, updatedData) => {

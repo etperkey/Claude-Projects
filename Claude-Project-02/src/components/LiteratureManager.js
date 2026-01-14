@@ -1,13 +1,28 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSyncTrigger } from '../context/DataSyncContext';
+import { useApiKeys, AI_PROVIDERS, PROVIDER_NAMES, PROVIDER_CAPABILITIES } from '../context/ApiKeysContext';
+import { useTrash, TRASH_ITEM_TYPES } from '../context/TrashContext';
+import { useToast } from '../context/ToastContext';
 import MacroTextarea from './MacroTextarea';
 import FileAttachments from './FileAttachments';
 import { fetchMultipleCitations, fetchFromPubMed, fetchFromDOI } from '../utils/citationFetcher';
+import * as claudeApi from '../utils/claudeApi';
+import * as openaiApi from '../utils/openaiEmbeddings';
+import * as geminiApi from '../utils/geminiApi';
 
 const LITERATURE_KEY = 'research-dashboard-literature';
 
 function LiteratureManager({ projectId, projectTitle }) {
   const triggerSync = useSyncTrigger();
+  const {
+    getApiKeyForProvider,
+    hasKeyForProvider,
+    openSettings,
+    summarizationProvider,
+    getAvailableProvidersForSummarization
+  } = useApiKeys();
+  const { moveToTrash } = useTrash();
+  const { showSuccess } = useToast();
   const [references, setReferences] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,6 +32,28 @@ function LiteratureManager({ projectId, projectTitle }) {
   const [fetchStatus, setFetchStatus] = useState({ message: '', type: '' });
   const [bulkPmids, setBulkPmids] = useState('');
   const [bulkImportProgress, setBulkImportProgress] = useState({ current: 0, total: 0, importing: false });
+  const [summarizingId, setSummarizingId] = useState(null);
+  const [batchSummarizing, setBatchSummarizing] = useState({ active: false, current: 0, total: 0 });
+  const [selectedSummaryProvider, setSelectedSummaryProvider] = useState(summarizationProvider);
+
+  // Get the appropriate API module for a provider
+  const getApiModule = (provider) => {
+    switch (provider) {
+      case AI_PROVIDERS.CLAUDE:
+        return claudeApi;
+      case AI_PROVIDERS.OPENAI:
+        return openaiApi;
+      case AI_PROVIDERS.GEMINI:
+        return geminiApi;
+      default:
+        return claudeApi;
+    }
+  };
+
+  // Check if any summarization provider is available
+  const hasAnySummarizationProvider = () => {
+    return getAvailableProvidersForSummarization().length > 0;
+  };
 
   // Form state
   const [newRef, setNewRef] = useState({
@@ -225,15 +262,114 @@ function LiteratureManager({ projectId, projectTitle }) {
     }
   };
 
-  // Delete reference
+  // Delete reference (move to trash)
   const handleDeleteReference = (refId) => {
-    if (window.confirm('Delete this reference?')) {
-      const updated = references.filter(r => r.id !== refId);
-      saveReferences(updated);
-      if (selectedRef?.id === refId) {
-        setSelectedRef(null);
-      }
+    const ref = references.find(r => r.id === refId);
+    if (!ref) return;
+
+    // Move to trash instead of permanent deletion
+    moveToTrash(TRASH_ITEM_TYPES.REFERENCE, ref, {
+      projectId,
+      projectTitle
+    });
+
+    // Remove from active references
+    const updated = references.filter(r => r.id !== refId);
+    saveReferences(updated);
+    if (selectedRef?.id === refId) {
+      setSelectedRef(null);
     }
+    showSuccess(`"${ref.title || 'Reference'}" moved to trash`);
+  };
+
+  // Summarize a single paper using selected AI provider
+  const handleSummarize = async (refId, provider = selectedSummaryProvider) => {
+    if (!hasKeyForProvider(provider)) {
+      openSettings();
+      return;
+    }
+
+    const ref = references.find(r => r.id === refId);
+    if (!ref || !ref.abstract) {
+      setFetchStatus({ message: 'Abstract required for summarization', type: 'error' });
+      setTimeout(() => setFetchStatus({ message: '', type: '' }), 3000);
+      return;
+    }
+
+    setSummarizingId(refId);
+    const providerName = PROVIDER_NAMES[provider] || provider;
+    setFetchStatus({ message: `Generating summary with ${providerName}...`, type: 'info' });
+
+    try {
+      const apiKey = getApiKeyForProvider(provider);
+      const apiModule = getApiModule(provider);
+      const aiSummary = await apiModule.summarizePaper(apiKey, ref);
+      // Add provider info to the summary
+      aiSummary.provider = provider;
+      handleUpdateReference(refId, { aiSummary });
+      setFetchStatus({ message: `Summary generated with ${providerName}!`, type: 'success' });
+    } catch (error) {
+      console.error('Summarization error:', error);
+      setFetchStatus({ message: error.message || 'Failed to generate summary', type: 'error' });
+    }
+
+    setSummarizingId(null);
+    setTimeout(() => setFetchStatus({ message: '', type: '' }), 3000);
+  };
+
+  // Batch summarize all papers without summaries
+  const handleBatchSummarize = async (provider = selectedSummaryProvider) => {
+    if (!hasKeyForProvider(provider)) {
+      openSettings();
+      return;
+    }
+
+    const refsToSummarize = references.filter(r => r.abstract && !r.aiSummary);
+    if (refsToSummarize.length === 0) {
+      setFetchStatus({ message: 'No papers to summarize (all have summaries or no abstracts)', type: 'info' });
+      setTimeout(() => setFetchStatus({ message: '', type: '' }), 3000);
+      return;
+    }
+
+    setBatchSummarizing({ active: true, current: 0, total: refsToSummarize.length });
+    const providerName = PROVIDER_NAMES[provider] || provider;
+    setFetchStatus({ message: `Summarizing ${refsToSummarize.length} papers with ${providerName}...`, type: 'info' });
+
+    try {
+      const apiKey = getApiKeyForProvider(provider);
+      const apiModule = getApiModule(provider);
+      const results = await apiModule.summarizePapersBatch(
+        apiKey,
+        refsToSummarize,
+        (current, total) => setBatchSummarizing({ active: true, current, total })
+      );
+
+      // Update references with summaries
+      const successCount = results.filter(r => r.success).length;
+      const updatedRefs = references.map(ref => {
+        const result = results.find(r => r.id === ref.id);
+        if (result?.success) {
+          return {
+            ...ref,
+            aiSummary: { ...result.summary, provider },
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return ref;
+      });
+
+      saveReferences(updatedRefs);
+      setFetchStatus({
+        message: `Summarized ${successCount} of ${refsToSummarize.length} papers with ${providerName}`,
+        type: successCount === refsToSummarize.length ? 'success' : 'warning'
+      });
+    } catch (error) {
+      console.error('Batch summarization error:', error);
+      setFetchStatus({ message: 'Batch summarization failed', type: 'error' });
+    }
+
+    setBatchSummarizing({ active: false, current: 0, total: 0 });
+    setTimeout(() => setFetchStatus({ message: '', type: '' }), 4000);
   };
 
   // Reset form
@@ -348,6 +484,85 @@ function LiteratureManager({ projectId, projectTitle }) {
     return matchesSearch && matchesTag;
   });
 
+  // Export references as CSV
+  const handleExportCSV = () => {
+    const rows = [['PMID', 'DOI', 'Title', 'Authors', 'Journal', 'Year', 'Tags', 'Abstract', 'Summary']];
+
+    filteredReferences.forEach(ref => {
+      rows.push([
+        ref.pmid || '',
+        ref.doi || '',
+        (ref.title || '').replace(/"/g, '""'),
+        (ref.authors || '').replace(/"/g, '""'),
+        (ref.journal || '').replace(/"/g, '""'),
+        ref.year || '',
+        (ref.tags || []).join('; '),
+        (ref.abstract || '').replace(/"/g, '""'),
+        (ref.aiSummary || '').replace(/"/g, '""')
+      ]);
+    });
+
+    const csvContent = rows.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `references-${projectId || 'all'}-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Export references as JSON
+  const handleExportJSON = () => {
+    const exportData = {
+      exportDate: new Date().toISOString(),
+      projectId,
+      projectTitle,
+      totalReferences: filteredReferences.length,
+      references: filteredReferences
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `references-${projectId || 'all'}-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Export references as BibTeX
+  const handleExportBibTeX = () => {
+    const bibtexEntries = filteredReferences.map(ref => {
+      const key = `ref${ref.id}`;
+      const authors = ref.authors || 'Unknown';
+      const title = ref.title || 'Untitled';
+      const journal = ref.journal || '';
+      const year = ref.year || '';
+      const doi = ref.doi || '';
+      const pmid = ref.pmid || '';
+
+      return `@article{${key},
+  author = {${authors}},
+  title = {${title}},
+  journal = {${journal}},
+  year = {${year}},
+  doi = {${doi}},
+  pmid = {${pmid}}
+}`;
+    }).join('\n\n');
+
+    const blob = new Blob([bibtexEntries], { type: 'text/plain;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `references-${projectId || 'all'}-${new Date().toISOString().split('T')[0]}.bib`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
   return (
     <div className="literature-manager">
       {fetchStatus.message && (
@@ -364,6 +579,38 @@ function LiteratureManager({ projectId, projectTitle }) {
         >
           + Add Reference
         </button>
+
+        <div className="ai-summarize-group">
+          <select
+            className="provider-select-inline"
+            value={selectedSummaryProvider}
+            onChange={(e) => setSelectedSummaryProvider(e.target.value)}
+            disabled={batchSummarizing.active}
+            title="Select AI provider for summarization"
+          >
+            {Object.values(AI_PROVIDERS)
+              .filter(p => PROVIDER_CAPABILITIES[p]?.summarization)
+              .map(provider => (
+                <option
+                  key={provider}
+                  value={provider}
+                  disabled={!hasKeyForProvider(provider)}
+                >
+                  {PROVIDER_NAMES[provider]} {!hasKeyForProvider(provider) ? '(No key)' : ''}
+                </option>
+              ))}
+          </select>
+          <button
+            className="batch-summarize-btn"
+            onClick={() => handleBatchSummarize(selectedSummaryProvider)}
+            disabled={batchSummarizing.active || references.length === 0 || !hasAnySummarizationProvider()}
+            title={hasAnySummarizationProvider() ? 'Summarize all papers with abstracts' : 'Configure an API key first'}
+          >
+            {batchSummarizing.active
+              ? `Summarizing ${batchSummarizing.current}/${batchSummarizing.total}...`
+              : 'AI Summarize All'}
+          </button>
+        </div>
 
         <div className="literature-filters">
           <input
@@ -384,6 +631,30 @@ function LiteratureManager({ projectId, projectTitle }) {
               <option key={tag} value={tag}>{tag}</option>
             ))}
           </select>
+        </div>
+
+        <div className="export-dropdown">
+          <button
+            className="export-refs-btn"
+            onClick={() => setShowExportMenu(!showExportMenu)}
+            disabled={filteredReferences.length === 0}
+            title="Export references"
+          >
+            📥 Export
+          </button>
+          {showExportMenu && (
+            <div className="export-menu">
+              <button onClick={() => { handleExportCSV(); setShowExportMenu(false); }}>
+                📄 CSV (spreadsheet)
+              </button>
+              <button onClick={() => { handleExportJSON(); setShowExportMenu(false); }}>
+                💾 JSON (backup)
+              </button>
+              <button onClick={() => { handleExportBibTeX(); setShowExportMenu(false); }}>
+                📚 BibTeX (citation)
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -662,6 +933,93 @@ function LiteratureManager({ projectId, projectTitle }) {
                       <p>{ref.abstract}</p>
                     </div>
                   )}
+
+                  {/* AI Summary */}
+                  <div className="reference-ai-summary">
+                    <h4>AI Summary</h4>
+                    {ref.aiSummary ? (
+                      <div className="ai-summary-content">
+                        <p className="ai-summary-text">{ref.aiSummary.summary}</p>
+                        {ref.aiSummary.keyFindings && ref.aiSummary.keyFindings.length > 0 && (
+                          <div className="ai-key-findings">
+                            <strong>Key Findings:</strong>
+                            <ul>
+                              {ref.aiSummary.keyFindings.map((finding, i) => (
+                                <li key={i}>{finding}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        <div className="ai-summary-meta">
+                          <span>
+                            Generated {new Date(ref.aiSummary.generatedAt).toLocaleDateString()}
+                            {ref.aiSummary.provider && ` with ${PROVIDER_NAMES[ref.aiSummary.provider] || ref.aiSummary.provider}`}
+                          </span>
+                          <div className="regenerate-group">
+                            <select
+                              className="provider-select-small"
+                              value={selectedSummaryProvider}
+                              onChange={(e) => setSelectedSummaryProvider(e.target.value)}
+                              disabled={summarizingId === ref.id}
+                            >
+                              {Object.values(AI_PROVIDERS)
+                                .filter(p => PROVIDER_CAPABILITIES[p]?.summarization)
+                                .map(provider => (
+                                  <option
+                                    key={provider}
+                                    value={provider}
+                                    disabled={!hasKeyForProvider(provider)}
+                                  >
+                                    {PROVIDER_NAMES[provider]}
+                                  </option>
+                                ))}
+                            </select>
+                            <button
+                              className="btn-regenerate"
+                              onClick={() => handleSummarize(ref.id, selectedSummaryProvider)}
+                              disabled={summarizingId === ref.id || !hasKeyForProvider(selectedSummaryProvider)}
+                            >
+                              {summarizingId === ref.id ? 'Regenerating...' : 'Regenerate'}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="ai-summary-empty">
+                        {ref.abstract ? (
+                          <div className="generate-summary-group">
+                            <select
+                              className="provider-select-small"
+                              value={selectedSummaryProvider}
+                              onChange={(e) => setSelectedSummaryProvider(e.target.value)}
+                              disabled={summarizingId === ref.id}
+                            >
+                              {Object.values(AI_PROVIDERS)
+                                .filter(p => PROVIDER_CAPABILITIES[p]?.summarization)
+                                .map(provider => (
+                                  <option
+                                    key={provider}
+                                    value={provider}
+                                    disabled={!hasKeyForProvider(provider)}
+                                  >
+                                    {PROVIDER_NAMES[provider]}
+                                  </option>
+                                ))}
+                            </select>
+                            <button
+                              className="btn-summarize"
+                              onClick={() => handleSummarize(ref.id, selectedSummaryProvider)}
+                              disabled={summarizingId === ref.id || !hasKeyForProvider(selectedSummaryProvider)}
+                            >
+                              {summarizingId === ref.id ? 'Generating...' : 'Generate Summary'}
+                            </button>
+                          </div>
+                        ) : (
+                          <p className="no-abstract-hint">Add an abstract to enable AI summarization</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
 
                   {/* Notes */}
                   <div className="reference-notes">

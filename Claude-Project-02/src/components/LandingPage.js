@@ -4,6 +4,8 @@ import { researchProjects } from '../data/projects';
 import AddProjectModal from './AddProjectModal';
 import { useApp } from '../context/AppContext';
 import { useSyncTrigger } from '../context/DataSyncContext';
+import { useTrash, TRASH_ITEM_TYPES } from '../context/TrashContext';
+import { useToast } from '../context/ToastContext';
 
 // Project icons
 const ProjectIcons = {
@@ -59,6 +61,8 @@ const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 function LandingPage() {
   const { isProjectArchived, archiveProject, unarchiveProject, archivedProjects, logActivity } = useApp();
   const triggerSync = useSyncTrigger();
+  const { moveToTrash } = useTrash();
+  const { showSuccess } = useToast();
   const [customProjects, setCustomProjects] = useState([]);
   const [savedTasks, setSavedTasks] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -106,10 +110,19 @@ function LandingPage() {
   const handleDeleteProject = (e, projectId) => {
     e.preventDefault();
     e.stopPropagation();
-    if (window.confirm('Are you sure you want to delete this project?')) {
-      const updated = customProjects.filter(p => p.id !== projectId);
-      saveCustomProjects(updated);
-    }
+    const project = customProjects.find(p => p.id === projectId);
+    if (!project) return;
+
+    // Move to trash instead of permanent deletion
+    moveToTrash(TRASH_ITEM_TYPES.PROJECT, project, {
+      projectId: project.id,
+      projectTitle: project.title
+    });
+
+    // Remove from active projects
+    const updated = customProjects.filter(p => p.id !== projectId);
+    saveCustomProjects(updated);
+    showSuccess(`"${project.title}" moved to trash`);
   };
 
   const handleArchiveProject = (e, projectId) => {

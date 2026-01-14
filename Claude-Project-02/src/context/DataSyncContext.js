@@ -1,7 +1,15 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { useGoogleAuth } from './GoogleAuthContext';
+import { TOAST_TYPES } from './ToastContext';
 
 const DataSyncContext = createContext(null);
+
+// Helper to emit toast events
+const emitToast = (message, type = TOAST_TYPES.INFO, duration = 5000) => {
+  window.dispatchEvent(new CustomEvent('show-toast', {
+    detail: { message, type, duration }
+  }));
+};
 
 // All localStorage keys that need to be synced
 const SYNC_KEYS = [
@@ -187,10 +195,13 @@ export function DataSyncProvider({ children }) {
   }, []);
 
   // Perform full sync (pull from Drive, merge, push back)
-  const syncNow = useCallback(async () => {
+  const syncNow = useCallback(async (showNotifications = true) => {
     if (!gapiLoaded || !isSignedIn) {
       setSyncStatus('error');
       setSyncError('Not signed in to Google');
+      if (showNotifications) {
+        emitToast('Sync failed: Not signed in to Google', TOAST_TYPES.ERROR);
+      }
       return false;
     }
 
@@ -235,6 +246,9 @@ export function DataSyncProvider({ children }) {
       console.error('Sync error:', error);
       setSyncStatus('error');
       setSyncError(error.message);
+      if (showNotifications) {
+        emitToast(`Sync failed: ${error.message}`, TOAST_TYPES.ERROR, 8000);
+      }
       return false;
     }
   }, [gapiLoaded, isSignedIn, findSyncFile, readFromDrive, getAllLocalData, mergeData, applyDataToLocal, writeToDrive]);
