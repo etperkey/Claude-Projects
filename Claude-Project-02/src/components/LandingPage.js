@@ -58,6 +58,7 @@ const getTaskStats = (tasks) => {
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 const PROJECT_ORDER_KEY = 'research-dashboard-project-order';
+const PROJECT_OVERRIDES_KEY = 'research-dashboard-project-overrides';
 
 function LandingPage() {
   const { isProjectArchived, archiveProject, unarchiveProject, archivedProjects, logActivity } = useApp();
@@ -71,6 +72,7 @@ function LandingPage() {
   const [projectOrder, setProjectOrder] = useState([]);
   const [draggedProject, setDraggedProject] = useState(null);
   const [dragOverProject, setDragOverProject] = useState(null);
+  const [projectOverrides, setProjectOverrides] = useState({});
 
   // Load custom projects and saved tasks from localStorage
   useEffect(() => {
@@ -101,6 +103,16 @@ function LandingPage() {
         setProjectOrder(JSON.parse(savedOrder));
       } catch (e) {
         console.error('Failed to load project order:', e);
+      }
+    }
+
+    // Load project overrides for built-in projects
+    const savedOverrides = localStorage.getItem(PROJECT_OVERRIDES_KEY);
+    if (savedOverrides) {
+      try {
+        setProjectOverrides(JSON.parse(savedOverrides));
+      } catch (e) {
+        console.error('Failed to load project overrides:', e);
       }
     }
   }, []);
@@ -224,7 +236,15 @@ function LandingPage() {
     return savedTasks[project.id] || project.tasks;
   };
 
-  const allProjects = [...researchProjects, ...customProjects];
+  // Apply overrides to built-in projects
+  const projectsWithOverrides = researchProjects.map(p => {
+    if (projectOverrides[p.id]) {
+      return { ...p, ...projectOverrides[p.id] };
+    }
+    return p;
+  });
+
+  const allProjects = [...projectsWithOverrides, ...customProjects];
   const activeProjectsUnsorted = allProjects.filter(p => !isProjectArchived(p.id));
 
   // Sort active projects by saved order

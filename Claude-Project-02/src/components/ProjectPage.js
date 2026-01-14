@@ -16,6 +16,7 @@ const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
 const LITERATURE_KEY = 'research-dashboard-literature';
+const PROJECT_OVERRIDES_KEY = 'research-dashboard-project-overrides';
 
 function ProjectPage() {
   const { projectId } = useParams();
@@ -40,6 +41,20 @@ function ProjectPage() {
     let foundProject = getProjectById(projectId);
 
     if (foundProject) {
+      // Check for any saved overrides for this built-in project
+      const savedOverrides = localStorage.getItem(PROJECT_OVERRIDES_KEY);
+      if (savedOverrides) {
+        try {
+          const overrides = JSON.parse(savedOverrides);
+          if (overrides[projectId]) {
+            // Merge overrides with built-in project data
+            foundProject = { ...foundProject, ...overrides[projectId] };
+          }
+        } catch (e) {
+          console.error('Failed to load project overrides:', e);
+        }
+      }
+
       setProject(foundProject);
       setIsCustomProject(false);
 
@@ -198,6 +213,24 @@ function ProjectPage() {
         } catch (e) {
           console.error('Failed to save project:', e);
         }
+      }
+    } else {
+      // Save overrides for built-in projects
+      try {
+        const savedOverrides = localStorage.getItem(PROJECT_OVERRIDES_KEY);
+        const overrides = savedOverrides ? JSON.parse(savedOverrides) : {};
+        overrides[projectId] = {
+          title: updatedProject.title,
+          subtitle: updatedProject.subtitle,
+          description: updatedProject.description,
+          hypothesis: updatedProject.hypothesis,
+          approaches: updatedProject.approaches,
+          color: updatedProject.color
+        };
+        localStorage.setItem(PROJECT_OVERRIDES_KEY, JSON.stringify(overrides));
+        triggerSync();
+      } catch (e) {
+        console.error('Failed to save project overrides:', e);
       }
     }
 
@@ -364,7 +397,7 @@ function ProjectPage() {
       <header className="project-header">
         <div className="header-nav">
           <Link to="/" className="back-link">← Dashboard</Link>
-          {isCustomProject && !isEditingProject && (
+          {!isEditingProject && (
             <button className="edit-project-btn" onClick={handleEditProject} title="Edit project details">
               ✏️ Edit
             </button>
