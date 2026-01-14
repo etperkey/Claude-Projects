@@ -311,33 +311,65 @@
 
         .game-card.kong .diff-dot.active { background: #9400D3; }
 
-        /* Kong Icon */
+        /* Kong Icon - Classic DK Style */
         .kong-icon {
             position: relative;
-            width: 60px;
-            height: 70px;
+            width: 70px;
+            height: 85px;
         }
 
-        .kong-icon-body {
-            width: 45px;
-            height: 35px;
-            background: linear-gradient(180deg, #8B008B 0%, #4B0082 100%);
-            border-radius: 25px 25px 15px 15px;
+        /* Barrel held above head */
+        .kong-icon-barrel {
+            width: 30px;
+            height: 22px;
+            background: linear-gradient(90deg, #6B3410 0%, #8B4513 20%, #D2691E 50%, #8B4513 80%, #6B3410 100%);
+            border-radius: 4px;
             position: absolute;
-            bottom: 5px;
-            left: 8px;
-            border: 2px solid #9400D3;
+            top: 0;
+            left: 20px;
+            border: 2px solid #5D3A1A;
+            animation: kong-barrel-shake 0.5s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .kong-icon-barrel::before, .kong-icon-barrel::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            background: #5D3A1A;
+            border-radius: 2px;
+        }
+
+        .kong-icon-barrel::before { top: 3px; }
+        .kong-icon-barrel::after { bottom: 3px; }
+
+        @keyframes kong-barrel-shake {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
         }
 
         .kong-icon-head {
-            width: 35px;
-            height: 30px;
+            width: 40px;
+            height: 32px;
             background: linear-gradient(180deg, #9932CC 0%, #8B008B 100%);
-            border-radius: 50%;
+            border-radius: 20px 20px 16px 16px;
             position: absolute;
-            top: 0;
-            left: 13px;
+            top: 18px;
+            left: 15px;
             border: 2px solid #9400D3;
+            z-index: 5;
+        }
+
+        /* Brow ridge */
+        .kong-icon-brow {
+            width: 34px;
+            height: 10px;
+            background: #4B0082;
+            border-radius: 17px 17px 0 0;
+            position: absolute;
+            top: 3px;
+            left: 3px;
         }
 
         .kong-icon-eye {
@@ -346,60 +378,122 @@
             background: white;
             border-radius: 50%;
             position: absolute;
-            top: 8px;
+            top: 10px;
         }
 
-        .kong-icon-eye.left { left: 6px; }
-        .kong-icon-eye.right { right: 6px; }
+        .kong-icon-eye.left { left: 8px; }
+        .kong-icon-eye.right { right: 8px; }
 
         .kong-icon-eye::after {
             content: '';
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 5px;
+            height: 5px;
             background: black;
             border-radius: 50%;
             bottom: 1px;
             left: 2px;
         }
 
+        /* Snout */
+        .kong-icon-snout {
+            width: 22px;
+            height: 12px;
+            background: linear-gradient(180deg, #D4A574 0%, #C4956A 100%);
+            border-radius: 11px;
+            position: absolute;
+            bottom: 3px;
+            left: 9px;
+            border: 1px solid #A67B5B;
+        }
+
+        .kong-icon-body {
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(180deg, #8B008B 0%, #4B0082 100%);
+            border-radius: 25px 25px 18px 18px;
+            position: absolute;
+            top: 45px;
+            left: 10px;
+            border: 2px solid #9400D3;
+            z-index: 3;
+        }
+
+        /* Chest */
+        .kong-icon-chest {
+            width: 28px;
+            height: 22px;
+            background: linear-gradient(180deg, #D4A574 0%, #C4956A 100%);
+            border-radius: 14px 14px 12px 12px;
+            position: absolute;
+            top: 8px;
+            left: 11px;
+            border: 1px solid #A67B5B;
+        }
+
         .kong-icon-arm {
+            width: 14px;
+            height: 28px;
+            background: linear-gradient(90deg, #4B0082 0%, #8B008B 50%, #4B0082 100%);
+            border-radius: 7px;
+            position: absolute;
+            top: 48px;
+            border: 2px solid #9400D3;
+            z-index: 6;
+        }
+
+        .kong-icon-arm.left {
+            left: 0;
+            transform-origin: top center;
+            animation: kong-arm-pound-left 1.5s ease-in-out infinite;
+        }
+        .kong-icon-arm.right {
+            right: 0;
+            transform-origin: top center;
+            animation: kong-arm-pound-right 1.5s ease-in-out infinite;
+            animation-delay: 0.75s;
+        }
+
+        @keyframes kong-arm-pound-left {
+            0%, 100% { transform: rotate(-12deg); }
+            50% { transform: rotate(-5deg) translateY(3px); }
+        }
+
+        @keyframes kong-arm-pound-right {
+            0%, 100% { transform: rotate(12deg); }
+            50% { transform: rotate(5deg) translateY(3px); }
+        }
+
+        /* Fists */
+        .kong-icon-fist {
             width: 12px;
-            height: 25px;
+            height: 11px;
             background: #8B008B;
-            border-radius: 8px;
+            border-radius: 50%;
             position: absolute;
-            top: 25px;
+            bottom: -2px;
+            left: 1px;
             border: 1px solid #9400D3;
-            animation: kong-arm-swing 0.8s ease-in-out infinite;
         }
 
-        .kong-icon-arm.left { left: 0; transform-origin: top center; }
-        .kong-icon-arm.right { right: 0; transform-origin: top center; animation-delay: 0.4s; }
-
-        @keyframes kong-arm-swing {
-            0%, 100% { transform: rotate(-15deg); }
-            50% { transform: rotate(15deg); }
+        /* Legs */
+        .kong-icon-leg {
+            width: 12px;
+            height: 18px;
+            background: #4B0082;
+            border-radius: 6px 6px 4px 4px;
+            position: absolute;
+            bottom: 0;
+            border: 1px solid #9400D3;
+            z-index: 2;
         }
 
+        .kong-icon-leg.left { left: 18px; }
+        .kong-icon-leg.right { right: 18px; }
+
+        /* Legacy barrel class - no longer rotating at bottom */
         .kong-barrel {
-            width: 25px;
-            height: 20px;
-            background: linear-gradient(90deg, #8B4513 0%, #D2691E 50%, #8B4513 100%);
-            border-radius: 3px;
-            position: absolute;
-            bottom: -5px;
-            left: 18px;
-            animation: barrel-roll-icon 1s linear infinite;
-        }
-
-        .kong-barrel::before, .kong-barrel::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 4px;
-            background: #5D3A1A;
-            border-radius: 2px;
+            display: none;
         }
 
         .kong-barrel::before { top: 3px; }
@@ -1066,14 +1160,29 @@
             <div class="game-card kong" onclick="launchGame('kong')">
                 <div class="game-icon" style="background: transparent; box-shadow: none;">
                     <div class="kong-icon">
-                        <div class="kong-icon-body"></div>
+                        <!-- Barrel above head -->
+                        <div class="kong-icon-barrel"></div>
+                        <!-- Head with features -->
                         <div class="kong-icon-head">
+                            <div class="kong-icon-brow"></div>
                             <div class="kong-icon-eye left"></div>
                             <div class="kong-icon-eye right"></div>
+                            <div class="kong-icon-snout"></div>
                         </div>
-                        <div class="kong-icon-arm left"></div>
-                        <div class="kong-icon-arm right"></div>
-                        <div class="kong-barrel"></div>
+                        <!-- Body with chest -->
+                        <div class="kong-icon-body">
+                            <div class="kong-icon-chest"></div>
+                        </div>
+                        <!-- Arms with fists -->
+                        <div class="kong-icon-arm left">
+                            <div class="kong-icon-fist"></div>
+                        </div>
+                        <div class="kong-icon-arm right">
+                            <div class="kong-icon-fist"></div>
+                        </div>
+                        <!-- Legs -->
+                        <div class="kong-icon-leg left"></div>
+                        <div class="kong-icon-leg right"></div>
                     </div>
                 </div>
                 <h2 class="game-title">Myeloid Kong</h2>
@@ -1362,7 +1471,7 @@
                         window.location.href = '../MS-AML-Man/ms-aml-man.html';
                         break;
                     case 'lymphoma':
-                        window.location.href = '../LymphoMaster/lymphoma-challenge.html';
+                        window.location.href = '../LymphoInvader/lymphoma-challenge.html';
                         break;
                     case 'waldo':
                         window.location.href = '../HemesWaldo/hemes-waldo.html';

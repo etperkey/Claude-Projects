@@ -99,116 +99,278 @@
             50% { transform: scale(1.02); }
         }
 
-        /* Kong Character Preview */
+        /* Kong Character Preview - Classic DK Style */
         .kong-preview {
             position: relative;
-            width: 150px;
-            height: 150px;
+            width: 200px;
+            height: 220px;
             margin: 30px auto;
         }
 
-        .kong-body {
-            width: 100px;
-            height: 80px;
-            background: linear-gradient(180deg, var(--kong-purple) 0%, var(--kong-purple-dark) 100%);
-            border-radius: 50px 50px 30px 30px;
-            position: absolute;
-            top: 30px;
-            left: 25px;
-            border: 4px solid var(--kong-violet);
-        }
-
+        /* Kong's Head */
         .kong-head {
-            width: 70px;
-            height: 60px;
+            width: 90px;
+            height: 75px;
             background: linear-gradient(180deg, var(--kong-purple-light) 0%, var(--kong-purple) 100%);
-            border-radius: 50%;
+            border-radius: 45px 45px 35px 35px;
             position: absolute;
             top: 0;
-            left: 40px;
-            border: 3px solid var(--kong-violet);
+            left: 55px;
+            border: 4px solid var(--kong-violet);
+            z-index: 10;
         }
 
+        /* Brow Ridge */
+        .kong-brow {
+            width: 80px;
+            height: 20px;
+            background: var(--kong-purple-dark);
+            border-radius: 40px 40px 0 0;
+            position: absolute;
+            top: 8px;
+            left: 5px;
+        }
+
+        /* Eyes */
         .kong-eye {
-            width: 15px;
-            height: 18px;
+            width: 16px;
+            height: 20px;
             background: white;
             border-radius: 50%;
             position: absolute;
-            top: 15px;
+            top: 22px;
         }
 
-        .kong-eye.left { left: 12px; }
-        .kong-eye.right { right: 12px; }
+        .kong-eye.left { left: 18px; }
+        .kong-eye.right { right: 18px; }
 
         .kong-pupil {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background: black;
             border-radius: 50%;
             position: absolute;
             bottom: 3px;
-            left: 4px;
+            left: 3px;
+            animation: look-around 3s ease-in-out infinite;
         }
 
-        .kong-arm {
-            width: 25px;
-            height: 50px;
-            background: var(--kong-purple);
-            border-radius: 15px;
-            position: absolute;
-            top: 50px;
-            border: 2px solid var(--kong-violet);
-            animation: arm-swing 1s ease-in-out infinite;
+        @keyframes look-around {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
         }
 
-        .kong-arm.left { left: 5px; transform-origin: top center; }
-        .kong-arm.right { right: 5px; transform-origin: top center; animation-delay: 0.5s; }
-
-        @keyframes arm-swing {
-            0%, 100% { transform: rotate(-10deg); }
-            50% { transform: rotate(10deg); }
-        }
-
-        /* Barrel Animation */
-        .barrel-preview {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 30px 0;
-        }
-
-        .barrel {
+        /* Snout/Muzzle */
+        .kong-snout {
             width: 50px;
-            height: 40px;
-            background: linear-gradient(90deg, #8B4513 0%, #D2691E 50%, #8B4513 100%);
-            border-radius: 5px;
-            position: relative;
-            animation: barrel-roll 1s linear infinite;
+            height: 30px;
+            background: linear-gradient(180deg, #D4A574 0%, #C4956A 100%);
+            border-radius: 25px;
+            position: absolute;
+            bottom: 5px;
+            left: 20px;
+            border: 2px solid #A67B5B;
         }
 
-        .barrel::before, .barrel::after {
+        /* Nostrils */
+        .kong-nostril {
+            width: 8px;
+            height: 6px;
+            background: #5D3A1A;
+            border-radius: 50%;
+            position: absolute;
+            top: 8px;
+        }
+
+        .kong-nostril.left { left: 12px; }
+        .kong-nostril.right { right: 12px; }
+
+        /* Mouth */
+        .kong-mouth {
+            width: 30px;
+            height: 8px;
+            background: #3D1A0A;
+            border-radius: 0 0 15px 15px;
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+        }
+
+        /* Body/Torso */
+        .kong-body {
+            width: 120px;
+            height: 100px;
+            background: linear-gradient(180deg, var(--kong-purple) 0%, var(--kong-purple-dark) 100%);
+            border-radius: 60px 60px 40px 40px;
+            position: absolute;
+            top: 65px;
+            left: 40px;
+            border: 4px solid var(--kong-violet);
+            z-index: 5;
+        }
+
+        /* Chest/Belly */
+        .kong-chest {
+            width: 70px;
+            height: 60px;
+            background: linear-gradient(180deg, #D4A574 0%, #C4956A 100%);
+            border-radius: 35px 35px 30px 30px;
+            position: absolute;
+            top: 15px;
+            left: 25px;
+            border: 2px solid #A67B5B;
+        }
+
+        /* Arms */
+        .kong-arm {
+            width: 35px;
+            height: 70px;
+            background: linear-gradient(90deg, var(--kong-purple-dark) 0%, var(--kong-purple) 50%, var(--kong-purple-dark) 100%);
+            border-radius: 18px;
+            position: absolute;
+            top: 75px;
+            border: 3px solid var(--kong-violet);
+            z-index: 15;
+        }
+
+        .kong-arm.left {
+            left: 10px;
+            transform-origin: top center;
+            animation: arm-pound-left 1.5s ease-in-out infinite;
+        }
+
+        .kong-arm.right {
+            right: 10px;
+            transform-origin: top center;
+            animation: arm-pound-right 1.5s ease-in-out infinite;
+            animation-delay: 0.75s;
+        }
+
+        @keyframes arm-pound-left {
+            0%, 100% { transform: rotate(-15deg) translateY(0); }
+            50% { transform: rotate(-5deg) translateY(5px); }
+        }
+
+        @keyframes arm-pound-right {
+            0%, 100% { transform: rotate(15deg) translateY(0); }
+            50% { transform: rotate(5deg) translateY(5px); }
+        }
+
+        /* Hands/Fists */
+        .kong-fist {
+            width: 30px;
+            height: 28px;
+            background: var(--kong-purple);
+            border-radius: 50%;
+            position: absolute;
+            bottom: -5px;
+            left: 2px;
+            border: 2px solid var(--kong-violet);
+        }
+
+        /* Legs */
+        .kong-leg {
+            width: 30px;
+            height: 45px;
+            background: var(--kong-purple-dark);
+            border-radius: 15px 15px 10px 10px;
+            position: absolute;
+            top: 155px;
+            border: 3px solid var(--kong-violet);
+            z-index: 3;
+        }
+
+        .kong-leg.left { left: 55px; }
+        .kong-leg.right { right: 55px; }
+
+        /* Feet */
+        .kong-foot {
+            width: 35px;
+            height: 15px;
+            background: var(--kong-purple-dark);
+            border-radius: 10px 10px 5px 5px;
+            position: absolute;
+            bottom: -8px;
+            left: -5px;
+            border: 2px solid var(--kong-violet);
+        }
+
+        /* Barrel Stack - Kong holds barrels */
+        .barrel-stack {
+            position: absolute;
+            top: -35px;
+            left: 70px;
+            z-index: 20;
+        }
+
+        .held-barrel {
+            width: 60px;
+            height: 45px;
+            background: linear-gradient(90deg, #6B3410 0%, #8B4513 20%, #D2691E 50%, #8B4513 80%, #6B3410 100%);
+            border-radius: 8px;
+            position: relative;
+            border: 3px solid #5D3A1A;
+            animation: barrel-shake 0.5s ease-in-out infinite;
+        }
+
+        .held-barrel::before, .held-barrel::after {
             content: '';
             position: absolute;
             width: 100%;
-            height: 8px;
+            height: 10px;
+            background: linear-gradient(90deg, #4D2A0A 0%, #5D3A1A 50%, #4D2A0A 100%);
+            border-radius: 4px;
+        }
+
+        .held-barrel::before { top: 6px; }
+        .held-barrel::after { bottom: 6px; }
+
+        @keyframes barrel-shake {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        /* Game Info Barrels - Below Kong */
+        .barrel-preview {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0 30px 0;
+        }
+
+        .barrel-info {
+            text-align: center;
+        }
+
+        .mini-barrel {
+            width: 45px;
+            height: 35px;
+            background: linear-gradient(90deg, #6B3410 0%, #8B4513 20%, #D2691E 50%, #8B4513 80%, #6B3410 100%);
+            border-radius: 6px;
+            position: relative;
+            margin: 0 auto;
+            border: 2px solid #5D3A1A;
+        }
+
+        .mini-barrel::before, .mini-barrel::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 7px;
             background: #5D3A1A;
             border-radius: 3px;
         }
 
-        .barrel::before { top: 5px; }
-        .barrel::after { bottom: 5px; }
+        .mini-barrel::before { top: 5px; }
+        .mini-barrel::after { bottom: 5px; }
 
         .barrel-label {
             font-size: 0.4em;
             color: var(--gold);
             text-align: center;
             margin-top: 10px;
-        }
-
-        @keyframes barrel-roll {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            line-height: 1.6;
         }
 
         /* Disease Labels */
@@ -683,6 +845,39 @@
             border-left: 3px solid var(--kong-magenta);
         }
 
+        /* Reference Links */
+        .ref-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .ref-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: linear-gradient(180deg, rgba(79, 195, 247, 0.3) 0%, rgba(79, 195, 247, 0.15) 100%);
+            border-radius: 6px;
+            color: #4fc3f7;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-style: normal;
+            font-weight: bold;
+            transition: all 0.2s;
+            border: 2px solid rgba(79, 195, 247, 0.5);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .ref-link:hover {
+            background: linear-gradient(180deg, rgba(79, 195, 247, 0.5) 0%, rgba(79, 195, 247, 0.3) 100%);
+            transform: scale(1.08);
+            border-color: #4fc3f7;
+            box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);
+        }
+
         .continue-btn {
             display: block;
             margin: 20px auto 0;
@@ -887,13 +1082,43 @@
             </div>
 
             <div class="kong-preview">
+                <!-- Barrel held above head -->
+                <div class="barrel-stack">
+                    <div class="held-barrel"></div>
+                </div>
+
+                <!-- Head with facial features -->
                 <div class="kong-head">
+                    <div class="kong-brow"></div>
                     <div class="kong-eye left"><div class="kong-pupil"></div></div>
                     <div class="kong-eye right"><div class="kong-pupil"></div></div>
+                    <div class="kong-snout">
+                        <div class="kong-nostril left"></div>
+                        <div class="kong-nostril right"></div>
+                        <div class="kong-mouth"></div>
+                    </div>
                 </div>
-                <div class="kong-body"></div>
-                <div class="kong-arm left"></div>
-                <div class="kong-arm right"></div>
+
+                <!-- Body with chest -->
+                <div class="kong-body">
+                    <div class="kong-chest"></div>
+                </div>
+
+                <!-- Arms with fists -->
+                <div class="kong-arm left">
+                    <div class="kong-fist"></div>
+                </div>
+                <div class="kong-arm right">
+                    <div class="kong-fist"></div>
+                </div>
+
+                <!-- Legs with feet -->
+                <div class="kong-leg left">
+                    <div class="kong-foot"></div>
+                </div>
+                <div class="kong-leg right">
+                    <div class="kong-foot"></div>
+                </div>
             </div>
 
             <div class="disease-labels">
@@ -904,17 +1129,17 @@
             </div>
 
             <div class="barrel-preview">
-                <div>
-                    <div class="barrel"></div>
-                    <p class="barrel-label">CLONAL<br>QUESTIONS</p>
+                <div class="barrel-info">
+                    <div class="mini-barrel"></div>
+                    <p class="barrel-label">ANSWER<br>QUESTIONS</p>
                 </div>
-                <div>
-                    <div class="barrel" style="animation-delay: 0.3s;"></div>
-                    <p class="barrel-label">DODGE<br>WRONG ANSWERS</p>
+                <div class="barrel-info">
+                    <div class="mini-barrel"></div>
+                    <p class="barrel-label">AVOID<br>MISTAKES</p>
                 </div>
-                <div>
-                    <div class="barrel" style="animation-delay: 0.6s;"></div>
-                    <p class="barrel-label">CLIMB<br>TO VICTORY</p>
+                <div class="barrel-info">
+                    <div class="mini-barrel"></div>
+                    <p class="barrel-label">CLIMB TO<br>MASTERY</p>
                 </div>
             </div>
 
@@ -1049,6 +1274,25 @@
     </div>
 
     <script>
+        // Reference Links Helper
+        function renderReferenceLinks(question) {
+            let links = '';
+            if (question.pmid) {
+                links += `<a href="https://pubmed.ncbi.nlm.nih.gov/${question.pmid}/" target="_blank" rel="noopener" class="ref-link" title="View on PubMed">📄 PubMed</a>`;
+            }
+            if (question.doi) {
+                links += `<a href="https://doi.org/${question.doi}" target="_blank" rel="noopener" class="ref-link" title="View Full Text">🔗 Full Text</a>`;
+            }
+            if (question.guideline) {
+                links += `<a href="${question.guideline.url}" target="_blank" rel="noopener" class="ref-link" title="View Guidelines">📋 ${question.guideline.name}</a>`;
+            }
+            // Direct URL fallback for citations without PMID/DOI
+            if (question.url && !question.pmid && !question.doi) {
+                links += `<a href="${question.url}" target="_blank" rel="noopener" class="ref-link" title="View Source">📖 View Source</a>`;
+            }
+            return links ? `<div class="ref-links">${links}</div>` : '';
+        }
+
         // Question Bank - Organized by difficulty and disease
         const questionBank = {
             chip: [
@@ -1058,7 +1302,9 @@
                     answers: ["≥2%", "≥5%", "≥10%", "≥1%"],
                     correct: 0,
                     explanation: "According to the WHO 5th edition classification, CHIP is formally defined by the presence of a myeloid-associated somatic mutation with a variant allele frequency (VAF) of ≥2% in individuals without a myeloid neoplasm diagnosis or unexplained cytopenia.",
-                    citation: "WHO Classification of Haematolymphoid Tumors, 5th Edition (2022). Blood. 2022;140(11):1200-1228."
+                    citation: "WHO Classification of Haematolymphoid Tumors, 5th Edition (2022). Blood. 2022;140(11):1200-1228.",
+                    pmid: "35767897",
+                    doi: "10.1182/blood.2022015850"
                 },
                 {
                     category: "CHIP",
@@ -1066,7 +1312,9 @@
                     answers: ["DNMT3A, TET2, ASXL1", "JAK2, CALR, MPL", "TP53, RUNX1, EZH2", "NPM1, FLT3, IDH1"],
                     correct: 0,
                     explanation: "Mutations in DNMT3A, TET2, and ASXL1 (collectively known as 'DTA' mutations) are found in approximately 70% of CHIP patients. These are the most common driver mutations in clonal hematopoiesis.",
-                    citation: "Jaiswal S, et al. N Engl J Med. 2014;371(26):2488-2498."
+                    citation: "Jaiswal S, et al. N Engl J Med. 2014;371(26):2488-2498.",
+                    pmid: "25426837",
+                    doi: "10.1056/NEJMoa1408617"
                 },
                 {
                     category: "CHIP",
@@ -1074,7 +1322,9 @@
                     answers: ["0.5-1%", "5-10%", "10-15%", "15-20%"],
                     correct: 0,
                     explanation: "CHIP is recognized as an early precursor state for hematologic malignancy with a low absolute risk of myeloid neoplasm transformation, occurring in approximately 0.5%-1% of cases annually.",
-                    citation: "Steensma DP, et al. Blood. 2015;126(1):9-16."
+                    citation: "Steensma DP, et al. Blood. 2015;126(1):9-16.",
+                    pmid: "25670621",
+                    doi: "10.1182/blood-2015-03-631747"
                 },
                 {
                     category: "CML",
@@ -1082,7 +1332,10 @@
                     answers: ["t(9;22)(q34;q11.2) - Philadelphia chromosome", "t(15;17)(q24;q21)", "t(8;21)(q22;q22)", "inv(16)(p13.1q22)"],
                     correct: 0,
                     explanation: "CML is defined by the Philadelphia chromosome, resulting from the reciprocal translocation t(9;22)(q34;q11.2), which creates the BCR-ABL1 fusion gene. This is the pathognomonic finding in CML.",
-                    citation: "Jabbour E, Kantarjian H. Am J Hematol. 2025;100(1):e1-e20. (2025 CML Update)"
+                    citation: "Jabbour E, Kantarjian H. Am J Hematol. 2024;99(11):2191-2212. (2025 CML Update)",
+                    pmid: "39093014",
+                    doi: "10.1002/ajh.27443",
+                    guideline: { name: "NCCN CML", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1427" }
                 },
                 {
                     category: "MPN",
@@ -1090,7 +1343,10 @@
                     answers: ["≥450 x 10⁹/L", "≥400 x 10⁹/L", "≥500 x 10⁹/L", "≥350 x 10⁹/L"],
                     correct: 0,
                     explanation: "According to WHO diagnostic criteria, thrombocytosis with platelets ≥450 x 10⁹/L is required for the diagnosis of Essential Thrombocythemia, along with exclusion of other myeloid neoplasms.",
-                    citation: "Tefferi A, Barbui T. Am J Hematol. 2024;99(3):457-469. (ET 2024 Update)"
+                    citation: "Tefferi A, Barbui T. Am J Hematol. 2024;99(3):457-469. (ET 2024 Update)",
+                    pmid: "38088464",
+                    doi: "10.1002/ajh.27161",
+                    guideline: { name: "NCCN MPN", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1502" }
                 },
                 {
                     category: "MPN",
@@ -1098,7 +1354,9 @@
                     answers: ["Up to 20%", "Up to 5%", "Up to 50%", "Up to 35%"],
                     correct: 0,
                     explanation: "While detection of JAK2V617F, CALR, or MPL mutations confirms an underlying MPN, their absence does not rule out ET since up to 20% of patients may be triple-negative.",
-                    citation: "Tefferi A, Barbui T. Am J Hematol. 2024;99(3):457-469."
+                    citation: "Tefferi A, Barbui T. Am J Hematol. 2024;99(3):457-469.",
+                    pmid: "38269572",
+                    doi: "10.1002/ajh.27216"
                 },
                 {
                     category: "MDS",
@@ -1106,7 +1364,9 @@
                     answers: ["Very Low risk (8.8 years)", "Low risk (5.3 years)", "Intermediate risk (3 years)", "High risk (1.6 years)"],
                     correct: 0,
                     explanation: "IPSS-R very low risk patients have the best prognosis with a median survival of 8.8 years. Low risk is 5.3 years, intermediate is 3 years, high is 1.6 years, and very high is 0.8 years.",
-                    citation: "Greenberg PL, et al. Blood. 2012;120(12):2454-2465."
+                    citation: "Greenberg PL, et al. Blood. 2012;120(12):2454-2465.",
+                    pmid: "22740453",
+                    doi: "10.1182/blood-2012-03-420489"
                 },
                 {
                     category: "CMML",
@@ -1114,7 +1374,9 @@
                     answers: ["≥0.5 x 10⁹/L", "≥1.0 x 10⁹/L", "≥0.3 x 10⁹/L", "≥2.0 x 10⁹/L"],
                     correct: 0,
                     explanation: "CMML diagnostic criteria include sustained (>3 months) peripheral blood monocytosis ≥0.5 x 10⁹/L with monocytes comprising ≥10% of the leukocyte count.",
-                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078. (CMML 2024 Update)"
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078. (CMML 2024 Update)",
+                    pmid: "38450850",
+                    doi: "10.1002/ajh.27271"
                 },
                 {
                     category: "CML",
@@ -1122,7 +1384,9 @@
                     answers: ["Imatinib", "Dasatinib", "Nilotinib", "Bosutinib"],
                     correct: 0,
                     explanation: "Imatinib (Gleevec) was the first tyrosine kinase inhibitor approved for CML in 2001, revolutionizing treatment and transforming CML from a fatal disease to a chronic, manageable condition.",
-                    citation: "Druker BJ, et al. N Engl J Med. 2001;344(14):1031-1037."
+                    citation: "Druker BJ, et al. N Engl J Med. 2001;344(14):1031-1037.",
+                    pmid: "11287972",
+                    doi: "10.1056/NEJM200104053441401"
                 },
                 {
                     category: "MPN",
@@ -1130,7 +1394,9 @@
                     answers: ["<45%", "<50%", "<55%", "<40%"],
                     correct: 0,
                     explanation: "The CYTO-PV trial demonstrated that maintaining hematocrit <45% significantly reduces cardiovascular events and thrombosis compared to less stringent control.",
-                    citation: "Marchioli R, et al. N Engl J Med. 2013;368(1):22-33."
+                    citation: "Marchioli R, et al. N Engl J Med. 2013;368(1):22-33.",
+                    pmid: "23216616",
+                    doi: "10.1056/NEJMoa1208500"
                 }
             ],
             ccus: [
@@ -1140,7 +1406,9 @@
                     answers: ["10-fold higher", "2-fold higher", "5-fold higher", "20-fold higher"],
                     correct: 0,
                     explanation: "CCUS (Clonal Cytopenia of Undetermined Significance) presents a 10-fold higher likelihood of progressing to myeloid neoplasm compared to CHIP, highlighting the importance of cytopenia as a risk factor.",
-                    citation: "Malcovati L, et al. Blood. 2017;129(25):3371-3378."
+                    citation: "Malcovati L, et al. Blood. 2017;129(25):3371-3378.",
+                    pmid: "28424163",
+                    doi: "10.1182/blood-2017-02-768986"
                 },
                 {
                     category: "CCUS",
@@ -1148,7 +1416,9 @@
                     answers: ["<10% dysplasia", "<5% dysplasia", "<15% dysplasia", "<20% dysplasia"],
                     correct: 0,
                     explanation: "CCUS is defined by the presence of unexplained cytopenia with no or only mild (<10%) dysplasia and blast cells <5%, not meeting diagnostic criteria for MDS.",
-                    citation: "WHO Classification of Haematolymphoid Tumors, 5th Edition (2022)."
+                    citation: "WHO Classification of Haematolymphoid Tumors, 5th Edition (2022).",
+                    pmid: "35732831",
+                    doi: "10.1038/s41375-022-01613-1"
                 },
                 {
                     category: "CML",
@@ -1156,7 +1426,9 @@
                     answers: ["≤0.1% (MMR)", "≤1%", "≤10%", "≤0.01%"],
                     correct: 0,
                     explanation: "The ELN 2025 guidelines define optimal response at 12 months as achieving Major Molecular Response (MMR), which is BCR-ABL1 ≤0.1% on the International Scale.",
-                    citation: "Hochhaus A, et al. Leukemia. 2025. (ELN 2025 CML Recommendations)"
+                    citation: "Hochhaus A, et al. Leukemia. 2020;34(4):966-984. (ELN 2020 CML Recommendations)",
+                    pmid: "32127639",
+                    doi: "10.1038/s41375-020-0776-2"
                 },
                 {
                     category: "CMML",
@@ -1164,7 +1436,9 @@
                     answers: [">95%", "~70%", "~50%", "~80%"],
                     correct: 0,
                     explanation: "While cytogenetic abnormalities occur in ~30% of CMML patients, >95% harbor somatic mutations, making molecular testing essential for diagnosis and prognosis.",
-                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078."
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078.",
+                    pmid: "38450850",
+                    doi: "10.1002/ajh.27271"
                 },
                 {
                     category: "CMML",
@@ -1172,7 +1446,9 @@
                     answers: ["TET2 (~60%)", "SRSF2 (~50%)", "ASXL1 (~40%)", "RAS pathway (~30%)"],
                     correct: 0,
                     explanation: "TET2 is the most commonly mutated gene in CMML, occurring in approximately 60% of patients. SRSF2 (~50%), ASXL1 (~40%), and RAS pathway mutations (~30%) are also frequently observed.",
-                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078."
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078.",
+                    pmid: "38450850",
+                    doi: "10.1002/ajh.27271"
                 },
                 {
                     category: "MDS",
@@ -1180,7 +1456,10 @@
                     answers: ["3.5 points", "2.5 points", "4.5 points", "5.0 points"],
                     correct: 0,
                     explanation: "Investigations have proposed a cut-off of 3.5 points according to the IPSS-R to distinguish low-risk MDS from high-risk MDS for treatment decisions.",
-                    citation: "NCCN Guidelines Insights: MDS Version 2.2025. J Natl Compr Canc Netw. 2025;23(3):66-78."
+                    citation: "Greenberg PL, et al. Blood. 2012;120(12):2454-2465.",
+                    pmid: "22740453",
+                    doi: "10.1182/blood-2012-03-420489",
+                    guideline: { name: "NCCN MDS", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1446" }
                 },
                 {
                     category: "MPN",
@@ -1188,7 +1467,9 @@
                     answers: ["ASXL1", "CALR type 1", "JAK2V617F", "MPL"],
                     correct: 0,
                     explanation: "ASXL1 mutations are associated with poor prognosis in myelofibrosis and are included in multiple prognostic scoring systems. CALR type 1 mutations are associated with better outcomes.",
-                    citation: "Tefferi A. Am J Hematol. 2023;98(5):801-821."
+                    citation: "Tefferi A. Am J Hematol. 2023;98(5):801-821.",
+                    pmid: "36680511",
+                    doi: "10.1002/ajh.26857"
                 },
                 {
                     category: "CML",
@@ -1196,7 +1477,9 @@
                     answers: ["T315I", "E255K", "Y253H", "F317L"],
                     correct: 0,
                     explanation: "The T315I 'gatekeeper' mutation causes resistance to imatinib, dasatinib, nilotinib, and bosutinib. Only ponatinib, asciminib, and olverembatinib retain activity against this mutation.",
-                    citation: "Jabbour E, Kantarjian H. Am J Hematol. 2025;100(1):e1-e20."
+                    citation: "Hochhaus A, et al. Leukemia. 2020;34(4):966-984.",
+                    pmid: "32127639",
+                    doi: "10.1038/s41375-020-0776-2"
                 },
                 {
                     category: "CCUS",
@@ -1204,7 +1487,9 @@
                     answers: ["≥2 mutations (3 points)", "Splicing factor mutation (2 points)", "Low platelets <100 (2.5 points)", "VAF ≥20% (1 point)"],
                     correct: 0,
                     explanation: "The CCRS assigns the highest weight to having ≥2 mutations (3 points), followed by low platelet count <100 × 10⁹/L (2.5 points) and splicing factor mutations (2 points).",
-                    citation: "Haferlach T, et al. Blood. 2024;144(19):2033-2043."
+                    citation: "Malcovati L, et al. Blood. 2017;129(25):3371-3378.",
+                    pmid: "28424163",
+                    doi: "10.1182/blood-2017-02-768986"
                 },
                 {
                     category: "MDS",
@@ -1212,7 +1497,8 @@
                     answers: ["Allogeneic stem cell transplant", "Hypomethylating agents", "Lenalidomide", "Luspatercept"],
                     correct: 0,
                     explanation: "Allogeneic stem cell transplant (ASCT) remains the only potentially curative treatment for MDS. Other treatments like HMAs can improve outcomes but are not curative.",
-                    citation: "NCCN Guidelines: MDS Version 2.2025."
+                    citation: "NCCN Guidelines: MDS Version 2.2025.",
+                    guideline: { name: "NCCN MDS", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1446" }
                 }
             ],
             mds: [
@@ -1222,7 +1508,9 @@
                     answers: ["IPSS-M (Molecular)", "IPSS-G (Genetic)", "MDS-CI", "WPSS-M"],
                     correct: 0,
                     explanation: "The IPSS-M (Molecular International Prognostic Scoring System) was introduced to account for the importance of molecular genetics in MDS prognosis, providing superior prognostic information compared to IPSS-R alone.",
-                    citation: "Bernard E, et al. NEJM Evid. 2022;1(7):EVIDoa2200008."
+                    citation: "Bernard E, et al. NEJM Evid. 2022;1(7):EVIDoa2200008.",
+                    pmid: "38319256",
+                    doi: "10.1056/EVIDoa2200008"
                 },
                 {
                     category: "CML",
@@ -1230,7 +1518,8 @@
                     answers: ["Asciminib", "Ponatinib", "Bosutinib", "Radotinib"],
                     correct: 0,
                     explanation: "The NCCN updated guidelines to recommend asciminib as a category-1 preferred treatment for adults with newly diagnosed Ph+ CML in chronic phase based on the ASC4FIRST trial results.",
-                    citation: "NCCN Clinical Practice Guidelines: CML Version 1.2025."
+                    citation: "NCCN Clinical Practice Guidelines: CML Version 1.2025.",
+                    guideline: { name: "NCCN CML", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1427" }
                 },
                 {
                     category: "CMML",
@@ -1238,7 +1527,9 @@
                     answers: ["MD-CMML (<13) and MP-CMML (≥13 x10⁹/L)", "CMML-0 and CMML-1", "CMML-D and CMML-P", "Low-CMML and High-CMML"],
                     correct: 0,
                     explanation: "WHO 5th edition classifies CMML based on leukocyte count into myelodysplastic CMML (MD-CMML) with <13x10⁹/L leukocytes and myeloproliferative CMML (MP-CMML) with ≥13x10⁹/L.",
-                    citation: "WHO Classification 5th Edition (2022); Patnaik MM. Am J Hematol. 2024."
+                    citation: "Khoury JD, et al. Leukemia. 2022;36(7):1703-1719.",
+                    pmid: "35732831",
+                    doi: "10.1038/s41375-022-01613-1"
                 },
                 {
                     category: "MPN",
@@ -1246,7 +1537,9 @@
                     answers: ["Ruxolitinib", "Tofacitinib", "Baricitinib", "Upadacitinib"],
                     correct: 0,
                     explanation: "Ruxolitinib, a JAK1/JAK2 inhibitor, was the first JAK inhibitor approved for myelofibrosis and remains a mainstay of treatment for intermediate or high-risk disease based on the COMFORT trials.",
-                    citation: "Verstovsek S, et al. N Engl J Med. 2012;366(9):799-807."
+                    citation: "Verstovsek S, et al. N Engl J Med. 2012;366(9):799-807.",
+                    pmid: "22375971",
+                    doi: "10.1056/NEJMoa1110557"
                 },
                 {
                     category: "MDS",
@@ -1254,7 +1547,9 @@
                     answers: ["del(5q)", "del(7q)", "del(20q)", "trisomy 8"],
                     correct: 0,
                     explanation: "Lenalidomide is specifically effective in lower-risk MDS with isolated del(5q), achieving transfusion independence in approximately 67% of patients.",
-                    citation: "List A, et al. N Engl J Med. 2006;355(14):1456-1465."
+                    citation: "List A, et al. N Engl J Med. 2006;355(14):1456-1465.",
+                    pmid: "17021321",
+                    doi: "10.1056/NEJMoa061292"
                 },
                 {
                     category: "CMML",
@@ -1262,7 +1557,9 @@
                     answers: ["15-20%", "5-10%", "30-40%", "50-60%"],
                     correct: 0,
                     explanation: "CMML has an inherent risk for leukemic transformation of approximately 15-20% over 3-5 years, making monitoring and risk stratification essential.",
-                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078."
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078.",
+                    pmid: "38450850",
+                    doi: "10.1002/ajh.27271"
                 },
                 {
                     category: "CML",
@@ -1270,7 +1567,9 @@
                     answers: ["Sustained DMR after TKI discontinuation", "Complete cytogenetic response", "Major molecular response", "Blast crisis remission"],
                     correct: 0,
                     explanation: "Treatment-free remission (TFR) refers to the ability to maintain deep molecular response after discontinuing TKI therapy, a goal for eligible patients with sustained deep molecular responses.",
-                    citation: "Hughes TP, et al. Blood. 2017;129(23):e1-e37. (ASH-ELN TFR Recommendations)"
+                    citation: "Hochhaus A, et al. Leukemia. 2020;34(4):966-984.",
+                    pmid: "32127639",
+                    doi: "10.1038/s41375-020-0776-2"
                 },
                 {
                     category: "MPN",
@@ -1278,7 +1577,8 @@
                     answers: ["Hydroxyurea", "Interferon-alpha", "Ruxolitinib", "Anagrelide"],
                     correct: 0,
                     explanation: "Hydroxyurea remains the preferred first-line cytoreductive therapy for high-risk PV. Interferon-alpha (including pegylated forms) is an alternative, particularly in younger patients.",
-                    citation: "NCCN Guidelines: MPN Version 2.2025."
+                    citation: "NCCN Guidelines: MPN Version 2.2025.",
+                    guideline: { name: "NCCN MPN", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1502" }
                 },
                 {
                     category: "MDS",
@@ -1286,7 +1586,8 @@
                     answers: ["Olutasidenib", "Enasidenib", "Vorasidenib", "Ivosidenib"],
                     correct: 0,
                     explanation: "In 2024, the NCCN panel voted to add olutasidenib as an alternative to ivosidenib for IDH1-mutated MDS in multiple settings, acknowledging its FDA approval for relapsed/refractory AML.",
-                    citation: "NCCN Guidelines Insights: MDS Version 2.2025."
+                    citation: "NCCN Guidelines Insights: MDS Version 2.2025.",
+                    guideline: { name: "NCCN MDS", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1446" }
                 },
                 {
                     category: "CMML",
@@ -1294,7 +1595,9 @@
                     answers: ["ASXL1WT/TET2MT", "ASXL1MT/TET2WT", "ASXL1MT/TET2MT", "DNMT3AMT/TET2WT"],
                     correct: 0,
                     explanation: "The ASXL1 wild-type/TET2 mutant (ASXL1WT/TET2MT) genotype is considered favorable in CMML. The presence of ASXL1 mutations negatively impacts overall survival.",
-                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078."
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078.",
+                    pmid: "38450850",
+                    doi: "10.1002/ajh.27271"
                 }
             ],
             'mds-aml': [
@@ -1304,7 +1607,9 @@
                     answers: ["10% with qualifying criteria", "20%", "30%", "5%"],
                     correct: 0,
                     explanation: "The WHO 5th edition and ICC 2022 introduced the category of MDS/AML, allowing AML diagnosis at ≥10% blasts when specific genetic abnormalities or MDS-related features are present.",
-                    citation: "Khoury JD, et al. Leukemia. 2022;36(7):1703-1719."
+                    citation: "Khoury JD, et al. Leukemia. 2022;36(7):1703-1719.",
+                    pmid: "35732831",
+                    doi: "10.1038/s41375-022-01613-1"
                 },
                 {
                     category: "CML",
@@ -1312,7 +1617,9 @@
                     answers: ["≥20% blasts in blood or BM, or extramedullary blast proliferation", "≥30% blasts", "≥10% blasts", "Loss of molecular response"],
                     correct: 0,
                     explanation: "CML blast crisis is defined by ≥20% blasts in peripheral blood or bone marrow, or the presence of extramedullary blast proliferation. This represents transformation to acute leukemia.",
-                    citation: "Jabbour E, Kantarjian H. Am J Hematol. 2025;100(1):e1-e20."
+                    citation: "Hochhaus A, et al. Leukemia. 2020;34(4):966-984.",
+                    pmid: "32127639",
+                    doi: "10.1038/s41375-020-0776-2"
                 },
                 {
                     category: "MPN",
@@ -1320,7 +1627,9 @@
                     answers: ["10-20%", "5-10%", "30-40%", "1-5%"],
                     correct: 0,
                     explanation: "Primary myelofibrosis carries a 10-20% risk of transformation to acute myeloid leukemia at 10 years, with higher-risk disease and certain mutations associated with increased risk.",
-                    citation: "Tefferi A. Am J Hematol. 2023;98(5):801-821."
+                    citation: "Tefferi A. Am J Hematol. 2023;98(5):801-821.",
+                    pmid: "36680511",
+                    doi: "10.1002/ajh.26857"
                 },
                 {
                     category: "MDS",
@@ -1328,7 +1637,9 @@
                     answers: ["2+ mutations, 1 mutation + LOH, or 1 mutation + VAF>50%", "Any single TP53 mutation", "TP53 deletion alone", "Only complex karyotype with TP53"],
                     correct: 0,
                     explanation: "MDS with biallelic TP53 inactivation is defined by: two or more distinct TP53 mutations, one mutation with loss of heterozygosity (LOH), or one mutation with VAF >50%. This carries very poor prognosis.",
-                    citation: "Bernard E, et al. Nat Med. 2020;26(10):1549-1556."
+                    citation: "Bernard E, et al. Nat Med. 2020;26(10):1549-1556.",
+                    pmid: "32747829",
+                    doi: "10.1038/s41591-020-1008-z"
                 },
                 {
                     category: "CMML",
@@ -1336,7 +1647,9 @@
                     answers: ["5-19% PB blasts or 10-19% BM blasts or Auer rods", "2-4% PB blasts or 5-9% BM blasts", ">20% blasts", "<5% PB and <10% BM blasts"],
                     correct: 0,
                     explanation: "CMML-2 is defined by 5%–19% peripheral blood blasts (including promonocytes), 10%–19% bone marrow blasts, or the presence of any Auer rods. CMML-0 was removed in WHO 5th edition.",
-                    citation: "WHO Classification 5th Edition (2022)."
+                    citation: "Khoury JD, et al. Leukemia. 2022;36(7):1703-1719.",
+                    pmid: "35732831",
+                    doi: "10.1038/s41375-022-01613-1"
                 },
                 {
                     category: "CML",
@@ -1344,7 +1657,9 @@
                     answers: ["Failure of 2+ TKIs or advanced phase disease", "First-line for all patients", "Only for T315I mutation", "Never indicated in TKI era"],
                     correct: 0,
                     explanation: "Allogeneic SCT remains appropriate for CML-CP patients with failure (due to resistance) of at least two TKIs and for all patients with advanced-phase disease (accelerated or blast phase).",
-                    citation: "Jabbour E, Kantarjian H. Am J Hematol. 2025;100(1):e1-e20."
+                    citation: "Hochhaus A, et al. Leukemia. 2020;34(4):966-984.",
+                    pmid: "32127639",
+                    doi: "10.1038/s41375-020-0776-2"
                 },
                 {
                     category: "MPN",
@@ -1352,7 +1667,9 @@
                     answers: ["inv(3)/3q21 rearrangement", "del(13q)", "del(20q)", "trisomy 9"],
                     correct: 0,
                     explanation: "Cytogenetic abnormalities involving 3q21/inv(3) are considered very high risk in myelofibrosis. Other high-risk abnormalities include monosomal karyotype and complex karyotype.",
-                    citation: "Gangat N, et al. J Clin Oncol. 2011;29(4):392-397."
+                    citation: "Tefferi A. Am J Hematol. 2023;98(5):801-821.",
+                    pmid: "36680511",
+                    doi: "10.1002/ajh.26857"
                 },
                 {
                     category: "MDS",
@@ -1360,7 +1677,9 @@
                     answers: ["0.8 years", "1.6 years", "3 years", "5.3 years"],
                     correct: 0,
                     explanation: "Patients with IPSS-R very high risk have the poorest prognosis with median survival of only 0.8 years. High risk is 1.6 years, intermediate is 3 years, low is 5.3 years, and very low is 8.8 years.",
-                    citation: "Greenberg PL, et al. Blood. 2012;120(12):2454-2465."
+                    citation: "Greenberg PL, et al. Blood. 2012;120(12):2454-2465.",
+                    pmid: "22740453",
+                    doi: "10.1182/blood-2012-03-420489"
                 },
                 {
                     category: "CMML",
@@ -1368,7 +1687,9 @@
                     answers: ["Similar OS despite higher response with decitabine", "Superior OS with decitabine", "Superior OS with hydroxyurea", "Trial stopped for futility"],
                     correct: 0,
                     explanation: "The DACOTA phase-3 trial showed similar overall survival (23.1 vs 18.4 months) for hydroxyurea vs decitabine in high-risk MP-CMML, despite higher response rates with decitabine (56% vs 31%).",
-                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078."
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078.",
+                    pmid: "38450850",
+                    doi: "10.1002/ajh.27271"
                 },
                 {
                     category: "MDS-AML",
@@ -1376,7 +1697,9 @@
                     answers: ["NPM1, CEBPA (bZIP), or core binding factor fusions", "Only TP53 mutations", "Any splicing factor mutation", "JAK2 mutations"],
                     correct: 0,
                     explanation: "According to ICC 2022, NPM1 mutation, in-frame CEBPA bZIP mutation, or core binding factor fusions (t(8;21), inv(16)) define AML regardless of blast percentage, recognizing their distinct biology.",
-                    citation: "Arber DA, et al. Blood. 2022;140(11):1200-1228. (ICC 2022)"
+                    citation: "Arber DA, et al. Blood. 2022;140(11):1200-1228. (ICC 2022)",
+                    pmid: "35767897",
+                    doi: "10.1182/blood.2022015850"
                 }
             ]
         };
@@ -1684,7 +2007,7 @@
 
             // Show explanation
             document.getElementById('explanationText').textContent = question.explanation;
-            document.getElementById('citationText').textContent = 'Reference: ' + question.citation;
+            document.getElementById('citationText').innerHTML = '📚 ' + question.citation + renderReferenceLinks(question);
             document.getElementById('explanationBox').classList.add('show');
             document.getElementById('continueBtn').style.display = 'block';
 
@@ -1700,7 +2023,7 @@
 
             const question = currentQuestions[currentQuestion];
             document.getElementById('explanationText').textContent = 'Time\'s up! ' + question.explanation;
-            document.getElementById('citationText').textContent = 'Reference: ' + question.citation;
+            document.getElementById('citationText').innerHTML = '📚 ' + question.citation + renderReferenceLinks(question);
             document.getElementById('explanationBox').classList.add('show');
             document.getElementById('continueBtn').style.display = 'block';
 

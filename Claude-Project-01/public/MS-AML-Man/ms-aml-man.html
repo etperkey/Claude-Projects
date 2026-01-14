@@ -775,6 +775,34 @@
             font-style: italic;
         }
 
+        /* Reference Links */
+        .ref-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ref-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            color: #4fc3f7;
+            text-decoration: none;
+            font-size: 1em;
+            font-style: normal;
+            transition: all 0.2s;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+
+        .ref-link:hover {
+            background: rgba(79, 195, 247, 0.3);
+            transform: scale(1.05);
+            border-color: #4fc3f7;
+        }
+
         .next-btn {
             display: block;
             margin: 20px auto 0;
@@ -1232,6 +1260,21 @@
         };
         DeviceDetector.init();
 
+        // Reference Links Helper
+        function renderReferenceLinks(question) {
+            let links = '';
+            if (question.pmid) {
+                links += `<a href="https://pubmed.ncbi.nlm.nih.gov/${question.pmid}/" target="_blank" rel="noopener" class="ref-link" title="View on PubMed">📄 PubMed</a>`;
+            }
+            if (question.doi) {
+                links += `<a href="https://doi.org/${question.doi}" target="_blank" rel="noopener" class="ref-link" title="View Full Text">🔗 DOI</a>`;
+            }
+            if (question.guideline) {
+                links += `<a href="${question.guideline.url}" target="_blank" rel="noopener" class="ref-link" title="View Guidelines">📋 ${question.guideline.name}</a>`;
+            }
+            return links ? `<div class="ref-links">${links}</div>` : '';
+        }
+
         let selectedDifficulty = null;
         let currentQuestion = 0;
         let score = 0;
@@ -1516,7 +1559,9 @@
                 correct: 2,
                 explanation: "AML is diagnosed when there are 20% or more blasts in the bone marrow or peripheral blood, according to WHO classification. Certain genetic abnormalities (t(8;21), inv(16), t(15;17)) can define AML regardless of blast count.",
                 keyPoint: "AML = 20% or more blasts. Exception: AML-defining genetic abnormalities.",
-                citation: "WHO Classification of Tumours of Haematopoietic and Lymphoid Tissues, 2022"
+                citation: "WHO Classification of Tumours of Haematopoietic and Lymphoid Tissues, 2022",
+                pmid: "35767897",
+                doi: "10.1182/blood.2022015850"
             },
             {
                 type: "simple",
@@ -1532,7 +1577,8 @@
                 correct: 1,
                 explanation: "Myeloperoxidase (MPO) is the most specific cytochemical stain for myeloid lineage. Blasts are considered myeloid if 3% or more are MPO positive. Sudan Black B also stains myeloid cells but is less specific.",
                 keyPoint: "MPO positive in 3% or more blasts = myeloid lineage.",
-                citation: "WHO Classification 2022"
+                citation: "WHO Classification 2022",
+                pmid: "35767897"
             },
             {
                 type: "simple",
@@ -1548,7 +1594,12 @@
                 correct: 1,
                 explanation: "APL is defined by t(15;17) which creates the PML-RARA fusion gene. This is critical to identify early as APL requires different treatment (ATRA + ATO) and has high cure rates but early mortality risk from coagulopathy.",
                 keyPoint: "APL = t(15;17) = PML-RARA. Medical emergency - start ATRA immediately if suspected.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35767897",
+                doi: "10.1182/blood.2022015850",
+                guideline: { name: "NCCN AML", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1411" }
             },
             {
                 type: "simple",
@@ -1564,7 +1615,9 @@
                 correct: 1,
                 explanation: "The '7+3' regimen consists of 7 days of continuous cytarabine plus 3 days of an anthracycline (typically daunorubicin or idarubicin). This has been the backbone of AML induction for decades.",
                 keyPoint: "7+3 = 7 days cytarabine + 3 days anthracycline. Standard intensive induction.",
-                citation: "NCCN Guidelines AML, 2024"
+                citation: "NCCN Guidelines AML, 2024",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/aml.pdf" },
+                guideline: { name: "NCCN AML", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1411" }
             },
             {
                 type: "simple",
@@ -1580,7 +1633,11 @@
                 correct: 2,
                 explanation: "NPM1 mutation without FLT3-ITD (or with low FLT3-ITD allelic ratio) is classified as favorable risk in ELN 2022. NPM1 is the most commonly mutated gene in AML (~30% of cases).",
                 keyPoint: "NPM1 mutated without FLT3-ITD = favorable risk. Most common AML mutation.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
 
             // RESIDENT LEVEL
@@ -1598,7 +1655,9 @@
                 correct: 1,
                 explanation: "Midostaurin is a FLT3 inhibitor added to 7+3 induction and consolidation for FLT3-mutated AML based on the RATIFY trial, which showed improved overall survival.",
                 keyPoint: "FLT3+ AML: Add midostaurin to 7+3. Gilteritinib for relapsed/refractory.",
-                citation: "Stone RM, et al. N Engl J Med. 2017;377:454-464"
+                citation: "Stone RM, et al. N Engl J Med. 2017;377:454-464",
+                pmid: "28644114",
+                doi: "10.1056/NEJMoa1614359"
             },
             {
                 type: "simple",
@@ -1614,7 +1673,11 @@
                 correct: 1,
                 explanation: "Venetoclax + azacitidine (or decitabine) is the standard of care for older or unfit patients who cannot tolerate intensive chemotherapy, based on the VIALE-A trial showing superior survival.",
                 keyPoint: "Unfit for intensive chemo: Venetoclax + HMA (azacitidine or decitabine).",
-                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629"
+                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971"
             },
             {
                 type: "simple",
@@ -1630,7 +1693,9 @@
                 correct: 1,
                 explanation: "Ivosidenib targets IDH1 mutations, while enasidenib targets IDH2 mutations. These are oral targeted therapies that can be used as monotherapy or combined with other agents.",
                 keyPoint: "IDH1 = ivosidenib. IDH2 = enasidenib. Both cause differentiation.",
-                citation: "DiNardo CD, et al. N Engl J Med. 2018;378:2386-2398"
+                citation: "DiNardo CD, et al. N Engl J Med. 2018;378:2386-2398",
+                pmid: "29860938",
+                doi: "10.1056/NEJMoa1716984"
             },
             {
                 type: "simple",
@@ -1646,7 +1711,11 @@
                 correct: 2,
                 explanation: "Complex karyotype (3 or more unrelated chromosomal abnormalities) is adverse risk. Other adverse markers include TP53 mutation, RUNX1 mutation, ASXL1 mutation, monosomal karyotype, and certain translocations.",
                 keyPoint: "Adverse: complex karyotype, TP53, ASXL1, RUNX1, monosomal karyotype, -5/-7.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "case",
@@ -1671,7 +1740,8 @@
                 correct: 1,
                 explanation: "Ruling out APL is critical before starting standard AML therapy. APL requires immediate ATRA treatment and has high early mortality from DIC if not recognized. Do not give cytotoxic chemo alone if APL is suspected.",
                 keyPoint: "Always rule out APL first! Check for t(15;17)/PML-RARA. APL is a medical emergency.",
-                citation: "NCCN Guidelines APL, 2024"
+                citation: "NCCN Guidelines APL, 2024",
+                guideline: { name: "NCCN AML", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1411" }
             },
 
             // FELLOW LEVEL
@@ -1689,7 +1759,11 @@
                 correct: 1,
                 explanation: "ELN 2022 changed the classification: NPM1-mutated AML with FLT3-ITD low allelic ratio (<0.5) remains favorable risk. High allelic ratio (>=0.5) moves it to intermediate risk.",
                 keyPoint: "NPM1+/FLT3-ITD low ratio (<0.5) = favorable. High ratio (>=0.5) = intermediate.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "simple",
@@ -1705,7 +1779,9 @@
                 correct: 2,
                 explanation: "RT-qPCR for NPM1 mutation transcript is the preferred MRD method as it has high sensitivity (10^-5 to 10^-6) and NPM1 is a stable marker that doesn't disappear at relapse. PCR-based MRD is more sensitive than flow cytometry.",
                 keyPoint: "NPM1 MRD: RT-qPCR preferred. Sensitivity 10^-5. Stable marker at relapse.",
-                citation: "Ivey A, et al. N Engl J Med. 2016;374:422-433"
+                citation: "Ivey A, et al. N Engl J Med. 2016;374:422-433",
+                pmid: "26789727",
+                doi: "10.1056/NEJMoa1507471"
             },
             {
                 type: "simple",
@@ -1721,7 +1797,9 @@
                 correct: 1,
                 explanation: "Intermediate and adverse risk AML patients benefit from allo-HCT in CR1 if eligible. Favorable risk patients (NPM1+/FLT3-ITD-, CBF-AML) can be treated with chemotherapy alone and transplanted at relapse.",
                 keyPoint: "Allo-HCT in CR1: Intermediate and adverse risk. Favorable: chemo, transplant at relapse.",
-                citation: "Cornelissen JJ, et al. Blood. 2012;119:4014-4022"
+                citation: "Cornelissen JJ, et al. Blood. 2012;119:4014-4022",
+                pmid: "22383796",
+                doi: "10.1182/blood-2012-01-403212"
             },
             {
                 type: "case",
@@ -1746,7 +1824,11 @@
                 correct: 1,
                 explanation: "KIT mutations in core binding factor AML (t(8;21) or inv(16)) are associated with higher relapse risk. ELN 2022 suggests KIT-mutated CBF-AML may be considered for allo-HCT in CR1, though this remains debated.",
                 keyPoint: "KIT mutation in CBF-AML: higher relapse risk. Consider transplant despite CBF.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
 
             // ATTENDING LEVEL
@@ -1764,7 +1846,11 @@
                 correct: 2,
                 explanation: "TP53 multi-hit (biallelic) is defined as TP53 mutation plus: deletion of 17p, second TP53 mutation, or copy-neutral loss of heterozygosity. Multi-hit TP53 has worse prognosis than single-hit and is adverse risk regardless of other features.",
                 keyPoint: "TP53 multi-hit: mutation + 17p loss OR second mutation OR CN-LOH. Very poor prognosis.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "simple",
@@ -1780,7 +1866,9 @@
                 correct: 1,
                 explanation: "IDH inhibitors cause leukemic blasts to differentiate, which can cause differentiation syndrome similar to APL. Symptoms include fever, dyspnea, pulmonary infiltrates, pleural effusions, and rising WBC. Treat with steroids.",
                 keyPoint: "IDH inhibitor differentiation syndrome: fever, dyspnea, weight gain, rising WBC. Treat with dexamethasone.",
-                citation: "DiNardo CD, et al. Blood. 2020;135:676-687"
+                citation: "DiNardo CD, et al. Blood. 2020;135:676-687",
+                pmid: "31697823",
+                doi: "10.1182/blood.2019001808"
             },
             {
                 type: "case",
@@ -1805,7 +1893,11 @@
                 correct: 1,
                 explanation: "Prolonged cytopenias despite remission are common with venetoclax-based therapy. Dose modifications include reducing venetoclax duration (e.g., 21 days instead of 28) or reducing HMA dose. Maintain efficacy while improving count recovery.",
                 keyPoint: "Ven-HMA prolonged cytopenias in remission: reduce venetoclax duration or HMA dose. Don't stop.",
-                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629"
+                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971"
             },
             {
                 type: "simple",
@@ -1821,7 +1913,9 @@
                 correct: 1,
                 explanation: "SORMAIN and other trials showed that sorafenib maintenance post-allo-HCT reduces relapse and improves survival in FLT3-ITD AML. Gilteritinib is also used. This has become standard practice for FLT3-ITD patients post-transplant.",
                 keyPoint: "FLT3 inhibitor post-HCT: sorafenib reduces relapse (SORMAIN). Start 30-60 days post-HCT.",
-                citation: "Burchert A, et al. J Clin Oncol. 2020;38:2993-3002"
+                citation: "Burchert A, et al. J Clin Oncol. 2020;38:2993-3002",
+                pmid: "32459600",
+                doi: "10.1200/JCO.19.03345"
             },
 
             // DR. STOCK LEVEL (EXTREME)
@@ -1848,7 +1942,11 @@
                 correct: 1,
                 explanation: "TP53-mutated AML has dismal prognosis with intensive chemo (~20% CR, short duration). Ven-HMA has similar efficacy with less toxicity. Novel TP53-targeting agents (magrolimab, eprenetapopt) are being studied. Allo-HCT if CR, but expect high relapse.",
                 keyPoint: "TP53 multi-hit: worst AML biology. Ven-HMA not inferior to intensive. Clinical trials important.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "simple",
@@ -1864,7 +1962,11 @@
                 correct: 1,
                 explanation: "ELN 2022: FLT3-TKD does not modify risk category. Only FLT3-ITD matters, where high allelic ratio (>=0.5) with NPM1 = intermediate, low ratio with NPM1 = favorable. FLT3-TKD still qualifies for FLT3 inhibitor therapy.",
                 keyPoint: "FLT3-ITD allelic ratio matters. FLT3-TKD doesn't change risk (still gets FLT3 inhibitor).",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "simple",
@@ -1880,7 +1982,8 @@
                 correct: 1,
                 explanation: "Venetoclax is a CYP3A4 substrate. Strong inhibitors like posaconazole increase exposure 5-6 fold. Reduce venetoclax to 70-100 mg with strong CYP3A4 inhibitors. Moderate inhibitors (fluconazole) require 50% reduction.",
                 keyPoint: "Venetoclax + posaconazole: reduce ven to 70-100mg. + fluconazole: 50% reduction.",
-                citation: "Venetoclax (VENCLEXTA) Package Insert, FDA"
+                citation: "Venetoclax (VENCLEXTA) Package Insert, FDA",
+                url: "https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/208573s009lbl.pdf"
             },
             {
                 type: "simple",
@@ -1896,7 +1999,9 @@
                 correct: 2,
                 explanation: "DNMT3A, TET2, and ASXL1 (DTA) mutations represent age-related clonal hematopoiesis (CHIP) that persists after treatment. They are NOT reliable MRD markers. NPM1 and fusion transcripts are reliable markers.",
                 keyPoint: "DTA mutations = CHIP, not MRD markers. NPM1 and fusions are good MRD markers.",
-                citation: "Jongen-Lavrencic M, et al. N Engl J Med. 2018;378:1189-1199"
+                citation: "Jongen-Lavrencic M, et al. N Engl J Med. 2018;378:1189-1199",
+                pmid: "29601269",
+                doi: "10.1056/NEJMoa1716863"
             },
             {
                 type: "case",
@@ -1971,7 +2076,9 @@
                 correct: 1,
                 explanation: "APL is treated with all-trans retinoic acid (ATRA) + arsenic trioxide (ATO). Low-risk APL (WBC ≤10,000) can be treated without chemotherapy. High-risk (WBC >10,000) adds anthracycline. Cure rate >90%.",
                 keyPoint: "APL = ATRA + ATO. Low-risk: no chemo needed. High-risk: add anthracycline. >90% cure rate.",
-                citation: "Lo-Coco F, et al. N Engl J Med. 2013;369:111-121"
+                citation: "Lo-Coco F, et al. N Engl J Med. 2013;369:111-121",
+                pmid: "23841729",
+                doi: "10.1056/NEJMoa1300874"
             },
             {
                 type: "simple",
@@ -1987,7 +2094,9 @@
                 correct: 1,
                 explanation: "APL causes severe DIC with both bleeding and clotting. Hemorrhagic complications (especially intracranial) cause most early deaths. Start ATRA immediately when APL is suspected; don't wait for molecular confirmation.",
                 keyPoint: "APL early death = bleeding/DIC. Start ATRA immediately on clinical suspicion. Support with platelets, fibrinogen.",
-                citation: "Sanz MA, et al. Blood. 2009;113:1875-1891"
+                citation: "Sanz MA, et al. Blood. 2009;113:1875-1891",
+                pmid: "18812465",
+                doi: "10.1182/blood-2008-04-150250"
             },
             {
                 type: "simple",
@@ -2003,7 +2112,9 @@
                 correct: 1,
                 explanation: "CBF-AML includes t(8;21)(q22;q22) involving RUNX1-RUNX1T1 and inv(16)(p13q22)/t(16;16) involving CBFB-MYH11. Both are favorable risk and respond well to high-dose cytarabine consolidation.",
                 keyPoint: "CBF-AML = t(8;21) or inv(16). Favorable risk. High-dose cytarabine consolidation is key.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "simple",
@@ -2037,7 +2148,9 @@
                 correct: 1,
                 explanation: "Gilteritinib is a FLT3 inhibitor approved for relapsed/refractory FLT3-mutated AML based on the ADMIRAL trial. It showed improved OS compared to salvage chemotherapy (9.3 vs 5.6 months).",
                 keyPoint: "Gilteritinib = FLT3 inhibitor for R/R FLT3+ AML. ADMIRAL trial showed OS benefit over chemo.",
-                citation: "Perl AE, et al. N Engl J Med. 2019;381:1728-1740"
+                citation: "Perl AE, et al. N Engl J Med. 2019;381:1728-1740",
+                pmid: "31665578",
+                doi: "10.1056/NEJMoa1902688"
             },
             {
                 type: "simple",
@@ -2085,7 +2198,9 @@
                 correct: 1,
                 explanation: "CR requires: <5% bone marrow blasts, ANC ≥1,000/μL, platelets ≥100,000/μL, no Auer rods, no extramedullary disease, and transfusion independence. CRi (incomplete) has cytopenias not meeting thresholds.",
                 keyPoint: "CR = <5% blasts, ANC ≥1000, plt ≥100k, no Auer rods, no EMD. CRi = CR with incomplete count recovery.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "case",
@@ -2110,7 +2225,9 @@
                 correct: 1,
                 explanation: "This elderly patient with comorbidities (poor PS, reduced cardiac function, renal impairment) is not a candidate for intensive chemotherapy. Venetoclax + HMA is the standard of care for unfit patients, with good efficacy in NPM1-mutated disease.",
                 keyPoint: "Unfit for intensive: age, PS ≥2, cardiac, renal, hepatic issues. Ven + HMA is standard. NPM1+ responds well.",
-                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629"
+                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971"
             },
             {
                 type: "simple",
@@ -2217,7 +2334,9 @@
                 correct: 1,
                 explanation: "RUNX1 mutation is classified as adverse risk in ELN 2022 when not occurring with favorable-risk defining genetic abnormalities. RUNX1-mutated AML often has poor response to standard chemotherapy.",
                 keyPoint: "RUNX1 mutation = adverse risk per ELN 2022 (unless with favorable lesion). Poor chemo response.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
 
             // ADDITIONAL ATTENDING LEVEL QUESTIONS
@@ -2243,7 +2362,9 @@
                 correct: 1,
                 explanation: "IDH mutations can persist as clonal hematopoiesis (CHIP) even in morphologic CR. Unlike NPM1 (which should clear in CR), persistent IDH doesn't necessarily indicate active disease. Clinical and morphologic assessment are key.",
                 keyPoint: "IDH1/2 can persist as CHIP in remission. Unlike NPM1, persistence doesn't equal MRD. Follow morphology.",
-                citation: "Jongen-Lavrencic M, et al. N Engl J Med. 2018;378:1189-1199"
+                citation: "Jongen-Lavrencic M, et al. N Engl J Med. 2018;378:1189-1199",
+                pmid: "29601269",
+                doi: "10.1056/NEJMoa1716863"
             },
             {
                 type: "simple",
@@ -2259,7 +2380,8 @@
                 correct: 1,
                 explanation: "Unlike intensive chemotherapy which has defined cycles, venetoclax-HMA is typically continued until disease progression or intolerance. Dose modifications for cytopenias are common. Stopping risks relapse.",
                 keyPoint: "Ven-HMA: continue until progression/intolerance. Not time-limited. Dose modify for cytopenias.",
-                citation: "NCCN Guidelines AML, 2024"
+                citation: "NCCN Guidelines AML, 2024",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/aml.pdf" }
             },
             {
                 type: "simple",
@@ -2334,7 +2456,9 @@
                 correct: 1,
                 explanation: "MECOM (3q26.2/EVI1) rearrangements define adverse-risk AML with extremely poor prognosis (median OS <1 year). Often resistant to standard chemotherapy. Allo-HCT should be pursued aggressively if possible.",
                 keyPoint: "MECOM/EVI1 rearrangements: among worst AML prognoses. Very chemoresistant. Aggressive HCT pursuit.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "simple",
@@ -2581,7 +2705,9 @@
                 correct: 1,
                 explanation: "Complex karyotype is defined as ≥3 unrelated chromosomal abnormalities (excluding recurrent translocations). It confers adverse risk per ELN 2022 and is associated with TP53 mutations, therapy-related AML, and poor response to chemotherapy.",
                 keyPoint: "Complex karyotype = ≥3 unrelated abnormalities = adverse risk. Often associated with TP53 mutations.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "simple",
@@ -2629,7 +2755,9 @@
                 correct: 1,
                 explanation: "FLT3-TKD (tyrosine kinase domain) mutations are point mutations with less adverse prognostic impact than FLT3-ITD (internal tandem duplication). Both are targetable with FLT3 inhibitors. ITD allelic ratio affects prognosis (high AR = worse).",
                 keyPoint: "FLT3-ITD worse prognosis than FLT3-TKD. Both respond to FLT3 inhibitors. ITD AR matters.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "simple",
@@ -2686,7 +2814,9 @@
                 correct: 1,
                 explanation: "NPM1-mutated/FLT3-ITD-negative AML is favorable risk. With undetectable MRD after consolidation, chemotherapy alone is appropriate; allo-HCT is reserved for relapse. HiDAC consolidation (3-4 cycles) is standard. Transplant adds TRM without clear OS benefit.",
                 keyPoint: "Favorable-risk AML + MRD negative: consolidation chemo, no HCT in CR1. HCT for relapse or MRD persistence.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
 
             // ============ ROUND 2: MORE CLINICAL QUESTIONS ============
@@ -2809,7 +2939,9 @@
                 correct: 1,
                 explanation: "TP53-mutated AML with complex karyotype has dismal prognosis (median OS 5-7 months, <10% 2-year OS). Standard chemotherapy poorly effective. Options: venetoclax-HMA (modest benefit), clinical trials (magrolimab, eprenetapopt), or HMA alone. HCT if CR achieved, but high relapse risk.",
                 keyPoint: "TP53-mutated AML: worst prognosis (<10% 2-yr OS). Standard chemo fails. Clinical trials preferred. HCT if CR, but relapses.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "simple",
@@ -2825,7 +2957,9 @@
                 correct: 1,
                 explanation: "VIALE-A: venetoclax + azacitidine vs placebo + azacitidine in unfit AML. Showed significant OS benefit (14.7 vs 9.6 months), with high CR rates (~66% CR+CRi). Changed standard of care for unfit patients. Venetoclax dose adjustments needed with azoles.",
                 keyPoint: "VIALE-A: ven-aza vs aza, OS 14.7 vs 9.6 mo. New standard for unfit AML. CYP3A4 interactions crucial.",
-                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629"
+                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971"
             },
             {
                 type: "simple",
@@ -2874,7 +3008,9 @@
                 correct: 1,
                 explanation: "MRD detected by multiparameter flow cytometry (0.1% sensitivity) or molecular methods (NPM1, CBF-rearrangements) strongly predicts relapse. ELN 2022 recommends MRD assessment. MRD-positive patients may benefit from transplant or intensification. MRD response is increasingly used as trial endpoint.",
                 keyPoint: "MRD: flow (0.1%) or molecular (NPM1, CBF). MRD+ predicts relapse. Informs transplant decision. ELN 2022 recommends.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "simple",
@@ -2963,7 +3099,9 @@
                 correct: 1,
                 explanation: "NPM1-mutated AML without FLT3-ITD is favorable-risk (ELN 2022). MRD-negative patients in CR1 have excellent outcomes with chemotherapy alone (~65% OS). Transplant reserved for MRD+ or relapse. Close MRD monitoring essential. Some centers still offer transplant given curative potential.",
                 keyPoint: "NPM1+/FLT3-neg: favorable. MRD-neg in CR1: can defer transplant with MRD monitoring. Transplant at relapse/MRD+.",
-                citation: "Dohner H, et al. Blood. 2022;140:1345-1377"
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
             },
             {
                 type: "simple",
@@ -3044,7 +3182,9 @@
                 correct: 1,
                 explanation: "ATO given 0.15 mg/kg IV daily. Toxicities: QTc prolongation (monitor ECG, keep K>4, Mg>2), hepatotoxicity (monitor LFTs), hyperleukocytosis/differentiation syndrome, peripheral neuropathy with prolonged use. Keep QTc <500ms. Avoid QT-prolonging drugs.",
                 keyPoint: "ATO: 0.15 mg/kg IV daily. QTc prolongation - keep K>4, Mg>2, QTc<500. Hepatotoxicity. Differentiation syndrome.",
-                citation: "Lo-Coco F, et al. N Engl J Med. 2013;369:111-121"
+                citation: "Lo-Coco F, et al. N Engl J Med. 2013;369:111-121",
+                pmid: "23841729",
+                doi: "10.1056/NEJMoa1300874"
             },
             {
                 type: "simple",
@@ -3367,7 +3507,7 @@
 
             document.getElementById('explanationText').textContent = q.explanation;
             document.getElementById('keyPoint').textContent = q.keyPoint;
-            document.getElementById('citation').textContent = q.citation;
+            document.getElementById('citation').innerHTML = '📚 ' + q.citation + renderReferenceLinks(q);
             document.getElementById('explanationBox').classList.add('show');
 
             updateScoreDisplay();

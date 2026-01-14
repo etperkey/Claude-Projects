@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LymphoMaster: Attending Level Challenge</title>
+    <title>LymphoInvader: Attending Level Challenge</title>
     <style>
         :root {
             /* Consistent Color Palette - Medical/Scientific Theme */
@@ -2172,6 +2172,33 @@
             text-decoration: underline;
         }
 
+        /* Reference Links */
+        .ref-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ref-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            background: rgba(139, 92, 246, 0.15);
+            border-radius: 4px;
+            color: #4fc3f7;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+
+        .ref-link:hover {
+            background: rgba(79, 195, 247, 0.3);
+            transform: scale(1.05);
+            border-color: #4fc3f7;
+        }
+
         /* Next Button */
         .next-btn {
             background: linear-gradient(135deg, var(--accent-primary) 0%, #0891b2 100%);
@@ -2500,7 +2527,7 @@
 
     <div class="game-container">
         <div class="header">
-            <h1 class="title">LymphoMaster</h1>
+            <h1 class="title">LymphoInvader</h1>
             <p class="subtitle">Attending Level Lymphoma Challenge | NCCN Guidelines 2025-2026</p>
         </div>
 
@@ -2636,6 +2663,21 @@
         };
         DeviceDetector.init();
 
+        // Reference Links Helper
+        function renderReferenceLinks(question) {
+            let links = '';
+            if (question.pmid) {
+                links += `<a href="https://pubmed.ncbi.nlm.nih.gov/${question.pmid}/" target="_blank" rel="noopener" class="ref-link" title="View on PubMed">📄 PubMed</a>`;
+            }
+            if (question.doi) {
+                links += `<a href="https://doi.org/${question.doi}" target="_blank" rel="noopener" class="ref-link" title="View Full Text">🔗 DOI</a>`;
+            }
+            if (question.guideline) {
+                links += `<a href="${question.guideline.url}" target="_blank" rel="noopener" class="ref-link" title="View Guidelines">📋 ${question.guideline.name}</a>`;
+            }
+            return links ? `<div class="ref-links">${links}</div>` : '';
+        }
+
         // Question Bank with Citations
         const questions = [
             // ============ CASE-BASED QUESTIONS ============
@@ -2667,7 +2709,9 @@
                 correct: 1,
                 explanation: "This patient has DLBCL with IPI score ≥2. Per NCCN Guidelines Version 3.2025, Pola-R-CHP (polatuzumab vedotin + rituximab, cyclophosphamide, doxorubicin, prednisone) is Category 1 PREFERRED for previously untreated DLBCL with IPI ≥2. The POLARIX trial demonstrated 2-year PFS of 76.7% vs 70.2% for R-CHOP (HR 0.73, p<0.02).",
                 keyPoint: "Pola-R-CHP is now PREFERRED over R-CHOP for DLBCL with IPI ≥2. Note vincristine is omitted (R-CHP not R-CHOP) due to overlapping neurotoxicity with polatuzumab.",
-                citation: "Tilly H, et al. N Engl J Med. 2022;386:351-363. DOI: 10.1056/NEJMoa2115304"
+                citation: "Tilly H, et al. N Engl J Med. 2022;386:351-363.",
+                pmid: "34904799",
+                doi: "10.1056/NEJMoa2115304"
             },
             {
                 type: "case",
@@ -2696,7 +2740,10 @@
                 correct: 1,
                 explanation: "For early-stage favorable cHL (Stage I-II, no B symptoms, ESR <50, non-bulky, <3 nodal sites), current guidelines recommend response-adapted therapy: 2 cycles ABVD followed by interim PET/CT. Deauville 1-3 allows de-escalation; Deauville 4-5 requires intensification. This reduces long-term toxicity while maintaining outcomes.",
                 keyPoint: "Deauville scoring guides response-adapted therapy: 1-2 = CMR, 3 = equivocal (often negative), 4-5 = positive disease requiring treatment modification.",
-                citation: "NCCN Guidelines Hodgkin Lymphoma Version 1.2026; Radford J, et al. N Engl J Med. 2015;372:1598-607"
+                citation: "NCCN Guidelines Hodgkin Lymphoma Version 1.2026; Radford J, et al. N Engl J Med. 2015;372:1598-607",
+                pmid: "25901426",
+                doi: "10.1056/NEJMoa1408648",
+                guideline: { name: "NCCN HL", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1439" }
             },
             {
                 type: "case",
@@ -2721,7 +2768,9 @@
                 correct: 1,
                 explanation: "Per NCCN Guidelines Version 1.2026, PREFERRED regimens for Stage III-IV cHL are Nivolumab-AVD (Category 1) or BrECADD + G-CSF. The SWOG S1826 trial showed Nivolumab-AVD achieved 2-year PFS of 92% vs 83% for BV-AVD (HR 0.45). ABVD remains an option but is no longer preferred.",
                 keyPoint: "NCCN 2025-2026: Nivolumab-AVD and BrECADD are now PREFERRED over ABVD for advanced-stage Hodgkin lymphoma, representing a major paradigm shift.",
-                citation: "Herrera AF, et al. N Engl J Med. 2024;391:1379-1389. DOI: 10.1056/NEJMoa2405888"
+                citation: "Herrera AF, et al. N Engl J Med. 2024;391:1379-1389.",
+                pmid: "39413375",
+                doi: "10.1056/NEJMoa2405888"
             },
             {
                 type: "case",
@@ -2750,7 +2799,10 @@
                 correct: 1,
                 explanation: "This patient has asymptomatic advanced-stage follicular lymphoma Grade 1-2 without GELF criteria (no mass >7cm, <3 nodes >3cm, no B symptoms, no cytopenias, no compression). Watch and wait is appropriate as multiple trials show no survival benefit to early treatment. Median time to requiring therapy is ~4-5 years.",
                 keyPoint: "GELF criteria for FL treatment: mass >7cm, ≥3 nodes >3cm, B symptoms, splenomegaly, compression, effusions, cytopenias, leukemic phase. Absence of all = watch and wait.",
-                citation: "Solal-Céligny P, et al. Blood. 2004;104:1258-1265; NCCN B-Cell Lymphomas Version 3.2025"
+                citation: "Solal-Céligny P, et al. Blood. 2004;104:1258-1265; NCCN B-Cell Lymphomas Version 3.2025",
+                pmid: "15126323",
+                doi: "10.1182/blood-2003-12-4434",
+                guideline: { name: "NCCN NHL", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1494" }
             },
             {
                 type: "case",
@@ -2774,7 +2826,9 @@
                 correct: 1,
                 explanation: "Acalabrutinib or zanubrutinib (2nd-generation BTK inhibitors) are preferred over ibrutinib in patients with AFib/anticoagulation. Ibrutinib has significant off-target effects: AFib (5-10%), bleeding (up to 50%) due to inhibition of non-BTK kinases. Second-generation agents have more selective BTK inhibition with better cardiac safety profiles.",
                 keyPoint: "BTK inhibitor selection: Ibrutinib has off-target effects (AFib, bleeding). Acalabrutinib/zanubrutinib are more selective with fewer cardiac/bleeding complications - preferred in patients with cardiac history or anticoagulation.",
-                citation: "Wang M, et al. N Engl J Med. 2013;369:507-516; Brown JR, et al. Lancet. 2024;403:1163-1175"
+                citation: "Wang M, et al. N Engl J Med. 2013;369:507-516; Brown JR, et al. Lancet. 2024;403:1163-1175",
+                pmid: "23782157",
+                doi: "10.1056/NEJMoa1306220"
             },
             {
                 type: "case",
@@ -2804,7 +2858,10 @@
                 correct: 1,
                 explanation: "This is Burkitt lymphoma: Ki-67 >95%, MYC rearrangement (without BCL2/BCL6 = not double-hit), CD10+/BCL6+/BCL2-, starry-sky pattern, extremely rapid doubling time. Elevated LDH, uric acid, creatinine, phosphorus indicate high tumor burden with impending/established TLS. Rasburicase, aggressive hydration, and allopurinol MUST be initiated before chemotherapy.",
                 keyPoint: "Burkitt lymphoma = highest TLS risk. MUST initiate TLS prophylaxis (rasburicase > allopurinol, hydration, monitoring) BEFORE chemotherapy. Do not delay prophylaxis.",
-                citation: "Cairo MS, Bishop M. Br J Haematol. 2004;127:3-11; NCCN B-Cell Lymphomas Version 3.2025"
+                citation: "Cairo MS, Bishop M. Br J Haematol. 2004;127:3-11; NCCN B-Cell Lymphomas Version 3.2025",
+                pmid: "15384972",
+                doi: "10.1111/j.1365-2141.2004.05094.x",
+                guideline: { name: "NCCN NHL", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1494" }
             },
             {
                 type: "case",
@@ -2851,7 +2908,9 @@
                 correct: 2,
                 explanation: "Despite CMR, ABC subtype carries significantly worse prognosis: 5-year OS 45-56% (ABC) vs 78-80% (GCB). TP53 mutation further worsens outcomes. Molecular subtype retains prognostic significance independent of response. Close surveillance warranted; novel agents targeting ABC/TP53-mutated disease under investigation.",
                 keyPoint: "DLBCL molecular subtypes: ABC 5-year OS 45-56% vs GCB 78-80% after R-CHOP. This difference persists even in patients achieving CMR.",
-                citation: "Rosenwald A, et al. N Engl J Med. 2002;346:1937-1947; Lenz G, et al. N Engl J Med. 2008;359:2313-2323"
+                citation: "Rosenwald A, et al. N Engl J Med. 2002;346:1937-1947; Lenz G, et al. N Engl J Med. 2008;359:2313-2323",
+                pmid: "12075054",
+                doi: "10.1056/NEJMoa012914"
             },
 
             // ============ SIMPLE/QUICK FIRE QUESTIONS ============
@@ -2869,7 +2928,9 @@
                 correct: 2,
                 explanation: "The t(14;18)(q32;q21) translocation juxtaposes BCL2 to IGH, causing BCL2 overexpression and inhibition of apoptosis. Present in ~85% of FL cases. t(8;14) = Burkitt, t(11;14) = MCL, t(2;5) = ALK+ ALCL.",
                 keyPoint: "Key translocations: t(14;18) BCL2 = FL | t(11;14) CCND1 = MCL | t(8;14) MYC = Burkitt | t(2;5) ALK = ALCL",
-                citation: "Swerdlow SH, et al. WHO Classification of Tumours of Haematopoietic and Lymphoid Tissues. 4th ed. 2017"
+                citation: "Swerdlow SH, et al. WHO Classification of Tumours of Haematopoietic and Lymphoid Tissues. 5th ed. 2022",
+                pmid: "35767897",
+                doi: "10.1182/blood.2022015850"
             },
             {
                 type: "simple",
@@ -2885,7 +2946,9 @@
                 correct: 1,
                 explanation: "IPI includes 5 factors (1 point each): Age >60, LDH elevated, ECOG PS ≥2, >1 extranodal site, Stage III/IV. Risk groups: Low (0-1), Low-Int (2), High-Int (3), High (4-5). NCCN-IPI provides better discrimination in the rituximab era.",
                 keyPoint: "IPI = Age >60 + LDH↑ + PS≥2 + >1 extranodal + Stage III/IV. Each factor = 1 point. Remains most widely used DLBCL prognostic tool.",
-                citation: "International NHL Prognostic Factors Project. N Engl J Med. 1993;329:987-994"
+                citation: "International NHL Prognostic Factors Project. N Engl J Med. 1993;329:987-994",
+                pmid: "8141877",
+                doi: "10.1056/NEJM199309303291402"
             },
             {
                 type: "simple",
@@ -2901,7 +2964,9 @@
                 correct: 1,
                 explanation: "Bleomycin causes pulmonary toxicity (pneumonitis/fibrosis) in 2-5% of patients. Risk factors: age >70, renal impairment, cumulative dose, G-CSF. In patients ≥60 years, bleomycin often omitted after 2 cycles. Cardiomyopathy = anthracyclines; neuropathy = vincristine/brentuximab.",
                 keyPoint: "Bleomycin pulmonary toxicity: 2-5% incidence. Risk increases with age >70, renal dysfunction, cumulative dose. Consider AVD (omit bleomycin) in elderly.",
-                citation: "Martin WG, et al. J Clin Oncol. 2005;23:7614-7620"
+                citation: "Martin WG, et al. J Clin Oncol. 2005;23:7614-7620",
+                pmid: "16186594",
+                doi: "10.1200/JCO.2004.00.9894"
             },
             {
                 type: "simple",
@@ -2917,7 +2982,9 @@
                 correct: 0,
                 explanation: "Deauville 5-point scale: 1 = no uptake, 2 = uptake ≤ mediastinum, 3 = uptake > mediastinum but ≤ liver, 4 = uptake moderately > liver, 5 = uptake markedly > liver or new lesions. Scores 1-2 = CMR. Score 3 often grouped as negative in trials.",
                 keyPoint: "Deauville: 1-2 = CMR | 3 = equivocal (often negative) | 4-5 = positive. Guides treatment in both HL and aggressive NHL.",
-                citation: "Cheson BD, et al. J Clin Oncol. 2014;32:3059-3067 (Lugano Classification)"
+                citation: "Cheson BD, et al. J Clin Oncol. 2014;32:3059-3067 (Lugano Classification)",
+                pmid: "25113753",
+                doi: "10.1200/JCO.2013.54.8800"
             },
             {
                 type: "simple",
@@ -2933,7 +3000,9 @@
                 correct: 1,
                 explanation: "Rituximab is a chimeric anti-CD20 monoclonal antibody that depletes B-cells via CDC (complement-dependent cytotoxicity), ADCC (antibody-dependent cellular cytotoxicity), and direct apoptosis. GELA trial: R-CHOP CR 76% vs CHOP 63% (p=0.005).",
                 keyPoint: "Rituximab = anti-CD20 mAb. Works via CDC + ADCC + direct apoptosis. Adding to CHOP improved CR 76% vs 63% and transformed DLBCL outcomes.",
-                citation: "Coiffier B, et al. N Engl J Med. 2002;346:235-242 (GELA LNH-98.5)"
+                citation: "Coiffier B, et al. N Engl J Med. 2002;346:235-242 (GELA LNH-98.5)",
+                pmid: "11807147",
+                doi: "10.1056/NEJMoa011795"
             },
             {
                 type: "simple",
@@ -2965,7 +3034,9 @@
                 correct: 1,
                 explanation: "C481S mutation converts cysteine to serine at position 481, the ibrutinib binding site. This prevents covalent binding. Pirtobrutinib (non-covalent, reversible BTK inhibitor) uses alternative binding mechanism not dependent on C481, effective in ibrutinib-resistant disease.",
                 keyPoint: "BTK C481S mutation = key acquired resistance to ibrutinib. Pirtobrutinib (non-covalent BTKi) overcomes this via alternative binding mechanism.",
-                citation: "Woyach JA, et al. N Engl J Med. 2014;370:2286-2294; Mato AR, et al. Lancet. 2021;397:892-901"
+                citation: "Woyach JA, et al. N Engl J Med. 2014;370:2286-2294; Mato AR, et al. Lancet. 2021;397:892-901",
+                pmid: "24869598",
+                doi: "10.1056/NEJMoa1400029"
             },
             {
                 type: "simple",
@@ -3013,7 +3084,9 @@
                 correct: 1,
                 explanation: "MCL: CD5+, CD23-, cyclin D1+, t(11;14). CLL: CD5+, CD23+, cyclin D1-. The t(11;14) juxtaposes CCND1 to IGH causing cyclin D1 overexpression. Despite small-medium cells, MCL typically has aggressive course.",
                 keyPoint: "CD5+ B-NHL: MCL = CD5+, CD23-, cyclin D1+, t(11;14) | CLL = CD5+, CD23+, cyclin D1-. Both CD5+ but very different biology/treatment.",
-                citation: "Jares P, et al. Nat Rev Cancer. 2007;7:750-762"
+                citation: "Jares P, et al. Nat Rev Cancer. 2007;7:750-762",
+                pmid: "17891190",
+                doi: "10.1038/nrc2230"
             },
             {
                 type: "simple",
@@ -3029,7 +3102,9 @@
                 correct: 1,
                 explanation: "Auto-SCT is NOT first-line. It's standard of care for relapsed/refractory DLBCL achieving at least PR to salvage chemotherapy (chemosensitive disease). Patients failing auto-SCT or not candidates → CAR-T, bispecifics, or clinical trials.",
                 keyPoint: "DLBCL algorithm: 1st line = R-CHOP/Pola-R-CHP | Relapse = salvage → auto-SCT if chemosensitive | Post-SCT relapse = CAR-T, bispecifics.",
-                citation: "Gisselbrecht C, et al. J Clin Oncol. 2010;28:4184-4190 (CORAL); NCCN Guidelines 2025"
+                citation: "Gisselbrecht C, et al. J Clin Oncol. 2010;28:4184-4190 (CORAL); NCCN Guidelines 2025",
+                pmid: "20660832",
+                doi: "10.1200/JCO.2010.28.1618"
             },
             {
                 type: "simple",
@@ -3045,7 +3120,9 @@
                 correct: 2,
                 explanation: "GELF criteria: mass >7cm, ≥3 nodes >3cm, B symptoms, splenomegaly, compression syndrome, effusions, cytopenias (Hgb <10, ANC <1.5, Plt <100), leukemic phase (>5000/μL lymphoma cells). t(14;18) is diagnostic marker (~85% FL) but NOT treatment indication.",
                 keyPoint: "GELF criteria = mass >7cm | ≥3 nodes >3cm | B symptoms | splenomegaly | compression | effusions | cytopenias | leukemic phase. Molecular markers ≠ treatment criteria.",
-                citation: "Brice P, et al. J Clin Oncol. 1997;15:1110-1117 (GELF criteria)"
+                citation: "Brice P, et al. J Clin Oncol. 1997;15:1110-1117 (GELF criteria)",
+                pmid: "9060552",
+                doi: "10.1200/JCO.1997.15.3.1110"
             },
             {
                 type: "simple",
@@ -3109,7 +3186,9 @@
                 correct: 1,
                 explanation: "Acalabrutinib and zanubrutinib have more selective BTK inhibition than ibrutinib. Ibrutinib's off-target effects include: AFib (5-10% due to PI3K inhibition), bleeding (up to 50% from TEC kinase inhibition), rash/diarrhea (EGFR). Second-gen agents spare these kinases.",
                 keyPoint: "Ibrutinib off-targets: AFib (PI3K), bleeding (TEC), rash/diarrhea (EGFR). Acalabrutinib/zanubrutinib spare these = better safety profile.",
-                citation: "Byrd JC, et al. N Engl J Med. 2016;374:323-332; Hillmen P, et al. Lancet. 2020;395:1278-1291"
+                citation: "Byrd JC, et al. N Engl J Med. 2016;374:323-332; Hillmen P, et al. Lancet. 2020;395:1278-1291",
+                pmid: "26641137",
+                doi: "10.1056/NEJMoa1509981"
             },
             {
                 type: "simple",
@@ -3141,7 +3220,9 @@
                 correct: 0,
                 explanation: "GELA LNH-98.5: CR rate 76% (R-CHOP) vs 63% (CHOP), p=0.005. This landmark trial in elderly DLBCL patients established rituximab + chemotherapy as standard. Event-free survival also significantly better (68% vs 49%).",
                 keyPoint: "GELA trial: R-CHOP CR 76% vs CHOP 63% (p=0.005). Established rituximab as essential component of DLBCL treatment.",
-                citation: "Coiffier B, et al. N Engl J Med. 2002;346:235-242"
+                citation: "Coiffier B, et al. N Engl J Med. 2002;346:235-242",
+                pmid: "11807147",
+                doi: "10.1056/NEJMoa011795"
             },
             {
                 type: "simple",
@@ -3157,7 +3238,9 @@
                 correct: 1,
                 explanation: "ABC subtype: 5-year OS 45-56%. GCB subtype: 5-year OS 78-80%. This significant difference persists in the rituximab era. ABC has chronically active BCR signaling and NF-κB activation. Novel targeted agents being developed for ABC subtype.",
                 keyPoint: "DLBCL molecular subtypes matter: ABC 5-yr OS 45-56% vs GCB 78-80%. ABC = poor prognosis due to constitutive NF-κB activation.",
-                citation: "Lenz G, et al. N Engl J Med. 2008;359:2313-2323; Rosenwald A, et al. N Engl J Med. 2002;346:1937-1947"
+                citation: "Lenz G, et al. N Engl J Med. 2008;359:2313-2323; Rosenwald A, et al. N Engl J Med. 2002;346:1937-1947",
+                pmid: "19038878",
+                doi: "10.1056/NEJMoa0802885"
             },
             {
                 type: "simple",
@@ -3173,7 +3256,9 @@
                 correct: 1,
                 explanation: "Both vincristine and polatuzumab vedotin cause peripheral neuropathy. Vincristine is omitted in Pola-R-CHP (not Pola-R-CHOP) to avoid overlapping neurotoxicity while maintaining efficacy. POLARIX trial validated this approach.",
                 keyPoint: "Pola-R-CHP: Vincristine omitted due to overlapping neuropathy with polatuzumab. Efficacy maintained per POLARIX trial.",
-                citation: "Tilly H, et al. N Engl J Med. 2022;386:351-363"
+                citation: "Tilly H, et al. N Engl J Med. 2022;386:351-363",
+                pmid: "34904799",
+                doi: "10.1056/NEJMoa2115304"
             },
             {
                 type: "simple",
@@ -3189,7 +3274,9 @@
                 correct: 1,
                 explanation: "Pirtobrutinib is a non-covalent, reversible BTK inhibitor that blocks the ATP binding site independently of C481. This allows activity against C481S-mutant BTK, providing an option for patients who develop resistance to covalent BTK inhibitors.",
                 keyPoint: "Pirtobrutinib = non-covalent BTKi, binds ATP site independent of C481. Effective in covalent BTKi-resistant disease including C481S mutations.",
-                citation: "Mato AR, et al. Lancet. 2021;397:892-901 (BRUIN study)"
+                citation: "Mato AR, et al. Lancet. 2021;397:892-901 (BRUIN study)",
+                pmid: "33637086",
+                doi: "10.1016/S0140-6736(21)00224-5"
             },
             {
                 type: "simple",
@@ -3253,7 +3340,9 @@
                 correct: 1,
                 explanation: "Platinum-based salvage regimens (R-ICE, R-DHAP, R-GDP) are used to assess chemosensitivity before auto-SCT. CORAL trial showed similar efficacy between R-ICE and R-DHAP. Chemosensitive patients (CR/PR to salvage) proceed to transplant.",
                 keyPoint: "Relapsed DLBCL salvage: R-ICE, R-DHAP, or R-GDP → assess response → auto-SCT if chemosensitive. CORAL trial showed R-ICE ≈ R-DHAP.",
-                citation: "Gisselbrecht C, et al. J Clin Oncol. 2010;28:4184-4190 (CORAL trial)"
+                citation: "Gisselbrecht C, et al. J Clin Oncol. 2010;28:4184-4190 (CORAL trial)",
+                pmid: "20660832",
+                doi: "10.1200/JCO.2010.28.1618"
             },
             {
                 type: "simple",
@@ -3269,7 +3358,9 @@
                 correct: 2,
                 explanation: "R-CHOP achieves cure in approximately 60-70% of DLBCL patients overall. However, this varies by IPI and molecular subtype: GCB subtype ~80% cure rate vs ABC ~45-55%. Up to 30-40% will be refractory or relapse.",
                 keyPoint: "R-CHOP overall cure rate: 60-70%. Varies by subtype (GCB ~80%, ABC ~50%) and IPI score. 30-40% refractory/relapse.",
-                citation: "Coiffier B, et al. Blood. 2010;116:2040-2045 (10-year GELA follow-up)"
+                citation: "Coiffier B, et al. Blood. 2010;116:2040-2045 (10-year GELA follow-up)",
+                pmid: "20548096",
+                doi: "10.1182/blood-2010-03-276246"
             },
             {
                 type: "simple",
@@ -3367,7 +3458,9 @@
                 correct: 1,
                 explanation: "CHOP = Cyclophosphamide + Hydroxydaunorubicin (doxorubicin) + Oncovin (vincristine) + Prednisone. R-CHOP adds Rituximab. This has been standard of care for DLBCL since the GELA trial demonstrated improved survival.",
                 keyPoint: "CHOP = Cyclophosphamide + doxorubicin (Hydroxydaunorubicin) + vincristine (Oncovin) + Prednisone. R = Rituximab.",
-                citation: "Coiffier B, et al. N Engl J Med. 2002;346:235-242"
+                citation: "Coiffier B, et al. N Engl J Med. 2002;346:235-242",
+                pmid: "11807147",
+                doi: "10.1056/NEJMoa011795"
             },
             {
                 type: "simple",
@@ -3383,7 +3476,9 @@
                 correct: 1,
                 explanation: "Reed-Sternberg cells are the pathognomonic malignant cells in classic Hodgkin lymphoma. They are large cells with 'owl-eye' bilobed nuclei and prominent eosinophilic nucleoli. They are CD15+, CD30+, and usually CD20-.",
                 keyPoint: "Reed-Sternberg cell = hallmark of Hodgkin lymphoma. Large, bilobed 'owl-eye' nucleus. CD15+, CD30+, CD20-.",
-                citation: "Kuppers R. Nat Rev Cancer. 2009;9:15-27"
+                citation: "Kuppers R. Nat Rev Cancer. 2009;9:15-27",
+                pmid: "19078975",
+                doi: "10.1038/nrc2542"
             },
 
             // ============ ADDITIONAL RESIDENT LEVEL QUESTIONS ============
@@ -3401,7 +3496,9 @@
                 correct: 1,
                 explanation: "Venetoclax is a selective BCL-2 inhibitor that promotes apoptosis by displacing pro-apoptotic proteins from BCL-2. Used in CLL (with obinutuzumab), MCL, and AML. TLS risk requires ramp-up dosing and monitoring.",
                 keyPoint: "Venetoclax = BCL-2 inhibitor → restores apoptosis. High TLS risk requires ramp-up. Key drug in CLL, MCL, AML.",
-                citation: "Roberts AW, et al. N Engl J Med. 2016;374:311-322"
+                citation: "Roberts AW, et al. N Engl J Med. 2016;374:311-322",
+                pmid: "26639348",
+                doi: "10.1056/NEJMoa1513257"
             },
             {
                 type: "simple",
@@ -3417,7 +3514,9 @@
                 correct: 1,
                 explanation: "FLIPI (Follicular Lymphoma International Prognostic Index) assesses FL prognosis. Factors: age >60, Stage III-IV, Hgb <12, LDH elevated, >4 nodal sites. FLIPI-2 adds β2-microglobulin and bone marrow involvement.",
                 keyPoint: "FLIPI = FL prognosis. Factors: Age >60, Stage III-IV, Hgb <12, LDH↑, >4 nodal sites. Each = 1 point.",
-                citation: "Solal-Céligny P, et al. Blood. 2004;104:1258-1265"
+                citation: "Solal-Céligny P, et al. Blood. 2004;104:1258-1265",
+                pmid: "15126323",
+                doi: "10.1182/blood-2003-12-4434"
             },
             {
                 type: "simple",
@@ -3433,7 +3532,9 @@
                 correct: 0,
                 explanation: "Brentuximab vedotin is an anti-CD30 antibody-drug conjugate (ADC). The anti-CD30 antibody delivers the cytotoxic payload (monomethyl auristatin E, MMAE) directly to CD30+ cells. Used in Hodgkin lymphoma and ALCL.",
                 keyPoint: "Brentuximab = anti-CD30 ADC (antibody + MMAE). Targets CD30+ cells. Used in HL, ALCL, CD30+ CTCL.",
-                citation: "Younes A, et al. N Engl J Med. 2010;363:1812-1821"
+                citation: "Younes A, et al. N Engl J Med. 2010;363:1812-1821",
+                pmid: "21047225",
+                doi: "10.1056/NEJMoa1002965"
             },
             {
                 type: "simple",
@@ -3449,7 +3550,9 @@
                 correct: 0,
                 explanation: "CLL/SLL immunophenotype: CD5+, CD23+, CD20 dim (weak), CD43+. This distinguishes it from MCL which is CD5+, CD23-. CD10+/BCL6+ = germinal center (FL). CD30+/CD15+ = Hodgkin.",
                 keyPoint: "CLL = CD5+, CD23+, CD20 dim | MCL = CD5+, CD23-, cyclin D1+. Both CD5+ but CD23 distinguishes them.",
-                citation: "Hallek M, et al. Blood. 2018;131:2745-2760"
+                citation: "Hallek M, et al. Blood. 2018;131:2745-2760",
+                pmid: "29540348",
+                doi: "10.1182/blood-2017-09-806398"
             },
 
             // ============ ADDITIONAL FELLOW LEVEL QUESTIONS ============
@@ -3467,7 +3570,9 @@
                 correct: 1,
                 explanation: "Glofitamab and epcoritamab are CD20xCD3 bispecific antibodies approved for r/r DLBCL after ≥2 prior lines. They redirect T-cells to CD20+ lymphoma cells. Blinatumomab (CD19xCD3) is approved for ALL. Mosunetuzumab is also approved for r/r FL.",
                 keyPoint: "CD20xCD3 bispecifics for DLBCL: Glofitamab, Epcoritamab, Mosunetuzumab. Redirect T-cells to kill CD20+ tumor.",
-                citation: "Dickinson MJ, et al. N Engl J Med. 2022;387:2220-2231 (Glofitamab)"
+                citation: "Dickinson MJ, et al. N Engl J Med. 2022;387:2220-2231 (Glofitamab)",
+                pmid: "36507690",
+                doi: "10.1056/NEJMoa2206913"
             },
             {
                 type: "simple",
@@ -3483,7 +3588,9 @@
                 correct: 1,
                 explanation: "MIPI (MCL International Prognostic Index) stratifies MCL patients. Factors: age, ECOG PS, LDH, WBC. Combined biological MIPI (MIPIb) adds Ki-67. Low/Intermediate/High risk groups guide treatment intensity decisions.",
                 keyPoint: "MIPI = MCL prognosis (Age, PS, LDH, WBC). MIPIb adds Ki-67. Guides treatment intensity decisions in MCL.",
-                citation: "Hoster E, et al. Blood. 2008;111:558-565"
+                citation: "Hoster E, et al. Blood. 2008;111:558-565",
+                pmid: "17962512",
+                doi: "10.1182/blood-2007-06-095331"
             },
             {
                 type: "simple",
@@ -3499,7 +3606,9 @@
                 correct: 0,
                 explanation: "CAR-T requires leukapheresis to collect patient T-cells, genetic modification ex vivo, and re-infusion (weeks-long process). Bispecifics are manufactured products available 'off-the-shelf' with immediate administration. Both can cause CRS/ICANS.",
                 keyPoint: "CAR-T = patient's modified T-cells (personalized, weeks to manufacture) | Bispecifics = off-the-shelf (immediate availability).",
-                citation: "Neelapu SS, et al. N Engl J Med. 2017;377:2531-2544 (ZUMA-1)"
+                citation: "Neelapu SS, et al. N Engl J Med. 2017;377:2531-2544 (ZUMA-1)",
+                pmid: "29226797",
+                doi: "10.1056/NEJMoa1707447"
             },
 
             // ============ ADDITIONAL ATTENDING LEVEL QUESTIONS ============
@@ -3573,7 +3682,9 @@
                 correct: 1,
                 explanation: "Loncastuximab tesirine is an anti-CD19 antibody-drug conjugate (ADC) with a pyrrolobenzodiazepine (PBD) dimer payload. Approved for r/r DLBCL after ≥2 prior systemic therapies. Notable for peripheral edema and effusions (capillary leak-like syndrome).",
                 keyPoint: "Loncastuximab = anti-CD19 ADC with PBD payload. Approved for r/r DLBCL ≥3rd line. Monitor for edema/effusions.",
-                citation: "Caimi PF, et al. Lancet Oncol. 2021;22:790-800 (LOTIS-2)"
+                citation: "Caimi PF, et al. Lancet Oncol. 2021;22:790-800 (LOTIS-2)",
+                pmid: "33989558",
+                doi: "10.1016/S1470-2045(21)00139-X"
             },
 
             // ============ EXPANDED QUESTION BANK ============
@@ -3593,7 +3704,8 @@
                 correct: 1,
                 explanation: "DLBCL accounts for approximately 30-35% of all NHL cases, making it the most common subtype. Follicular lymphoma is second most common (~20%). DLBCL is aggressive but potentially curable with chemoimmunotherapy.",
                 keyPoint: "DLBCL = most common NHL (~30-35%). Aggressive but curable. FL is second most common (~20%).",
-                citation: "NCCN B-Cell Lymphomas Guidelines 2025"
+                citation: "NCCN B-Cell Lymphomas Guidelines 2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/b-cell.pdf" }
             },
             {
                 type: "simple",
@@ -3609,7 +3721,8 @@
                 correct: 1,
                 explanation: "B symptoms are: unexplained fever >38°C, drenching night sweats, and unintentional weight loss >10% of body weight in 6 months. Their presence upstages disease (e.g., Stage IIA becomes IIB) and indicates worse prognosis.",
                 keyPoint: "B symptoms: Fever >38°C, drenching night sweats, >10% weight loss in 6 months. Indicates worse prognosis.",
-                citation: "NCCN Hodgkin Lymphoma Guidelines 2025"
+                citation: "NCCN Hodgkin Lymphoma Guidelines 2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/hodgkins.pdf" }
             },
             {
                 type: "simple",
@@ -3625,7 +3738,8 @@
                 correct: 1,
                 explanation: "Early-stage favorable Hodgkin lymphoma is treated with combined modality therapy: 2-4 cycles of ABVD followed by involved-site radiation therapy (ISRT). This approach balances efficacy with minimizing long-term toxicities.",
                 keyPoint: "Early favorable HL: ABVD x 2-4 + ISRT. PET-adapted approaches may omit RT if PET-negative after 2 cycles.",
-                citation: "NCCN Hodgkin Lymphoma Guidelines 2025"
+                citation: "NCCN Hodgkin Lymphoma Guidelines 2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/hodgkins.pdf" }
             },
             {
                 type: "simple",
@@ -3657,7 +3771,9 @@
                 correct: 1,
                 explanation: "Rituximab is a chimeric anti-CD20 monoclonal antibody that targets the CD20 antigen on B-cells. It works through antibody-dependent cellular cytotoxicity (ADCC), complement-dependent cytotoxicity (CDC), and direct apoptosis induction.",
                 keyPoint: "Rituximab = anti-CD20 mAb. Backbone of B-cell lymphoma treatment. Works via ADCC, CDC, direct apoptosis.",
-                citation: "Maloney DG, et al. Blood. 1997;90:2188-2195"
+                citation: "Maloney DG, et al. Blood. 1997;90:2188-2195",
+                pmid: "9310469",
+                doi: "10.1182/blood.V90.6.2188"
             },
             {
                 type: "simple",
@@ -3673,7 +3789,9 @@
                 correct: 0,
                 explanation: "R-CHOP: Rituximab, Cyclophosphamide, Hydroxydaunorubicin (doxorubicin), Oncovin (vincristine), Prednisone. This is the standard frontline regimen for DLBCL and other aggressive B-cell lymphomas. Given every 21 days for 6 cycles.",
                 keyPoint: "R-CHOP = Rituximab + CHOP. Standard for DLBCL. Every 21 days x 6 cycles.",
-                citation: "Coiffier B, et al. N Engl J Med. 2002;346:235-242"
+                citation: "Coiffier B, et al. N Engl J Med. 2002;346:235-242",
+                pmid: "11807147",
+                doi: "10.1056/NEJMoa011795"
             },
             {
                 type: "simple",
@@ -3705,7 +3823,9 @@
                 correct: 1,
                 explanation: "Watch and wait (active surveillance) is appropriate for asymptomatic, low tumor burden indolent lymphomas like follicular lymphoma. There is no survival benefit to early treatment in asymptomatic patients. Treatment is initiated when symptoms develop or tumor burden increases.",
                 keyPoint: "Watch and wait for asymptomatic indolent lymphomas (FL, MZL). No survival benefit to early treatment. Treat when symptomatic.",
-                citation: "Ardeshna KM, et al. Lancet Oncol. 2014;15:424-435"
+                citation: "Ardeshna KM, et al. Lancet Oncol. 2014;15:424-435",
+                pmid: "24602760",
+                doi: "10.1016/S1470-2045(14)70027-0"
             },
             {
                 type: "simple",
@@ -3721,7 +3841,8 @@
                 correct: 1,
                 explanation: "Ann Arbor staging classifies lymphoma by anatomic extent: Stage I (single nodal region), Stage II (≥2 regions same side of diaphragm), Stage III (both sides of diaphragm), Stage IV (extranodal involvement). Modified with A/B for symptoms, E for extranodal extension.",
                 keyPoint: "Ann Arbor: I=1 region, II=≥2 same side, III=both sides diaphragm, IV=extranodal. A=no symptoms, B=symptoms.",
-                citation: "Carbone PP, et al. Cancer Res. 1971;31:1860-1861"
+                citation: "Carbone PP, et al. Cancer Res. 1971;31:1860-1861",
+                pmid: "5121694"
             },
             {
                 type: "simple",
@@ -3755,7 +3876,9 @@
                 correct: 1,
                 explanation: "Histologic transformation of follicular lymphoma most commonly results in DLBCL, occurring in approximately 2-3% of patients per year. Transformed FL has a worse prognosis than de novo DLBCL.",
                 keyPoint: "FL transforms to DLBCL most commonly (~2-3%/year). Suspect with rapid growth, B symptoms, rising LDH.",
-                citation: "Al-Tourah AJ, et al. J Clin Oncol. 2008;26:5165-5169"
+                citation: "Al-Tourah AJ, et al. J Clin Oncol. 2008;26:5165-5169",
+                pmid: "18838711",
+                doi: "10.1200/JCO.2008.16.0283"
             },
             {
                 type: "simple",
@@ -3819,7 +3942,9 @@
                 correct: 1,
                 explanation: "MCL: CD5+, CD10-, CD23- (unlike CLL which is CD23+), Cyclin D1+ (due to t(11;14)), CD20+. The CD5+/CD23-/Cyclin D1+ pattern distinguishes MCL from CLL/SLL. SOX11 positivity helps in Cyclin D1-negative cases.",
                 keyPoint: "MCL: CD5+, CD23-, Cyclin D1+, t(11;14). CLL: CD5+, CD23+. Cyclin D1 distinguishes them.",
-                citation: "Swerdlow SH, et al. WHO Classification 2017"
+                citation: "Swerdlow SH, et al. Blood. 2016;127:2375-2390 (WHO Classification)",
+                pmid: "26980727",
+                doi: "10.1182/blood-2016-01-643569"
             },
             {
                 type: "simple",
@@ -3835,7 +3960,9 @@
                 correct: 1,
                 explanation: "H. pylori-positive gastric MALT lymphoma is treated with antibiotics for H. pylori eradication (triple or quadruple therapy). Complete remission occurs in 60-80% of localized cases. H. pylori-negative or refractory cases require radiation or chemoimmunotherapy.",
                 keyPoint: "H. pylori+ gastric MALT: Antibiotic eradication first. 60-80% CR. RT or chemo for H. pylori-negative or refractory.",
-                citation: "Wündisch T, et al. J Clin Oncol. 2005;23:8018-8024"
+                citation: "Wündisch T, et al. J Clin Oncol. 2005;23:8018-8024",
+                pmid: "16204012",
+                doi: "10.1200/JCO.2005.02.3903"
             },
             {
                 type: "simple",
@@ -3851,7 +3978,9 @@
                 correct: 2,
                 explanation: "NLPHL has 'popcorn' or LP (lymphocyte-predominant) cells that are CD20+, CD45+, BCL6+, but CD15- and CD30- (opposite of classical HL). NLPHL is more indolent, can be observed if asymptomatic, and may transform to T-cell rich DLBCL.",
                 keyPoint: "NLPHL: CD20+, CD45+, CD15-, CD30-. 'Popcorn' cells. More indolent than classical HL. May transform to DLBCL.",
-                citation: "Swerdlow SH, et al. WHO Classification 2017"
+                citation: "Swerdlow SH, et al. Blood. 2016;127:2375-2390 (WHO Classification)",
+                pmid: "26980727",
+                doi: "10.1182/blood-2016-01-643569"
             },
             {
                 type: "simple",
@@ -3947,7 +4076,8 @@
                 correct: 1,
                 explanation: "This is Burkitt lymphoma. The lab abnormalities indicate impending TLS. Aggressive TLS prophylaxis (hydration, rasburicase, allopurinol) is critical BEFORE chemotherapy. Burkitt requires intensive regimens, not R-CHOP.",
                 keyPoint: "Burkitt = TLS emergency. Ki-67 >95%, BCL2-. Requires TLS prophylaxis BEFORE chemo and intensive regimens.",
-                citation: "NCCN B-Cell Lymphomas 2025; Cairo MS, Bishop M. Br J Haematol. 2004;127:3-11"
+                citation: "NCCN B-Cell Lymphomas 2025; Cairo MS, Bishop M. Br J Haematol. 2004;127:3-11",
+                pmid: "15384972"
             },
             {
                 type: "simple",
@@ -3963,7 +4093,9 @@
                 correct: 1,
                 explanation: "Polatuzumab vedotin is an anti-CD79b antibody conjugated to MMAE (monomethyl auristatin E), a microtubule-disrupting agent. It's part of Pola-R-CHP, now preferred frontline for IPI ≥2 DLBCL (POLARIX trial).",
                 keyPoint: "Polatuzumab = anti-CD79b ADC with MMAE. Part of Pola-R-CHP for frontline DLBCL with IPI ≥2.",
-                citation: "Tilly H, et al. N Engl J Med. 2022;386:351-363 (POLARIX)"
+                citation: "Tilly H, et al. N Engl J Med. 2022;386:351-363 (POLARIX)",
+                pmid: "34904799",
+                doi: "10.1056/NEJMoa2115304"
             },
             {
                 type: "simple",
@@ -3979,7 +4111,9 @@
                 correct: 1,
                 explanation: "CRS is characterized by massive cytokine release, particularly IL-6, with very high ferritin levels (often >10,000). Other markers include elevated CRP, d-dimer, and hypofibrinogenemia. Tocilizumab (anti-IL-6R) is the treatment for moderate-severe CRS.",
                 keyPoint: "CRS: Very high ferritin, elevated IL-6. Treat with tocilizumab (anti-IL-6R). Differentiate from infection (CRS ferritin often >10,000).",
-                citation: "Lee DW, et al. Biol Blood Marrow Transplant. 2019;25:625-638"
+                citation: "Lee DW, et al. Biol Blood Marrow Transplant. 2019;25:625-638",
+                pmid: "30592986",
+                doi: "10.1016/j.bbmt.2018.12.758"
             },
             {
                 type: "simple",
@@ -3995,7 +4129,9 @@
                 correct: 1,
                 explanation: "Ibrutinib is a covalent BTK inhibitor that blocks B-cell receptor signaling. It's approved for CLL, MCL, marginal zone lymphoma, and Waldenström's. Notable toxicities include atrial fibrillation, bleeding, and infections.",
                 keyPoint: "Ibrutinib = BTK inhibitor. Used in CLL, MCL, MZL, WM. Watch for AFib, bleeding, infections.",
-                citation: "Byrd JC, et al. N Engl J Med. 2013;369:32-42"
+                citation: "Byrd JC, et al. N Engl J Med. 2013;369:32-42",
+                pmid: "23782158",
+                doi: "10.1056/NEJMoa1215637"
             },
             {
                 type: "simple",
@@ -4011,7 +4147,9 @@
                 correct: 1,
                 explanation: "Double-hit lymphoma (now called high-grade B-cell lymphoma) has MYC rearrangement PLUS BCL2 and/or BCL6 rearrangement. Triple-hit has all three. These have aggressive behavior and poor prognosis with R-CHOP; often treated with DA-EPOCH-R.",
                 keyPoint: "Double-hit: MYC + BCL2/BCL6 rearrangements. Poor prognosis. Treat with DA-EPOCH-R, not R-CHOP.",
-                citation: "Petrich AM, et al. Blood. 2014;124:2354-2361"
+                citation: "Petrich AM, et al. Blood. 2014;124:2354-2361",
+                pmid: "25161267",
+                doi: "10.1182/blood-2014-05-578963"
             },
             {
                 type: "simple",
@@ -4027,7 +4165,9 @@
                 correct: 1,
                 explanation: "Venetoclax is a BCL2 inhibitor used in CLL with obinutuzumab (frontline) or rituximab (relapsed). It enables time-limited therapy with deep MRD-negative responses. Requires tumor lysis prophylaxis and ramp-up dosing.",
                 keyPoint: "Venetoclax = BCL2 inhibitor. Time-limited therapy in CLL. Requires TLS prophylaxis and dose ramp-up.",
-                citation: "Fischer K, et al. N Engl J Med. 2019;380:2225-2236 (CLL14)"
+                citation: "Fischer K, et al. N Engl J Med. 2019;380:2225-2236 (CLL14)",
+                pmid: "31166681",
+                doi: "10.1056/NEJMoa1815281"
             },
             {
                 type: "simple",
@@ -4043,7 +4183,9 @@
                 correct: 1,
                 explanation: "BRAF V600E mutation is present in virtually all classical hairy cell leukemia cases (~100%). It can be detected by PCR or IHC. This mutation is the basis for vemurafenib therapy in relapsed/refractory HCL.",
                 keyPoint: "Hairy cell leukemia: BRAF V600E in ~100%. CD25+, CD103+, CD11c+, CD123+. Treat with cladribine or pentostatin.",
-                citation: "Tiacci E, et al. N Engl J Med. 2011;364:2305-2315"
+                citation: "Tiacci E, et al. N Engl J Med. 2011;364:2305-2315",
+                pmid: "21663470",
+                doi: "10.1056/NEJMoa1014209"
             },
             {
                 type: "simple",
@@ -4059,7 +4201,9 @@
                 correct: 1,
                 explanation: "For heavily pretreated r/r FL, options include CAR-T (axi-cel approved after ≥2 prior lines), bispecifics (mosunetuzumab), PI3K inhibitors, and tazemetostat (EZH2 inhibitor). CAR-T shows high response rates in this setting.",
                 keyPoint: "r/r FL after multiple lines: CAR-T, bispecifics, PI3Ki, tazemetostat. Axi-cel approved after ≥2 prior lines.",
-                citation: "Jacobson CA, et al. Lancet Oncol. 2022;23:1066-1077 (ZUMA-5)"
+                citation: "Jacobson CA, et al. Lancet Oncol. 2022;23:91-103 (ZUMA-5)",
+                pmid: "34895487",
+                doi: "10.1016/S1470-2045(21)00591-X"
             },
             {
                 type: "simple",
@@ -4075,7 +4219,9 @@
                 correct: 1,
                 explanation: "FLIPI (Follicular Lymphoma International Prognostic Index) uses: Age >60, Stage III-IV, Hgb <12, LDH elevated, >4 nodal areas. FLIPI-2 adds β2-microglobulin and bone marrow involvement. Guides prognosis but doesn't determine treatment.",
                 keyPoint: "FLIPI: Age >60, Stage III-IV, Hgb <12, ↑LDH, >4 nodal areas. Low (0-1), Int (2), High (3-5) risk.",
-                citation: "Solal-Céligny P, et al. Blood. 2004;104:1258-1265"
+                citation: "Solal-Céligny P, et al. Blood. 2004;104:1258-1265",
+                pmid: "15126323",
+                doi: "10.1182/blood-2003-12-4434"
             },
             {
                 type: "case",
@@ -4100,7 +4246,9 @@
                 correct: 3,
                 explanation: "Ring-enhancing lesions with high EBV viral load in an immunocompromised patient suggests EBV-driven CNS lymphoproliferative disorder or primary CNS lymphoma. BTK inhibitors cause immunosuppression and increase opportunistic infection risk including EBV reactivation.",
                 keyPoint: "Ring-enhancing CNS lesions + high EBV in immunocompromised = suspect EBV-driven lymphoma/LPD. BTK inhibitors increase infection risk.",
-                citation: "Mato AR, et al. Haematologica. 2018;103:874-879"
+                citation: "Mato AR, et al. Haematologica. 2018;103:874-879",
+                pmid: "29419436",
+                doi: "10.3324/haematol.2017.182907"
             },
 
             // --- ATTENDING LEVEL QUESTIONS ---
@@ -4143,7 +4291,9 @@
                 correct: 1,
                 explanation: "TP53 mutation/deletion (17p-) predicts resistance to chemoimmunotherapy (FCR, BR). These patients should receive BTK inhibitors or venetoclax-based regimens. TP53 testing is mandatory before CLL treatment selection.",
                 keyPoint: "TP53 mutation/17p-: Chemo-resistant. Use BTK inhibitors or venetoclax. Test TP53 before all CLL treatment decisions.",
-                citation: "Hallek M, et al. Blood. 2018;131:2745-2760"
+                citation: "Hallek M, et al. Blood. 2018;131:2745-2760",
+                pmid: "29540348",
+                doi: "10.1182/blood-2017-09-806398"
             },
             {
                 type: "simple",
@@ -4159,7 +4309,9 @@
                 correct: 1,
                 explanation: "Bridging therapy between leukapheresis and CAR-T infusion may be needed for disease control. Goals: reduce tumor bulk, prevent clinical deterioration, but avoid excessive lymphodepletion. Options include radiation, steroids, or low-intensity chemo. High tumor burden at infusion correlates with worse outcomes.",
                 keyPoint: "CAR-T bridging: Control disease, avoid excess lymphodepletion. High tumor burden at infusion = worse outcomes. Options: RT, steroids, low-intensity chemo.",
-                citation: "Nastoupil LJ, et al. J Clin Oncol. 2020;38:3119-3128"
+                citation: "Nastoupil LJ, et al. J Clin Oncol. 2020;38:3119-3128",
+                pmid: "32401634",
+                doi: "10.1200/JCO.19.02104"
             },
             {
                 type: "simple",
@@ -4175,7 +4327,9 @@
                 correct: 1,
                 explanation: "ICANS (Immune effector Cell-Associated Neurotoxicity Syndrome) occurs after CAR-T or bispecific therapy. Symptoms: confusion, aphasia, tremor, seizures, cerebral edema. Graded 1-4. Management: supportive care (grade 1), dexamethasone (grade ≥2). Unlike CRS, tocilizumab less effective for ICANS.",
                 keyPoint: "ICANS: Neurotoxicity after CAR-T/bispecifics. Confusion, aphasia, seizures. Treat with steroids (dexamethasone). Tocilizumab less effective than for CRS.",
-                citation: "Lee DW, et al. Biol Blood Marrow Transplant. 2019;25:625-638"
+                citation: "Lee DW, et al. Biol Blood Marrow Transplant. 2019;25:625-638",
+                pmid: "30592986",
+                doi: "10.1016/j.bbmt.2018.12.758"
             },
             {
                 type: "simple",
@@ -4191,7 +4345,9 @@
                 correct: 1,
                 explanation: "Radiation in DLBCL: consolidation for initially bulky disease (≥7.5-10 cm), partial response to chemo, or selected limited-stage disease. UNFOLDER trial showed benefit for bulky disease. Also used for localized relapse or palliation.",
                 keyPoint: "DLBCL RT: Consolidation for bulky disease (≥7.5cm), PR after chemo, or limited-stage. Not needed for all patients achieving CMR.",
-                citation: "Held G, et al. J Clin Oncol. 2014;32:1188-1194 (UNFOLDER)"
+                citation: "Held G, et al. J Clin Oncol. 2014;32:1112-1118",
+                pmid: "24493716",
+                doi: "10.1200/JCO.2013.51.4505"
             },
             {
                 type: "simple",
@@ -4207,7 +4363,9 @@
                 correct: 1,
                 explanation: "Glofitamab has a unique 2:1 structure with two CD20 binding sites and one CD3 site, providing stronger CD20 binding. Given IV with step-up dosing to mitigate CRS. Fixed 12-cycle duration. Obinutuzumab pre-treatment required.",
                 keyPoint: "Glofitamab: 2:1 bispecific (2 CD20 sites). Step-up dosing. Fixed 12 cycles. Obinutuzumab pretreatment. IV administration.",
-                citation: "Dickinson MJ, et al. N Engl J Med. 2022;387:2220-2231"
+                citation: "Dickinson MJ, et al. N Engl J Med. 2022;387:2220-2231",
+                pmid: "36507690",
+                doi: "10.1056/NEJMoa2206913"
             },
             {
                 type: "simple",
@@ -4223,7 +4381,9 @@
                 correct: 1,
                 explanation: "MYC protein overexpression (≥40%) by IHC, with or without BCL2 co-expression ('double expressor'), confers worse prognosis even without gene rearrangement. Double expressors have outcomes between standard DLBCL and double-hit lymphoma. FISH still needed to rule out rearrangement.",
                 keyPoint: "Double expressor: MYC ≥40% + BCL2 ≥50% by IHC without rearrangement. Worse prognosis than standard DLBCL. Still do FISH for rearrangements.",
-                citation: "Johnson NA, et al. J Clin Oncol. 2012;30:3452-3459"
+                citation: "Johnson NA, et al. J Clin Oncol. 2012;30:3452-3459",
+                pmid: "22851565",
+                doi: "10.1200/JCO.2011.41.0985"
             },
             {
                 type: "case",
@@ -4264,7 +4424,9 @@
                 correct: 1,
                 explanation: "Zanubrutinib is a more selective next-generation BTK inhibitor with less off-target kinase inhibition (especially ITK, EGFR). ALPINE trial showed superior PFS and fewer cardiac events (AFib) and bleeding compared to ibrutinib in r/r CLL.",
                 keyPoint: "Zanubrutinib: More selective BTK inhibitor. Less AFib and bleeding than ibrutinib (ALPINE). Both work in TP53-mutated CLL.",
-                citation: "Brown JR, et al. N Engl J Med. 2023;388:319-332 (ALPINE)"
+                citation: "Brown JR, et al. N Engl J Med. 2023;388:319-332 (ALPINE)",
+                pmid: "36511784",
+                doi: "10.1056/NEJMoa2211582"
             },
             {
                 type: "simple",
@@ -4280,7 +4442,9 @@
                 correct: 1,
                 explanation: "DLBCL is classified as germinal center B-cell (GCB) or activated B-cell (ABC/non-GCB) type by gene expression or Hans algorithm (IHC: CD10, BCL6, MUM1). ABC has worse prognosis with R-CHOP. ABC may benefit from BTK inhibitor addition, though ibrutinib+R-CHOP trials were mixed.",
                 keyPoint: "DLBCL COO: GCB vs. ABC (Hans algorithm). ABC = worse prognosis with R-CHOP. ABC may benefit from BTK inhibitors (under investigation).",
-                citation: "Alizadeh AA, et al. Nature. 2000;403:503-511"
+                citation: "Alizadeh AA, et al. Nature. 2000;403:503-511",
+                pmid: "10676951",
+                doi: "10.1038/35000501"
             },
             {
                 type: "simple",
@@ -4296,7 +4460,9 @@
                 correct: 1,
                 explanation: "CNS prophylaxis (IT or IV MTX) indicated for: High CNS-IPI (4-6), testicular/breast/kidney/adrenal involvement, epidural disease, double/triple-hit lymphoma. CNS-IPI adds kidney/adrenal involvement to IPI factors. Prophylaxis reduces but doesn't eliminate CNS relapse risk.",
                 keyPoint: "DLBCL CNS prophylaxis: High CNS-IPI (4-6), testicular, breast, kidney, adrenal, double-hit. IT or IV MTX. Reduces but doesn't eliminate risk.",
-                citation: "Schmitz N, et al. J Clin Oncol. 2016;34:3150-3156 (CNS-IPI)"
+                citation: "Schmitz N, et al. J Clin Oncol. 2016;34:3150-3156 (CNS-IPI)",
+                pmid: "27382100",
+                doi: "10.1200/JCO.2015.65.6520"
             },
 
             // ADDITIONAL INTERN LEVEL QUESTIONS
@@ -4378,7 +4544,9 @@
                 correct: 1,
                 explanation: "R-CHOP: Rituximab (anti-CD20), Cyclophosphamide (alkylator), Hydroxydaunorubicin/doxorubicin (anthracycline), Oncovin/vincristine (vinca alkaloid), Prednisone (steroid). Standard regimen for aggressive B-cell lymphomas.",
                 keyPoint: "R-CHOP = Rituximab + Cyclophosphamide + Doxorubicin + Vincristine + Prednisone. Every 21 days. Standard for DLBCL.",
-                citation: "Coiffier B, et al. N Engl J Med. 2002;346:235-242"
+                citation: "Coiffier B, et al. N Engl J Med. 2002;346:235-242",
+                pmid: "11807147",
+                doi: "10.1056/NEJMoa011795"
             },
 
             // ADDITIONAL RESIDENT LEVEL QUESTIONS
@@ -4396,7 +4564,9 @@
                 correct: 1,
                 explanation: "Double-expressor (DE): MYC and BCL2 protein overexpression by IHC (40% of DLBCL, worse prognosis). Double-hit (DH): actual chromosomal rearrangements of MYC plus BCL2 and/or BCL6 (5-10%, very poor prognosis). DH is classified as high-grade B-cell lymphoma.",
                 keyPoint: "Double-expressor = IHC protein (worse prognosis). Double-hit = genetic rearrangements (much worse, high-grade). Test both.",
-                citation: "Rosenwald A, et al. J Clin Oncol. 2019;37:346-358"
+                citation: "Rosenwald A, et al. J Clin Oncol. 2019;37:3359-3368",
+                pmid: "31498031",
+                doi: "10.1200/JCO.19.00743"
             },
             {
                 type: "simple",
@@ -4436,7 +4606,9 @@
                 correct: 1,
                 explanation: "Asymptomatic, low-tumor-burden follicular lymphoma (no GELF criteria) is managed with watch and wait. No survival benefit to early treatment. Monitor every 3-6 months. Treat when symptoms or GELF criteria develop.",
                 keyPoint: "Asymptomatic FL without GELF criteria: watch and wait. No survival benefit to early treatment. Follow closely.",
-                citation: "Ardeshna KM, et al. Lancet Oncol. 2014;15:424-435"
+                citation: "Ardeshna KM, et al. Lancet Oncol. 2014;15:424-435",
+                pmid: "24602760",
+                doi: "10.1016/S1470-2045(14)70027-0"
             },
             {
                 type: "simple",
@@ -4468,7 +4640,9 @@
                 correct: 1,
                 explanation: "Early-stage favorable cHL: 2 cycles ABVD → interim PET → if Deauville 1-3: 2 more cycles ABVD ± ISRT. Response-adapted approach reduces toxicity while maintaining excellent outcomes. RAPID trial showed PET-guided approach is safe.",
                 keyPoint: "Early favorable cHL: 2 ABVD → PET → response-adapted. Deauville guides further therapy. Excellent outcomes.",
-                citation: "Radford J, et al. N Engl J Med. 2015;372:1598-1607"
+                citation: "Radford J, et al. N Engl J Med. 2015;372:1598-1607",
+                pmid: "25901426",
+                doi: "10.1056/NEJMoa1408648"
             },
 
             // ADDITIONAL FELLOW LEVEL QUESTIONS
@@ -4486,7 +4660,9 @@
                 correct: 1,
                 explanation: "CD19-directed CAR-T (axi-cel, liso-cel, tisa-cel) is approved for R/R DLBCL after ≥2 prior therapies. ZUMA-7 and TRANSFORM showed benefit in early relapse (after 1 prior line). Main toxicities: CRS and ICANS.",
                 keyPoint: "CAR-T in DLBCL: 3rd line standard, 2nd line for early relapse (ZUMA-7). CD19-directed. Watch for CRS/ICANS.",
-                citation: "Locke FL, et al. N Engl J Med. 2022;386:640-654"
+                citation: "Locke FL, et al. N Engl J Med. 2022;386:640-654",
+                pmid: "34891224",
+                doi: "10.1056/NEJMoa2116133"
             },
             {
                 type: "simple",
@@ -4502,7 +4678,9 @@
                 correct: 1,
                 explanation: "Bispecific antibodies (glofitamab, epcoritamab, mosunetuzumab) bind CD20 on lymphoma cells and CD3 on T-cells, creating immunologic synapses. Approved for R/R DLBCL and FL. CRS risk requires step-up dosing. Off-the-shelf (no manufacturing delay).",
                 keyPoint: "CD20xCD3 bispecifics: T-cell redirectors for R/R B-NHL. Off-the-shelf advantage. Step-up dosing for CRS mitigation.",
-                citation: "Dickinson MJ, et al. N Engl J Med. 2022;387:2220-2231"
+                citation: "Dickinson MJ, et al. N Engl J Med. 2022;387:2220-2231",
+                pmid: "36507690",
+                doi: "10.1056/NEJMoa2206913"
             },
             {
                 type: "case",
@@ -4558,7 +4736,9 @@
                 correct: 1,
                 explanation: "ABC subtype has significantly worse prognosis than GCB (5-year OS 45-56% vs 78-80% with R-CHOP). ABC has constitutively active NF-κB signaling. Novel agents targeting this pathway are being studied. GCB more often associated with BCL2 rearrangements.",
                 keyPoint: "ABC DLBCL: worse prognosis than GCB. NF-κB pathway activated. 5-yr OS 45-56% vs 78-80% for GCB.",
-                citation: "Lenz G, et al. N Engl J Med. 2008;359:2313-2323"
+                citation: "Lenz G, et al. N Engl J Med. 2008;359:2313-2323",
+                pmid: "19038878",
+                doi: "10.1056/NEJMoa0802885"
             },
 
             // ADDITIONAL ATTENDING LEVEL QUESTIONS
@@ -4584,7 +4764,9 @@
                 correct: 1,
                 explanation: "For early relapse DLBCL (<12 months), CAR-T therapy is now preferred over traditional salvage-ASCT based on ZUMA-7 and TRANSFORM trials showing superior EFS. Patients with relapse >12 months may be considered for either approach.",
                 keyPoint: "DLBCL early relapse (<12 mo): CAR-T preferred (ZUMA-7, TRANSFORM). Late relapse (>12 mo): CAR-T or salvage-ASCT both options.",
-                citation: "Westin JR, et al. N Engl J Med. 2023;389:148-157"
+                citation: "Westin JR, et al. N Engl J Med. 2023;389:148-157",
+                pmid: "37272527",
+                doi: "10.1056/NEJMoa2301665"
             },
             {
                 type: "simple",
@@ -4600,7 +4782,9 @@
                 correct: 1,
                 explanation: "Lenalidomide + rituximab (R2) shows activity in relapsed DLBCL, particularly non-GCB/ABC subtype given lenalidomide's effect on NF-κB pathway. Can be a bridge to CAR-T or for patients not candidates for intensive therapy.",
                 keyPoint: "Lenalidomide-Rituximab: R/R DLBCL option, better in ABC/non-GCB. Bridge to definitive therapy or for unfit patients.",
-                citation: "Leonard JP, et al. J Clin Oncol. 2019;37:1188-1199"
+                citation: "Leonard JP, et al. J Clin Oncol. 2019;37:1188-1199",
+                pmid: "30897038",
+                doi: "10.1200/JCO.19.00010"
             },
             {
                 type: "simple",
@@ -4616,7 +4800,9 @@
                 correct: 1,
                 explanation: "Loncastuximab tesirine is a CD19-directed antibody-drug conjugate (ADC) carrying a pyrrolobenzodiazepine dimer payload. FDA-approved for R/R DLBCL after 2+ prior lines. Key toxicities include cytopenias, elevated GGT, and effusions.",
                 keyPoint: "Loncastuximab tesirine: CD19 ADC for R/R DLBCL. Watch for cytopenias, GGT elevation, effusions. Different target than CD20.",
-                citation: "Caimi PF, et al. Lancet Oncol. 2021;22:790-800"
+                citation: "Caimi PF, et al. Lancet Oncol. 2021;22:790-800",
+                pmid: "33989558",
+                doi: "10.1016/S1470-2045(21)00139-X"
             },
             {
                 type: "simple",
@@ -4632,7 +4818,9 @@
                 correct: 1,
                 explanation: "All patients should be screened for HBsAg and anti-HBc before rituximab. HBsAg+ patients need antiviral prophylaxis (entecavir preferred). Anti-HBc+ (HBsAg-) patients need monitoring ± prophylaxis. Reactivation can be fatal.",
                 keyPoint: "HBV + rituximab: Screen all (HBsAg, anti-HBc). HBsAg+ = antiviral prophylaxis. Anti-HBc+ = close monitoring ± prophylaxis.",
-                citation: "Loomba R, et al. Ann Intern Med. 2017;167:794-803"
+                citation: "Loomba R, Liang TJ. Gastroenterology. 2017;152:1297-1309",
+                pmid: "28219691",
+                doi: "10.1053/j.gastro.2017.01.004"
             },
 
             // ============ H&E HISTOPATHOLOGY QUESTIONS ============
@@ -4662,7 +4850,9 @@
                 correct: 1,
                 explanation: "Reed-Sternberg (RS) cells are the malignant cells of classic Hodgkin lymphoma. They are large cells with bilobed or binucleated nuclei, each lobe containing a prominent eosinophilic nucleolus creating the classic 'owl-eye' appearance. They are CD15+, CD30+, usually CD20-.",
                 keyPoint: "Reed-Sternberg cells: binucleated, owl-eye nucleoli, CD15+/CD30+, usually CD20-. Pathognomonic for cHL.",
-                citation: "Swerdlow SH, et al. WHO Classification 2017"
+                citation: "Swerdlow SH, et al. Blood. 2016;127:2375-2390 (WHO Classification)",
+                pmid: "26980727",
+                doi: "10.1182/blood-2016-01-643569"
             },
             {
                 type: "simple",
@@ -4678,7 +4868,9 @@
                 correct: 1,
                 explanation: "Follicular lymphoma shows a nodular (follicular) growth pattern with numerous closely packed follicles replacing normal architecture. The neoplastic follicles lack normal mantle zones, lack polarization (no distinct dark/light zones), and are composed of centrocytes and centroblasts.",
                 keyPoint: "FL: nodular/follicular pattern, back-to-back follicles, no mantle zones, no polarization. t(14;18) BCL2+.",
-                citation: "Swerdlow SH, et al. WHO Classification 2017"
+                citation: "Swerdlow SH, et al. Blood. 2016;127:2375-2390 (WHO Classification)",
+                pmid: "26980727",
+                doi: "10.1182/blood-2016-01-643569"
             },
             {
                 type: "case",
@@ -4707,7 +4899,9 @@
                 correct: 1,
                 explanation: "The 'starry sky' appearance in Burkitt lymphoma results from tingible-body macrophages (pale 'stars') scattered among sheets of monomorphic medium-sized blue lymphoma cells (dark 'sky'). The macrophages are phagocytosing apoptotic tumor cells due to extremely high proliferation/turnover.",
                 keyPoint: "Starry sky = Burkitt lymphoma. Tingible-body macrophages (stars) in monotonous blue cells (sky). Ki-67 ~100%.",
-                citation: "Swerdlow SH, et al. WHO Classification 2017"
+                citation: "Swerdlow SH, et al. Blood. 2016;127:2375-2390 (WHO Classification)",
+                pmid: "26980727",
+                doi: "10.1182/blood-2016-01-643569"
             },
             {
                 type: "simple",
@@ -4739,7 +4933,9 @@
                 correct: 1,
                 explanation: "MCL shows monomorphic small-to-medium lymphoid cells with irregular, indented, or cleaved nuclear contours and dispersed chromatin. Classic pattern is diffuse or nodular. Blastoid and pleomorphic variants are more aggressive. Cyclin D1+ (due to t(11;14)).",
                 keyPoint: "MCL: monomorphic small-medium cells, irregular/cleaved nuclei, cyclin D1+. Blastoid variant = aggressive.",
-                citation: "Swerdlow SH, et al. WHO Classification 2017"
+                citation: "Swerdlow SH, et al. Blood. 2016;127:2375-2390 (WHO Classification)",
+                pmid: "26980727",
+                doi: "10.1182/blood-2016-01-643569"
             },
             {
                 type: "simple",
@@ -4755,7 +4951,9 @@
                 correct: 1,
                 explanation: "NLPHL has LP cells (lymphocyte-predominant, 'popcorn' or 'L&H' cells): large cells with multilobated vesicular nuclei and small nucleoli, unlike RS cells' owl-eye appearance. Critically different immunophenotype: LP cells are CD20+, CD15-, CD30- (opposite of RS cells).",
                 keyPoint: "NLPHL: LP/popcorn cells, multilobated nuclei. CD20+/CD15-/CD30- (opposite of classic HL RS cells).",
-                citation: "Swerdlow SH, et al. WHO Classification 2017"
+                citation: "Swerdlow SH, et al. Blood. 2016;127:2375-2390 (WHO Classification)",
+                pmid: "26980727",
+                doi: "10.1182/blood-2016-01-643569"
             },
             {
                 type: "simple",
@@ -4771,7 +4969,9 @@
                 correct: 1,
                 explanation: "MALT lymphoma shows small B-cells with centrocyte-like (cleaved) or monocytoid (pale cytoplasm) morphology surrounding reactive follicles (marginal zone pattern). Lymphoepithelial lesions (lymphoma cells invading epithelial structures) are characteristic, especially in gastric MALT.",
                 keyPoint: "MALT: marginal zone cells, lymphoepithelial lesions (invasion into glands). Associated with H. pylori in stomach.",
-                citation: "Swerdlow SH, et al. WHO Classification 2017"
+                citation: "Swerdlow SH, et al. Blood. 2016;127:2375-2390 (WHO Classification)",
+                pmid: "26980727",
+                doi: "10.1182/blood-2016-01-643569"
             },
             {
                 type: "simple",
@@ -4787,7 +4987,9 @@
                 correct: 1,
                 explanation: "Double-hit lymphoma (now 'high-grade B-cell lymphoma with MYC and BCL2/BCL6 rearrangements') requires FISH-confirmed translocations, not just protein expression. Morphology may be DLBCL-like or Burkitt-like or intermediate. Extremely aggressive; needs intensified therapy.",
                 keyPoint: "Double-hit = FISH-confirmed MYC + BCL2/BCL6 translocations. Not just IHC. Very aggressive. Need DA-EPOCH-R.",
-                citation: "Rosenwald A, et al. J Clin Oncol. 2019;37:346-358"
+                citation: "Rosenwald A, et al. J Clin Oncol. 2019;37:3359-3368",
+                pmid: "31498031",
+                doi: "10.1200/JCO.19.00743"
             },
             {
                 type: "simple",
@@ -4803,7 +5005,9 @@
                 correct: 1,
                 explanation: "Nodular sclerosis cHL (most common subtype): broad bands of birefringent collagen dividing tumor into nodules, and lacunar cells (RS variant where cytoplasm retracts in formalin fixation creating 'lacunae'). Common in young adults, mediastinal involvement frequent.",
                 keyPoint: "NS cHL: collagen bands + lacunar cells. Most common subtype. Young adults, mediastinal mass.",
-                citation: "Swerdlow SH, et al. WHO Classification 2017"
+                citation: "Swerdlow SH, et al. Blood. 2016;127:2375-2390 (WHO Classification)",
+                pmid: "26980727",
+                doi: "10.1182/blood-2016-01-643569"
             },
             {
                 type: "simple",
@@ -4819,7 +5023,9 @@
                 correct: 1,
                 explanation: "PMBCL shows large cells often with clear cytoplasm (due to glycogen), delicate compartmentalizing fibrosis, and arises in the thymus (anterior mediastinum). More common in young women. Gene expression similar to classic HL. CD30 variably positive.",
                 keyPoint: "PMBCL: large cells, clear cytoplasm, compartmentalizing fibrosis, thymic origin. Young women, mediastinal mass.",
-                citation: "Swerdlow SH, et al. WHO Classification 2017"
+                citation: "Swerdlow SH, et al. Blood. 2016;127:2375-2390 (WHO Classification)",
+                pmid: "26980727",
+                doi: "10.1182/blood-2016-01-643569"
             },
             {
                 type: "simple",
@@ -4835,7 +5041,9 @@
                 correct: 1,
                 explanation: "ALCL shows large pleomorphic cells with characteristic 'hallmark cells': eccentric, horseshoe/embryo-shaped nuclei with eosinophilic Golgi region. Always CD30+. ALK+ (usually t(2;5)) has better prognosis than ALK-. T-cell/null cell lineage.",
                 keyPoint: "ALCL: hallmark cells (horseshoe nuclei), CD30+. ALK+ = better prognosis. T/null lineage.",
-                citation: "Swerdlow SH, et al. WHO Classification 2017"
+                citation: "Swerdlow SH, et al. Blood. 2016;127:2375-2390 (WHO Classification)",
+                pmid: "26980727",
+                doi: "10.1182/blood-2016-01-643569"
             },
 
             // ============ ADDITIONAL QUESTIONS ============
@@ -4853,7 +5061,9 @@
                 correct: 1,
                 explanation: "Lymphoma uses Lugano classification (2014), which modified Ann Arbor staging. Stages I-II are limited; III-IV are advanced. Uses PET/CT for staging. 'E' denotes extranodal extension; 'X' for bulk (≥10cm or >1/3 thorax).",
                 keyPoint: "Lugano staging: I-II limited, III-IV advanced. Based on Ann Arbor. PET-based assessment.",
-                citation: "Cheson BD, et al. J Clin Oncol. 2014;32:3059-3068"
+                citation: "Cheson BD, et al. J Clin Oncol. 2014;32:3059-3068",
+                pmid: "25113753",
+                doi: "10.1200/JCO.2013.54.8800"
             },
             {
                 type: "simple",
@@ -4885,7 +5095,9 @@
                 correct: 1,
                 explanation: "IPI factors (1 point each): Age >60, Stage III-IV, >1 extranodal site, Elevated LDH, ECOG PS ≥2. Score 0-1: low risk, 2: low-intermediate, 3: high-intermediate, 4-5: high risk. Predicts survival in DLBCL.",
                 keyPoint: "IPI for DLBCL: Age, Stage, LDH, PS, extranodal sites. 0-1 low, 2 low-int, 3 high-int, 4-5 high risk.",
-                citation: "Shipp MA, et al. N Engl J Med. 1993;329:987-994"
+                citation: "Shipp MA, et al. N Engl J Med. 1993;329:987-994",
+                pmid: "8141877",
+                doi: "10.1056/NEJM199309303291402"
             },
             {
                 type: "simple",
@@ -4901,7 +5113,9 @@
                 correct: 1,
                 explanation: "PET/CT is used for: initial staging (Lugano), interim assessment during treatment (Deauville score guides therapy in HL, some DLBCL), end-of-treatment response, and surveillance (controversial, mainly for aggressive lymphoma). Deauville 1-3 = good response.",
                 keyPoint: "PET/CT: staging, interim assessment (Deauville 1-5), end of treatment. Deauville 1-3 good, 4-5 bad.",
-                citation: "Barrington SF, et al. J Clin Oncol. 2014;32:3048-3058"
+                citation: "Barrington SF, et al. J Clin Oncol. 2014;32:3048-3058",
+                pmid: "25113771",
+                doi: "10.1200/JCO.2013.53.5229"
             },
             {
                 type: "simple",
@@ -4917,7 +5131,9 @@
                 correct: 1,
                 explanation: "Polatuzumab vedotin is a CD79b-directed ADC (MMAE payload). Approved with bendamustine-rituximab for R/R DLBCL. POLARIX trial led to approval of Pola-R-CHP as frontline for DLBCL (replacing vincristine with polatuzumab). Improved PFS over R-CHOP.",
                 keyPoint: "Polatuzumab: CD79b ADC. Pola-R-CHP frontline for DLBCL (POLARIX). Pola-BR for R/R DLBCL.",
-                citation: "Tilly H, et al. N Engl J Med. 2022;386:351-363"
+                citation: "Tilly H, et al. N Engl J Med. 2022;386:351-363",
+                pmid: "34904799",
+                doi: "10.1056/NEJMoa2115304"
             },
             {
                 type: "case",
@@ -4942,7 +5158,9 @@
                 correct: 1,
                 explanation: "PMBCL: young woman, large anterior mediastinal mass, clear cytoplasm, fibrosis, CD20+/CD30+. DA-EPOCH-R is preferred over R-CHOP based on NCI data showing improved outcomes and reduced need for radiation. PET-guided approach to avoid mediastinal radiation.",
                 keyPoint: "PMBCL: DA-EPOCH-R preferred (NCI regimen). PET-adapted to avoid radiation if possible. Young women, mediastinal mass.",
-                citation: "Dunleavy K, et al. N Engl J Med. 2013;368:1408-1416"
+                citation: "Dunleavy K, et al. N Engl J Med. 2013;368:1408-1416",
+                pmid: "23574119",
+                doi: "10.1056/NEJMoa1214561"
             },
             {
                 type: "simple",
@@ -4958,7 +5176,9 @@
                 correct: 1,
                 explanation: "EBV is associated with: endemic Burkitt lymphoma (~100%), some DLBCL (EBV+ DLBCL, worse prognosis), classic HL (~40%, higher in immunosuppressed), PTLD (post-transplant), and some T/NK lymphomas. EBER in-situ hybridization detects EBV.",
                 keyPoint: "EBV associated: endemic Burkitt, some DLBCL/HL, PTLD, NK/T lymphomas. EBER detects it. May guide therapy.",
-                citation: "Shannon-Lowe C, et al. Nat Rev Cancer. 2017;17:51-63"
+                citation: "Shannon-Lowe C, et al. Philos Trans R Soc B. 2017;372:20160271",
+                pmid: "28893938",
+                doi: "10.1098/rstb.2016.0271"
             },
             {
                 type: "simple",
@@ -4974,7 +5194,9 @@
                 correct: 1,
                 explanation: "Ibrutinib (BTK inhibitor) is approved for: relapsed MCL, marginal zone lymphoma, Waldenstrom macroglobulinemia (with rituximab), and CLL. Active in B-cell malignancies dependent on BCR signaling. Key toxicities: bleeding, atrial fibrillation, infections.",
                 keyPoint: "Ibrutinib: BTK inhibitor for MCL, MZL, WM, CLL. Watch for afib, bleeding, infections. Avoid with anticoagulants.",
-                citation: "Wang ML, et al. N Engl J Med. 2013;369:507-516"
+                citation: "Wang ML, et al. N Engl J Med. 2013;369:507-516",
+                pmid: "23782157",
+                doi: "10.1056/NEJMoa1306220"
             },
             // ============ ROUND 2: ADDITIONAL CLINICAL QUESTIONS ============
             {
@@ -4991,7 +5213,9 @@
                 correct: 1,
                 explanation: "Three anti-CD19 CAR-T products are FDA-approved for R/R DLBCL after ≥2 prior therapies: axi-cel (ZUMA-1), tisa-cel (JULIET), and liso-cel (TRANSCEND). Each has different toxicity profiles. ZUMA-7 and TRANSFORM trials showed benefit in 2nd line for high-risk patients.",
                 keyPoint: "Three CAR-T for DLBCL: axi-cel, tisa-cel, liso-cel. Different CRS/ICANS profiles. 2nd line for high-risk (ZUMA-7, TRANSFORM).",
-                citation: "Neelapu SS, et al. N Engl J Med. 2017;377:2531-2544"
+                citation: "Neelapu SS, et al. N Engl J Med. 2017;377:2531-2544",
+                pmid: "29226797",
+                doi: "10.1056/NEJMoa1707447"
             },
             {
                 type: "simple",
@@ -5007,7 +5231,9 @@
                 correct: 1,
                 explanation: "CD20xCD3 bispecific antibodies (mosunetuzumab, glofitamab, epcoritamab) bridge T-cells to lymphoma cells by binding CD3 on T-cells and CD20 on tumor. This induces T-cell activation and tumor killing. Off-the-shelf, no manufacturing delay unlike CAR-T.",
                 keyPoint: "CD20xCD3 bispecifics: bridge T-cells to lymphoma via CD20. Off-the-shelf. CRS occurs but usually lower grade than CAR-T.",
-                citation: "Budde LE, et al. Lancet Oncol. 2022;23:1055-1065"
+                citation: "Budde LE, et al. Lancet Oncol. 2022;23:1055-1065",
+                pmid: "35803286",
+                doi: "10.1016/S1470-2045(22)00335-7"
             },
             {
                 type: "simple",
@@ -5071,7 +5297,9 @@
                 correct: 1,
                 explanation: "Polatuzumab vedotin is an anti-CD79b antibody-drug conjugate (MMAE payload). POLARIX trial showed pola-R-CHP superior to R-CHOP for first-line DLBCL (PFS benefit). Also approved with BR for R/R DLBCL. Main toxicity: peripheral neuropathy.",
                 keyPoint: "Pola-vedotin: anti-CD79b ADC. POLARIX: pola-R-CHP > R-CHOP for DLBCL. Watch for neuropathy.",
-                citation: "Tilly H, et al. N Engl J Med. 2022;386:351-363"
+                citation: "Tilly H, et al. N Engl J Med. 2022;386:351-363",
+                pmid: "34904799",
+                doi: "10.1056/NEJMoa2115304"
             },
             {
                 type: "simple",
@@ -5103,7 +5331,9 @@
                 correct: 1,
                 explanation: "High-grade B-cell lymphoma with MYC and BCL2 rearrangements (double-hit) has poor prognosis. Often GCB subtype. DA-EPOCH-R may be superior to R-CHOP. CNS prophylaxis recommended. Consider CAR-T or transplant consolidation in first remission for fit patients.",
                 keyPoint: "Double-hit: MYC + BCL2 rearranged. Poor prognosis. DA-EPOCH-R, CNS prophylaxis, consider consolidation.",
-                citation: "Petrich AM, et al. Blood. 2014;124:2354-2361"
+                citation: "Petrich AM, et al. Blood. 2014;124:2354-2361",
+                pmid: "25161267",
+                doi: "10.1182/blood-2014-05-578963"
             },
             {
                 type: "simple",
@@ -5345,7 +5575,9 @@
                 correct: 1,
                 explanation: "FLIPI (Follicular Lymphoma International Prognostic Index) uses 5 factors: age >60, stage III-IV, Hgb <12, elevated LDH, >4 nodal sites. Risk groups: low (0-1), intermediate (2), high (3-5). FLIPI2 adds β2-microglobulin and bone marrow involvement. Helps estimate prognosis, less so treatment selection.",
                 keyPoint: "FLIPI: age, stage, Hgb, LDH, nodal sites. Low/intermediate/high risk. Prognostic, less treatment-guiding.",
-                citation: "Solal-Céligny P, et al. Blood. 2004;104:1258-1265"
+                citation: "Solal-Céligny P, et al. Blood. 2004;104:1258-1265",
+                pmid: "15126323",
+                doi: "10.1182/blood-2003-12-4434"
             },
             {
                 type: "simple",
@@ -5409,7 +5641,9 @@
                 correct: 1,
                 explanation: "CLL requires: FISH (del17p - worst prognosis, del11q - adverse, trisomy 12 - intermediate, del13q alone - favorable), TP53 mutation testing, and IGHV mutation status (unmutated - worse prognosis, mutated - better). del17p/TP53 mutation: avoid chemoimmunotherapy, use BTK inhibitors or venetoclax.",
                 keyPoint: "CLL genetics: FISH (del17p, 11q, +12, 13q), TP53 mutation, IGHV status. del17p/TP53mut → BTKi or venetoclax.",
-                citation: "Hallek M, et al. Blood. 2018;131:2745-2760"
+                citation: "Hallek M, et al. Blood. 2018;131:2745-2760",
+                pmid: "29540348",
+                doi: "10.1182/blood-2017-09-806398"
             }
         ];
 
@@ -5822,7 +6056,8 @@
                     ` : ''}
                     ${q.citation ? `
                         <div class="citation">
-                            <strong>Citation:</strong> ${q.citation}
+                            <strong>📚 Citation:</strong> ${q.citation}
+                            ${renderReferenceLinks(q)}
                         </div>
                     ` : ''}
                 </div>
@@ -6136,7 +6371,7 @@
                 if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
             }
 
-            localStorage.setItem('lymphomaster-sf-mode', sfMode);
+            localStorage.setItem('lymphoinvader-sf-mode', sfMode);
         }
 
         function showSFAnnouncement(text) {
@@ -6251,7 +6486,7 @@
         });
 
         // Check for saved SF mode preference
-        if (localStorage.getItem('lymphomaster-sf-mode') === 'true') {
+        if (localStorage.getItem('lymphoinvader-sf-mode') === 'true') {
             sfMode = true;
             document.body.classList.add('sf-mode');
         }
@@ -6313,7 +6548,7 @@
             }
 
             // Save preference
-            localStorage.setItem('lymphomaster-volume', value);
+            localStorage.setItem('lymphoinvader-volume', value);
         }
 
         // Create a pulsing synth bass - Cliff Martinez style
@@ -6628,7 +6863,7 @@
                 playMusicLoop();
             }
 
-            localStorage.setItem('lymphomaster-music', musicPlaying);
+            localStorage.setItem('lymphoinvader-music', musicPlaying);
         }
 
         // Create electronic revelation stab
@@ -6882,7 +7117,7 @@
         };
 
         // Check for saved volume preference
-        const savedVolume = localStorage.getItem('lymphomaster-volume');
+        const savedVolume = localStorage.getItem('lymphoinvader-volume');
         if (savedVolume !== null) {
             const vol = parseInt(savedVolume);
             musicVolume = vol / 100;
@@ -6903,7 +7138,7 @@
         }
 
         // Check for saved music preference
-        if (localStorage.getItem('lymphomaster-music') === 'true' && !sfMode) {
+        if (localStorage.getItem('lymphoinvader-music') === 'true' && !sfMode) {
             setTimeout(() => {
                 musicPlaying = true;
                 document.querySelector('.music-control').classList.add('playing');
