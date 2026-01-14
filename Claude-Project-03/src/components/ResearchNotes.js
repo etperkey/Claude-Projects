@@ -70,11 +70,7 @@ function ResearchNotes({ projectId, projectTitle }) {
     const newAim = {
       id: Date.now(),
       title: '',
-      description: '',
-      rationale: '',
-      hypothesis: '',
-      approach: '',
-      expectedOutcomes: '',
+      content: '', // Single text field for all aim details
       status: 'planned',
       googleDocId: null,
       googleDocUrl: null
@@ -192,20 +188,7 @@ Status: ${aim.status}
 
 ---
 
-DESCRIPTION:
-${aim.description || 'Not specified'}
-
-RATIONALE:
-${aim.rationale || 'Not specified'}
-
-HYPOTHESIS:
-${aim.hypothesis || 'Not specified'}
-
-EXPERIMENTAL APPROACH:
-${aim.approach || 'Not specified'}
-
-EXPECTED OUTCOMES:
-${aim.expectedOutcomes || 'Not specified'}
+${aim.content || aim.description || 'No details yet.'}
 
 ---
 Last Updated: ${new Date().toLocaleString()}`;
@@ -227,20 +210,7 @@ Status: ${aim.status}
 
 ---
 
-DESCRIPTION:
-${aim.description || 'Not specified'}
-
-RATIONALE:
-${aim.rationale || 'Not specified'}
-
-HYPOTHESIS:
-${aim.hypothesis || 'Not specified'}
-
-EXPERIMENTAL APPROACH:
-${aim.approach || 'Not specified'}
-
-EXPECTED OUTCOMES:
-${aim.expectedOutcomes || 'Not specified'}
+${aim.content || aim.description || 'No details yet.'}
 
 ---
 Last Updated: ${new Date().toLocaleString()}`;
@@ -637,57 +607,13 @@ Type @cite: or [@ to insert citations from your literature library."
                     </div>
 
                     <div className="aim-field">
-                      <label>Description</label>
+                      <label>Details</label>
                       <CitableTextarea
-                        value={aim.description}
-                        onChange={(e) => handleUpdateAim(aim.id, 'description', e.target.value)}
+                        value={aim.content || aim.description || ''}
+                        onChange={(e) => handleUpdateAim(aim.id, 'content', e.target.value)}
                         projectId={projectId}
-                        placeholder="What do you want to achieve? (Type @cite: to add citations)"
-                        rows={2}
-                      />
-                    </div>
-
-                    <div className="aim-field">
-                      <label>Rationale</label>
-                      <CitableTextarea
-                        value={aim.rationale}
-                        onChange={(e) => handleUpdateAim(aim.id, 'rationale', e.target.value)}
-                        projectId={projectId}
-                        placeholder="Why is this aim important? (Type @cite: to add citations)"
-                        rows={2}
-                      />
-                    </div>
-
-                    <div className="aim-field">
-                      <label>Hypothesis</label>
-                      <CitableTextarea
-                        value={aim.hypothesis}
-                        onChange={(e) => handleUpdateAim(aim.id, 'hypothesis', e.target.value)}
-                        projectId={projectId}
-                        placeholder="What do you hypothesize? (Type @cite: to add citations)"
-                        rows={2}
-                      />
-                    </div>
-
-                    <div className="aim-field">
-                      <label>Experimental Approach</label>
-                      <CitableTextarea
-                        value={aim.approach}
-                        onChange={(e) => handleUpdateAim(aim.id, 'approach', e.target.value)}
-                        projectId={projectId}
-                        placeholder="How will you test this aim? (Type @cite: to add citations)"
-                        rows={3}
-                      />
-                    </div>
-
-                    <div className="aim-field">
-                      <label>Expected Outcomes</label>
-                      <CitableTextarea
-                        value={aim.expectedOutcomes}
-                        onChange={(e) => handleUpdateAim(aim.id, 'expectedOutcomes', e.target.value)}
-                        projectId={projectId}
-                        placeholder="What results do you expect? (Type @cite: to add citations)"
-                        rows={2}
+                        placeholder="Describe your specific aim including hypothesis, approach, and expected outcomes... (Type @cite: to add citations)"
+                        rows={8}
                       />
                     </div>
                   </div>

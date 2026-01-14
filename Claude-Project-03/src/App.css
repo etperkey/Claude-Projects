@@ -439,6 +439,108 @@ body {
   line-height: 1.6;
 }
 
+/* Project Edit Button and Form */
+.header-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-project-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.edit-project-btn:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--project-color);
+}
+
+.project-edit-form {
+  padding: 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.edit-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.edit-form-row label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.edit-form-row input[type="text"],
+.edit-form-row textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.edit-form-row input[type="text"]:focus,
+.edit-form-row textarea:focus {
+  outline: none;
+  border-color: var(--project-color);
+}
+
+.edit-form-row input[type="color"] {
+  width: 60px;
+  height: 36px;
+  padding: 2px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.edit-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.edit-form-actions .btn-cancel {
+  padding: 10px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.edit-form-actions .btn-save {
+  padding: 10px 20px;
+  background: var(--project-color, var(--accent));
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  font-weight: 500;
+}
+
+.edit-form-actions .btn-cancel:hover {
+  background: var(--bg-secondary);
+}
+
+.edit-form-actions .btn-save:hover {
+  opacity: 0.9;
+}
+
 .header-stats {
   display: flex;
   gap: 30px;
