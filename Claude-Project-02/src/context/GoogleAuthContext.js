@@ -1,9 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY || '';
 
 const GoogleAuthContext = createContext(null);
+
+const TOKEN_STORAGE_KEY = 'google-auth-token';
+const USER_STORAGE_KEY = 'google-auth-user';
 
 export function GoogleAuthProvider({ children }) {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -13,6 +16,7 @@ export function GoogleAuthProvider({ children }) {
   const [tokenClient, setTokenClient] = useState(null);
   const [user, setUser] = useState(null);
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
+  const tokenRestoredRef = useRef(false);
 
   const hasCredentials = Boolean(GOOGLE_CLIENT_ID && GOOGLE_API_KEY);
 
@@ -20,6 +24,51 @@ export function GoogleAuthProvider({ children }) {
   const [promptDismissed, setPromptDismissed] = useState(() => {
     return sessionStorage.getItem('google-signin-dismissed') === 'true';
   });
+
+  // Save token to localStorage
+  const saveToken = useCallback((tokenResponse) => {
+    const tokenData = {
+      access_token: tokenResponse.access_token,
+      expires_at: Date.now() + (tokenResponse.expires_in * 1000),
+      token_type: tokenResponse.token_type,
+      scope: tokenResponse.scope
+    };
+    localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(tokenData));
+    return tokenData;
+  }, []);
+
+  // Load and validate saved token
+  const loadSavedToken = useCallback(() => {
+    try {
+      const saved = localStorage.getItem(TOKEN_STORAGE_KEY);
+      if (!saved) return null;
+
+      const tokenData = JSON.parse(saved);
+
+      // Check if token is expired (with 5 min buffer)
+      if (tokenData.expires_at && tokenData.expires_at < Date.now() + 300000) {
+        localStorage.removeItem(TOKEN_STORAGE_KEY);
+        localStorage.removeItem(USER_STORAGE_KEY);
+        return null;
+      }
+
+      return tokenData;
+    } catch (e) {
+      console.error('Error loading saved token:', e);
+      return null;
+    }
+  }, []);
+
+  // Load saved user
+  const loadSavedUser = useCallback(() => {
+    try {
+      const saved = localStorage.getItem(USER_STORAGE_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error('Error loading saved user:', e);
+    }
+    return null;
+  }, []);
 
   // Load Google API (gapi) for Docs/Drive/Calendar
   useEffect(() => {
@@ -56,13 +105,30 @@ export function GoogleAuthProvider({ children }) {
           ]
         });
         setGapiLoaded(true);
+
+        // Restore saved token after gapi is ready
+        if (!tokenRestoredRef.current) {
+          tokenRestoredRef.current = true;
+          const savedToken = loadSavedToken();
+          if (savedToken) {
+            window.gapi.client.setToken({
+              access_token: savedToken.access_token,
+              token_type: savedToken.token_type || 'Bearer'
+            });
+            setIsSignedIn(true);
+            const savedUser = loadSavedUser();
+            if (savedUser) {
+              setUser(savedUser);
+            }
+          }
+        }
       } catch (error) {
         console.error('Error initializing gapi:', error);
       }
     };
 
     loadGapi();
-  }, []);
+  }, [loadSavedToken, loadSavedUser]);
 
   // Load Google Identity Services (GIS) for auth
   useEffect(() => {
@@ -89,6 +155,8 @@ export function GoogleAuthProvider({ children }) {
           scope: 'openid profile email https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/spreadsheets',
           callback: (tokenResponse) => {
             if (tokenResponse && tokenResponse.access_token) {
+              // Save token for persistence
+              saveToken(tokenResponse);
               setIsSignedIn(true);
               setShowSignInPrompt(false);
               fetchUserInfo(tokenResponse.access_token);
@@ -106,18 +174,37 @@ export function GoogleAuthProvider({ children }) {
     };
 
     loadGis();
-  }, [gisLoaded]);
+  }, [gisLoaded, saveToken]);
 
   // Show sign-in prompt when GIS is loaded and user is not signed in
+  // Wait for gapi to also be loaded (to allow token restoration first)
   useEffect(() => {
-    if (gisLoaded && hasCredentials && !isSignedIn && !promptDismissed) {
-      // Small delay to let the app render first
+    if (gisLoaded && gapiLoaded && hasCredentials && !isSignedIn && !promptDismissed) {
+      // Longer delay to let token restoration complete first
       const timer = setTimeout(() => {
         setShowSignInPrompt(true);
-      }, 500);
+      }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [gisLoaded, hasCredentials, isSignedIn, promptDismissed]);
+  }, [gisLoaded, gapiLoaded, hasCredentials, isSignedIn, promptDismissed]);
+
+  // Check token expiration periodically
+  useEffect(() => {
+    if (!isSignedIn) return;
+
+    const checkExpiration = () => {
+      const savedToken = loadSavedToken();
+      if (!savedToken) {
+        // Token expired or invalid, sign out
+        setIsSignedIn(false);
+        setUser(null);
+      }
+    };
+
+    // Check every minute
+    const interval = setInterval(checkExpiration, 60000);
+    return () => clearInterval(interval);
+  }, [isSignedIn, loadSavedToken]);
 
   const fetchUserInfo = async (accessToken) => {
     try {
@@ -125,11 +212,14 @@ export function GoogleAuthProvider({ children }) {
         headers: { Authorization: `Bearer ${accessToken}` }
       });
       const data = await response.json();
-      setUser({
+      const userData = {
         name: data.name,
         email: data.email,
         picture: data.picture
-      });
+      };
+      setUser(userData);
+      // Save user for persistence
+      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData));
     } catch (error) {
       console.error('Error fetching user info:', error);
     }
@@ -142,12 +232,20 @@ export function GoogleAuthProvider({ children }) {
   }, [tokenClient]);
 
   const signOut = useCallback(() => {
+    // Clear stored token and user
+    localStorage.removeItem(TOKEN_STORAGE_KEY);
+    localStorage.removeItem(USER_STORAGE_KEY);
+
     if (window.google && window.google.accounts && window.gapi?.client?.getToken()) {
       window.google.accounts.oauth2.revoke(window.gapi.client.getToken().access_token, () => {
         window.gapi.client.setToken(null);
         setIsSignedIn(false);
         setUser(null);
       });
+    } else {
+      // Handle case where gapi token isn't available
+      setIsSignedIn(false);
+      setUser(null);
     }
   }, []);
 
