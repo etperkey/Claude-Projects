@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git fetch:*)",
+      "Bash(npm start)",
+      "Bash(timeout:*)",
+      "Bash(more:*)",
+      "Bash(curl:*)",
+      "Bash(findstr:*)",
+      "Bash(CONTRIBUTING)",
+      "Bash(LICENSE)",
+      "Bash(CHANGELOG)",
+      "Bash(.md \")",
+      "Bash(git add:*)"
+    ]
+  },
+  "projectName": "Claude-Project-02"
+}
