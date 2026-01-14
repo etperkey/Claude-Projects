@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
 import { useSyncTrigger } from '../context/DataSyncContext';
+import { useTrash, TRASH_ITEM_TYPES } from '../context/TrashContext';
+import { useToast } from '../context/ToastContext';
 import MacroTextarea from './MacroTextarea';
 
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
@@ -8,6 +10,8 @@ const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
 function ProjectLabNotebook({ projectId, projectTitle }) {
   const { isSignedIn, createDoc, syncToDoc, importFromDoc, createSheet, syncToSheet, importFromSheet } = useGoogleAuth();
   const triggerSync = useSyncTrigger();
+  const { moveToTrash } = useTrash();
+  const { showSuccess } = useToast();
 
   const [entries, setEntries] = useState([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
@@ -155,15 +159,24 @@ function ProjectLabNotebook({ projectId, projectTitle }) {
     }
   };
 
-  // Delete entry
+  // Delete entry (move to trash)
   const handleDeleteEntry = (entryId) => {
-    if (window.confirm('Delete this notebook entry?')) {
-      const updated = entries.filter(e => e.id !== entryId);
-      saveEntries(updated);
-      if (selectedEntry?.id === entryId) {
-        setSelectedEntry(null);
-      }
+    const entry = entries.find(e => e.id === entryId);
+    if (!entry) return;
+
+    // Move to trash instead of permanent deletion
+    moveToTrash(TRASH_ITEM_TYPES.NOTEBOOK_ENTRY, entry, {
+      projectId,
+      projectTitle
+    });
+
+    // Remove from active entries
+    const updated = entries.filter(e => e.id !== entryId);
+    saveEntries(updated);
+    if (selectedEntry?.id === entryId) {
+      setSelectedEntry(null);
     }
+    showSuccess(`"${entry.title || 'Notebook entry'}" moved to trash`);
   };
 
   // Add tag

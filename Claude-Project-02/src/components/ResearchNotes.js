@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
 import { useSyncTrigger } from '../context/DataSyncContext';
+import { useTrash, TRASH_ITEM_TYPES } from '../context/TrashContext';
+import { useToast } from '../context/ToastContext';
 import LiteratureManager from './LiteratureManager';
 import CitableTextarea from './CitableTextarea';
 
@@ -9,6 +11,8 @@ const RESEARCH_NOTES_KEY = 'research-dashboard-research-notes';
 function ResearchNotes({ projectId, projectTitle }) {
   const { isSignedIn, createDoc, syncToDoc, importFromDoc } = useGoogleAuth();
   const triggerSync = useSyncTrigger();
+  const { moveToTrash } = useTrash();
+  const { showSuccess } = useToast();
 
   const [activeTab, setActiveTab] = useState('background');
   const [notes, setNotes] = useState({
@@ -88,10 +92,18 @@ function ResearchNotes({ projectId, projectTitle }) {
   };
 
   const handleDeleteAim = (aimId) => {
-    if (window.confirm('Delete this specific aim?')) {
-      const updatedAims = notes.specificAims.filter(aim => aim.id !== aimId);
-      saveNotes({ ...notes, specificAims: updatedAims });
-    }
+    const aim = notes.specificAims.find(a => a.id === aimId);
+    if (!aim) return;
+
+    // Move to trash instead of permanent deletion
+    moveToTrash(TRASH_ITEM_TYPES.NOTE, { ...aim, noteType: 'specificAim' }, {
+      projectId,
+      projectTitle
+    });
+
+    const updatedAims = notes.specificAims.filter(a => a.id !== aimId);
+    saveNotes({ ...notes, specificAims: updatedAims });
+    showSuccess(`"${aim.title || 'Specific Aim'}" moved to trash`);
   };
 
   // Misc Notes handlers
@@ -118,10 +130,18 @@ function ResearchNotes({ projectId, projectTitle }) {
   };
 
   const handleDeleteNote = (noteId) => {
-    if (window.confirm('Delete this note?')) {
-      const updatedNotes = notes.miscNotes.filter(note => note.id !== noteId);
-      saveNotes({ ...notes, miscNotes: updatedNotes });
-    }
+    const note = notes.miscNotes.find(n => n.id === noteId);
+    if (!note) return;
+
+    // Move to trash instead of permanent deletion
+    moveToTrash(TRASH_ITEM_TYPES.NOTE, { ...note, noteType: 'miscNote' }, {
+      projectId,
+      projectTitle
+    });
+
+    const updatedNotes = notes.miscNotes.filter(n => n.id !== noteId);
+    saveNotes({ ...notes, miscNotes: updatedNotes });
+    showSuccess(`"${note.title || 'Note'}" moved to trash`);
   };
 
   // Google Docs handlers

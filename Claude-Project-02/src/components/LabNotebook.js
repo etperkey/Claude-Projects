@@ -3,11 +3,19 @@ import { useGoogleAuth } from '../context/GoogleAuthContext';
 import { useSyncTrigger } from '../context/DataSyncContext';
 import { researchProjects } from '../data/projects';
 import MacroTextarea from './MacroTextarea';
+import { createAuditEntry, diffObjects, CHANGE_TYPES, formatAuditEntry, shouldAutoLock } from '../utils/auditTrail';
 
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
+const ELN_SETTINGS_KEY = 'research-dashboard-eln-settings';
+
+const DEFAULT_ELN_SETTINGS = {
+  autoLockEnabled: true,
+  autoLockHours: 24,
+  showArchivedEntries: false
+};
 
 function LabNotebook({ isOpen, onClose }) {
-  const { isSignedIn, createDoc, syncToDoc, importFromDoc, createSheet, syncToSheet, importFromSheet } = useGoogleAuth();
+  const { isSignedIn, user, createDoc, syncToDoc, importFromDoc, createSheet, syncToSheet, importFromSheet } = useGoogleAuth();
   const triggerSync = useSyncTrigger();
 
   const [entries, setEntries] = useState([]);
@@ -24,6 +32,11 @@ function LabNotebook({ isOpen, onClose }) {
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [syncStatus, setSyncStatus] = useState({ message: '', type: '' });
 
+  // ELN Compliance state
+  const [elnSettings, setElnSettings] = useState(DEFAULT_ELN_SETTINGS);
+  const [showVersionHistory, setShowVersionHistory] = useState(null);
+  const [showElnSettings, setShowElnSettings] = useState(false);
+
   // Load custom projects
   const [customProjects, setCustomProjects] = useState([]);
 
@@ -36,17 +49,54 @@ function LabNotebook({ isOpen, onClose }) {
 
   const allProjects = [...researchProjects, ...customProjects];
 
+  // Load ELN settings from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(ELN_SETTINGS_KEY);
+      if (saved) setElnSettings({ ...DEFAULT_ELN_SETTINGS, ...JSON.parse(saved) });
+    } catch (e) {}
+  }, []);
+
+  // Save ELN settings
+  const saveElnSettings = useCallback((newSettings) => {
+    localStorage.setItem(ELN_SETTINGS_KEY, JSON.stringify(newSettings));
+    setElnSettings(newSettings);
+    triggerSync();
+  }, [triggerSync]);
+
   // Load entries from localStorage
   useEffect(() => {
     const saved = localStorage.getItem(NOTEBOOK_KEY);
     if (saved) {
       try {
-        setEntries(JSON.parse(saved));
+        let loadedEntries = JSON.parse(saved);
+
+        // Check for auto-lock on entries
+        let needsSave = false;
+        loadedEntries = loadedEntries.map(entry => {
+          if (shouldAutoLock(entry, elnSettings) && !entry.isLocked) {
+            needsSave = true;
+            const auditEntry = createAuditEntry(CHANGE_TYPES.LOCK, [], { name: 'System (Auto-Lock)' }, entry.content);
+            return {
+              ...entry,
+              isLocked: true,
+              lockedAt: new Date().toISOString(),
+              lockedBy: 'System (Auto-Lock)',
+              auditTrail: [...(entry.auditTrail || []), auditEntry]
+            };
+          }
+          return entry;
+        });
+
+        setEntries(loadedEntries);
+        if (needsSave) {
+          localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(loadedEntries));
+        }
       } catch (e) {
         console.error('Failed to load notebook entries:', e);
       }
     }
-  }, []);
+  }, [elnSettings]);
 
   // Save entries to localStorage
   const saveEntries = useCallback((newEntries) => {
@@ -87,9 +137,16 @@ function LabNotebook({ isOpen, onClose }) {
     });
   };
 
-  // Add new entry
+  // Add new entry with audit trail
   const handleAddEntry = () => {
     if (!newEntry.title.trim() && !newEntry.content.trim()) return;
+
+    const auditEntry = createAuditEntry(
+      CHANGE_TYPES.CREATE,
+      [],
+      { name: user?.name || user?.email },
+      newEntry.content
+    );
 
     const entry = {
       id: `entry-${Date.now()}`,
@@ -102,7 +159,15 @@ function LabNotebook({ isOpen, onClose }) {
       googleDocId: null,
       googleDocUrl: null,
       googleSheetId: null,
-      googleSheetUrl: null
+      googleSheetUrl: null,
+      // ELN fields
+      auditTrail: [auditEntry],
+      isLocked: false,
+      lockedAt: null,
+      lockedBy: null,
+      isArchived: false,
+      archivedAt: null,
+      archivedBy: null
     };
 
     saveEntries([entry, ...entries]);
@@ -110,11 +175,34 @@ function LabNotebook({ isOpen, onClose }) {
     setShowNewEntry(false);
   };
 
-  // Update entry
+  // Update entry with audit trail
   const handleUpdateEntry = (entryId, updates) => {
+    const entry = entries.find(e => e.id === entryId);
+
+    // Prevent updates to locked entries (except for Google Doc sync fields)
+    const googleFields = ['googleDocId', 'googleDocUrl', 'googleSheetId', 'googleSheetUrl'];
+    const isOnlyGoogleUpdate = Object.keys(updates).every(key => googleFields.includes(key));
+
+    if (entry?.isLocked && !isOnlyGoogleUpdate) {
+      setSyncStatus({ message: 'Cannot modify locked entry', type: 'error' });
+      setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+      return;
+    }
+
+    // Create audit entry for changes
+    const changes = diffObjects(entry, { ...entry, ...updates }, ['title', 'content', 'tags', 'projectId']);
+    const auditEntry = changes.length > 0
+      ? createAuditEntry(CHANGE_TYPES.UPDATE, changes, { name: user?.name || user?.email }, updates.content || entry.content)
+      : null;
+
     const updated = entries.map(e =>
       e.id === entryId
-        ? { ...e, ...updates, updatedAt: new Date().toISOString() }
+        ? {
+            ...e,
+            ...updates,
+            updatedAt: new Date().toISOString(),
+            auditTrail: auditEntry ? [...(e.auditTrail || []), auditEntry] : e.auditTrail
+          }
         : e
     );
     saveEntries(updated);
@@ -123,14 +211,76 @@ function LabNotebook({ isOpen, onClose }) {
     }
   };
 
-  // Delete entry
-  const handleDeleteEntry = (entryId) => {
-    if (window.confirm('Delete this notebook entry?')) {
-      const updated = entries.filter(e => e.id !== entryId);
+  // Archive entry (soft delete) with audit trail
+  const handleArchiveEntry = (entryId) => {
+    const entry = entries.find(e => e.id === entryId);
+    if (entry?.isLocked) {
+      setSyncStatus({ message: 'Cannot archive locked entry', type: 'error' });
+      setTimeout(() => setSyncStatus({ message: '', type: '' }), 3000);
+      return;
+    }
+
+    if (window.confirm('Archive this notebook entry? It can be restored later.')) {
+      const auditEntry = createAuditEntry(CHANGE_TYPES.ARCHIVE, [], { name: user?.name || user?.email });
+
+      const updated = entries.map(e =>
+        e.id === entryId
+          ? {
+              ...e,
+              isArchived: true,
+              archivedAt: new Date().toISOString(),
+              archivedBy: user?.name || user?.email || 'Unknown',
+              auditTrail: [...(e.auditTrail || []), auditEntry]
+            }
+          : e
+      );
       saveEntries(updated);
       if (selectedEntry?.id === entryId) {
         setSelectedEntry(null);
       }
+    }
+  };
+
+  // Restore archived entry
+  const handleRestoreEntry = (entryId) => {
+    const auditEntry = createAuditEntry(CHANGE_TYPES.RESTORE, [], { name: user?.name || user?.email });
+
+    const updated = entries.map(e =>
+      e.id === entryId
+        ? {
+            ...e,
+            isArchived: false,
+            archivedAt: null,
+            archivedBy: null,
+            auditTrail: [...(e.auditTrail || []), auditEntry]
+          }
+        : e
+    );
+    saveEntries(updated);
+  };
+
+  // Lock entry
+  const handleLockEntry = (entryId) => {
+    if (window.confirm('Lock this entry? Locked entries cannot be edited.')) {
+      const auditEntry = createAuditEntry(CHANGE_TYPES.LOCK, [], { name: user?.name || user?.email });
+
+      const updated = entries.map(e =>
+        e.id === entryId
+          ? {
+              ...e,
+              isLocked: true,
+              lockedAt: new Date().toISOString(),
+              lockedBy: user?.name || user?.email || 'Unknown',
+              auditTrail: [...(e.auditTrail || []), auditEntry]
+            }
+          : e
+      );
+      saveEntries(updated);
+      if (selectedEntry?.id === entryId) {
+        setSelectedEntry({ ...selectedEntry, isLocked: true });
+      }
+      setSyncStatus({ message: 'Entry locked', type: 'success' });
+      setTimeout(() => setSyncStatus({ message: '', type: '' }), 2000);
     }
   };
 
@@ -336,13 +486,21 @@ function LabNotebook({ isOpen, onClose }) {
     !entry.projectId || entry.tags?.includes('inbox') || entry.isQuickCapture
   ).length;
 
-  // Filter entries
+  // Filter entries (including archived filter)
   const filteredEntries = entries.filter(entry => {
+    // Filter out archived entries unless showArchivedEntries is enabled
+    if (entry.isArchived && !elnSettings.showArchivedEntries) {
+      return false;
+    }
+
     let matchesProject = filterProject === 'all';
 
     if (filterProject === 'inbox') {
       // Show entries with no project, or with 'inbox' tag, or quick captures
       matchesProject = !entry.projectId || entry.tags?.includes('inbox') || entry.isQuickCapture;
+    } else if (filterProject === 'archived') {
+      // Show only archived entries
+      return entry.isArchived;
     } else if (filterProject === '') {
       matchesProject = !entry.projectId;
     } else if (filterProject !== 'all') {
@@ -352,9 +510,12 @@ function LabNotebook({ isOpen, onClose }) {
     const matchesSearch = !searchTerm ||
       entry.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       entry.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      entry.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
+      entry.tags?.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesProject && matchesSearch;
   });
+
+  // Count archived entries
+  const archivedCount = entries.filter(e => e.isArchived).length;
 
   // Group entries by date
   const groupedEntries = filteredEntries.reduce((groups, entry) => {
@@ -422,6 +583,9 @@ function LabNotebook({ isOpen, onClose }) {
               <option value="all">All Entries</option>
               <option value="inbox">Inbox ({inboxCount})</option>
               <option value="">Unassigned</option>
+              {archivedCount > 0 && (
+                <option value="archived">Archived ({archivedCount})</option>
+              )}
               {allProjects.map(p => (
                 <option key={p.id} value={p.id}>{p.title}</option>
               ))}
@@ -517,7 +681,7 @@ function LabNotebook({ isOpen, onClose }) {
                   {dayEntries.map(entry => (
                     <div
                       key={entry.id}
-                      className={`notebook-entry ${selectedEntry?.id === entry.id ? 'selected' : ''}`}
+                      className={`notebook-entry ${selectedEntry?.id === entry.id ? 'selected' : ''} ${entry.isArchived ? 'archived' : ''} ${entry.isLocked ? 'locked' : ''}`}
                     >
                       <div
                         className="entry-main"
@@ -559,6 +723,16 @@ function LabNotebook({ isOpen, onClose }) {
                               S
                             </span>
                           )}
+                          {entry.isLocked && (
+                            <span className="eln-locked-badge" title={`Locked by ${entry.lockedBy} on ${formatTimestamp(entry.lockedAt)}`}>
+                              Locked
+                            </span>
+                          )}
+                          {entry.isArchived && (
+                            <span className="eln-archived-badge" title={`Archived by ${entry.archivedBy} on ${formatTimestamp(entry.archivedAt)}`}>
+                              Archived
+                            </span>
+                          )}
                         </div>
 
                         <h4 className="entry-title">{entry.title}</h4>
@@ -580,11 +754,18 @@ function LabNotebook({ isOpen, onClose }) {
                       {/* Expanded Entry View */}
                       {selectedEntry?.id === entry.id && (
                         <div className="entry-expanded">
+                          {entry.isLocked && (
+                            <div className="eln-locked-notice">
+                              This entry is locked and cannot be edited.
+                              {entry.lockedBy && ` (Locked by ${entry.lockedBy})`}
+                            </div>
+                          )}
                           <div className="entry-full-content">
                             <MacroTextarea
                               value={entry.content}
                               onChange={(content) => handleUpdateEntry(entry.id, { content })}
                               rows={10}
+                              disabled={entry.isLocked}
                             />
                           </div>
 
@@ -594,6 +775,7 @@ function LabNotebook({ isOpen, onClose }) {
                             <select
                               className="entry-project-assign"
                               value={entry.projectId || ''}
+                              disabled={entry.isLocked}
                               onChange={(e) => {
                                 const newProjectId = e.target.value || null;
                                 // Remove 'inbox' tag when assigning to a project
@@ -694,12 +876,40 @@ function LabNotebook({ isOpen, onClose }) {
                                 </div>
                               </>
                             )}
+                            {/* ELN Actions */}
+                            {!entry.isLocked && !entry.isArchived && (
+                              <button
+                                className="btn-action"
+                                onClick={() => handleLockEntry(entry.id)}
+                                title="Lock entry to prevent further edits"
+                              >
+                                Lock
+                              </button>
+                            )}
                             <button
-                              className="btn-action danger"
-                              onClick={() => handleDeleteEntry(entry.id)}
+                              className="btn-action"
+                              onClick={() => setShowVersionHistory(entry.id)}
+                              title="View version history"
                             >
-                              Delete
+                              History
                             </button>
+                            {entry.isArchived ? (
+                              <button
+                                className="btn-action"
+                                onClick={() => handleRestoreEntry(entry.id)}
+                              >
+                                Restore
+                              </button>
+                            ) : (
+                              <button
+                                className="btn-action danger"
+                                onClick={() => handleArchiveEntry(entry.id)}
+                                disabled={entry.isLocked}
+                                title={entry.isLocked ? "Cannot archive locked entry" : "Archive entry"}
+                              >
+                                Archive
+                              </button>
+                            )}
                           </div>
 
                           <div className="entry-meta-info">
@@ -717,6 +927,71 @@ function LabNotebook({ isOpen, onClose }) {
             )}
           </div>
         </div>
+
+        {/* Version History Modal */}
+        {showVersionHistory && (
+          <div className="eln-version-history-overlay" onClick={() => setShowVersionHistory(null)}>
+            <div className="eln-version-history-modal" onClick={e => e.stopPropagation()}>
+              <div className="version-history-header">
+                <h3>Version History</h3>
+                <button className="modal-close" onClick={() => setShowVersionHistory(null)}>&times;</button>
+              </div>
+              <div className="version-history-content">
+                {(() => {
+                  const entry = entries.find(e => e.id === showVersionHistory);
+                  if (!entry || !entry.auditTrail || entry.auditTrail.length === 0) {
+                    return <p className="no-history">No version history available</p>;
+                  }
+                  return (
+                    <div className="audit-timeline">
+                      {[...entry.auditTrail].reverse().map((audit, index) => (
+                        <div key={audit.id || index} className={`audit-entry ${audit.changeType}`}>
+                          <div className="audit-marker"></div>
+                          <div className="audit-details">
+                            <div className="audit-header">
+                              <span className={`audit-type-badge ${audit.changeType}`}>
+                                {audit.changeType}
+                              </span>
+                              <span className="audit-time">
+                                {formatTimestamp(audit.timestamp)}
+                              </span>
+                            </div>
+                            <div className="audit-user">
+                              By: {audit.userName || 'Unknown'}
+                            </div>
+                            {audit.changes && audit.changes.length > 0 && (
+                              <div className="audit-changes">
+                                {audit.changes.map((change, i) => (
+                                  <div key={i} className="audit-change">
+                                    <strong>{change.field}:</strong>
+                                    {typeof change.oldValue === 'string' && change.oldValue.length > 50 ? (
+                                      <span className="change-text"> (content modified)</span>
+                                    ) : (
+                                      <>
+                                        <span className="old-value">{JSON.stringify(change.oldValue)}</span>
+                                        <span className="change-arrow"> → </span>
+                                        <span className="new-value">{JSON.stringify(change.newValue)}</span>
+                                      </>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            {audit.checksum && (
+                              <div className="audit-checksum">
+                                Checksum: <code>{audit.checksum}</code>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -2,6 +2,8 @@ import React, { useState, useCallback } from 'react';
 import { useApp } from '../context/AppContext';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
 import { useSyncTrigger } from '../context/DataSyncContext';
+import { useTrash, TRASH_ITEM_TYPES } from '../context/TrashContext';
+import { useToast } from '../context/ToastContext';
 import MacroTextarea from './MacroTextarea';
 import FileAttachments from './FileAttachments';
 
@@ -36,6 +38,8 @@ function ProtocolsResults({ projectId, projectTitle }) {
   const { logActivity } = useApp();
   const { isSignedIn, createDoc, syncToDoc, importFromDoc, createSheet, syncToSheet, importFromSheet } = useGoogleAuth();
   const triggerSync = useSyncTrigger();
+  const { moveToTrash } = useTrash();
+  const { showSuccess } = useToast();
 
   // Wrapper to save data and trigger sync
   const saveWithSync = useCallback((key, items) => {
@@ -102,16 +106,34 @@ function ProtocolsResults({ projectId, projectTitle }) {
   };
 
   const handleDeleteItem = (itemId) => {
-    if (!window.confirm('Delete this item?')) return;
-
     if (activeTab === 'protocols') {
+      const item = protocols.find(p => p.id === itemId);
+      if (!item) return;
+
+      // Move to trash instead of permanent deletion
+      moveToTrash(TRASH_ITEM_TYPES.PROTOCOL, item, {
+        projectId,
+        projectTitle
+      });
+
       const updated = protocols.filter(p => p.id !== itemId);
       setProtocols(updated);
       saveWithSync(PROTOCOLS_KEY, updated);
+      showSuccess(`"${item.title || 'Protocol'}" moved to trash`);
     } else {
+      const item = results.find(r => r.id === itemId);
+      if (!item) return;
+
+      // Move to trash instead of permanent deletion
+      moveToTrash(TRASH_ITEM_TYPES.RESULT, item, {
+        projectId,
+        projectTitle
+      });
+
       const updated = results.filter(r => r.id !== itemId);
       setResults(updated);
       saveWithSync(RESULTS_KEY, updated);
+      showSuccess(`"${item.title || 'Result'}" moved to trash`);
     }
   };
 
