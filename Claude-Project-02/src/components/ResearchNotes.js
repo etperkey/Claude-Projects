@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
 import LiteratureManager from './LiteratureManager';
+import CitableTextarea from './CitableTextarea';
 
 const RESEARCH_NOTES_KEY = 'research-dashboard-research-notes';
 
@@ -474,9 +475,10 @@ Last Updated: ${new Date().toLocaleString()}`;
 
             {isEditing === 'background' ? (
               <div className="background-editor">
-                <textarea
+                <CitableTextarea
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
+                  projectId={projectId}
                   placeholder="Enter research background, context, and significance...
 
 Include:
@@ -484,7 +486,9 @@ Include:
 - Current state of knowledge
 - Gap in existing research
 - Significance and innovation
-- Preliminary data (if any)"
+- Preliminary data (if any)
+
+Type @cite: or [@ to insert citations from your literature library."
                   rows={15}
                 />
                 <div className="editor-actions">
@@ -611,50 +615,55 @@ Include:
 
                     <div className="aim-field">
                       <label>Description</label>
-                      <textarea
+                      <CitableTextarea
                         value={aim.description}
                         onChange={(e) => handleUpdateAim(aim.id, 'description', e.target.value)}
-                        placeholder="What do you want to achieve?"
+                        projectId={projectId}
+                        placeholder="What do you want to achieve? (Type @cite: to add citations)"
                         rows={2}
                       />
                     </div>
 
                     <div className="aim-field">
                       <label>Rationale</label>
-                      <textarea
+                      <CitableTextarea
                         value={aim.rationale}
                         onChange={(e) => handleUpdateAim(aim.id, 'rationale', e.target.value)}
-                        placeholder="Why is this aim important?"
+                        projectId={projectId}
+                        placeholder="Why is this aim important? (Type @cite: to add citations)"
                         rows={2}
                       />
                     </div>
 
                     <div className="aim-field">
                       <label>Hypothesis</label>
-                      <textarea
+                      <CitableTextarea
                         value={aim.hypothesis}
                         onChange={(e) => handleUpdateAim(aim.id, 'hypothesis', e.target.value)}
-                        placeholder="What do you hypothesize?"
+                        projectId={projectId}
+                        placeholder="What do you hypothesize? (Type @cite: to add citations)"
                         rows={2}
                       />
                     </div>
 
                     <div className="aim-field">
                       <label>Experimental Approach</label>
-                      <textarea
+                      <CitableTextarea
                         value={aim.approach}
                         onChange={(e) => handleUpdateAim(aim.id, 'approach', e.target.value)}
-                        placeholder="How will you test this aim?"
+                        projectId={projectId}
+                        placeholder="How will you test this aim? (Type @cite: to add citations)"
                         rows={3}
                       />
                     </div>
 
                     <div className="aim-field">
                       <label>Expected Outcomes</label>
-                      <textarea
+                      <CitableTextarea
                         value={aim.expectedOutcomes}
                         onChange={(e) => handleUpdateAim(aim.id, 'expectedOutcomes', e.target.value)}
-                        placeholder="What results do you expect?"
+                        projectId={projectId}
+                        placeholder="What results do you expect? (Type @cite: to add citations)"
                         rows={2}
                       />
                     </div>
@@ -718,11 +727,12 @@ Include:
                       placeholder="Note title..."
                     />
 
-                    <textarea
+                    <CitableTextarea
                       className="note-content"
                       value={note.content}
                       onChange={(e) => handleUpdateNote(note.id, { content: e.target.value })}
-                      placeholder="Write your note here..."
+                      projectId={projectId}
+                      placeholder="Write your note here... (Type @cite: to add citations)"
                       rows={4}
                     />
 
