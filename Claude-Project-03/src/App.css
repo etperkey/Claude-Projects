@@ -817,6 +817,27 @@ body {
   color: var(--text-primary);
   margin-bottom: 10px;
   line-height: 1.4;
+  cursor: text;
+}
+
+.task-title:hover {
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 4px;
+  margin: -2px;
+  padding: 2px;
+}
+
+.task-title-edit {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 4px 8px;
+  width: 100%;
+  margin-bottom: 10px;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
 .task-footer {

@@ -33,6 +33,8 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
   const [showAddForm, setShowAddForm] = useState({});
   const [selectedTask, setSelectedTask] = useState(null);
   const [selectedColumn, setSelectedColumn] = useState(null);
+  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [editingTitle, setEditingTitle] = useState('');
 
   const handleDragStart = (e, task, columnId) => {
     setDraggedTask(task);
@@ -137,6 +139,39 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
     if (onUpdateTask) {
       onUpdateTask(taskId, columnId, updatedData);
     }
+  };
+
+  // Inline title editing
+  const handleTitleDoubleClick = (e, task) => {
+    e.stopPropagation();
+    setEditingTaskId(task.id);
+    setEditingTitle(task.title);
+  };
+
+  const handleTitleChange = (e) => {
+    setEditingTitle(e.target.value);
+  };
+
+  const handleTitleSave = (taskId, columnId) => {
+    if (editingTitle.trim() && onUpdateTask) {
+      onUpdateTask(taskId, columnId, { title: editingTitle.trim() });
+    }
+    setEditingTaskId(null);
+    setEditingTitle('');
+  };
+
+  const handleTitleKeyDown = (e, taskId, columnId) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleTitleSave(taskId, columnId);
+    } else if (e.key === 'Escape') {
+      setEditingTaskId(null);
+      setEditingTitle('');
+    }
+  };
+
+  const handleTitleBlur = (taskId, columnId) => {
+    handleTitleSave(taskId, columnId);
   };
 
   const getColumnCount = (columnId) => tasks[columnId]?.length || 0;
@@ -272,7 +307,26 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
                       </button>
                     </div>
 
-                    <p className="task-title">{task.title}</p>
+                    {editingTaskId === task.id ? (
+                      <input
+                        type="text"
+                        className="task-title-edit"
+                        value={editingTitle}
+                        onChange={handleTitleChange}
+                        onKeyDown={(e) => handleTitleKeyDown(e, task.id, column.id)}
+                        onBlur={() => handleTitleBlur(task.id, column.id)}
+                        onClick={(e) => e.stopPropagation()}
+                        autoFocus
+                      />
+                    ) : (
+                      <p
+                        className="task-title"
+                        onDoubleClick={(e) => handleTitleDoubleClick(e, task)}
+                        title="Double-click to edit"
+                      >
+                        {task.title}
+                      </p>
+                    )}
 
                     {/* Task metadata icons */}
                     <div className="task-metadata">
