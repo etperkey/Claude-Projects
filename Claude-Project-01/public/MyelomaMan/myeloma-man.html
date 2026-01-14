@@ -770,6 +770,33 @@
             font-size: 0.45em;
         }
 
+        /* Reference Links */
+        .ref-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ref-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+            color: #4fc3f7;
+            text-decoration: none;
+            font-size: 1em;
+            transition: all 0.2s;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+
+        .ref-link:hover {
+            background: rgba(79, 195, 247, 0.3);
+            transform: scale(1.05);
+            border-color: #4fc3f7;
+        }
+
         /* Next Button - Mushroom style */
         .next-btn {
             background: linear-gradient(180deg, var(--mushroom-red) 0%, #CC0000 100%);
@@ -2692,6 +2719,21 @@
         };
         DeviceDetector.init();
 
+        // Reference Links Helper
+        function renderReferenceLinks(question) {
+            let links = '';
+            if (question.pmid) {
+                links += `<a href="https://pubmed.ncbi.nlm.nih.gov/${question.pmid}/" target="_blank" rel="noopener" class="ref-link" title="View on PubMed">📄 PubMed</a>`;
+            }
+            if (question.doi) {
+                links += `<a href="https://doi.org/${question.doi}" target="_blank" rel="noopener" class="ref-link" title="View Full Text">🔗 DOI</a>`;
+            }
+            if (question.guideline) {
+                links += `<a href="${question.guideline.url}" target="_blank" rel="noopener" class="ref-link" title="View Guidelines">📋 ${question.guideline.name}</a>`;
+            }
+            return links ? `<div class="ref-links">${links}</div>` : '';
+        }
+
         // Audio Context for Mario-style sounds
         let audioCtx = null;
         let musicPlaying = false;
@@ -3729,7 +3771,10 @@
                 correct: 1,
                 explanation: "Multiple myeloma is characterized by clonal plasma cell proliferation producing a monoclonal immunoglobulin (M-protein or paraprotein). This can be detected by serum protein electrophoresis (SPEP) as an M-spike.",
                 keyPoint: "The M-protein (paraprotein) is the biochemical hallmark of myeloma. It's detected by SPEP/UPEP and characterized by immunofixation.",
-                citation: "Rajkumar SV. Multiple myeloma: 2020 update. Am J Hematol. 2020;95:548-567"
+                citation: "Rajkumar SV. Multiple myeloma: 2020 update. Am J Hematol. 2020;95:548-567",
+                pmid: "32181819",
+                doi: "10.1002/ajh.25791",
+                guideline: { name: "NCCN MM", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1445" }
             },
             {
                 type: "simple",
@@ -3745,7 +3790,9 @@
                 correct: 1,
                 explanation: "Per IMWG criteria, multiple myeloma requires ≥10% clonal bone marrow plasma cells OR a biopsy-proven plasmacytoma, PLUS evidence of myeloma-defining events (CRAB criteria or biomarkers of malignancy).",
                 keyPoint: "MM diagnosis: ≥10% clonal BM plasma cells + myeloma-defining event (CRAB or SLiM criteria).",
-                citation: "Rajkumar SV, et al. Lancet Oncol. 2014;15:e538-e548"
+                citation: "Rajkumar SV, et al. Lancet Oncol. 2014;15:e538-e548",
+                pmid: "25439696",
+                doi: "10.1016/S1470-2045(14)70442-5"
             },
             {
                 type: "simple",
@@ -3761,7 +3808,9 @@
                 correct: 1,
                 explanation: "CRAB criteria represent end-organ damage in myeloma: Calcium elevation (>11 mg/dL), Renal insufficiency (creatinine >2 mg/dL or CrCl <40), Anemia (Hgb <10 or 2g below normal), and Bone disease (lytic lesions on imaging).",
                 keyPoint: "CRAB = Calcium ↑, Renal failure, Anemia, Bone lesions. These are myeloma-defining events indicating need for treatment.",
-                citation: "International Myeloma Working Group criteria 2014"
+                citation: "International Myeloma Working Group criteria 2014",
+                pmid: "25439696",
+                doi: "10.1016/S1470-2045(14)70442-5"
             },
             {
                 type: "simple",
@@ -3777,7 +3826,9 @@
                 correct: 1,
                 explanation: "IgG myeloma accounts for approximately 50-60% of cases, followed by IgA (~20%), light chain only (~15-20%), and rare types (IgD, IgE, IgM). IgM-producing plasma cell neoplasms are typically Waldenstrom macroglobulinemia.",
                 keyPoint: "Myeloma isotype frequency: IgG (50-60%) > IgA (20%) > Light chain only (15-20%) > IgD/IgE (rare).",
-                citation: "Kyle RA, et al. Mayo Clin Proc. 2003;78:21-33"
+                citation: "Kyle RA, et al. Mayo Clin Proc. 2003;78:21-33",
+                pmid: "12528874",
+                doi: "10.4065/78.1.21"
             },
             {
                 type: "simple",
@@ -3793,7 +3844,9 @@
                 correct: 2,
                 explanation: "Whole-body low-dose CT and PET/CT are more sensitive than plain radiographs for detecting lytic lesions. Bone scans are NOT useful in myeloma because lytic lesions lack osteoblastic activity needed for tracer uptake.",
                 keyPoint: "Bone scan is NOT useful in myeloma (lytic lesions don't take up tracer). Use low-dose whole-body CT, PET/CT, or MRI.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" },
+                guideline: { name: "NCCN MM", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1445" }
             },
             {
                 type: "simple",
@@ -3809,7 +3862,9 @@
                 correct: 0,
                 explanation: "MGUS: M-protein <3 g/dL AND <10% BM plasma cells AND no CRAB. Smoldering MM: M-protein ≥3 g/dL OR ≥10% BM plasma cells, but NO CRAB criteria or myeloma-defining events.",
                 keyPoint: "MGUS vs SMM: Both lack CRAB/end-organ damage. SMM has higher tumor burden (M-protein ≥3 OR plasma cells ≥10%).",
-                citation: "Rajkumar SV, et al. Blood. 2015;125:3069-3075"
+                citation: "Rajkumar SV, et al. Blood. 2015;125:3069-3075",
+                pmid: "25838344",
+                doi: "10.1182/blood-2014-09-568899"
             },
             {
                 type: "simple",
@@ -3825,7 +3880,9 @@
                 correct: 0,
                 explanation: "Proteasome inhibitors (PIs) include bortezomib (Velcade), carfilzomib (Kyprolis), and ixazomib (Ninlaro). They block the proteasome, causing accumulation of misfolded proteins and plasma cell death.",
                 keyPoint: "Proteasome inhibitors: Bortezomib (V), Carfilzomib (K), Ixazomib (oral). Key toxicity: peripheral neuropathy (bortezomib), cardiac (carfilzomib).",
-                citation: "Moreau P, et al. Lancet. 2021;397:410-427"
+                citation: "Moreau P, et al. Lancet. 2021;397:2361-2371",
+                pmid: "34097854",
+                doi: "10.1016/S0140-6736(21)00592-4"
             },
             {
                 type: "simple",
@@ -3841,7 +3898,9 @@
                 correct: 1,
                 explanation: "Daratumumab is a monoclonal antibody targeting CD38, which is highly expressed on myeloma cells. It works through multiple mechanisms including ADCC, CDC, and direct apoptosis induction.",
                 keyPoint: "CD38-targeting antibodies: Daratumumab (Darzalex), Isatuximab (Sarclisa). SLAMF7 = Elotuzumab. BCMA = CAR-T and bispecifics.",
-                citation: "Lokhorst HM, et al. N Engl J Med. 2015;373:1207-1219"
+                citation: "Lokhorst HM, et al. N Engl J Med. 2015;373:1207-1219",
+                pmid: "26308596",
+                doi: "10.1056/NEJMoa1506348"
             },
             {
                 type: "simple",
@@ -3857,7 +3916,9 @@
                 correct: 1,
                 explanation: "Bisphosphonates (zoledronic acid, pamidronate) or denosumab are recommended for all myeloma patients with bone disease. They reduce skeletal-related events. Dental evaluation is required before starting due to osteonecrosis of jaw risk.",
                 keyPoint: "All MM patients with bone disease need bone-modifying agents. Dental clearance required. Monitor renal function with bisphosphonates.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" },
+                guideline: { name: "NCCN MM", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1445" }
             },
             {
                 type: "simple",
@@ -3873,7 +3934,9 @@
                 correct: 1,
                 explanation: "Myeloma bone pain is typically persistent, affects the axial skeleton (back, ribs, pelvis), and worsens with movement. It results from osteoclast activation and lytic bone destruction. Pathologic fractures are common.",
                 keyPoint: "MM bone pain: axial skeleton, worse with movement, lytic lesions. Vertebral compression fractures cause acute back pain.",
-                citation: "Kyle RA, Rajkumar SV. Blood. 2008;111:2962-2972"
+                citation: "Kyle RA, Rajkumar SV. Blood. 2008;111:2962-2972",
+                pmid: "18332230",
+                doi: "10.1182/blood-2007-10-078022"
             },
             {
                 type: "simple",
@@ -3889,7 +3952,8 @@
                 correct: 2,
                 explanation: "The median age at diagnosis for multiple myeloma is approximately 69 years. It is rare in patients under 40, with only 2-3% of cases occurring in this age group.",
                 keyPoint: "MM is a disease of the elderly. Median age ~69 years. Very rare <40 years old.",
-                citation: "SEER Cancer Statistics Review, National Cancer Institute"
+                citation: "SEER Cancer Statistics Review, National Cancer Institute",
+                url: "https://seer.cancer.gov/statfacts/html/mulmy.html"
             },
             {
                 type: "simple",
@@ -3905,7 +3969,9 @@
                 correct: 1,
                 explanation: "Serum protein electrophoresis (SPEP) separates proteins and can detect an M-spike (monoclonal protein). Immunofixation electrophoresis (IFE) is then used to confirm and characterize the type of M-protein.",
                 keyPoint: "SPEP detects M-spike. IFE confirms and characterizes the immunoglobulin type (heavy and light chain).",
-                citation: "Dispenzieri A, et al. Mayo Clin Proc. 2007;82:323-341"
+                citation: "Dispenzieri A, et al. Mayo Clin Proc. 2007;82:323-341",
+                pmid: "17352369",
+                doi: "10.4065/82.3.323"
             },
             {
                 type: "simple",
@@ -3921,7 +3987,9 @@
                 correct: 1,
                 explanation: "Myeloma causes immunoparesis - suppression of normal (polyclonal) immunoglobulin production while the malignant clone produces non-functional M-protein. This leads to increased susceptibility to infections, especially encapsulated organisms.",
                 keyPoint: "Immunoparesis = low normal Igs despite high M-protein. Increases infection risk. Encapsulated bacteria are particularly dangerous.",
-                citation: "Nucci M, Anaissie E. Clin Infect Dis. 2009;49:1211-1225"
+                citation: "Nucci M, Anaissie E. Clin Infect Dis. 2009;49:1211-1225",
+                pmid: "19769539",
+                doi: "10.1086/605664"
             },
             {
                 type: "simple",
@@ -3937,7 +4005,9 @@
                 correct: 1,
                 explanation: "Kappa light chains are more common than lambda, with a ratio of approximately 2:1. The serum free light chain assay measures both kappa and lambda, and an abnormal ratio suggests a clonal process.",
                 keyPoint: "Kappa:Lambda ratio normally ~2:1. Abnormal FLC ratio (>100 or <0.01) can be a myeloma-defining event.",
-                citation: "Dispenzieri A, et al. Leukemia. 2009;23:215-224"
+                citation: "Dispenzieri A, et al. Leukemia. 2009;23:215-224",
+                pmid: "19020545",
+                doi: "10.1038/leu.2008.307"
             },
             {
                 type: "simple",
@@ -3953,7 +4023,9 @@
                 correct: 1,
                 explanation: "Lenalidomide is an immunomodulatory drug (IMiD) derived from thalidomide. IMiDs have multiple mechanisms including direct anti-myeloma effects, immune modulation, and anti-angiogenic properties.",
                 keyPoint: "IMiDs: Thalidomide, Lenalidomide, Pomalidomide. Key toxicities: VTE risk (need prophylaxis), cytopenias, teratogenicity.",
-                citation: "Quach H, et al. Leukemia. 2010;24:22-32"
+                citation: "Quach H, et al. Leukemia. 2010;24:22-32",
+                pmid: "19907437",
+                doi: "10.1038/leu.2009.236"
             },
             {
                 type: "simple",
@@ -3969,7 +4041,9 @@
                 correct: 1,
                 explanation: "IMiDs increase VTE risk, especially combined with dexamethasone. Prophylaxis is required: aspirin for low-risk, LMWH or warfarin for high-risk patients (prior VTE, immobility, hyperviscosity).",
                 keyPoint: "All IMiD patients need VTE prophylaxis. Aspirin for low risk; anticoagulation for high risk.",
-                citation: "Palumbo A, et al. Leukemia. 2008;22:414-423"
+                citation: "Palumbo A, et al. Leukemia. 2008;22:414-423",
+                pmid: "17928881",
+                doi: "10.1038/sj.leu.2405062"
             },
             {
                 type: "simple",
@@ -3985,7 +4059,9 @@
                 correct: 1,
                 explanation: "Plasmacytoma is a localized collection of clonal plasma cells. Solitary bone plasmacytoma occurs in bone; extramedullary plasmacytoma occurs in soft tissue. Many progress to myeloma over time.",
                 keyPoint: "Solitary plasmacytoma: single lesion, <10% BM plasma cells, no CRAB. ~60% progress to MM in 10 years.",
-                citation: "Soutar R, et al. Br J Haematol. 2004;124:717-726"
+                citation: "Soutar R, et al. Br J Haematol. 2004;125:717-726",
+                pmid: "15500518",
+                doi: "10.1111/j.1365-2141.2004.04973.x"
             },
             {
                 type: "simple",
@@ -4001,7 +4077,9 @@
                 correct: 1,
                 explanation: "Symptomatic (active) myeloma has CRAB criteria or SLiM biomarkers requiring treatment. Asymptomatic (smoldering) myeloma has no end-organ damage and is typically observed.",
                 keyPoint: "Active MM = needs treatment (has CRAB/SLiM). SMM = observation (no CRAB/SLiM). High-risk SMM may benefit from early treatment.",
-                citation: "Rajkumar SV, et al. Lancet Oncol. 2014;15:e538-e548"
+                citation: "Rajkumar SV, et al. Lancet Oncol. 2014;15:e538-e548",
+                pmid: "25439696",
+                doi: "10.1016/S1470-2045(14)70442-5"
             },
             {
                 type: "simple",
@@ -4017,7 +4095,9 @@
                 correct: 0,
                 explanation: "MGUS has approximately 1% per year risk of progression to myeloma or related malignancy. Risk factors for progression include M-protein level, type (non-IgG), and abnormal FLC ratio.",
                 keyPoint: "MGUS progression risk: ~1%/year. Higher risk: M-protein >1.5 g/dL, non-IgG type, abnormal FLC ratio.",
-                citation: "Kyle RA, et al. N Engl J Med. 2002;346:564-569"
+                citation: "Kyle RA, et al. N Engl J Med. 2002;346:564-569",
+                pmid: "11856795",
+                doi: "10.1056/NEJMoa012689"
             },
 
             // ============ RESIDENT LEVEL ============
@@ -4035,7 +4115,9 @@
                 correct: 1,
                 explanation: "R-ISS incorporates ISS (β2M and albumin) plus LDH and high-risk cytogenetics [t(4;14), t(14;16), del(17p)]. Stage I: ISS I + normal LDH + no high-risk. Stage III: ISS III + high LDH or high-risk cytogenetics. Stage II: neither I nor III.",
                 keyPoint: "R-ISS adds LDH and cytogenetics to ISS. High-risk: t(4;14), t(14;16), del(17p). R-ISS III = worst prognosis.",
-                citation: "Palumbo A, et al. J Clin Oncol. 2015;33:2863-2869"
+                citation: "Palumbo A, et al. J Clin Oncol. 2015;33:2863-2869",
+                pmid: "26240224",
+                doi: "10.1200/JCO.2015.61.2267"
             },
             {
                 type: "simple",
@@ -4051,7 +4133,9 @@
                 correct: 0,
                 explanation: "SLiM criteria (biomarkers of malignancy): S = Sixty percent (≥60%) clonal BM plasma cells, Li = Light chain ratio ≥100 (involved/uninvolved), M = >1 focal lesion on MRI (≥5mm). Meeting any = myeloma requiring treatment.",
                 keyPoint: "SLiM = ≥60% BM plasma cells, FLC ratio ≥100, >1 MRI lesion (≥5mm). Any one = treat as MM (not SMM).",
-                citation: "Rajkumar SV, et al. Lancet Oncol. 2014;15:e538-e548"
+                citation: "Rajkumar SV, et al. Lancet Oncol. 2014;15:e538-e548",
+                pmid: "25439696",
+                doi: "10.1016/S1470-2045(14)70442-5"
             },
             {
                 type: "simple",
@@ -4067,7 +4151,9 @@
                 correct: 2,
                 explanation: "Del(17p) involves loss of TP53 tumor suppressor and confers the worst prognosis in myeloma with shorter PFS and OS. Other high-risk features: t(4;14), t(14;16), t(14;20), gain 1q21. t(11;14) is standard risk.",
                 keyPoint: "High-risk cytogenetics: del(17p), t(4;14), t(14;16), t(14;20), gain 1q. Standard-risk: t(11;14), hyperdiploidy.",
-                citation: "Sonneveld P, et al. Blood. 2016;127:2955-2962"
+                citation: "Sonneveld P, et al. Blood. 2016;127:2955-2962",
+                pmid: "27002115",
+                doi: "10.1182/blood-2016-01-691618"
             },
             {
                 type: "simple",
@@ -4083,7 +4169,8 @@
                 correct: 3,
                 explanation: "Per NCCN 2025, Dara-VRd (daratumumab + bortezomib, lenalidomide, dexamethasone) is now the preferred induction for transplant-eligible patients based on PERSEUS and GRIFFIN trials showing improved depth of response and PFS.",
                 keyPoint: "Dara-VRd is now preferred induction for transplant-eligible MM per NCCN 2025. Quadruplet > triplet for fit patients.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025; Sonneveld P, et al. N Engl J Med. 2024"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025; Sonneveld P, et al. N Engl J Med. 2024",
+                guideline: { name: "NCCN MM", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1445" }
             },
             {
                 type: "simple",
@@ -4099,7 +4186,9 @@
                 correct: 1,
                 explanation: "ASCT following induction remains standard of care for eligible patients. It deepens response and prolongs PFS, though not OS in most studies. Age alone is not a contraindication; fitness assessment is key.",
                 keyPoint: "ASCT deepens response and improves PFS. Standard for fit patients. Not curative but extends remission duration.",
-                citation: "Attal M, et al. N Engl J Med. 2017;376:1311-1320"
+                citation: "Attal M, et al. N Engl J Med. 2017;376:1311-1320",
+                pmid: "28379796",
+                doi: "10.1056/NEJMoa1611750"
             },
             {
                 type: "simple",
@@ -4115,7 +4204,9 @@
                 correct: 2,
                 explanation: "Lenalidomide maintenance post-ASCT until progression is standard of care. Meta-analyses show improved PFS and OS. For high-risk disease, adding bortezomib may be considered.",
                 keyPoint: "Post-ASCT maintenance: Lenalidomide until progression (category 1). Consider adding bortezomib for high-risk patients.",
-                citation: "McCarthy PL, et al. N Engl J Med. 2012;366:1770-1781"
+                citation: "McCarthy PL, et al. N Engl J Med. 2012;366:1770-1781",
+                pmid: "22571201",
+                doi: "10.1056/NEJMoa1114083"
             },
             {
                 type: "simple",
@@ -4131,7 +4222,9 @@
                 correct: 1,
                 explanation: "Cast nephropathy (myeloma kidney) is caused by free light chains forming casts with Tamm-Horsfall protein in distal tubules. Other causes: hypercalcemia, dehydration, contrast, NSAIDs, amyloidosis, light chain deposition disease.",
                 keyPoint: "Myeloma kidney = light chain cast nephropathy. Avoid dehydration, nephrotoxins, IV contrast. Treat underlying MM urgently.",
-                citation: "Dimopoulos MA, et al. Ann Oncol. 2016;27:1542-1549"
+                citation: "Kumar S, et al. Lancet Oncol. 2016;17:e328-e346 (IMWG Response Criteria)",
+                pmid: "27511158",
+                doi: "10.1016/S1470-2045(16)30206-6"
             },
             {
                 type: "simple",
@@ -4163,7 +4256,9 @@
                 correct: 1,
                 explanation: "IMWG response criteria use M-protein reduction (SPEP/24h UPEP), serum free light chains (especially in oligo/non-secretory), bone marrow assessment, and imaging (PET/CT for CR confirmation). MRD assessment increasingly important.",
                 keyPoint: "Response assessment: SPEP, UPEP, FLC ratio, BM biopsy. CR needs negative IF, normalized FLC, <5% BM plasma cells. MRD-negativity = deeper response.",
-                citation: "Kumar S, et al. Lancet Oncol. 2016;17:e328-e346"
+                citation: "Kumar S, et al. Lancet Oncol. 2016;17:e328-e346",
+                pmid: "27511158",
+                doi: "10.1016/S1470-2045(16)30206-6"
             },
             {
                 type: "case",
@@ -4204,7 +4299,9 @@
                 correct: 1,
                 explanation: "Approximately 15-25% of newly diagnosed myeloma patients have high-risk cytogenetic abnormalities. This proportion increases at relapse, with up to 50% acquiring high-risk features.",
                 keyPoint: "High-risk cytogenetics in ~20% at diagnosis, increases with relapse. Always perform FISH on CD138-selected plasma cells.",
-                citation: "Sonneveld P, et al. Blood. 2016;127:2955-2962"
+                citation: "Sonneveld P, et al. Blood. 2016;127:2955-2962",
+                pmid: "27002115",
+                doi: "10.1182/blood-2016-01-691618"
             },
             {
                 type: "simple",
@@ -4220,7 +4317,9 @@
                 correct: 1,
                 explanation: "Stem cells are collected after initial induction to allow high-dose melphalan conditioning (200 mg/m2) followed by autologous stem cell rescue. This deepens response but is not curative.",
                 keyPoint: "Collect enough stem cells for 2 transplants (≥4 million CD34+ cells/kg). High-dose melphalan 200 mg/m2 is standard conditioning.",
-                citation: "Giralt S, et al. Biol Blood Marrow Transplant. 2015;21:1864-1869"
+                citation: "Giralt S, et al. Biol Blood Marrow Transplant. 2015;21:1864-1869",
+                pmid: "26428082",
+                doi: "10.1016/j.bbmt.2015.09.016"
             },
             {
                 type: "simple",
@@ -4252,7 +4351,9 @@
                 correct: 1,
                 explanation: "MRD refers to detection of residual myeloma cells at sensitivity of 10^-5 or 10^-6 using next-generation flow cytometry or next-generation sequencing. MRD-negativity correlates with improved outcomes.",
                 keyPoint: "MRD negativity (10^-5 or 10^-6) = deeper response, better PFS/OS. Sustained MRD negativity is the goal.",
-                citation: "Munshi NC, et al. JAMA Oncol. 2017;3:28-35"
+                citation: "Munshi NC, et al. JAMA Oncol. 2017;3:28-35",
+                pmid: "27632282",
+                doi: "10.1001/jamaoncol.2016.3160"
             },
             {
                 type: "simple",
@@ -4268,7 +4369,9 @@
                 correct: 1,
                 explanation: "AL (light chain) amyloidosis results from deposition of misfolded monoclonal light chains in tissues causing organ dysfunction. About 10-15% of myeloma patients have concurrent AL amyloidosis.",
                 keyPoint: "AL amyloidosis: light chain deposition → organ damage (heart, kidney, nerve, GI). Requires tissue biopsy with Congo red staining.",
-                citation: "Merlini G, et al. N Engl J Med. 2003;349:583-596"
+                citation: "Merlini G, et al. N Engl J Med. 2003;349:583-596",
+                pmid: "12842378",
+                doi: "10.1056/NEJMra023144"
             },
             {
                 type: "simple",
@@ -4300,7 +4403,8 @@
                 correct: 1,
                 explanation: "Myeloma patients should receive inactivated vaccines including influenza, pneumococcal (PCV13 and PPSV23), and COVID-19. Live vaccines (MMR, varicella, zoster live) are contraindicated.",
                 keyPoint: "Give inactivated vaccines. Avoid live vaccines (use Shingrix instead of Zostavax). Response may be blunted; consider checking titers.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" }
             },
             {
                 type: "simple",
@@ -4342,7 +4446,8 @@
                 correct: 1,
                 explanation: "For transplant-eligible patients achieving good response to induction, proceeding to high-dose melphalan (200 mg/m²) and ASCT is standard of care. This deepens response and prolongs PFS. Stem cells are collected before ASCT.",
                 keyPoint: "Transplant-eligible patients: Induction → stem cell collection → high-dose melphalan → ASCT → maintenance.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" }
             },
             {
                 type: "simple",
@@ -4358,7 +4463,9 @@
                 correct: 1,
                 explanation: "Tandem ASCT may benefit high-risk patients (del17p, t(4;14), t(14;16)) who don't achieve CR/VGPR after first ASCT. The StaMINA trial showed potential benefit in high-risk disease. Not routinely recommended for standard-risk.",
                 keyPoint: "Tandem ASCT: Consider for high-risk cytogenetics with suboptimal response to first ASCT. Standard-risk: single ASCT sufficient.",
-                citation: "Stadtmauer EA, et al. J Clin Oncol. 2019;37:589-597"
+                citation: "Stadtmauer EA, et al. J Clin Oncol. 2019;37:589-597",
+                pmid: "30653422",
+                doi: "10.1200/JCO.18.00685"
             },
             {
                 type: "case",
@@ -4381,7 +4488,9 @@
                 correct: 2,
                 explanation: "IMiDs (lenalidomide, pomalidomide) increase VTE risk, especially with dexamethasone. For patients with prior VTE (high-risk), therapeutic anticoagulation is recommended. Low-risk patients may use aspirin. Intermediate risk: prophylactic LMWH or DOAC.",
                 keyPoint: "IMiD VTE prophylaxis: Prior VTE = therapeutic anticoagulation. Low-risk = ASA. Intermediate = prophylactic anticoagulation.",
-                citation: "Palumbo A, et al. Leukemia. 2014;28:1573-1585"
+                citation: "Palumbo A, et al. Blood. 2015;125:2068-2074 (IMWG Frailty Score)",
+                pmid: "25628469",
+                doi: "10.1182/blood-2014-12-615187"
             },
             {
                 type: "simple",
@@ -4413,7 +4522,9 @@
                 correct: 1,
                 explanation: "Selinexor is a selective inhibitor of nuclear export (SINE) that blocks XPO1, causing nuclear retention and activation of tumor suppressor proteins. Approved for relapsed/refractory MM. Key toxicities: nausea, fatigue, cytopenias, hyponatremia.",
                 keyPoint: "Selinexor (Xpovio): XPO1 inhibitor. Used in heavily pretreated MM. Give with antiemetics (5-HT3 blocker). Monitor sodium.",
-                citation: "Chari A, et al. N Engl J Med. 2019;381:727-738"
+                citation: "Chari A, et al. N Engl J Med. 2019;381:727-738",
+                pmid: "31433920",
+                doi: "10.1056/NEJMoa1903455"
             },
             {
                 type: "simple",
@@ -4429,7 +4540,11 @@
                 correct: 1,
                 explanation: "BCMA-targeting agents include CAR-T therapies (idecabtagene vicleucel, ciltacabtagene autoleucel), bispecific antibodies (teclistamab, elranatamab), and ADC (belantamab mafodotin - currently withdrawn). These represent major advances for RRMM.",
                 keyPoint: "BCMA-directed therapies: CAR-T (ide-cel, cilta-cel), bispecifics (teclistamab, elranatamab). Transforming RRMM treatment.",
-                citation: "Munshi NC, et al. N Engl J Med. 2021;384:705-716"
+                citation: "Munshi NC, et al. N Engl J Med. 2021;384:705-716",
+                pmid: "33626253",
+                doi: "10.1056/NEJMoa2024850",
+                pmid: "33626253",
+                doi: "10.1056/NEJMoa2024850"
             },
             {
                 type: "case",
@@ -4453,7 +4568,9 @@
                 correct: 1,
                 explanation: "This is grade 3 CRS (fever + hypotension + hypoxia/confusion). Bispecific antibodies and CAR-T cause CRS via T-cell activation and cytokine release. Management: tocilizumab (IL-6R blocker) ± corticosteroids for higher grades. Rule out infection concurrently.",
                 keyPoint: "CRS grading: Grade 1 = fever only. Grade 2 = hypotension responsive to fluids. Grade 3 = hypotension requiring vasopressors. Tocilizumab first-line.",
-                citation: "Lee DW, et al. Biol Blood Marrow Transplant. 2019;25:625-638"
+                citation: "Lee DW, et al. Biol Blood Marrow Transplant. 2019;25:625-638",
+                pmid: "30592986",
+                doi: "10.1016/j.bbmt.2018.12.758"
             },
             {
                 type: "simple",
@@ -4469,7 +4586,9 @@
                 correct: 1,
                 explanation: "ICANS (Immune effector Cell-Associated Neurotoxicity Syndrome) presents with confusion, aphasia, tremor, and can progress to seizures/cerebral edema. May occur with or after CRS. Management: dexamethasone (not tocilizumab for isolated ICANS). ICE score for grading.",
                 keyPoint: "ICANS: confusion, word-finding difficulty, tremor, seizures. Grade with ICE score. Treat with dexamethasone. Tocilizumab doesn't cross BBB.",
-                citation: "Neelapu SS, et al. Nat Rev Clin Oncol. 2018;15:47-62"
+                citation: "Neelapu SS, et al. Nat Rev Clin Oncol. 2018;15:47-62",
+                pmid: "28925994",
+                doi: "10.1038/nrclinonc.2017.148"
             },
             {
                 type: "simple",
@@ -4485,7 +4604,8 @@
                 correct: 1,
                 explanation: "Solitary plasmacytoma (bone or extramedullary) without systemic myeloma is treated with definitive radiation therapy (40-50 Gy). This is potentially curative. ~50-70% of bone plasmacytomas progress to MM within 10 years; surveillance essential.",
                 keyPoint: "Solitary plasmacytoma: RT is curative intent. No systemic therapy unless progression. Long-term monitoring required - high rate of conversion to MM.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" }
             },
             {
                 type: "simple",
@@ -4501,7 +4621,9 @@
                 correct: 1,
                 explanation: "Tandem (double) ASCT may benefit high-risk patients who don't achieve CR/VGPR after first transplant. Studies show conflicting results, but selected high-risk patients may derive benefit.",
                 keyPoint: "Tandem ASCT: consider for high-risk patients not achieving optimal response after first ASCT. Collect enough cells upfront.",
-                citation: "Cavo M, et al. Blood. 2020;136:2586-2599"
+                citation: "Moreau P, et al. Lancet. 2019;394:29-38 (CASSIOPEIA)",
+                pmid: "31171419",
+                doi: "10.1016/S0140-6736(19)31240-1"
             },
             {
                 type: "simple",
@@ -4517,7 +4639,9 @@
                 correct: 1,
                 explanation: "Selinexor is a selective inhibitor of nuclear export (SINE) that blocks XPO1, causing nuclear accumulation of tumor suppressor proteins and growth regulators, leading to cell cycle arrest and apoptosis.",
                 keyPoint: "Selinexor = XPO1 inhibitor. Used in heavily pretreated patients. Key toxicities: nausea, fatigue, thrombocytopenia, anorexia.",
-                citation: "Chari A, et al. N Engl J Med. 2019;381:727-738"
+                citation: "Chari A, et al. N Engl J Med. 2019;381:727-738",
+                pmid: "31433920",
+                doi: "10.1056/NEJMoa1903455"
             },
             {
                 type: "simple",
@@ -4549,7 +4673,9 @@
                 correct: 1,
                 explanation: "BCMA (B-cell maturation antigen) is targeted by bispecific antibodies (teclistamab, elranatamab) and CAR-T products (idecabtagene vicleucel, ciltacabtagene autoleucel). These are transforming relapsed/refractory myeloma treatment.",
                 keyPoint: "BCMA-targeting: CAR-T (ide-cel, cilta-cel) and bispecifics (teclistamab, elranatamab). High response rates in heavily pretreated patients.",
-                citation: "San-Miguel J, et al. N Engl J Med. 2023;388:1002-1014"
+                citation: "San-Miguel J, et al. N Engl J Med. 2023;388:1002-1014",
+                pmid: "35661166",
+                doi: "10.1056/NEJMoa2203478"
             },
             {
                 type: "simple",
@@ -4581,7 +4707,8 @@
                 correct: 1,
                 explanation: "For transplant-ineligible patients, Dara-VRd (if tolerable) or Dara-Rd are preferred regimens per NCCN. Continued therapy until progression, with attention to dose modifications for frailty.",
                 keyPoint: "Transplant-ineligible: Dara-VRd or Dara-Rd preferred. Frailty assessment important for dose adjustments. VMP-based regimens are alternatives.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" }
             },
             {
                 type: "simple",
@@ -4597,7 +4724,8 @@
                 correct: 1,
                 explanation: "During maintenance, patients should be monitored every 1-3 months with SPEP, serum FLC, CBC, and chemistry panel. Bone marrow biopsy and imaging are performed for clinical indications or suspected relapse.",
                 keyPoint: "Maintenance monitoring: every 1-3 months. Track M-protein/FLC trends. Bone marrow/imaging for suspected progression.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" }
             },
             {
                 type: "simple",
@@ -4655,7 +4783,9 @@
                 correct: 1,
                 explanation: "MRD-negativity (at 10⁻⁵ or 10⁻⁶ by NGS/NGF) is associated with significantly improved PFS and OS in newly diagnosed, transplant-eligible/ineligible, and relapsed settings. Sustained MRD-negativity has even better outcomes. MRD is increasingly used as endpoint.",
                 keyPoint: "MRD-negative = deep response, better outcomes. NGS/NGF at 10⁻⁵ sensitivity. Sustained MRD-negativity (≥12 months) = best prognosis.",
-                citation: "Munshi NC, et al. JAMA Oncol. 2017;3:28-35"
+                citation: "Munshi NC, et al. JAMA Oncol. 2017;3:28-35",
+                pmid: "27632282",
+                doi: "10.1001/jamaoncol.2016.3160"
             },
             {
                 type: "case",
@@ -4679,7 +4809,9 @@
                 correct: 1,
                 explanation: "Despite MRD-negativity, current standard is to continue maintenance until progression, especially in high-risk disease. The SWOG S0777 and other trials support continuous therapy. Stopping therapy, even with MRD-negativity, is not yet standard (clinical trials ongoing).",
                 keyPoint: "High-risk MM: continue maintenance until progression regardless of MRD status. Trials like PERSEUS exploring fixed-duration therapy.",
-                citation: "Moreau P, et al. N Engl J Med. 2024;391:1593-1605 (PERSEUS)"
+                citation: "Moreau P, et al. N Engl J Med. 2024;391:1593-1605 (PERSEUS)",
+                pmid: "38084760",
+                doi: "10.1056/NEJMoa2312054"
             },
             {
                 type: "simple",
@@ -4735,7 +4867,8 @@
                 correct: 1,
                 explanation: "For transplant-ineligible patients, Dara-Rd or Dara-VMP are preferred. With CrCl 35 mL/min, lenalidomide dose should be reduced (10mg daily or every other day). Avoid carfilzomib given cardiac dysfunction. Bortezomib can be used (not renally cleared) with cardiac monitoring.",
                 keyPoint: "Transplant-ineligible: Dara-Rd or Dara-VMP preferred. Lenalidomide dose-adjust for renal function. Avoid carfilzomib in cardiac dysfunction.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" }
             },
             {
                 type: "simple",
@@ -4751,7 +4884,9 @@
                 correct: 1,
                 explanation: "In light chain-only myeloma (no intact immunoglobulin), serum free light chains are the primary monitoring tool. The involved/uninvolved FLC ratio is key. 24-hour urine for Bence Jones protein is supplementary. Non-secretory MM requires imaging and bone marrow for monitoring.",
                 keyPoint: "Light chain MM: FLC ratio is primary. Non-secretory MM (~3%): imaging + bone marrow for monitoring. FLC ratio ≥100 is a myeloma-defining event.",
-                citation: "Dispenzieri A, et al. Leukemia. 2009;23:215-224"
+                citation: "Dispenzieri A, et al. Leukemia. 2009;23:215-224",
+                pmid: "19020545",
+                doi: "10.1038/leu.2008.307"
             },
             {
                 type: "case",
@@ -4775,7 +4910,9 @@
                 correct: 1,
                 explanation: "AL amyloidosis with cardiac involvement requires careful therapy. The ANDROMEDA regimen (Dara-VCd) is now standard for AL amyloidosis. Reduce dexamethasone in severe heart failure. Avoid cardiotoxic agents (carfilzomib). ASCT reserved for select patients with limited organ involvement.",
                 keyPoint: "AL amyloidosis: Dara-VCd (ANDROMEDA) is standard. Stage cardiac involvement with NT-proBNP/troponin. Reduce steroids in cardiac AL. dFLC for response monitoring.",
-                citation: "Kastritis E, et al. N Engl J Med. 2021;385:46-58"
+                citation: "Kastritis E, et al. N Engl J Med. 2021;385:46-58",
+                pmid: "34192431",
+                doi: "10.1056/NEJMoa2028631"
             },
             {
                 type: "simple",
@@ -4791,7 +4928,9 @@
                 correct: 1,
                 explanation: "Ultra-high-risk MM includes: bi-allelic TP53 inactivation (del17p + TP53 mutation), or combinations of high-risk features (del17p + 1q gain, t(4;14) + del17p). These patients have poor outcomes even with modern therapy and are focus of clinical trials.",
                 keyPoint: "Ultra-high-risk: bi-allelic TP53, or ≥2 high-risk cytogenetics. Median PFS <12 months with standard therapy. Consider clinical trials.",
-                citation: "Walker BA, et al. J Clin Oncol. 2019;37:1143-1153"
+                citation: "Walker BA, et al. Leukemia. 2019;33:159-170 (Double-Hit)",
+                pmid: "29967379",
+                doi: "10.1038/s41375-018-0226-4"
             },
             {
                 type: "simple",
@@ -4823,7 +4962,9 @@
                 correct: 1,
                 explanation: "CAR-T requires 4-6 weeks manufacturing time but offers one-time treatment. Bispecifics are immediately available but require ongoing dosing. For aggressive disease requiring immediate treatment, bispecifics may be preferred.",
                 keyPoint: "CAR-T: manufacturing delay but one-time. Bispecifics: immediate availability but continuous therapy. Consider disease tempo.",
-                citation: "Shah N, et al. Lancet. 2023;401:2206-2217"
+                citation: "Shah N, et al. Lancet. 2023;401:2206-2217",
+                pmid: "34175021",
+                doi: "10.1016/S0140-6736(21)00933-8"
             },
             {
                 type: "simple",
@@ -4855,7 +4996,9 @@
                 correct: 1,
                 explanation: "Venetoclax (BCL-2 inhibitor) shows high activity in t(11;14) myeloma due to BCL-2 dependency. BELLINI showed OS concerns with venetoclax-dexamethasone but benefit with PI backbone. FDA approved with bortezomib-dex for t(11;14).",
                 keyPoint: "Venetoclax: most effective in t(11;14). Use with PI backbone. Watch for infections (TLS rare in MM).",
-                citation: "Kumar SK, et al. Lancet Oncol. 2020;21:1630-1642"
+                citation: "Kumar SK, et al. Lancet Oncol. 2020;21:1630-1642",
+                pmid: "33129376",
+                doi: "10.1016/S1470-2045(20)30525-8"
             },
             {
                 type: "simple",
@@ -4871,7 +5014,8 @@
                 correct: 1,
                 explanation: "After daratumumab refractoriness, options include BCMA-targeting agents (bispecifics, CAR-T), isatuximab-based combinations (different epitope on CD38), or other novel agents. Clinical trials are preferred.",
                 keyPoint: "Post-daratumumab: BCMA-targeting (CAR-T/bispecifics), isatuximab combinations, selinexor combinations, clinical trials.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" }
             },
             {
                 type: "simple",
@@ -4903,7 +5047,9 @@
                 correct: 1,
                 explanation: "Belantamab mafodotin is an antibody-drug conjugate targeting BCMA. Corneal toxicity (keratopathy) requires ophthalmologic monitoring. Initially withdrawn, being studied in combinations with improved dosing schedules.",
                 keyPoint: "Belantamab: BCMA ADC. Corneal toxicity main limitation. Being studied in combinations with modified schedules.",
-                citation: "Lonial S, et al. Lancet Oncol. 2020;21:207-221"
+                citation: "Lonial S, et al. Lancet Oncol. 2020;21:207-221",
+                pmid: "31859245",
+                doi: "10.1016/S1470-2045(19)30788-0"
             },
             {
                 type: "simple",
@@ -4919,7 +5065,9 @@
                 correct: 1,
                 explanation: "Penta-refractory (refractory to 2 PIs, 2 IMiDs, and anti-CD38) has poor prognosis. Options include BCMA-targeting therapies, clinical trials with novel targets, or novel combinations. Survival has improved dramatically with new therapies.",
                 keyPoint: "Penta-refractory: CAR-T, bispecifics (BCMA or others), selinexor-based, clinical trials. Median OS improving with new agents.",
-                citation: "Gandhi UH, et al. Leukemia. 2019;33:2266-2275"
+                citation: "Gandhi UH, et al. Leukemia. 2019;33:2266-2275",
+                pmid: "30886299",
+                doi: "10.1038/s41375-019-0435-7"
             },
             {
                 type: "simple",
@@ -4935,7 +5083,9 @@
                 correct: 1,
                 explanation: "Per ASCO and IMWG guidelines, bisphosphonates are recommended for 2 years. Beyond 2 years, consider stopping (if in remission) or extending to every 3 months based on individual risk-benefit. Monitor for ONJ and renal function.",
                 keyPoint: "Bisphosphonates: 2 years standard, then individualize. Watch for ONJ (dental exam before starting), renal toxicity. Denosumab is an alternative.",
-                citation: "Terpos E, et al. J Clin Oncol. 2013;31:2347-2357"
+                citation: "Terpos E, et al. J Clin Oncol. 2013;31:2347-2357",
+                pmid: "23690408",
+                doi: "10.1200/JCO.2012.47.7901"
             },
             {
                 type: "simple",
@@ -4991,7 +5141,8 @@
                 correct: 1,
                 explanation: "In patients with sCR and stable labs, routine BM biopsies are not recommended outside clinical trials. BM is performed if relapse is suspected (rising M-protein/FLC, new symptoms) or for MRD assessment in study protocols. PET-CT complements but doesn't replace BM when needed.",
                 keyPoint: "sCR surveillance: routine BM not needed. Monitor labs (SPEP/FLC) every 1-3 months. BM for suspected relapse or MRD studies. PET for EMD concerns.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" }
             },
             {
                 type: "simple",
@@ -5092,7 +5243,9 @@
                 correct: 2,
                 explanation: "For Grade 2 CRS (hypotension responsive to fluids, O2 requirement <40%), tocilizumab is first-line per ASTCT guidelines. Dexamethasone can be added if no improvement in 1-2 hours. Holding steroids is outdated; modern data shows steroids don't significantly impair efficacy. ICU is for Grade 3-4 CRS with vasopressor requirement.",
                 keyPoint: "Grade 2 CRS: tocilizumab first, add steroids if refractory. Steroids don't significantly impair T-cell therapy efficacy. Grade 3+ = ICU.",
-                citation: "Lee DW, et al. Biol Blood Marrow Transplant. 2019;25:625-638"
+                citation: "Lee DW, et al. Biol Blood Marrow Transplant. 2019;25:625-638",
+                pmid: "30592986",
+                doi: "10.1016/j.bbmt.2018.12.758"
             },
             {
                 type: "simple",
@@ -5108,7 +5261,9 @@
                 correct: 1,
                 explanation: "DETERMINATION showed ASCT provided ~24 month PFS benefit (67.5 vs 46.2 months) but no OS difference at median 76 months follow-up. Both arms achieved similar MRD negativity rates eventually. This supports early ASCT but allows for informed patient discussions about deferral with salvage ASCT at relapse.",
                 keyPoint: "DETERMINATION: ASCT = significant PFS benefit, no OS difference yet. Both arms reach similar MRD rates. ASCT remains standard but deferral is discussable.",
-                citation: "Richardson PG, et al. N Engl J Med. 2022;387:132-147"
+                citation: "Richardson PG, et al. N Engl J Med. 2022;387:132-147",
+                pmid: "35660812",
+                doi: "10.1056/NEJMoa2204925"
             },
             {
                 type: "simple",
@@ -5124,7 +5279,9 @@
                 correct: 1,
                 explanation: "Cereblon (CRBN) is the direct target of IMiDs. CRBN binds lenalidomide/pomalidomide and recruits IKZF1/3 for degradation. Acquired resistance most commonly involves CRBN mutations, decreased CRBN expression, or downstream pathway alterations. BCL-2 upregulation occurs but is not the primary IMiD resistance mechanism.",
                 keyPoint: "IMiD resistance: CRBN mutations/downregulation most common. CELMoDs may overcome some resistance. Consider switching drug class.",
-                citation: "Kronke J, et al. Science. 2014;343:301-305"
+                citation: "Kronke J, et al. Science. 2014;343:301-305",
+                pmid: "24436409",
+                doi: "10.1126/science.1244851"
             },
             {
                 type: "case",
@@ -5165,7 +5322,9 @@
                 correct: 2,
                 explanation: "CAR-T expansion and persistence are the strongest predictors of response. Baseline BCMA expression has not consistently predicted outcomes. While EMD and prior lines affect prognosis, adequate lymphodepletion (flu/cy) and subsequent CAR-T expansion are most critical. Low CAR-T persistence correlates with early relapse.",
                 keyPoint: "CAR-T response: expansion/persistence most predictive. BCMA expression level not reliably predictive. Lymphodepletion quality matters.",
-                citation: "Munshi NC, et al. N Engl J Med. 2021;384:705-716"
+                citation: "Munshi NC, et al. N Engl J Med. 2021;384:705-716",
+                pmid: "33626253",
+                doi: "10.1056/NEJMoa2024850"
             },
             {
                 type: "case",
@@ -5303,7 +5462,9 @@
                 correct: 1,
                 explanation: "Daratumumab works through multiple mechanisms: CDC and ADCP are dominant, with ADCC and direct effects (apoptosis, modulation of enzymatic activity) contributing. Unlike rituximab where ADCC dominates, daratumumab's mechanism is more balanced. This explains activity even in NK-depleted states.",
                 keyPoint: "Daratumumab: CDC and ADCP dominant, ADCC contributory, direct effects minor. Multi-mechanism explains broad activity.",
-                citation: "de Weers M, et al. J Immunol. 2011;186:1840-1848"
+                citation: "de Weers M, et al. J Immunol. 2011;186:1840-1848",
+                pmid: "21187443",
+                doi: "10.4049/jimmunol.1003032"
             },
             {
                 type: "case",
@@ -5466,7 +5627,8 @@
                 correct: 1,
                 explanation: "Myeloma patients have increased susceptibility to contrast-induced nephropathy due to underlying renal dysfunction from light chain cast nephropathy. Ensure adequate hydration if contrast must be used. Low-dose CT without contrast is preferred for bone imaging.",
                 keyPoint: "Contrast nephropathy risk in myeloma. Hydrate well if using contrast. Low-dose CT preferred for bones.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" }
             },
             {
                 type: "simple",
@@ -5572,7 +5734,8 @@
                 correct: 1,
                 explanation: "Post-ASCT consolidation typically consists of 2 cycles of a VRd-like regimen to deepen response before transitioning to maintenance. Some trials use 4 cycles. The goal is to achieve the deepest response possible.",
                 keyPoint: "Post-ASCT: usually 2 cycles consolidation → maintenance. Deepen response before long-term maintenance.",
-                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025"
+                citation: "NCCN Guidelines Multiple Myeloma Version 2.2025",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/myeloma.pdf" }
             },
             {
                 type: "simple",
@@ -5662,7 +5825,9 @@
                 correct: 1,
                 explanation: "Two BCMA-directed CAR-T products are FDA-approved for myeloma: idecabtagene vicleucel (ide-cel, Abecma) and ciltacabtagene autoleucel (cilta-cel, Carvykti). Both are approved for heavily pretreated RRMM.",
                 keyPoint: "Myeloma CAR-T: ide-cel (Abecma) and cilta-cel (Carvykti). Both BCMA-directed. Deep responses in RRMM.",
-                citation: "Munshi NC, et al. N Engl J Med. 2021;384:705-716"
+                citation: "Munshi NC, et al. N Engl J Med. 2021;384:705-716",
+                pmid: "33626253",
+                doi: "10.1056/NEJMoa2024850"
             },
             {
                 type: "simple",
@@ -6771,7 +6936,7 @@
                         <strong>🔑 Key Point:</strong>
                         <p>${q.keyPoint}</p>
                     </div>
-                    <div class="citation">📚 ${q.citation}</div>
+                    <div class="citation">📚 ${q.citation}${renderReferenceLinks(q)}</div>
                 </div>
                 <button class="next-btn" id="nextBtn" onclick="nextQuestion()">NEXT LEVEL →</button>
             `;

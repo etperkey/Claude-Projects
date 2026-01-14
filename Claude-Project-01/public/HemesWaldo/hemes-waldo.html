@@ -638,6 +638,34 @@
             font-style: italic;
         }
 
+        /* Reference Links */
+        .ref-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ref-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            background: rgba(204, 0, 0, 0.1);
+            border-radius: 4px;
+            color: #4fc3f7;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-style: normal;
+            transition: all 0.2s;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+
+        .ref-link:hover {
+            background: rgba(79, 195, 247, 0.3);
+            transform: scale(1.05);
+            border-color: #4fc3f7;
+        }
+
         .next-btn {
             font-family: 'Bangers', cursive;
             font-size: 1.5em;
@@ -1100,6 +1128,21 @@
         };
         DeviceDetector.init();
 
+        // Reference Links Helper
+        function renderReferenceLinks(question) {
+            let links = '';
+            if (question.pmid) {
+                links += `<a href="https://pubmed.ncbi.nlm.nih.gov/${question.pmid}/" target="_blank" rel="noopener" class="ref-link" title="View on PubMed">📄 PubMed</a>`;
+            }
+            if (question.doi) {
+                links += `<a href="https://doi.org/${question.doi}" target="_blank" rel="noopener" class="ref-link" title="View Full Text">🔗 DOI</a>`;
+            }
+            if (question.guideline) {
+                links += `<a href="${question.guideline.url}" target="_blank" rel="noopener" class="ref-link" title="View Guidelines">📋 ${question.guideline.name}</a>`;
+            }
+            return links ? `<div class="ref-links">${links}</div>` : '';
+        }
+
         // ASH Image Bank Questions - Organized by Difficulty Level
         // intern: Basic morphology identification
         // fellow: Clinical correlation and workup
@@ -1121,7 +1164,8 @@
                 correct: 1,
                 explanation: "This is an Auer rod - a pink/red rod-like cytoplasmic inclusion composed of fused azurophilic (primary) granules. Auer rods are pathognomonic for myeloid neoplasms.",
                 keyPoint: "Auer rods = fused primary granules. PATHOGNOMONIC for myeloid malignancy.",
-                citation: "ASH Image Bank - Teresa Scordino"
+                citation: "ASH Image Bank - Teresa Scordino",
+                url: "https://imagebank.hematology.org/image/60924"
             },
             {
                 difficulty: "intern",
@@ -1137,7 +1181,9 @@
                 correct: 1,
                 explanation: "These RBCs are hypochromic (increased central pallor >1/3 cell diameter) and microcytic (smaller than normal). This is the classic appearance of iron deficiency anemia.",
                 keyPoint: "Hypochromic = pale centers. Microcytic = small cells. Think iron deficiency or thalassemia.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/",
+                url: "https://imagebank.hematology.org/image/60219"
             },
             {
                 difficulty: "intern",
@@ -1153,7 +1199,8 @@
                 correct: 1,
                 explanation: "These are schistocytes - fragmented RBCs with sharp angles, helmet shapes, or triangular forms. They indicate mechanical destruction of red cells.",
                 keyPoint: "Schistocytes = RBC fragments. Think MAHA (TTP, HUS, DIC) or mechanical valves.",
-                citation: "ASH Image Bank - Teresa Scordino"
+                citation: "ASH Image Bank - Teresa Scordino",
+                url: "https://imagebank.hematology.org/image/60307"
             },
             {
                 difficulty: "intern",
@@ -1169,7 +1216,8 @@
                 correct: 1,
                 explanation: "These are target cells (codocytes) with the classic bull's-eye appearance - central and peripheral hemoglobin with a pale ring between.",
                 keyPoint: "Target cells = bull's-eye. Seen in liver disease, thalassemia, hemoglobin C, post-splenectomy.",
-                citation: "ASH Image Bank - Teresa Scordino"
+                citation: "ASH Image Bank - Teresa Scordino",
+                url: "https://imagebank.hematology.org/image/60310"
             },
             {
                 difficulty: "intern",
@@ -1185,7 +1233,8 @@
                 correct: 1,
                 explanation: "This is toxic granulation - prominent dark azurophilic granules in neutrophils seen in severe infection, inflammation, or G-CSF administration.",
                 keyPoint: "Toxic granulation = reactive change, not malignant. Often with Döhle bodies and vacuoles.",
-                citation: "ASH Image Bank - Teresa Scordino"
+                citation: "ASH Image Bank - Teresa Scordino",
+                url: "https://imagebank.hematology.org/image/60046"
             },
             {
                 difficulty: "intern",
@@ -1201,7 +1250,9 @@
                 correct: 1,
                 explanation: "This is an atypical lymphocyte (Downey cell) - a reactive T-cell with abundant blue cytoplasm that conforms around adjacent RBCs. Classic for viral infections like EBV mono.",
                 keyPoint: "Atypical lymphocytes = reactive T-cells in viral infections. NOT malignant.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/",
+                url: "https://imagebank.hematology.org/image/64671"
             },
             {
                 difficulty: "intern",
@@ -1217,7 +1268,8 @@
                 correct: 1,
                 explanation: "This is a Howell-Jolly body - a round nuclear remnant in the RBC. Normally removed by the spleen, so presence indicates asplenia or hyposplenia.",
                 keyPoint: "Howell-Jolly body = nuclear remnant = asplenia/hyposplenia.",
-                citation: "ASH Image Bank - Perla Vicari"
+                citation: "ASH Image Bank - Perla Vicari",
+                url: "https://imagebank.hematology.org/image/63694"
             },
             {
                 difficulty: "intern",
@@ -1233,7 +1285,9 @@
                 correct: 1,
                 explanation: "This is a hypersegmented neutrophil with ≥6 nuclear lobes. Classic for megaloblastic anemia due to B12 or folate deficiency.",
                 keyPoint: "Hypersegmented PMNs (≥6 lobes) = B12 or folate deficiency.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/",
+                url: "https://imagebank.hematology.org/image/64380"
             },
             {
                 difficulty: "intern",
@@ -1249,7 +1303,8 @@
                 correct: 1,
                 explanation: "These are spherocytes - small, round RBCs without central pallor due to loss of membrane surface area. Seen in hereditary spherocytosis and autoimmune hemolytic anemia.",
                 keyPoint: "Spherocytes = round, no pallor. Think hereditary spherocytosis or AIHA.",
-                citation: "ASH Image Bank - Teresa Scordino"
+                citation: "ASH Image Bank - Teresa Scordino",
+                url: "https://imagebank.hematology.org/image/60308"
             },
             {
                 difficulty: "intern",
@@ -1265,7 +1320,8 @@
                 correct: 1,
                 explanation: "These are smudge cells (basket cells) - fragile CLL lymphocytes that rupture during blood smear preparation. A classic finding in CLL.",
                 keyPoint: "Smudge cells = fragile CLL cells. Almost pathognomonic for CLL.",
-                citation: "ASH Image Bank - Peter Maslak"
+                citation: "ASH Image Bank - Peter Maslak",
+                url: "https://imagebank.hematology.org/image/1023"
             },
             {
                 difficulty: "intern",
@@ -1281,7 +1337,8 @@
                 correct: 1,
                 explanation: "This is rouleaux formation - RBCs stacked like coins due to increased plasma proteins (immunoglobulins or fibrinogen) that neutralize RBC surface charge.",
                 keyPoint: "Rouleaux = coin stacks. Think myeloma, Waldenström's, or inflammation.",
-                citation: "ASH Image Bank - Teresa Scordino"
+                citation: "ASH Image Bank - Teresa Scordino",
+                url: "https://imagebank.hematology.org/image/60268"
             },
             {
                 difficulty: "intern",
@@ -1297,7 +1354,8 @@
                 correct: 1,
                 explanation: "These are dacrocytes (teardrop cells) - RBCs with a teardrop or pear shape. Seen when RBCs are squeezed through fibrotic marrow or in extramedullary hematopoiesis.",
                 keyPoint: "Dacrocytes = teardrops. Think myelofibrosis or marrow infiltration.",
-                citation: "ASH Image Bank - Teresa Scordino"
+                citation: "ASH Image Bank - Teresa Scordino",
+                url: "https://imagebank.hematology.org/image/60311"
             },
             {
                 difficulty: "intern",
@@ -1329,7 +1387,8 @@
                 correct: 1,
                 explanation: "These are plasma cells with characteristic features: eccentric nucleus, clock-face chromatin, perinuclear hof (clear zone), and basophilic cytoplasm.",
                 keyPoint: "Plasma cells: eccentric nucleus, clock-face chromatin, perinuclear hof.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "intern",
@@ -1395,7 +1454,8 @@
                 correct: 1,
                 explanation: "These bite cells result from splenic removal of Heinz bodies (denatured hemoglobin). Rasburicase produces hydrogen peroxide, causing oxidative hemolysis in G6PD-deficient patients - a contraindication.",
                 keyPoint: "Bite/blister cells = oxidative hemolysis. G6PD deficiency triggers: fava beans, rasburicase, dapsone, sulfa drugs.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "fellow",
@@ -1411,7 +1471,8 @@
                 correct: 1,
                 explanation: "These atypical lymphocytes (Downey cells) with pharyngitis and lymphadenopathy suggest infectious mononucleosis. Monospot confirms EBV. These are reactive CD8+ T cells, NOT malignant.",
                 keyPoint: "Atypical lymphocytes + pharyngitis = think EBV mono. Monospot for quick diagnosis.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "fellow",
@@ -1459,7 +1520,8 @@
                 correct: 1,
                 explanation: "Hypersegmented neutrophils + macrocytosis = MEGALOBLASTIC ANEMIA from impaired DNA synthesis. Check both B12 AND folate - treatment differs and giving folate alone in B12 deficiency can worsen neuro damage.",
                 keyPoint: "Hypersegmented PMNs + high MCV = check B12 AND folate. Never treat blindly.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "fellow",
@@ -1539,7 +1601,8 @@
                 correct: 1,
                 explanation: "COARSE basophilic stippling is classic for lead poisoning. Lead inhibits pyrimidine-5'-nucleotidase. Herbal supplements are an increasingly recognized lead source.",
                 keyPoint: "COARSE stippling = lead. FINE stippling = thalassemia.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "fellow",
@@ -1621,7 +1684,8 @@
                 correct: 1,
                 explanation: "Low-grade follicular lymphoma is INDOLENT. Multiple studies show no survival benefit to early treatment in asymptomatic patients. Watch-and-wait avoids toxicity until needed.",
                 keyPoint: "FL grade 1-2 asymptomatic = watch and wait. Treat when symptomatic or bulky.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "attending",
@@ -1637,7 +1701,8 @@
                 correct: 1,
                 explanation: "Plasma cells ≥10% = plasma cell neoplasm, but active myeloma requires CRAB (Ca>11, Renal Cr>2, Anemia Hgb<10, Bone lesions) OR myeloma-defining events (≥60% PC, FLC ratio ≥100, >1 MRI lesion).",
                 keyPoint: "CRAB criteria distinguish active myeloma from smoldering. Treatment only for active disease.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "attending",
@@ -1653,7 +1718,8 @@
                 correct: 1,
                 explanation: "Spur cells (acanthocytes) ≥5% indicate end-stage liver disease with median survival <3 months. Only liver transplant is definitive treatment. This is a poor prognostic sign.",
                 keyPoint: "Spur cell anemia = end-stage liver. Very poor prognosis without transplant.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "attending",
@@ -1669,7 +1735,8 @@
                 correct: 1,
                 explanation: "Congo red confirms AMYLOID but doesn't identify TYPE. In myeloma, could be AL (light chain) or rarely AA. Mass spectrometry directly identifies the amyloid protein - now gold standard over immunohistochemistry.",
                 keyPoint: "Amyloid typing is CRITICAL. AL vs AA vs ATTR have completely different treatments.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "attending",
@@ -1685,7 +1752,8 @@
                 correct: 1,
                 explanation: "Triple-negative primary myelofibrosis (no JAK2, CALR, or MPL) has the WORST prognosis within PMF. DIPSS-plus score is highest. May warrant earlier transplant consideration.",
                 keyPoint: "Triple-negative PMF = worst prognosis. JAK2 > MPL > CALR > triple-neg for survival.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "attending",
@@ -1781,7 +1849,8 @@
                 correct: 1,
                 explanation: "T-LGL leukemia is often indolent. When treatment needed (usually for cytopenias), first-line is immunosuppression: methotrexate, cyclophosphamide, or cyclosporine. NOT chemotherapy.",
                 keyPoint: "T-LGL: immunosuppression, not chemo. Often associated with autoimmune conditions (RA).",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
 
             // ============ HEMATOPATHOLOGIST LEVEL - Rare/Subtle Findings ============
@@ -1799,7 +1868,8 @@
                 correct: 1,
                 explanation: "Microgranular APL has hypogranular cells with bilobed nuclei that can mimic AML-M5 (monocytic). WBC is often very high (vs. classic APL). Still has t(15;17) and responds to ATRA. DIC risk remains high.",
                 keyPoint: "Microgranular APL: looks monocytic, high WBC, bilobed nuclei. Still t(15;17)+, still needs ATRA urgently.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "hematopathologist",
@@ -1863,7 +1933,8 @@
                 correct: 1,
                 explanation: "APL morphology with negative PML-RARA can be variant APL (t(11;17) ZBTB16-RARA, t(5;17) NPM1-RARA) or AML mimicking APL. ZBTB16-RARA is ATRA-resistant. Crucial to identify for treatment.",
                 keyPoint: "APL morphology, PML-RARA negative = variant APL or mimic. ZBTB16-RARA resists ATRA.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "hematopathologist",
@@ -1895,7 +1966,8 @@
                 correct: 1,
                 explanation: "Bernard-Soulier syndrome = GPIb-IX-V complex deficiency. This receptor binds vWF for platelet adhesion. Absent ristocetin-induced platelet aggregation (like vWD) but NOT corrected by adding normal plasma.",
                 keyPoint: "BSS: GPIb-IX-V defect, giant platelets, absent RIPA NOT corrected by plasma (vs vWD which corrects).",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "hematopathologist",
@@ -1911,7 +1983,8 @@
                 correct: 1,
                 explanation: "Giant platelets + Döhle bodies + hearing loss = MYH9-related disorder. Includes May-Hegglin, Sebastian, Fechtner, Epstein syndromes. Can develop nephropathy and cataracts.",
                 keyPoint: "MYH9 disorders: giant platelets + Döhle bodies + deafness/nephropathy/cataracts.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "hematopathologist",
@@ -1927,7 +2000,8 @@
                 correct: 1,
                 explanation: "Flame cells have intensely red/pink cytoplasm due to high carbohydrate content, classically associated with IgA myeloma. The glycosylated IgA gives the distinctive color.",
                 keyPoint: "Flame cells = IgA myeloma typically. High carbohydrate content causes red color.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             },
             {
                 difficulty: "hematopathologist",
@@ -1975,7 +2049,8 @@
                 correct: 1,
                 explanation: "TET2 mutations are found in ~60% of CMML, more than any other mutation. ASXL1 mutations confer worse prognosis. CMML has overlap MDS/MPN features.",
                 keyPoint: "CMML: TET2 most common (~60%). ASXL1 = worse prognosis. RAS mutations = proliferative phenotype.",
-                citation: "ASH Image Bank"
+                citation: "ASH Image Bank",
+                url: "https://imagebank.hematology.org/"
             }
         ];
 
@@ -2250,7 +2325,7 @@
             // Show explanation
             document.getElementById('explanationText').textContent = q.explanation;
             document.getElementById('keyPoint').textContent = '🔑 ' + q.keyPoint;
-            document.getElementById('citation').textContent = '📚 ' + q.citation;
+            document.getElementById('citation').innerHTML = '📚 ' + q.citation + renderReferenceLinks(q);
             document.getElementById('explanationBox').classList.add('show');
 
             updateScoreDisplay();
