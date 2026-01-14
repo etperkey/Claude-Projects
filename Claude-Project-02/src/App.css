@@ -5792,6 +5792,39 @@ body {
   text-align: center;
 }
 
+.suggestion-item.refs-insert {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.suggestion-item.refs-insert:hover {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.suggestion-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.suggestion-item.already-cited {
+  opacity: 0.7;
+}
+
+.already-cited-badge {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  background: rgba(39, 174, 96, 0.15);
+  color: #27ae60;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.citation-count {
+  color: var(--accent);
+  font-weight: 500;
+}
+
 /* ==================== iCal Subscribe ==================== */
 .ical-subscribe-section {
   display: flex;
