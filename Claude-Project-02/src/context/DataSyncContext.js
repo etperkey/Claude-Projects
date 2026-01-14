@@ -15,7 +15,7 @@ const emitToast = (message, type = TOAST_TYPES.INFO, duration = 5000) => {
 const SYNC_KEYS = [
   'research-dashboard-custom-projects',
   'research-dashboard-tasks',
-  'research-lab-notebook',
+  'research-dashboard-lab-notebook',
   'research-dashboard-literature',
   'research-dashboard-recurring',
   'research-dashboard-templates',
