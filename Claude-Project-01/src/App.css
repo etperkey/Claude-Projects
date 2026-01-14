@@ -899,6 +899,36 @@ a {
   transform: translate(3px, -3px);
 }
 
+/* KanLab Card Featured Styling */
+.tool-card.kanlab-card {
+  position: relative;
+  background: linear-gradient(135deg, var(--background) 0%, rgba(99, 102, 241, 0.05) 100%);
+  border: 2px solid rgba(99, 102, 241, 0.3);
+}
+
+.tool-card.kanlab-card:hover {
+  border-color: #6366f1;
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.2);
+}
+
+.tool-card.kanlab-card .tool-icon.kanlab-icon {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+}
+
+.tool-status-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* Contact Section */
 .contact {
   padding: 100px 20px;
