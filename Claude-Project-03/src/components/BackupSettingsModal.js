@@ -109,6 +109,8 @@ function BackupSettingsModal({ isOpen, onClose }) {
                   onChange={(e) => updateSettings({ intervalMinutes: parseInt(e.target.value) })}
                   disabled={!settings.enabled}
                 >
+                  <option value={5}>Every 5 minutes</option>
+                  <option value={10}>Every 10 minutes</option>
                   <option value={15}>Every 15 minutes</option>
                   <option value={30}>Every 30 minutes</option>
                   <option value={60}>Every hour</option>

@@ -14,6 +14,8 @@ import { useToast } from '../context/ToastContext';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
+const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
+const LITERATURE_KEY = 'research-dashboard-literature';
 
 function ProjectPage() {
   const { projectId } = useParams();
@@ -28,6 +30,10 @@ function ProjectPage() {
   const [activeTab, setActiveTab] = useState('kanban'); // kanban, protocols, or notes
   const [showRecurringModal, setShowRecurringModal] = useState(false);
   const [showTemplatesModal, setShowTemplatesModal] = useState(false);
+  const [isEditingProject, setIsEditingProject] = useState(false);
+  const [editedProject, setEditedProject] = useState(null);
+  const [notebookCount, setNotebookCount] = useState(0);
+  const [citationsCount, setCitationsCount] = useState(0);
 
   useEffect(() => {
     // First try to get from built-in projects
@@ -109,6 +115,104 @@ function ProjectPage() {
       triggerSync();
     }
   }, [tasks, isCustomProject, project, projectId, isLoaded, triggerSync]);
+
+  // Load notebook entries and citations counts
+  useEffect(() => {
+    if (!project) return;
+
+    // Count notebook entries for this project
+    const notebookSaved = localStorage.getItem(NOTEBOOK_KEY);
+    if (notebookSaved) {
+      try {
+        const allEntries = JSON.parse(notebookSaved);
+        const projectTitleLower = project.title.toLowerCase();
+        const projectIdLower = projectId.toLowerCase();
+
+        const projectEntries = allEntries.filter(entry => {
+          if (entry.projectId === projectId) return true;
+          return entry.tags?.some(tag => {
+            const tagLower = tag.toLowerCase();
+            return tagLower === projectTitleLower ||
+                   tagLower === projectIdLower ||
+                   projectTitleLower.includes(tagLower) ||
+                   tagLower.includes(projectTitleLower);
+          });
+        });
+        setNotebookCount(projectEntries.length);
+      } catch (e) {
+        setNotebookCount(0);
+      }
+    }
+
+    // Count citations/literature for this project
+    const literatureSaved = localStorage.getItem(LITERATURE_KEY);
+    if (literatureSaved) {
+      try {
+        const all = JSON.parse(literatureSaved);
+        const projectRefs = all[projectId] || [];
+        setCitationsCount(projectRefs.length);
+      } catch (e) {
+        setCitationsCount(0);
+      }
+    }
+  }, [project, projectId, activeTab]); // Re-count when tab changes (in case user added entries)
+
+  // Start editing project
+  const handleEditProject = () => {
+    setEditedProject({
+      title: project.title,
+      subtitle: project.subtitle || '',
+      description: project.description || '',
+      hypothesis: project.hypothesis || '',
+      approaches: project.approaches?.join(', ') || '',
+      color: project.color || '#6366f1'
+    });
+    setIsEditingProject(true);
+  };
+
+  // Save project edits
+  const handleSaveProject = () => {
+    if (!editedProject.title.trim()) return;
+
+    const updatedProject = {
+      ...project,
+      title: editedProject.title.trim(),
+      subtitle: editedProject.subtitle.trim(),
+      description: editedProject.description.trim(),
+      hypothesis: editedProject.hypothesis.trim(),
+      approaches: editedProject.approaches.split(',').map(a => a.trim()).filter(a => a),
+      color: editedProject.color
+    };
+
+    if (isCustomProject) {
+      // Update in custom projects storage
+      const saved = localStorage.getItem(CUSTOM_PROJECTS_KEY);
+      if (saved) {
+        try {
+          const customProjects = JSON.parse(saved);
+          const updatedProjects = customProjects.map(p =>
+            p.id === projectId ? { ...p, ...updatedProject } : p
+          );
+          localStorage.setItem(CUSTOM_PROJECTS_KEY, JSON.stringify(updatedProjects));
+          triggerSync();
+        } catch (e) {
+          console.error('Failed to save project:', e);
+        }
+      }
+    }
+
+    setProject(updatedProject);
+    setIsEditingProject(false);
+    setEditedProject(null);
+    showSuccess('Project updated successfully');
+    logActivity('edit', 'project', updatedProject.title);
+  };
+
+  // Cancel editing
+  const handleCancelEdit = () => {
+    setIsEditingProject(false);
+    setEditedProject(null);
+  };
 
   if (!project) {
     return (
@@ -260,31 +364,108 @@ function ProjectPage() {
       <header className="project-header">
         <div className="header-nav">
           <Link to="/" className="back-link">← Dashboard</Link>
+          {isCustomProject && !isEditingProject && (
+            <button className="edit-project-btn" onClick={handleEditProject} title="Edit project details">
+              ✏️ Edit
+            </button>
+          )}
         </div>
-        <div className="header-main">
-          <div className="header-info">
-            <div className="project-badge" style={{ backgroundColor: project.color }}>
-              {project.subtitle || 'Research Project'}
+        {isEditingProject && editedProject ? (
+          <div className="project-edit-form">
+            <div className="edit-form-row">
+              <label>Project Title</label>
+              <input
+                type="text"
+                value={editedProject.title}
+                onChange={(e) => setEditedProject({ ...editedProject, title: e.target.value })}
+                placeholder="Project title"
+              />
             </div>
-            <h1>{project.title}</h1>
-            <p className="project-hypothesis">{project.hypothesis || project.description}</p>
+            <div className="edit-form-row">
+              <label>Subtitle/Badge</label>
+              <input
+                type="text"
+                value={editedProject.subtitle}
+                onChange={(e) => setEditedProject({ ...editedProject, subtitle: e.target.value })}
+                placeholder="e.g., CAR-T Therapy, Drug Discovery"
+              />
+            </div>
+            <div className="edit-form-row">
+              <label>Description</label>
+              <textarea
+                value={editedProject.description}
+                onChange={(e) => setEditedProject({ ...editedProject, description: e.target.value })}
+                placeholder="Brief project description"
+                rows={2}
+              />
+            </div>
+            <div className="edit-form-row">
+              <label>Hypothesis</label>
+              <textarea
+                value={editedProject.hypothesis}
+                onChange={(e) => setEditedProject({ ...editedProject, hypothesis: e.target.value })}
+                placeholder="Main hypothesis or research question"
+                rows={2}
+              />
+            </div>
+            <div className="edit-form-row">
+              <label>Approaches (comma-separated)</label>
+              <input
+                type="text"
+                value={editedProject.approaches}
+                onChange={(e) => setEditedProject({ ...editedProject, approaches: e.target.value })}
+                placeholder="e.g., In vivo, CRISPR, Flow Cytometry"
+              />
+            </div>
+            <div className="edit-form-row">
+              <label>Color</label>
+              <input
+                type="color"
+                value={editedProject.color}
+                onChange={(e) => setEditedProject({ ...editedProject, color: e.target.value })}
+              />
+            </div>
+            <div className="edit-form-actions">
+              <button className="btn-cancel" onClick={handleCancelEdit}>Cancel</button>
+              <button className="btn-save" onClick={handleSaveProject}>Save Changes</button>
+            </div>
           </div>
-          <div className="header-stats">
-            <div className="header-stat">
-              <span className="stat-value">{completedTasks}/{totalTasks}</span>
-              <span className="stat-label">Tasks Complete</span>
+        ) : (
+          <>
+            <div className="header-main">
+              <div className="header-info">
+                <div className="project-badge" style={{ backgroundColor: project.color }}>
+                  {project.subtitle || 'Research Project'}
+                </div>
+                <h1>{project.title}</h1>
+                <p className="project-hypothesis">{project.hypothesis || project.description}</p>
+              </div>
+              <div className="header-stats">
+                <div className="header-stat">
+                  <span className="stat-value">{completedTasks}/{totalTasks}</span>
+                  <span className="stat-label">Tasks Complete</span>
+                </div>
+                <div className="header-stat">
+                  <span className="stat-value">{progressPercent}%</span>
+                  <span className="stat-label">Progress</span>
+                </div>
+                <div className="header-stat">
+                  <span className="stat-value">{notebookCount}</span>
+                  <span className="stat-label">Notebook Entries</span>
+                </div>
+                <div className="header-stat">
+                  <span className="stat-value">{citationsCount}</span>
+                  <span className="stat-label">Citations</span>
+                </div>
+              </div>
             </div>
-            <div className="header-stat">
-              <span className="stat-value">{progressPercent}%</span>
-              <span className="stat-label">Progress</span>
+            <div className="approaches-bar">
+              {project.approaches?.map((approach, idx) => (
+                <span key={idx} className="approach-chip">{approach}</span>
+              ))}
             </div>
-          </div>
-        </div>
-        <div className="approaches-bar">
-          {project.approaches?.map((approach, idx) => (
-            <span key={idx} className="approach-chip">{approach}</span>
-          ))}
-        </div>
+          </>
+        )}
       </header>
 
       {/* Tab navigation */}
