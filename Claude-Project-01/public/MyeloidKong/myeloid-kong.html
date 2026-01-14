@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myeloid Kong: The Clonal Climb</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --kong-purple: #8B008B;
+            --kong-purple-light: #9932CC;
+            --kong-purple-dark: #4B0082;
+            --kong-violet: #9400D3;
+            --kong-magenta: #FF00FF;
+            --kong-pink: #FF69B4;
+            --ladder-brown: #8B4513;
+            --barrel-red: #B22222;
+            --platform-steel: #4A4A6A;
+            --gold: #FFD700;
+            --bone-marrow: #FFE4C4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(180deg, #1a0a2e 0%, #0d0015 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white;
+        }
+
+        /* Animated background */
+        .game-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .chromosome {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.1;
+            animation: float-chromosome 15s linear infinite;
+        }
+
+        @keyframes float-chromosome {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .game-container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Title Screen */
+        .title-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .game-logo {
+            margin-bottom: 30px;
+        }
+
+        .logo-text {
+            font-size: 2.5em;
+            color: var(--kong-magenta);
+            text-shadow:
+                4px 4px 0 var(--kong-purple),
+                8px 8px 0 var(--kong-purple-dark);
+            letter-spacing: 4px;
+            animation: logo-pulse 2s ease-in-out infinite;
+        }
+
+        .logo-subtitle {
+            font-size: 0.8em;
+            color: var(--kong-pink);
+            margin-top: 15px;
+            text-shadow: 2px 2px 0 var(--kong-purple-dark);
+        }
+
+        @keyframes logo-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        /* Kong Character Preview */
+        .kong-preview {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 30px auto;
+        }
+
+        .kong-body {
+            width: 100px;
+            height: 80px;
+            background: linear-gradient(180deg, var(--kong-purple) 0%, var(--kong-purple-dark) 100%);
+            border-radius: 50px 50px 30px 30px;
+            position: absolute;
+            top: 30px;
+            left: 25px;
+            border: 4px solid var(--kong-violet);
+        }
+
+        .kong-head {
+            width: 70px;
+            height: 60px;
+            background: linear-gradient(180deg, var(--kong-purple-light) 0%, var(--kong-purple) 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 40px;
+            border: 3px solid var(--kong-violet);
+        }
+
+        .kong-eye {
+            width: 15px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 15px;
+        }
+
+        .kong-eye.left { left: 12px; }
+        .kong-eye.right { right: 12px; }
+
+        .kong-pupil {
+            width: 8px;
+            height: 8px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 3px;
+            left: 4px;
+        }
+
+        .kong-arm {
+            width: 25px;
+            height: 50px;
+            background: var(--kong-purple);
+            border-radius: 15px;
+            position: absolute;
+            top: 50px;
+            border: 2px solid var(--kong-violet);
+            animation: arm-swing 1s ease-in-out infinite;
+        }
+
+        .kong-arm.left { left: 5px; transform-origin: top center; }
+        .kong-arm.right { right: 5px; transform-origin: top center; animation-delay: 0.5s; }
+
+        @keyframes arm-swing {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        /* Barrel Animation */
+        .barrel-preview {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .barrel {
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(90deg, #8B4513 0%, #D2691E 50%, #8B4513 100%);
+            border-radius: 5px;
+            position: relative;
+            animation: barrel-roll 1s linear infinite;
+        }
+
+        .barrel::before, .barrel::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 8px;
+            background: #5D3A1A;
+            border-radius: 3px;
+        }
+
+        .barrel::before { top: 5px; }
+        .barrel::after { bottom: 5px; }
+
+        .barrel-label {
+            font-size: 0.4em;
+            color: var(--gold);
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        @keyframes barrel-roll {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Disease Labels */
+        .disease-labels {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .disease-tag {
+            padding: 8px 15px;
+            background: var(--kong-purple-dark);
+            border: 2px solid var(--kong-violet);
+            border-radius: 5px;
+            font-size: 0.5em;
+            color: var(--kong-magenta);
+        }
+
+        /* Difficulty Section */
+        .difficulty-section {
+            margin: 40px 0;
+        }
+
+        .section-title {
+            font-size: 1em;
+            color: var(--kong-magenta);
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px var(--kong-purple);
+        }
+
+        .difficulty-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .difficulty-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6em;
+            padding: 15px 10px;
+            border: 3px solid;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .difficulty-btn.chip {
+            background: linear-gradient(180deg, #9370DB 0%, #7B68EE 100%);
+            border-color: #6A5ACD;
+            color: white;
+        }
+
+        .difficulty-btn.ccus {
+            background: linear-gradient(180deg, #8B008B 0%, #800080 100%);
+            border-color: #9400D3;
+            color: #FFD700;
+        }
+
+        .difficulty-btn.mds {
+            background: linear-gradient(180deg, #4B0082 0%, #2E0854 100%);
+            border-color: #8B008B;
+            color: #FF69B4;
+        }
+
+        .difficulty-btn.mds-aml {
+            background: linear-gradient(180deg, #1a0a2e 0%, #0d0015 100%);
+            border-color: #FF00FF;
+            color: #FF00FF;
+            animation: danger-pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes danger-pulse {
+            0%, 100% { box-shadow: 0 0 10px var(--kong-magenta); }
+            50% { box-shadow: 0 0 25px var(--kong-magenta), 0 0 40px var(--kong-purple); }
+        }
+
+        .difficulty-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .difficulty-btn.selected {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--kong-magenta);
+        }
+
+        .difficulty-desc {
+            font-size: 0.4em;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        .start-btn {
+            display: block;
+            margin: 30px auto;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.2em;
+            padding: 20px 40px;
+            background: linear-gradient(180deg, var(--kong-purple) 0%, var(--kong-purple-dark) 100%);
+            color: var(--kong-magenta);
+            border: 4px solid var(--kong-violet);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px var(--kong-magenta);
+        }
+
+        /* Game Screen */
+        .game-screen {
+            display: none;
+        }
+
+        .game-screen.active {
+            display: block;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 10px;
+            background: rgba(75, 0, 130, 0.3);
+            border-radius: 10px;
+            border: 2px solid var(--kong-purple);
+        }
+
+        .score-display {
+            font-size: 0.7em;
+        }
+
+        .score-display span {
+            color: var(--gold);
+        }
+
+        .level-display {
+            font-size: 0.6em;
+            color: var(--kong-pink);
+        }
+
+        .lives-display {
+            display: flex;
+            gap: 8px;
+        }
+
+        .life-icon {
+            width: 25px;
+            height: 25px;
+            background: var(--kong-purple);
+            border-radius: 50%;
+            border: 2px solid var(--kong-magenta);
+        }
+
+        .life-icon.lost {
+            background: #333;
+            border-color: #555;
+        }
+
+        /* Platform Game Area */
+        .platform-area {
+            position: relative;
+            background: linear-gradient(180deg, #1a0a2e 0%, #0a0015 100%);
+            border: 4px solid var(--kong-purple);
+            border-radius: 10px;
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        /* Platforms */
+        .platform {
+            position: absolute;
+            height: 15px;
+            background: linear-gradient(180deg, var(--platform-steel) 0%, #2A2A4A 100%);
+            border-radius: 3px;
+        }
+
+        .platform-1 { width: 90%; bottom: 10%; left: 5%; }
+        .platform-2 { width: 85%; bottom: 30%; left: 10%; }
+        .platform-3 { width: 80%; bottom: 50%; left: 5%; }
+        .platform-4 { width: 75%; bottom: 70%; left: 15%; }
+        .platform-5 { width: 50%; bottom: 88%; left: 25%; }
+
+        /* Ladders */
+        .ladder {
+            position: absolute;
+            width: 30px;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 8px,
+                var(--ladder-brown) 8px,
+                var(--ladder-brown) 12px
+            );
+            border-left: 4px solid var(--ladder-brown);
+            border-right: 4px solid var(--ladder-brown);
+        }
+
+        .ladder-1 { height: 80px; bottom: 10%; left: 20%; }
+        .ladder-2 { height: 80px; bottom: 30%; right: 25%; }
+        .ladder-3 { height: 80px; bottom: 50%; left: 30%; }
+        .ladder-4 { height: 70px; bottom: 70%; right: 35%; }
+
+        /* Game Character */
+        .player {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            bottom: 12%;
+            left: 10%;
+            z-index: 20;
+            transition: all 0.3s ease-out;
+        }
+
+        .player-body {
+            width: 30px;
+            height: 35px;
+            background: linear-gradient(180deg, #FFE4B5 0%, #DEB887 100%);
+            border-radius: 15px 15px 10px 10px;
+            position: absolute;
+            top: 15px;
+            left: 5px;
+        }
+
+        .player-head {
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(180deg, #FFE4B5 0%, #FFDAB9 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 8px;
+        }
+
+        .player-hat {
+            width: 30px;
+            height: 12px;
+            background: var(--kong-purple);
+            border-radius: 5px 5px 0 0;
+            position: absolute;
+            top: -5px;
+            left: -3px;
+        }
+
+        /* Rolling Barrels */
+        .game-barrel {
+            position: absolute;
+            width: 35px;
+            height: 28px;
+            background: linear-gradient(90deg, #8B4513 0%, #D2691E 50%, #8B4513 100%);
+            border-radius: 4px;
+            z-index: 15;
+            animation: game-barrel-roll 0.5s linear infinite;
+        }
+
+        .game-barrel::before, .game-barrel::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            background: #5D3A1A;
+            border-radius: 2px;
+        }
+
+        .game-barrel::before { top: 3px; }
+        .game-barrel::after { bottom: 3px; }
+
+        @keyframes game-barrel-roll {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Kong at top */
+        .kong-top {
+            position: absolute;
+            top: 2%;
+            left: 10%;
+            width: 80px;
+            height: 70px;
+            z-index: 25;
+        }
+
+        .kong-top .kong-mini-body {
+            width: 60px;
+            height: 45px;
+            background: linear-gradient(180deg, var(--kong-purple) 0%, var(--kong-purple-dark) 100%);
+            border-radius: 30px 30px 20px 20px;
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+            border: 3px solid var(--kong-violet);
+        }
+
+        .kong-top .kong-mini-head {
+            width: 40px;
+            height: 35px;
+            background: linear-gradient(180deg, var(--kong-purple-light) 0%, var(--kong-purple) 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 20px;
+            border: 2px solid var(--kong-violet);
+        }
+
+        /* Princess/Goal */
+        .goal {
+            position: absolute;
+            top: 5%;
+            right: 15%;
+            text-align: center;
+        }
+
+        .goal-icon {
+            font-size: 2em;
+            animation: goal-float 2s ease-in-out infinite;
+        }
+
+        @keyframes goal-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .goal-label {
+            font-size: 0.4em;
+            color: var(--gold);
+            margin-top: 5px;
+        }
+
+        /* Question Modal */
+        .question-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .question-modal.active {
+            display: flex;
+        }
+
+        .question-box {
+            background: linear-gradient(180deg, #2a1a4e 0%, #1a0a2e 100%);
+            border: 4px solid var(--kong-purple);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 50px var(--kong-purple);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-category {
+            font-size: 0.6em;
+            color: var(--kong-pink);
+            padding: 5px 15px;
+            background: var(--kong-purple-dark);
+            border-radius: 5px;
+        }
+
+        .question-timer {
+            font-size: 0.8em;
+            color: var(--gold);
+        }
+
+        .question-text {
+            font-size: 0.7em;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        .answers-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .answer-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.55em;
+            padding: 15px;
+            background: var(--kong-purple-dark);
+            border: 3px solid var(--kong-purple);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .answer-btn:hover {
+            background: var(--kong-purple);
+            border-color: var(--kong-magenta);
+            transform: translateX(5px);
+        }
+
+        .answer-btn.correct {
+            background: #228B22;
+            border-color: #32CD32;
+        }
+
+        .answer-btn.incorrect {
+            background: #8B0000;
+            border-color: #FF0000;
+        }
+
+        .answer-btn.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Explanation Box */
+        .explanation-box {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--kong-violet);
+            border-radius: 10px;
+        }
+
+        .explanation-box.show {
+            display: block;
+        }
+
+        .explanation-title {
+            font-size: 0.7em;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .explanation-text {
+            font-size: 0.5em;
+            line-height: 1.8;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .citation {
+            font-size: 0.45em;
+            color: var(--kong-pink);
+            font-style: italic;
+            padding: 10px;
+            background: rgba(139, 0, 139, 0.2);
+            border-radius: 5px;
+            border-left: 3px solid var(--kong-magenta);
+        }
+
+        .continue-btn {
+            display: block;
+            margin: 20px auto 0;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+            padding: 15px 30px;
+            background: var(--kong-purple);
+            color: white;
+            border: 3px solid var(--kong-magenta);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .continue-btn:hover {
+            background: var(--kong-purple-light);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .results-screen.active {
+            display: block;
+        }
+
+        .results-title {
+            font-size: 2em;
+            color: var(--kong-magenta);
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px var(--kong-purple);
+        }
+
+        .results-stats {
+            display: grid;
+            gap: 20px;
+            max-width: 400px;
+            margin: 0 auto 30px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background: var(--kong-purple-dark);
+            border-radius: 8px;
+            border: 2px solid var(--kong-purple);
+        }
+
+        .stat-label {
+            font-size: 0.6em;
+            color: #aaa;
+        }
+
+        .stat-value {
+            font-size: 0.8em;
+            color: var(--gold);
+        }
+
+        .play-again-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1em;
+            padding: 20px 40px;
+            background: var(--kong-purple);
+            color: var(--kong-magenta);
+            border: 4px solid var(--kong-violet);
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .play-again-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--kong-magenta);
+        }
+
+        .home-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+            padding: 15px 30px;
+            background: transparent;
+            color: var(--kong-pink);
+            border: 2px solid var(--kong-pink);
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .home-btn:hover {
+            background: var(--kong-purple-dark);
+        }
+
+        /* Volume Toggle */
+        .volume-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(139, 0, 139, 0.3);
+            border: 2px solid var(--kong-purple);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            transition: all 0.3s;
+        }
+
+        .volume-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--kong-purple);
+        }
+
+        .volume-toggle.muted {
+            background: rgba(100, 100, 100, 0.3);
+            border-color: #666;
+        }
+
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6em;
+            padding: 10px 20px;
+            background: var(--kong-purple-dark);
+            color: var(--kong-pink);
+            border: 2px solid var(--kong-purple);
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: var(--kong-purple);
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #1a0a2e;
+            border: 2px solid var(--kong-purple);
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--kong-purple) 0%, var(--kong-magenta) 100%);
+            transition: width 0.5s ease-out;
+            border-radius: 8px;
+        }
+
+        .progress-text {
+            font-size: 0.5em;
+            color: var(--kong-pink);
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo-text { font-size: 1.5em; }
+            .question-text { font-size: 0.6em; }
+            .answer-btn { font-size: 0.5em; padding: 12px; }
+            .platform-area { min-height: 300px; }
+            .game-header { font-size: 0.8em; }
+        }
+
+        @media (max-width: 480px) {
+            .logo-text { font-size: 1.2em; }
+            .difficulty-btn { font-size: 0.5em; padding: 12px 8px; }
+            .question-box { padding: 15px; }
+            .answer-btn { font-size: 0.45em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-bg" id="gameBg"></div>
+
+    <a href="../HematologyArcade/index.html" class="back-btn">< ARCADE</a>
+
+    <button class="volume-toggle" id="volumeToggle" onclick="toggleVolume()">
+        <span id="volumeIcon">&#128266;</span>
+    </button>
+
+    <div class="game-container">
+        <!-- Title Screen -->
+        <div class="title-screen" id="titleScreen">
+            <div class="game-logo">
+                <h1 class="logo-text">MYELOID KONG</h1>
+                <p class="logo-subtitle">The Clonal Climb</p>
+            </div>
+
+            <div class="kong-preview">
+                <div class="kong-head">
+                    <div class="kong-eye left"><div class="kong-pupil"></div></div>
+                    <div class="kong-eye right"><div class="kong-pupil"></div></div>
+                </div>
+                <div class="kong-body"></div>
+                <div class="kong-arm left"></div>
+                <div class="kong-arm right"></div>
+            </div>
+
+            <div class="disease-labels">
+                <span class="disease-tag">CML</span>
+                <span class="disease-tag">CMML</span>
+                <span class="disease-tag">MPN</span>
+                <span class="disease-tag">MDS</span>
+            </div>
+
+            <div class="barrel-preview">
+                <div>
+                    <div class="barrel"></div>
+                    <p class="barrel-label">CLONAL<br>QUESTIONS</p>
+                </div>
+                <div>
+                    <div class="barrel" style="animation-delay: 0.3s;"></div>
+                    <p class="barrel-label">DODGE<br>WRONG ANSWERS</p>
+                </div>
+                <div>
+                    <div class="barrel" style="animation-delay: 0.6s;"></div>
+                    <p class="barrel-label">CLIMB<br>TO VICTORY</p>
+                </div>
+            </div>
+
+            <div class="difficulty-section">
+                <h2 class="section-title">SELECT DIFFICULTY</h2>
+                <div class="difficulty-grid">
+                    <button class="difficulty-btn chip" onclick="selectDifficulty('chip')">
+                        CHIP
+                        <div class="difficulty-desc">Clonal Hematopoiesis</div>
+                    </button>
+                    <button class="difficulty-btn ccus" onclick="selectDifficulty('ccus')">
+                        CCUS
+                        <div class="difficulty-desc">Clonal Cytopenia</div>
+                    </button>
+                    <button class="difficulty-btn mds" onclick="selectDifficulty('mds')">
+                        MDS
+                        <div class="difficulty-desc">Myelodysplastic</div>
+                    </button>
+                    <button class="difficulty-btn mds-aml" onclick="selectDifficulty('mds-aml')">
+                        MDS-AML
+                        <div class="difficulty-desc">Transformation</div>
+                    </button>
+                </div>
+            </div>
+
+            <button class="start-btn" onclick="startGame()">START CLIMB</button>
+
+            <p style="font-size: 0.5em; color: #666; margin-top: 20px;">
+                Test your knowledge of myeloid neoplasms!<br>
+                Questions based on ASH, ELN, NCCN, and WHO guidelines
+            </p>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="game-screen" id="gameScreen">
+            <div class="game-header">
+                <div class="score-display">SCORE: <span id="scoreValue">0</span></div>
+                <div class="level-display" id="levelDisplay">LEVEL 1</div>
+                <div class="lives-display" id="livesDisplay">
+                    <div class="life-icon"></div>
+                    <div class="life-icon"></div>
+                    <div class="life-icon"></div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <p class="progress-text" id="progressText">Question 1 of 10</p>
+
+            <div class="platform-area" id="platformArea">
+                <!-- Platforms -->
+                <div class="platform platform-1"></div>
+                <div class="platform platform-2"></div>
+                <div class="platform platform-3"></div>
+                <div class="platform platform-4"></div>
+                <div class="platform platform-5"></div>
+
+                <!-- Ladders -->
+                <div class="ladder ladder-1"></div>
+                <div class="ladder ladder-2"></div>
+                <div class="ladder ladder-3"></div>
+                <div class="ladder ladder-4"></div>
+
+                <!-- Kong at top -->
+                <div class="kong-top">
+                    <div class="kong-mini-head"></div>
+                    <div class="kong-mini-body"></div>
+                </div>
+
+                <!-- Goal -->
+                <div class="goal">
+                    <div class="goal-icon">&#127942;</div>
+                    <div class="goal-label">MASTERY!</div>
+                </div>
+
+                <!-- Player -->
+                <div class="player" id="player">
+                    <div class="player-hat"></div>
+                    <div class="player-head"></div>
+                    <div class="player-body"></div>
+                </div>
+
+                <!-- Barrels will be added dynamically -->
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen">
+            <h1 class="results-title" id="resultsTitle">LEVEL COMPLETE!</h1>
+            <div class="results-stats">
+                <div class="stat-row">
+                    <span class="stat-label">FINAL SCORE</span>
+                    <span class="stat-value" id="finalScore">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">CORRECT ANSWERS</span>
+                    <span class="stat-value" id="correctAnswers">0/10</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">ACCURACY</span>
+                    <span class="stat-value" id="accuracy">0%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">DIFFICULTY</span>
+                    <span class="stat-value" id="difficultyPlayed">CHIP</span>
+                </div>
+            </div>
+            <button class="play-again-btn" onclick="restartGame()">PLAY AGAIN</button>
+            <button class="home-btn" onclick="goHome()">BACK TO ARCADE</button>
+        </div>
+    </div>
+
+    <!-- Question Modal -->
+    <div class="question-modal" id="questionModal">
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-category" id="questionCategory">CML</span>
+                <span class="question-timer" id="questionTimer">30</span>
+            </div>
+            <p class="question-text" id="questionText">Loading question...</p>
+            <div class="answers-grid" id="answersGrid">
+                <!-- Answers will be populated dynamically -->
+            </div>
+            <div class="explanation-box" id="explanationBox">
+                <h3 class="explanation-title">EXPLANATION</h3>
+                <p class="explanation-text" id="explanationText"></p>
+                <p class="citation" id="citationText"></p>
+            </div>
+            <button class="continue-btn" id="continueBtn" onclick="continueGame()" style="display: none;">CONTINUE CLIMB</button>
+        </div>
+    </div>
+
+    <script>
+        // Question Bank - Organized by difficulty and disease
+        const questionBank = {
+            chip: [
+                {
+                    category: "CHIP",
+                    question: "What is the minimum variant allele frequency (VAF) required for defining CHIP according to the WHO 5th edition classification?",
+                    answers: ["≥2%", "≥5%", "≥10%", "≥1%"],
+                    correct: 0,
+                    explanation: "According to the WHO 5th edition classification, CHIP is formally defined by the presence of a myeloid-associated somatic mutation with a variant allele frequency (VAF) of ≥2% in individuals without a myeloid neoplasm diagnosis or unexplained cytopenia.",
+                    citation: "WHO Classification of Haematolymphoid Tumors, 5th Edition (2022). Blood. 2022;140(11):1200-1228."
+                },
+                {
+                    category: "CHIP",
+                    question: "Which three genes account for approximately 70% of mutations found in CHIP patients?",
+                    answers: ["DNMT3A, TET2, ASXL1", "JAK2, CALR, MPL", "TP53, RUNX1, EZH2", "NPM1, FLT3, IDH1"],
+                    correct: 0,
+                    explanation: "Mutations in DNMT3A, TET2, and ASXL1 (collectively known as 'DTA' mutations) are found in approximately 70% of CHIP patients. These are the most common driver mutations in clonal hematopoiesis.",
+                    citation: "Jaiswal S, et al. N Engl J Med. 2014;371(26):2488-2498."
+                },
+                {
+                    category: "CHIP",
+                    question: "What is the annual risk of progression from CHIP to a myeloid malignancy?",
+                    answers: ["0.5-1%", "5-10%", "10-15%", "15-20%"],
+                    correct: 0,
+                    explanation: "CHIP is recognized as an early precursor state for hematologic malignancy with a low absolute risk of myeloid neoplasm transformation, occurring in approximately 0.5%-1% of cases annually.",
+                    citation: "Steensma DP, et al. Blood. 2015;126(1):9-16."
+                },
+                {
+                    category: "CML",
+                    question: "Which translocation defines chronic myeloid leukemia (CML)?",
+                    answers: ["t(9;22)(q34;q11.2) - Philadelphia chromosome", "t(15;17)(q24;q21)", "t(8;21)(q22;q22)", "inv(16)(p13.1q22)"],
+                    correct: 0,
+                    explanation: "CML is defined by the Philadelphia chromosome, resulting from the reciprocal translocation t(9;22)(q34;q11.2), which creates the BCR-ABL1 fusion gene. This is the pathognomonic finding in CML.",
+                    citation: "Jabbour E, Kantarjian H. Am J Hematol. 2025;100(1):e1-e20. (2025 CML Update)"
+                },
+                {
+                    category: "MPN",
+                    question: "What is the platelet threshold for diagnosing Essential Thrombocythemia (ET) according to WHO criteria?",
+                    answers: ["≥450 x 10⁹/L", "≥400 x 10⁹/L", "≥500 x 10⁹/L", "≥350 x 10⁹/L"],
+                    correct: 0,
+                    explanation: "According to WHO diagnostic criteria, thrombocytosis with platelets ≥450 x 10⁹/L is required for the diagnosis of Essential Thrombocythemia, along with exclusion of other myeloid neoplasms.",
+                    citation: "Tefferi A, Barbui T. Am J Hematol. 2024;99(3):457-469. (ET 2024 Update)"
+                },
+                {
+                    category: "MPN",
+                    question: "What percentage of Essential Thrombocythemia patients are 'triple-negative' (lacking JAK2, CALR, and MPL mutations)?",
+                    answers: ["Up to 20%", "Up to 5%", "Up to 50%", "Up to 35%"],
+                    correct: 0,
+                    explanation: "While detection of JAK2V617F, CALR, or MPL mutations confirms an underlying MPN, their absence does not rule out ET since up to 20% of patients may be triple-negative.",
+                    citation: "Tefferi A, Barbui T. Am J Hematol. 2024;99(3):457-469."
+                },
+                {
+                    category: "MDS",
+                    question: "According to IPSS-R, which category has the longest median survival?",
+                    answers: ["Very Low risk (8.8 years)", "Low risk (5.3 years)", "Intermediate risk (3 years)", "High risk (1.6 years)"],
+                    correct: 0,
+                    explanation: "IPSS-R very low risk patients have the best prognosis with a median survival of 8.8 years. Low risk is 5.3 years, intermediate is 3 years, high is 1.6 years, and very high is 0.8 years.",
+                    citation: "Greenberg PL, et al. Blood. 2012;120(12):2454-2465."
+                },
+                {
+                    category: "CMML",
+                    question: "What is the minimum absolute monocyte count required for CMML diagnosis?",
+                    answers: ["≥0.5 x 10⁹/L", "≥1.0 x 10⁹/L", "≥0.3 x 10⁹/L", "≥2.0 x 10⁹/L"],
+                    correct: 0,
+                    explanation: "CMML diagnostic criteria include sustained (>3 months) peripheral blood monocytosis ≥0.5 x 10⁹/L with monocytes comprising ≥10% of the leukocyte count.",
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078. (CMML 2024 Update)"
+                },
+                {
+                    category: "CML",
+                    question: "Which TKI was the first approved for CML treatment?",
+                    answers: ["Imatinib", "Dasatinib", "Nilotinib", "Bosutinib"],
+                    correct: 0,
+                    explanation: "Imatinib (Gleevec) was the first tyrosine kinase inhibitor approved for CML in 2001, revolutionizing treatment and transforming CML from a fatal disease to a chronic, manageable condition.",
+                    citation: "Druker BJ, et al. N Engl J Med. 2001;344(14):1031-1037."
+                },
+                {
+                    category: "MPN",
+                    question: "What hematocrit target is recommended for Polycythemia Vera management?",
+                    answers: ["<45%", "<50%", "<55%", "<40%"],
+                    correct: 0,
+                    explanation: "The CYTO-PV trial demonstrated that maintaining hematocrit <45% significantly reduces cardiovascular events and thrombosis compared to less stringent control.",
+                    citation: "Marchioli R, et al. N Engl J Med. 2013;368(1):22-33."
+                }
+            ],
+            ccus: [
+                {
+                    category: "CCUS",
+                    question: "How much higher is the risk of progression to myeloid neoplasm in CCUS compared to CHIP?",
+                    answers: ["10-fold higher", "2-fold higher", "5-fold higher", "20-fold higher"],
+                    correct: 0,
+                    explanation: "CCUS (Clonal Cytopenia of Undetermined Significance) presents a 10-fold higher likelihood of progressing to myeloid neoplasm compared to CHIP, highlighting the importance of cytopenia as a risk factor.",
+                    citation: "Malcovati L, et al. Blood. 2017;129(25):3371-3378."
+                },
+                {
+                    category: "CCUS",
+                    question: "What dysplasia threshold distinguishes CCUS from MDS?",
+                    answers: ["<10% dysplasia", "<5% dysplasia", "<15% dysplasia", "<20% dysplasia"],
+                    correct: 0,
+                    explanation: "CCUS is defined by the presence of unexplained cytopenia with no or only mild (<10%) dysplasia and blast cells <5%, not meeting diagnostic criteria for MDS.",
+                    citation: "WHO Classification of Haematolymphoid Tumors, 5th Edition (2022)."
+                },
+                {
+                    category: "CML",
+                    question: "According to ELN 2025 recommendations, what BCR-ABL1 transcript level defines optimal response at 12 months?",
+                    answers: ["≤0.1% (MMR)", "≤1%", "≤10%", "≤0.01%"],
+                    correct: 0,
+                    explanation: "The ELN 2025 guidelines define optimal response at 12 months as achieving Major Molecular Response (MMR), which is BCR-ABL1 ≤0.1% on the International Scale.",
+                    citation: "Hochhaus A, et al. Leukemia. 2025. (ELN 2025 CML Recommendations)"
+                },
+                {
+                    category: "CMML",
+                    question: "What is the percentage of CMML patients who harbor somatic mutations?",
+                    answers: [">95%", "~70%", "~50%", "~80%"],
+                    correct: 0,
+                    explanation: "While cytogenetic abnormalities occur in ~30% of CMML patients, >95% harbor somatic mutations, making molecular testing essential for diagnosis and prognosis.",
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078."
+                },
+                {
+                    category: "CMML",
+                    question: "What is the most commonly mutated gene in CMML?",
+                    answers: ["TET2 (~60%)", "SRSF2 (~50%)", "ASXL1 (~40%)", "RAS pathway (~30%)"],
+                    correct: 0,
+                    explanation: "TET2 is the most commonly mutated gene in CMML, occurring in approximately 60% of patients. SRSF2 (~50%), ASXL1 (~40%), and RAS pathway mutations (~30%) are also frequently observed.",
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078."
+                },
+                {
+                    category: "MDS",
+                    question: "What IPSS-R score cutoff distinguishes lower-risk from higher-risk MDS?",
+                    answers: ["3.5 points", "2.5 points", "4.5 points", "5.0 points"],
+                    correct: 0,
+                    explanation: "Investigations have proposed a cut-off of 3.5 points according to the IPSS-R to distinguish low-risk MDS from high-risk MDS for treatment decisions.",
+                    citation: "NCCN Guidelines Insights: MDS Version 2.2025. J Natl Compr Canc Netw. 2025;23(3):66-78."
+                },
+                {
+                    category: "MPN",
+                    question: "Which mutation is associated with the poorest prognosis in myelofibrosis?",
+                    answers: ["ASXL1", "CALR type 1", "JAK2V617F", "MPL"],
+                    correct: 0,
+                    explanation: "ASXL1 mutations are associated with poor prognosis in myelofibrosis and are included in multiple prognostic scoring systems. CALR type 1 mutations are associated with better outcomes.",
+                    citation: "Tefferi A. Am J Hematol. 2023;98(5):801-821."
+                },
+                {
+                    category: "CML",
+                    question: "Which mutation causes resistance to all TKIs except ponatinib, asciminib, and olverembatinib?",
+                    answers: ["T315I", "E255K", "Y253H", "F317L"],
+                    correct: 0,
+                    explanation: "The T315I 'gatekeeper' mutation causes resistance to imatinib, dasatinib, nilotinib, and bosutinib. Only ponatinib, asciminib, and olverembatinib retain activity against this mutation.",
+                    citation: "Jabbour E, Kantarjian H. Am J Hematol. 2025;100(1):e1-e20."
+                },
+                {
+                    category: "CCUS",
+                    question: "According to the CCRS (Clonal Cytopenia Risk Score), which factor carries the highest point value?",
+                    answers: ["≥2 mutations (3 points)", "Splicing factor mutation (2 points)", "Low platelets <100 (2.5 points)", "VAF ≥20% (1 point)"],
+                    correct: 0,
+                    explanation: "The CCRS assigns the highest weight to having ≥2 mutations (3 points), followed by low platelet count <100 × 10⁹/L (2.5 points) and splicing factor mutations (2 points).",
+                    citation: "Haferlach T, et al. Blood. 2024;144(19):2033-2043."
+                },
+                {
+                    category: "MDS",
+                    question: "What is the only treatment modality that can cure MDS?",
+                    answers: ["Allogeneic stem cell transplant", "Hypomethylating agents", "Lenalidomide", "Luspatercept"],
+                    correct: 0,
+                    explanation: "Allogeneic stem cell transplant (ASCT) remains the only potentially curative treatment for MDS. Other treatments like HMAs can improve outcomes but are not curative.",
+                    citation: "NCCN Guidelines: MDS Version 2.2025."
+                }
+            ],
+            mds: [
+                {
+                    category: "MDS",
+                    question: "Which new molecular prognostic system was introduced to complement IPSS-R?",
+                    answers: ["IPSS-M (Molecular)", "IPSS-G (Genetic)", "MDS-CI", "WPSS-M"],
+                    correct: 0,
+                    explanation: "The IPSS-M (Molecular International Prognostic Scoring System) was introduced to account for the importance of molecular genetics in MDS prognosis, providing superior prognostic information compared to IPSS-R alone.",
+                    citation: "Bernard E, et al. NEJM Evid. 2022;1(7):EVIDoa2200008."
+                },
+                {
+                    category: "CML",
+                    question: "Which TKI was recently approved as category-1 preferred first-line treatment for newly diagnosed CML-CP?",
+                    answers: ["Asciminib", "Ponatinib", "Bosutinib", "Radotinib"],
+                    correct: 0,
+                    explanation: "The NCCN updated guidelines to recommend asciminib as a category-1 preferred treatment for adults with newly diagnosed Ph+ CML in chronic phase based on the ASC4FIRST trial results.",
+                    citation: "NCCN Clinical Practice Guidelines: CML Version 1.2025."
+                },
+                {
+                    category: "CMML",
+                    question: "According to WHO 5th edition, how is CMML now subclassified based on leukocyte count?",
+                    answers: ["MD-CMML (<13) and MP-CMML (≥13 x10⁹/L)", "CMML-0 and CMML-1", "CMML-D and CMML-P", "Low-CMML and High-CMML"],
+                    correct: 0,
+                    explanation: "WHO 5th edition classifies CMML based on leukocyte count into myelodysplastic CMML (MD-CMML) with <13x10⁹/L leukocytes and myeloproliferative CMML (MP-CMML) with ≥13x10⁹/L.",
+                    citation: "WHO Classification 5th Edition (2022); Patnaik MM. Am J Hematol. 2024."
+                },
+                {
+                    category: "MPN",
+                    question: "Which JAK inhibitor is approved for intermediate or high-risk myelofibrosis?",
+                    answers: ["Ruxolitinib", "Tofacitinib", "Baricitinib", "Upadacitinib"],
+                    correct: 0,
+                    explanation: "Ruxolitinib, a JAK1/JAK2 inhibitor, was the first JAK inhibitor approved for myelofibrosis and remains a mainstay of treatment for intermediate or high-risk disease based on the COMFORT trials.",
+                    citation: "Verstovsek S, et al. N Engl J Med. 2012;366(9):799-807."
+                },
+                {
+                    category: "MDS",
+                    question: "Which cytogenetic abnormality in MDS is associated with response to lenalidomide?",
+                    answers: ["del(5q)", "del(7q)", "del(20q)", "trisomy 8"],
+                    correct: 0,
+                    explanation: "Lenalidomide is specifically effective in lower-risk MDS with isolated del(5q), achieving transfusion independence in approximately 67% of patients.",
+                    citation: "List A, et al. N Engl J Med. 2006;355(14):1456-1465."
+                },
+                {
+                    category: "CMML",
+                    question: "What is the risk of leukemic transformation in CMML over 3-5 years?",
+                    answers: ["15-20%", "5-10%", "30-40%", "50-60%"],
+                    correct: 0,
+                    explanation: "CMML has an inherent risk for leukemic transformation of approximately 15-20% over 3-5 years, making monitoring and risk stratification essential.",
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078."
+                },
+                {
+                    category: "CML",
+                    question: "What is treatment-free remission (TFR) in CML?",
+                    answers: ["Sustained DMR after TKI discontinuation", "Complete cytogenetic response", "Major molecular response", "Blast crisis remission"],
+                    correct: 0,
+                    explanation: "Treatment-free remission (TFR) refers to the ability to maintain deep molecular response after discontinuing TKI therapy, a goal for eligible patients with sustained deep molecular responses.",
+                    citation: "Hughes TP, et al. Blood. 2017;129(23):e1-e37. (ASH-ELN TFR Recommendations)"
+                },
+                {
+                    category: "MPN",
+                    question: "What is the preferred first-line cytoreductive therapy for high-risk Polycythemia Vera?",
+                    answers: ["Hydroxyurea", "Interferon-alpha", "Ruxolitinib", "Anagrelide"],
+                    correct: 0,
+                    explanation: "Hydroxyurea remains the preferred first-line cytoreductive therapy for high-risk PV. Interferon-alpha (including pegylated forms) is an alternative, particularly in younger patients.",
+                    citation: "NCCN Guidelines: MPN Version 2.2025."
+                },
+                {
+                    category: "MDS",
+                    question: "Which IDH1 inhibitor was recently added as a treatment option for MDS?",
+                    answers: ["Olutasidenib", "Enasidenib", "Vorasidenib", "Ivosidenib"],
+                    correct: 0,
+                    explanation: "In 2024, the NCCN panel voted to add olutasidenib as an alternative to ivosidenib for IDH1-mutated MDS in multiple settings, acknowledging its FDA approval for relapsed/refractory AML.",
+                    citation: "NCCN Guidelines Insights: MDS Version 2.2025."
+                },
+                {
+                    category: "CMML",
+                    question: "Which genotype is considered favorable in CMML?",
+                    answers: ["ASXL1WT/TET2MT", "ASXL1MT/TET2WT", "ASXL1MT/TET2MT", "DNMT3AMT/TET2WT"],
+                    correct: 0,
+                    explanation: "The ASXL1 wild-type/TET2 mutant (ASXL1WT/TET2MT) genotype is considered favorable in CMML. The presence of ASXL1 mutations negatively impacts overall survival.",
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078."
+                }
+            ],
+            'mds-aml': [
+                {
+                    category: "MDS-AML",
+                    question: "According to WHO 5th edition and ICC 2022, what blast threshold now defines AML with myelodysplasia-related changes?",
+                    answers: ["10% with qualifying criteria", "20%", "30%", "5%"],
+                    correct: 0,
+                    explanation: "The WHO 5th edition and ICC 2022 introduced the category of MDS/AML, allowing AML diagnosis at ≥10% blasts when specific genetic abnormalities or MDS-related features are present.",
+                    citation: "Khoury JD, et al. Leukemia. 2022;36(7):1703-1719."
+                },
+                {
+                    category: "CML",
+                    question: "What defines CML blast crisis?",
+                    answers: ["≥20% blasts in blood or BM, or extramedullary blast proliferation", "≥30% blasts", "≥10% blasts", "Loss of molecular response"],
+                    correct: 0,
+                    explanation: "CML blast crisis is defined by ≥20% blasts in peripheral blood or bone marrow, or the presence of extramedullary blast proliferation. This represents transformation to acute leukemia.",
+                    citation: "Jabbour E, Kantarjian H. Am J Hematol. 2025;100(1):e1-e20."
+                },
+                {
+                    category: "MPN",
+                    question: "What is the risk of transformation to acute leukemia in primary myelofibrosis at 10 years?",
+                    answers: ["10-20%", "5-10%", "30-40%", "1-5%"],
+                    correct: 0,
+                    explanation: "Primary myelofibrosis carries a 10-20% risk of transformation to acute myeloid leukemia at 10 years, with higher-risk disease and certain mutations associated with increased risk.",
+                    citation: "Tefferi A. Am J Hematol. 2023;98(5):801-821."
+                },
+                {
+                    category: "MDS",
+                    question: "Which TP53 abnormality pattern defines MDS with biallelic TP53 inactivation?",
+                    answers: ["2+ mutations, 1 mutation + LOH, or 1 mutation + VAF>50%", "Any single TP53 mutation", "TP53 deletion alone", "Only complex karyotype with TP53"],
+                    correct: 0,
+                    explanation: "MDS with biallelic TP53 inactivation is defined by: two or more distinct TP53 mutations, one mutation with loss of heterozygosity (LOH), or one mutation with VAF >50%. This carries very poor prognosis.",
+                    citation: "Bernard E, et al. Nat Med. 2020;26(10):1549-1556."
+                },
+                {
+                    category: "CMML",
+                    question: "What defines CMML-2 according to updated WHO classification?",
+                    answers: ["5-19% PB blasts or 10-19% BM blasts or Auer rods", "2-4% PB blasts or 5-9% BM blasts", ">20% blasts", "<5% PB and <10% BM blasts"],
+                    correct: 0,
+                    explanation: "CMML-2 is defined by 5%–19% peripheral blood blasts (including promonocytes), 10%–19% bone marrow blasts, or the presence of any Auer rods. CMML-0 was removed in WHO 5th edition.",
+                    citation: "WHO Classification 5th Edition (2022)."
+                },
+                {
+                    category: "CML",
+                    question: "When is allogeneic stem cell transplant indicated in CML?",
+                    answers: ["Failure of 2+ TKIs or advanced phase disease", "First-line for all patients", "Only for T315I mutation", "Never indicated in TKI era"],
+                    correct: 0,
+                    explanation: "Allogeneic SCT remains appropriate for CML-CP patients with failure (due to resistance) of at least two TKIs and for all patients with advanced-phase disease (accelerated or blast phase).",
+                    citation: "Jabbour E, Kantarjian H. Am J Hematol. 2025;100(1):e1-e20."
+                },
+                {
+                    category: "MPN",
+                    question: "Which cytogenetic abnormality is considered highest risk in myelofibrosis?",
+                    answers: ["inv(3)/3q21 rearrangement", "del(13q)", "del(20q)", "trisomy 9"],
+                    correct: 0,
+                    explanation: "Cytogenetic abnormalities involving 3q21/inv(3) are considered very high risk in myelofibrosis. Other high-risk abnormalities include monosomal karyotype and complex karyotype.",
+                    citation: "Gangat N, et al. J Clin Oncol. 2011;29(4):392-397."
+                },
+                {
+                    category: "MDS",
+                    question: "What is the median survival for IPSS-R very high-risk MDS?",
+                    answers: ["0.8 years", "1.6 years", "3 years", "5.3 years"],
+                    correct: 0,
+                    explanation: "Patients with IPSS-R very high risk have the poorest prognosis with median survival of only 0.8 years. High risk is 1.6 years, intermediate is 3 years, low is 5.3 years, and very low is 8.8 years.",
+                    citation: "Greenberg PL, et al. Blood. 2012;120(12):2454-2465."
+                },
+                {
+                    category: "CMML",
+                    question: "What was the outcome of the DACOTA trial comparing hydroxyurea vs decitabine in high-risk MP-CMML?",
+                    answers: ["Similar OS despite higher response with decitabine", "Superior OS with decitabine", "Superior OS with hydroxyurea", "Trial stopped for futility"],
+                    correct: 0,
+                    explanation: "The DACOTA phase-3 trial showed similar overall survival (23.1 vs 18.4 months) for hydroxyurea vs decitabine in high-risk MP-CMML, despite higher response rates with decitabine (56% vs 31%).",
+                    citation: "Patnaik MM, Tefferi A. Am J Hematol. 2024;99(6):1055-1078."
+                },
+                {
+                    category: "MDS-AML",
+                    question: "Which gene mutations define AML/MDS regardless of blast count according to ICC 2022?",
+                    answers: ["NPM1, CEBPA (bZIP), or core binding factor fusions", "Only TP53 mutations", "Any splicing factor mutation", "JAK2 mutations"],
+                    correct: 0,
+                    explanation: "According to ICC 2022, NPM1 mutation, in-frame CEBPA bZIP mutation, or core binding factor fusions (t(8;21), inv(16)) define AML regardless of blast percentage, recognizing their distinct biology.",
+                    citation: "Arber DA, et al. Blood. 2022;140(11):1200-1228. (ICC 2022)"
+                }
+            ]
+        };
+
+        // Game State
+        let currentDifficulty = 'chip';
+        let score = 0;
+        let lives = 3;
+        let currentQuestion = 0;
+        let questionsPerLevel = 10;
+        let currentQuestions = [];
+        let timerInterval = null;
+        let timeLeft = 30;
+        let isMuted = false;
+        let audioContext = null;
+        let playerPosition = 0; // 0-4 representing platform levels
+
+        // Audio System
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        function playSound(frequency, duration, type = 'square', volume = 0.1) {
+            if (isMuted) return;
+            try {
+                const ctx = initAudio();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = frequency;
+                gain.gain.setValueAtTime(volume, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function playJumpSound() {
+            playSound(200, 0.1);
+            setTimeout(() => playSound(400, 0.1), 50);
+            setTimeout(() => playSound(600, 0.15), 100);
+        }
+
+        function playCorrectSound() {
+            playSound(523, 0.1);
+            setTimeout(() => playSound(659, 0.1), 100);
+            setTimeout(() => playSound(784, 0.15), 200);
+        }
+
+        function playIncorrectSound() {
+            playSound(200, 0.2, 'sawtooth');
+            setTimeout(() => playSound(150, 0.3, 'sawtooth'), 100);
+        }
+
+        function playBarrelSound() {
+            playSound(100, 0.1, 'triangle');
+        }
+
+        function playVictoryMusic() {
+            if (isMuted) return;
+            const melody = [523, 587, 659, 784, 659, 784, 880, 784, 880, 1047];
+            melody.forEach((freq, i) => {
+                setTimeout(() => playSound(freq, 0.2, 'square', 0.08), i * 150);
+            });
+        }
+
+        function playGameOverSound() {
+            if (isMuted) return;
+            const notes = [400, 350, 300, 250, 200];
+            notes.forEach((freq, i) => {
+                setTimeout(() => playSound(freq, 0.3, 'sawtooth', 0.1), i * 200);
+            });
+        }
+
+        // Background Music
+        let musicInterval = null;
+        let musicPlaying = false;
+        const kongMelody = [
+            392, 392, 0, 392, 0, 311, 392, 0, 523, 0, 0, 0, 261,
+            0, 0, 0, 196, 0, 0, 247, 0, 294, 277, 0, 294, 0,
+            196, 0, 0, 0, 330, 0, 349, 0, 392, 0, 349, 330, 0
+        ];
+        let melodyIndex = 0;
+
+        function startMusic() {
+            if (musicPlaying || isMuted) return;
+            musicPlaying = true;
+            musicInterval = setInterval(() => {
+                if (!musicPlaying || isMuted) return;
+                const note = kongMelody[melodyIndex];
+                if (note > 0) {
+                    playSound(note, 0.12, 'square', 0.03);
+                }
+                melodyIndex = (melodyIndex + 1) % kongMelody.length;
+            }, 140);
+        }
+
+        function stopMusic() {
+            musicPlaying = false;
+            if (musicInterval) {
+                clearInterval(musicInterval);
+                musicInterval = null;
+            }
+        }
+
+        function toggleVolume() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('volumeToggle');
+            const icon = document.getElementById('volumeIcon');
+            if (isMuted) {
+                btn.classList.add('muted');
+                icon.innerHTML = '&#128263;';
+                stopMusic();
+            } else {
+                btn.classList.remove('muted');
+                icon.innerHTML = '&#128266;';
+                if (document.getElementById('gameScreen').classList.contains('active')) {
+                    startMusic();
+                }
+            }
+        }
+
+        // Create floating chromosomes
+        function createChromosomes() {
+            const container = document.getElementById('gameBg');
+            const symbols = ['&#9878;', '&#9879;', '&#8853;', '&#8854;', '&#10683;'];
+            for (let i = 0; i < 15; i++) {
+                const chrom = document.createElement('div');
+                chrom.className = 'chromosome';
+                chrom.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                chrom.style.left = Math.random() * 100 + '%';
+                chrom.style.color = `hsl(${280 + Math.random() * 40}, 70%, 50%)`;
+                chrom.style.animationDelay = Math.random() * 15 + 's';
+                chrom.style.animationDuration = (12 + Math.random() * 8) + 's';
+                container.appendChild(chrom);
+            }
+        }
+        createChromosomes();
+
+        // Difficulty Selection
+        function selectDifficulty(diff) {
+            currentDifficulty = diff;
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`.difficulty-btn.${diff.replace('-', '')}`).classList.add('selected');
+            playSound(440, 0.1);
+        }
+
+        // Shuffle array
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Start Game
+        function startGame() {
+            score = 0;
+            lives = 3;
+            currentQuestion = 0;
+            playerPosition = 0;
+
+            // Get questions for selected difficulty
+            const diffKey = currentDifficulty.replace('-', '-');
+            currentQuestions = shuffleArray(questionBank[diffKey]).slice(0, questionsPerLevel);
+
+            document.getElementById('titleScreen').style.display = 'none';
+            document.getElementById('gameScreen').classList.add('active');
+            document.getElementById('resultsScreen').classList.remove('active');
+
+            updateUI();
+            startMusic();
+
+            // Start first question after short delay
+            setTimeout(() => {
+                showQuestion();
+            }, 1000);
+        }
+
+        // Update UI
+        function updateUI() {
+            document.getElementById('scoreValue').textContent = score;
+            document.getElementById('levelDisplay').textContent = currentDifficulty.toUpperCase();
+
+            // Update lives
+            const livesContainer = document.getElementById('livesDisplay');
+            livesContainer.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                const life = document.createElement('div');
+                life.className = 'life-icon' + (i >= lives ? ' lost' : '');
+                livesContainer.appendChild(life);
+            }
+
+            // Update progress
+            const progress = (currentQuestion / questionsPerLevel) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questionsPerLevel}`;
+
+            // Update player position
+            updatePlayerPosition();
+        }
+
+        function updatePlayerPosition() {
+            const player = document.getElementById('player');
+            const positions = [
+                { bottom: '12%', left: '10%' },
+                { bottom: '32%', left: '70%' },
+                { bottom: '52%', left: '15%' },
+                { bottom: '72%', left: '65%' },
+                { bottom: '89%', left: '40%' }
+            ];
+
+            const pos = positions[Math.min(playerPosition, 4)];
+            player.style.bottom = pos.bottom;
+            player.style.left = pos.left;
+        }
+
+        // Show Question
+        function showQuestion() {
+            if (currentQuestion >= questionsPerLevel || lives <= 0) {
+                endGame();
+                return;
+            }
+
+            const question = currentQuestions[currentQuestion];
+            document.getElementById('questionCategory').textContent = question.category;
+            document.getElementById('questionText').textContent = question.question;
+
+            // Shuffle answers
+            const answerIndices = shuffleArray([0, 1, 2, 3]);
+            const correctIndex = answerIndices.indexOf(question.correct);
+
+            const answersGrid = document.getElementById('answersGrid');
+            answersGrid.innerHTML = '';
+
+            answerIndices.forEach((ansIdx, displayIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'answer-btn';
+                btn.textContent = String.fromCharCode(65 + displayIdx) + '. ' + question.answers[ansIdx];
+                btn.onclick = () => checkAnswer(displayIdx, correctIndex, question);
+                answersGrid.appendChild(btn);
+            });
+
+            // Reset and hide explanation
+            document.getElementById('explanationBox').classList.remove('show');
+            document.getElementById('continueBtn').style.display = 'none';
+
+            // Start timer
+            timeLeft = 30;
+            document.getElementById('questionTimer').textContent = timeLeft;
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('questionTimer').textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeout();
+                }
+            }, 1000);
+
+            // Show modal
+            document.getElementById('questionModal').classList.add('active');
+            playBarrelSound();
+        }
+
+        // Check Answer
+        function checkAnswer(selected, correct, question) {
+            clearInterval(timerInterval);
+
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach((btn, i) => {
+                btn.classList.add('disabled');
+                if (i === correct) {
+                    btn.classList.add('correct');
+                } else if (i === selected && i !== correct) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            if (selected === correct) {
+                // Correct answer
+                playCorrectSound();
+                const timeBonus = Math.floor(timeLeft * 10);
+                const difficultyMultiplier = { chip: 1, ccus: 1.5, mds: 2, 'mds-aml': 3 };
+                const points = Math.floor((100 + timeBonus) * difficultyMultiplier[currentDifficulty]);
+                score += points;
+
+                // Move player up
+                playerPosition = Math.min(playerPosition + 1, 4);
+                playJumpSound();
+            } else {
+                // Incorrect answer
+                playIncorrectSound();
+                lives--;
+            }
+
+            // Show explanation
+            document.getElementById('explanationText').textContent = question.explanation;
+            document.getElementById('citationText').textContent = 'Reference: ' + question.citation;
+            document.getElementById('explanationBox').classList.add('show');
+            document.getElementById('continueBtn').style.display = 'block';
+
+            updateUI();
+        }
+
+        // Handle Timeout
+        function handleTimeout() {
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            playIncorrectSound();
+            lives--;
+
+            const question = currentQuestions[currentQuestion];
+            document.getElementById('explanationText').textContent = 'Time\'s up! ' + question.explanation;
+            document.getElementById('citationText').textContent = 'Reference: ' + question.citation;
+            document.getElementById('explanationBox').classList.add('show');
+            document.getElementById('continueBtn').style.display = 'block';
+
+            updateUI();
+        }
+
+        // Continue Game
+        function continueGame() {
+            document.getElementById('questionModal').classList.remove('active');
+            currentQuestion++;
+
+            if (lives <= 0) {
+                endGame();
+            } else if (currentQuestion >= questionsPerLevel) {
+                endGame();
+            } else {
+                setTimeout(() => {
+                    showQuestion();
+                }, 500);
+            }
+        }
+
+        // End Game
+        function endGame() {
+            stopMusic();
+            document.getElementById('questionModal').classList.remove('active');
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('resultsScreen').classList.add('active');
+
+            const won = lives > 0 && currentQuestion >= questionsPerLevel;
+            document.getElementById('resultsTitle').textContent = won ? 'LEVEL COMPLETE!' : 'GAME OVER';
+
+            if (won) {
+                playVictoryMusic();
+            } else {
+                playGameOverSound();
+            }
+
+            document.getElementById('finalScore').textContent = score;
+            const correctCount = currentQuestion - (3 - lives);
+            document.getElementById('correctAnswers').textContent = `${Math.max(0, correctCount)}/${questionsPerLevel}`;
+            document.getElementById('accuracy').textContent = Math.round((Math.max(0, correctCount) / questionsPerLevel) * 100) + '%';
+            document.getElementById('difficultyPlayed').textContent = currentDifficulty.toUpperCase();
+
+            // Save high score
+            const highScoreKey = 'myeloidKongHighScore_' + currentDifficulty;
+            const existingScore = localStorage.getItem(highScoreKey) || 0;
+            if (score > existingScore) {
+                localStorage.setItem(highScoreKey, score);
+                localStorage.setItem('myeloidKongHighScore', Math.max(score, localStorage.getItem('myeloidKongHighScore') || 0));
+            }
+        }
+
+        // Restart Game
+        function restartGame() {
+            document.getElementById('resultsScreen').classList.remove('active');
+            document.getElementById('titleScreen').style.display = 'block';
+        }
+
+        // Go Home
+        function goHome() {
+            window.location.href = '../HematologyArcade/index.html';
+        }
+
+        // Initialize on first click
+        document.addEventListener('click', function init() {
+            initAudio();
+            document.removeEventListener('click', init);
+        });
+
+        // Select default difficulty
+        selectDifficulty('chip');
+    </script>
+</body>
+</html>
