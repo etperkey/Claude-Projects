@@ -4215,13 +4215,230 @@ body {
 .references-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .references-list h4 {
   margin: 0;
   font-size: 1rem;
   color: var(--text-secondary);
+}
+
+.reference-item {
+  background: var(--bg-card);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.reference-item:hover {
+  border-color: var(--accent);
+}
+
+.reference-item.expanded {
+  border-color: var(--accent);
+}
+
+.reference-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.reference-citation {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.reference-number {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-width: 24px;
+  flex-shrink: 0;
+}
+
+.citation-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.reference-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.ref-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ref-badge.pmid {
+  background: rgba(52, 152, 219, 0.15);
+  color: #3498db;
+  border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.ref-badge.doi {
+  background: rgba(155, 89, 182, 0.15);
+  color: #9b59b6;
+  border: 1px solid rgba(155, 89, 182, 0.3);
+}
+
+.ref-badge.tag {
+  background: rgba(39, 174, 96, 0.15);
+  color: #27ae60;
+  border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+.reference-expanded {
+  padding: 0 16px 16px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 0;
+  padding-top: 16px;
+}
+
+.reference-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ref-link {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.ref-link.pubmed {
+  background: rgba(52, 152, 219, 0.1);
+  color: #3498db;
+  border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.ref-link.pubmed:hover {
+  background: rgba(52, 152, 219, 0.2);
+}
+
+.ref-link.scholar {
+  background: rgba(52, 73, 94, 0.1);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.ref-link.scholar:hover {
+  background: rgba(52, 73, 94, 0.2);
+}
+
+.ref-link.doi {
+  background: rgba(155, 89, 182, 0.1);
+  color: #9b59b6;
+  border: 1px solid rgba(155, 89, 182, 0.3);
+}
+
+.ref-link.doi:hover {
+  background: rgba(155, 89, 182, 0.2);
+}
+
+.reference-abstract {
+  margin-bottom: 16px;
+}
+
+.reference-abstract h4,
+.reference-notes h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reference-abstract p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.reference-notes textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+.reference-notes textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.reference-actions .btn-action {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reference-actions .btn-action.copy {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.reference-actions .btn-action.copy:hover {
+  background: var(--border-color);
+}
+
+.reference-actions .btn-action.danger {
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  color: #e74c3c;
+}
+
+.reference-actions .btn-action.danger:hover {
+  background: rgba(231, 76, 60, 0.2);
+}
+
+.references-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+
+.references-empty .hint {
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.references-count {
+  text-align: center;
+  padding: 16px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .reference-card {
@@ -5573,6 +5790,39 @@ body {
   border-top: 1px solid var(--border-color);
   border-radius: 0 0 10px 10px;
   text-align: center;
+}
+
+.suggestion-item.refs-insert {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.suggestion-item.refs-insert:hover {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.suggestion-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.suggestion-item.already-cited {
+  opacity: 0.7;
+}
+
+.already-cited-badge {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  background: rgba(39, 174, 96, 0.15);
+  color: #27ae60;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.citation-count {
+  color: var(--accent);
+  font-weight: 500;
 }
 
 /* ==================== iCal Subscribe ==================== */

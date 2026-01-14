@@ -34,6 +34,9 @@ function GlobalSearch({ isOpen, onClose }) {
       if (saved) customProjects = JSON.parse(saved);
     } catch {}
 
+    // Track custom project IDs
+    const customProjectIds = new Set(customProjects.map(p => p.id));
+
     const allProjects = [...researchProjects, ...customProjects];
 
     // Get saved tasks
@@ -53,10 +56,18 @@ function GlobalSearch({ isOpen, onClose }) {
     // Search tasks across all projects
     const matchedTasks = [];
     allProjects.forEach(project => {
-      const projectTasks = savedTasks[project.id] || project.tasks;
+      // For custom projects, tasks are in the project object
+      // For built-in projects, check savedTasks first
+      let projectTasks;
+      if (customProjectIds.has(project.id)) {
+        projectTasks = project.tasks;
+      } else {
+        projectTasks = savedTasks[project.id] || project.tasks;
+      }
       if (!projectTasks) return;
 
       Object.entries(projectTasks).forEach(([column, tasks]) => {
+        if (!Array.isArray(tasks)) return;
         tasks.forEach(task => {
           const matchesQuery =
             task.title.toLowerCase().includes(searchQuery) ||

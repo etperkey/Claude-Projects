@@ -121,6 +121,9 @@ function CalendarView({ isOpen, onClose }) {
       if (saved) customProjects = JSON.parse(saved);
     } catch {}
 
+    // Track custom project IDs
+    const customProjectIds = new Set(customProjects.map(p => p.id));
+
     const allProjects = [...researchProjects, ...customProjects];
 
     let savedTasks = {};
@@ -131,10 +134,21 @@ function CalendarView({ isOpen, onClose }) {
 
     const allTasks = [];
     allProjects.forEach(project => {
-      const projectTasks = savedTasks[project.id] || project.tasks;
+      // For custom projects, tasks are stored in the project object itself
+      // For built-in projects, tasks are in savedTasks or fall back to project.tasks
+      let projectTasks;
+      if (customProjectIds.has(project.id)) {
+        // Custom project - tasks are in the project object
+        projectTasks = project.tasks;
+      } else {
+        // Built-in project - check savedTasks first, then fall back to project.tasks
+        projectTasks = savedTasks[project.id] || project.tasks;
+      }
+
       if (!projectTasks) return;
 
       Object.entries(projectTasks).forEach(([column, taskList]) => {
+        if (!Array.isArray(taskList)) return;
         taskList.forEach(task => {
           if (task.dueDate) {
             allTasks.push({

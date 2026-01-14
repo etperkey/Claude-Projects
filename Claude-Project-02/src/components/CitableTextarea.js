@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useReferences } from '../context/ReferencesContext';
 
 function CitableTextarea({
@@ -16,14 +16,57 @@ function CitableTextarea({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [triggerPosition, setTriggerPosition] = useState({ top: 0, left: 0 });
   const [searchQuery, setSearchQuery] = useState('');
+  const [triggerType, setTriggerType] = useState(null); // 'cite', 'bracket', or 'refs'
   const textareaRef = useRef(null);
   const suggestionsRef = useRef(null);
 
   const references = getProjectReferences(projectId);
 
-  // Detect @cite or [@ trigger
+  // Parse existing citations in the text and build a map of ref ID -> appearance order
+  const citationMap = useMemo(() => {
+    if (!value) return { order: [], refToNum: {}, numToRef: {} };
+
+    // Find all [refId:XXX] markers in the text
+    const citationRegex = /\[refId:([^\]]+)\]/g;
+    const order = [];
+    const refToNum = {};
+    let match;
+
+    while ((match = citationRegex.exec(value)) !== null) {
+      const refId = match[1];
+      if (!refToNum[refId]) {
+        order.push(refId);
+        refToNum[refId] = order.length;
+      }
+    }
+
+    // Also build reverse map
+    const numToRef = {};
+    order.forEach((refId, idx) => {
+      numToRef[idx + 1] = refId;
+    });
+
+    return { order, refToNum, numToRef };
+  }, [value]);
+
+  // Get the display number for a reference (order of first appearance, or next available)
+  const getDisplayNumber = (refId) => {
+    if (citationMap.refToNum[refId]) {
+      return citationMap.refToNum[refId];
+    }
+    // New citation, will be next number
+    return citationMap.order.length + 1;
+  };
+
+  // Detect @cite, [@, or @refs trigger
   const detectTrigger = (text, cursorPos) => {
     const beforeCursor = text.substring(0, cursorPos);
+
+    // Check for @refs or @references to insert reference list
+    const refsTriggerMatch = beforeCursor.match(/@refs?$/i) || beforeCursor.match(/@references?$/i);
+    if (refsTriggerMatch) {
+      return { type: 'refs', query: '', fullMatch: refsTriggerMatch[0] };
+    }
 
     // Look for @cite: or [@
     const citeTriggerMatch = beforeCursor.match(/@cite:(\S*)$/i);
@@ -60,19 +103,27 @@ function CitableTextarea({
 
     const trigger = detectTrigger(newValue, cursorPos);
 
-    if (trigger && references.length > 0) {
-      const filtered = filterReferences(trigger.query);
-      setSuggestions(filtered);
-      setSearchQuery(trigger.query);
-      setSelectedIndex(0);
-      setShowSuggestions(filtered.length > 0);
+    if (trigger) {
+      setTriggerType(trigger.type);
+
+      if (trigger.type === 'refs') {
+        // Show option to insert reference list
+        setSuggestions([{ type: 'insert-refs', label: 'Insert Reference List' }]);
+        setSelectedIndex(0);
+        setShowSuggestions(true);
+        setSearchQuery('');
+      } else if (references.length > 0) {
+        const filtered = filterReferences(trigger.query);
+        setSuggestions(filtered);
+        setSearchQuery(trigger.query);
+        setSelectedIndex(0);
+        setShowSuggestions(filtered.length > 0);
+      }
 
       // Calculate position for suggestions dropdown
       if (textareaRef.current) {
         const textarea = textareaRef.current;
         const rect = textarea.getBoundingClientRect();
-
-        // Rough estimate of cursor position
         const lineHeight = parseInt(getComputedStyle(textarea).lineHeight) || 20;
         const lines = newValue.substring(0, cursorPos).split('\n');
         const currentLine = lines.length - 1;
@@ -84,6 +135,7 @@ function CitableTextarea({
       }
     } else {
       setShowSuggestions(false);
+      setTriggerType(null);
     }
   };
 
@@ -106,9 +158,11 @@ function CitableTextarea({
         break;
       case 'Enter':
       case 'Tab':
-        if (suggestions[selectedIndex]) {
-          e.preventDefault();
-          insertCitation(suggestions[selectedIndex], selectedIndex);
+        e.preventDefault();
+        if (triggerType === 'refs') {
+          insertReferenceList();
+        } else if (suggestions[selectedIndex]) {
+          insertCitation(suggestions[selectedIndex]);
         }
         break;
       case 'Escape':
@@ -119,8 +173,8 @@ function CitableTextarea({
     }
   };
 
-  // Insert citation at cursor
-  const insertCitation = (ref, index) => {
+  // Insert citation at cursor with order-based numbering
+  const insertCitation = (ref) => {
     const textarea = textareaRef.current;
     if (!textarea) return;
 
@@ -133,22 +187,16 @@ function CitableTextarea({
     const beforeTrigger = text.substring(0, cursorPos - trigger.fullMatch.length);
     const afterCursor = text.substring(cursorPos);
 
-    // Format the citation insertion
-    const refNumber = references.findIndex(r => r.id === ref.id) + 1;
-    let insertion;
+    // Get the display number (order of appearance)
+    const displayNum = getDisplayNumber(ref.id);
 
-    if (trigger.type === 'bracket') {
-      // Insert as [1] style
-      insertion = `[${refNumber}]`;
-    } else {
-      // Insert as inline citation
-      insertion = `[${refNumber}]`;
-    }
+    // Insert as [N] with hidden marker for tracking: [N][refId:XXX]
+    // The refId marker is hidden/stripped when displaying but used for tracking
+    const insertion = `[${displayNum}][refId:${ref.id}]`;
 
     const newValue = beforeTrigger + insertion + afterCursor;
     const newCursorPos = beforeTrigger.length + insertion.length;
 
-    // Update the value
     const syntheticEvent = {
       target: { value: newValue, selectionStart: newCursorPos }
     };
@@ -156,7 +204,53 @@ function CitableTextarea({
 
     setShowSuggestions(false);
 
-    // Set cursor position after React updates
+    setTimeout(() => {
+      if (textarea) {
+        textarea.selectionStart = newCursorPos;
+        textarea.selectionEnd = newCursorPos;
+        textarea.focus();
+      }
+    }, 0);
+  };
+
+  // Insert reference list at cursor
+  const insertReferenceList = () => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const cursorPos = textarea.selectionStart;
+    const text = value;
+
+    const trigger = detectTrigger(text, cursorPos);
+    if (!trigger) return;
+
+    const beforeTrigger = text.substring(0, cursorPos - trigger.fullMatch.length);
+    const afterCursor = text.substring(cursorPos);
+
+    // Build the reference list based on order of appearance
+    let refList = '\n\nReferences:\n';
+
+    if (citationMap.order.length === 0) {
+      refList += '(No citations in this text yet)\n';
+    } else {
+      citationMap.order.forEach((refId, index) => {
+        const ref = references.find(r => r.id === refId);
+        if (ref) {
+          refList += `${index + 1}. ${formatCitation(ref)}\n`;
+        }
+      });
+    }
+
+    const newValue = beforeTrigger + refList + afterCursor;
+    const newCursorPos = beforeTrigger.length + refList.length;
+
+    const syntheticEvent = {
+      target: { value: newValue, selectionStart: newCursorPos }
+    };
+    onChange(syntheticEvent);
+
+    setShowSuggestions(false);
+
     setTimeout(() => {
       if (textarea) {
         textarea.selectionStart = newCursorPos;
@@ -186,6 +280,9 @@ function CitableTextarea({
     return firstAuthor.length > 20 ? firstAuthor.substring(0, 20) + '...' : firstAuthor;
   };
 
+  // Format value for display (hide refId markers)
+  const displayValue = value?.replace(/\[refId:[^\]]+\]/g, '') || '';
+
   return (
     <div className="citable-textarea-wrapper">
       <textarea
@@ -193,7 +290,7 @@ function CitableTextarea({
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        placeholder={placeholder || "Type @cite: or [@ to insert a citation..."}
+        placeholder={placeholder || "Type @cite: or [@ to insert a citation, @refs to insert reference list..."}
         rows={rows}
         className={`citable-textarea ${className}`}
         {...props}
@@ -201,7 +298,10 @@ function CitableTextarea({
 
       {references.length > 0 && (
         <div className="citation-hint">
-          Type <code>@cite:</code> or <code>[@</code> to cite a reference
+          <code>@cite:</code> or <code>[@</code> to cite • <code>@refs</code> to insert reference list
+          {citationMap.order.length > 0 && (
+            <span className="citation-count"> • {citationMap.order.length} citation{citationMap.order.length !== 1 ? 's' : ''}</span>
+          )}
         </div>
       )}
 
@@ -216,30 +316,54 @@ function CitableTextarea({
             zIndex: 9999
           }}
         >
-          <div className="suggestions-header">
-            Select reference {searchQuery && `(matching "${searchQuery}")`}
-          </div>
-          {suggestions.map((ref, index) => {
-            const refNumber = references.findIndex(r => r.id === ref.id) + 1;
-            return (
+          {triggerType === 'refs' ? (
+            <>
+              <div className="suggestions-header">Insert Reference List</div>
               <div
-                key={ref.id}
-                className={`suggestion-item ${index === selectedIndex ? 'selected' : ''}`}
-                onClick={() => insertCitation(ref, index)}
-                onMouseEnter={() => setSelectedIndex(index)}
+                className="suggestion-item selected refs-insert"
+                onClick={insertReferenceList}
               >
-                <span className="suggestion-number">[{refNumber}]</span>
+                <span className="suggestion-icon">📚</span>
                 <div className="suggestion-content">
-                  <span className="suggestion-author">{getShortAuthor(ref.authors)}</span>
-                  {ref.year && <span className="suggestion-year">({ref.year})</span>}
-                  <span className="suggestion-title">{ref.title?.substring(0, 60)}{ref.title?.length > 60 ? '...' : ''}</span>
+                  <span className="suggestion-title">
+                    Insert {citationMap.order.length} reference{citationMap.order.length !== 1 ? 's' : ''} in citation order
+                  </span>
                 </div>
               </div>
-            );
-          })}
-          <div className="suggestions-footer">
-            ↑↓ Navigate • Enter/Tab Select • Esc Close
-          </div>
+              <div className="suggestions-footer">
+                Enter to insert • Esc to cancel
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="suggestions-header">
+                Select reference {searchQuery && `(matching "${searchQuery}")`}
+              </div>
+              {suggestions.map((ref, index) => {
+                const displayNum = getDisplayNumber(ref.id);
+                const isAlreadyCited = citationMap.refToNum[ref.id];
+                return (
+                  <div
+                    key={ref.id}
+                    className={`suggestion-item ${index === selectedIndex ? 'selected' : ''} ${isAlreadyCited ? 'already-cited' : ''}`}
+                    onClick={() => insertCitation(ref)}
+                    onMouseEnter={() => setSelectedIndex(index)}
+                  >
+                    <span className="suggestion-number">[{displayNum}]</span>
+                    <div className="suggestion-content">
+                      <span className="suggestion-author">{getShortAuthor(ref.authors)}</span>
+                      {ref.year && <span className="suggestion-year">({ref.year})</span>}
+                      <span className="suggestion-title">{ref.title?.substring(0, 60)}{ref.title?.length > 60 ? '...' : ''}</span>
+                    </div>
+                    {isAlreadyCited && <span className="already-cited-badge">cited</span>}
+                  </div>
+                );
+              })}
+              <div className="suggestions-footer">
+                ↑↓ Navigate • Enter/Tab Select • Esc Close
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>
