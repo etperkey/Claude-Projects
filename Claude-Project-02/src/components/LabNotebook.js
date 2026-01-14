@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
+import { useSyncTrigger } from '../context/DataSyncContext';
 import { researchProjects } from '../data/projects';
+import MacroTextarea from './MacroTextarea';
 
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
 
 function LabNotebook({ isOpen, onClose }) {
   const { isSignedIn, createDoc, syncToDoc, importFromDoc, createSheet, syncToSheet, importFromSheet } = useGoogleAuth();
+  const triggerSync = useSyncTrigger();
 
   const [entries, setEntries] = useState([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
@@ -46,10 +49,11 @@ function LabNotebook({ isOpen, onClose }) {
   }, []);
 
   // Save entries to localStorage
-  const saveEntries = (newEntries) => {
+  const saveEntries = useCallback((newEntries) => {
     localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(newEntries));
     setEntries(newEntries);
-  };
+    triggerSync();
+  }, [triggerSync]);
 
   // Format timestamp
   const formatTimestamp = (isoString) => {
@@ -438,11 +442,11 @@ function LabNotebook({ isOpen, onClose }) {
                 autoFocus
               />
 
-              <textarea
+              <MacroTextarea
                 className="entry-content-input"
-                placeholder="Write your lab notes here..."
+                placeholder="Write your lab notes here... (type @ for commands)"
                 value={newEntry.content}
-                onChange={(e) => setNewEntry({ ...newEntry, content: e.target.value })}
+                onChange={(content) => setNewEntry({ ...newEntry, content })}
                 rows={8}
               />
 
@@ -577,9 +581,9 @@ function LabNotebook({ isOpen, onClose }) {
                       {selectedEntry?.id === entry.id && (
                         <div className="entry-expanded">
                           <div className="entry-full-content">
-                            <textarea
+                            <MacroTextarea
                               value={entry.content}
-                              onChange={(e) => handleUpdateEntry(entry.id, { content: e.target.value })}
+                              onChange={(content) => handleUpdateEntry(entry.id, { content })}
                               rows={10}
                             />
                           </div>

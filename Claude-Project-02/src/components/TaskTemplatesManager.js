@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSyncTrigger } from '../context/DataSyncContext';
 
 const TEMPLATES_KEY = 'research-dashboard-task-templates';
 
@@ -106,6 +107,7 @@ const DEFAULT_TEMPLATES = [
 ];
 
 function TaskTemplatesManager({ projectId, onApplyTemplate, isOpen, onClose }) {
+  const triggerSync = useSyncTrigger();
   const [templates, setTemplates] = useState([]);
   const [customTemplates, setCustomTemplates] = useState([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -132,10 +134,11 @@ function TaskTemplatesManager({ projectId, onApplyTemplate, isOpen, onClose }) {
     }
   }, []);
 
-  const saveCustomTemplates = (templates) => {
+  const saveCustomTemplates = useCallback((templates) => {
     localStorage.setItem(TEMPLATES_KEY, JSON.stringify(templates));
     setCustomTemplates(templates);
-  };
+    triggerSync();
+  }, [triggerSync]);
 
   const handleApplyTemplate = (template) => {
     if (window.confirm(`Apply "${template.name}" template? This will create ${template.tasks.length} tasks.`)) {

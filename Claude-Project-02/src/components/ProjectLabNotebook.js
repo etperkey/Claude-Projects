@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
+import { useSyncTrigger } from '../context/DataSyncContext';
+import MacroTextarea from './MacroTextarea';
 
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
 
 function ProjectLabNotebook({ projectId, projectTitle }) {
   const { isSignedIn, createDoc, syncToDoc, importFromDoc, createSheet, syncToSheet, importFromSheet } = useGoogleAuth();
+  const triggerSync = useSyncTrigger();
 
   const [entries, setEntries] = useState([]);
   const [showNewEntry, setShowNewEntry] = useState(false);
@@ -52,7 +55,7 @@ function ProjectLabNotebook({ projectId, projectTitle }) {
   }, [projectId, projectTitle]);
 
   // Save entries to localStorage
-  const saveEntries = (newProjectEntries) => {
+  const saveEntries = useCallback((newProjectEntries) => {
     try {
       const saved = localStorage.getItem(NOTEBOOK_KEY);
       let allEntries = saved ? JSON.parse(saved) : [];
@@ -78,10 +81,11 @@ function ProjectLabNotebook({ projectId, projectTitle }) {
 
       localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(allEntries));
       setEntries(newProjectEntries);
+      triggerSync();
     } catch (e) {
       console.error('Failed to save notebook entries:', e);
     }
-  };
+  }, [triggerSync]);
 
   // Format timestamp
   const formatTimestamp = (isoString) => {
@@ -391,12 +395,13 @@ function ProjectLabNotebook({ projectId, projectTitle }) {
             autoFocus
           />
 
-          <textarea
+          <MacroTextarea
             className="entry-content-input"
-            placeholder="Write your lab notes here..."
+            placeholder="Write your lab notes here... (type @ for commands)"
             value={newEntry.content}
-            onChange={(e) => setNewEntry({ ...newEntry, content: e.target.value })}
+            onChange={(content) => setNewEntry({ ...newEntry, content })}
             rows={6}
+            projectName={projectTitle}
           />
 
           <div className="entry-meta-row">
@@ -502,10 +507,11 @@ function ProjectLabNotebook({ projectId, projectTitle }) {
                   {selectedEntry?.id === entry.id && (
                     <div className="entry-expanded">
                       <div className="entry-full-content">
-                        <textarea
+                        <MacroTextarea
                           value={entry.content}
-                          onChange={(e) => handleUpdateEntry(entry.id, { content: e.target.value })}
+                          onChange={(content) => handleUpdateEntry(entry.id, { content })}
                           rows={10}
+                          projectName={projectTitle}
                         />
                       </div>
 

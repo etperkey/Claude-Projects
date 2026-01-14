@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useApp } from '../context/AppContext';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
+import { useSyncTrigger } from '../context/DataSyncContext';
+import MacroTextarea from './MacroTextarea';
+import FileAttachments from './FileAttachments';
 
 const PROTOCOLS_KEY = 'research-dashboard-protocols';
 const RESULTS_KEY = 'research-dashboard-results';
@@ -32,6 +35,13 @@ const saveStoredData = (key, projectId, items) => {
 function ProtocolsResults({ projectId, projectTitle }) {
   const { logActivity } = useApp();
   const { isSignedIn, createDoc, syncToDoc, importFromDoc, createSheet, syncToSheet, importFromSheet } = useGoogleAuth();
+  const triggerSync = useSyncTrigger();
+
+  // Wrapper to save data and trigger sync
+  const saveWithSync = useCallback((key, items) => {
+    saveStoredData(key, projectId, items);
+    triggerSync();
+  }, [projectId, triggerSync]);
 
   const [activeTab, setActiveTab] = useState('protocols');
   const [protocols, setProtocols] = useState(() => getStoredData(PROTOCOLS_KEY, projectId));
@@ -64,7 +74,7 @@ function ProtocolsResults({ projectId, projectTitle }) {
     if (activeTab === 'protocols') {
       const updated = [...protocols, item];
       setProtocols(updated);
-      saveStoredData(PROTOCOLS_KEY, projectId, updated);
+      saveWithSync(PROTOCOLS_KEY, updated);
       logActivity('protocol_added', {
         protocolTitle: item.title,
         projectId,
@@ -73,7 +83,7 @@ function ProtocolsResults({ projectId, projectTitle }) {
     } else {
       const updated = [...results, item];
       setResults(updated);
-      saveStoredData(RESULTS_KEY, projectId, updated);
+      saveWithSync(RESULTS_KEY, updated);
       logActivity('result_added', {
         resultTitle: item.title,
         projectId,
@@ -97,11 +107,11 @@ function ProtocolsResults({ projectId, projectTitle }) {
     if (activeTab === 'protocols') {
       const updated = protocols.filter(p => p.id !== itemId);
       setProtocols(updated);
-      saveStoredData(PROTOCOLS_KEY, projectId, updated);
+      saveWithSync(PROTOCOLS_KEY, updated);
     } else {
       const updated = results.filter(r => r.id !== itemId);
       setResults(updated);
-      saveStoredData(RESULTS_KEY, projectId, updated);
+      saveWithSync(RESULTS_KEY, updated);
     }
   };
 
@@ -109,11 +119,11 @@ function ProtocolsResults({ projectId, projectTitle }) {
     if (activeTab === 'protocols') {
       const updated = protocols.map(p => p.id === itemId ? { ...p, ...updates } : p);
       setProtocols(updated);
-      saveStoredData(PROTOCOLS_KEY, projectId, updated);
+      saveWithSync(PROTOCOLS_KEY, updated);
     } else {
       const updated = results.map(r => r.id === itemId ? { ...r, ...updates } : r);
       setResults(updated);
-      saveStoredData(RESULTS_KEY, projectId, updated);
+      saveWithSync(RESULTS_KEY, updated);
     }
   };
 
@@ -355,10 +365,10 @@ Last Updated: ${new Date().toLocaleString()}`;
               onChange={e => setNewItem({ ...newItem, title: e.target.value })}
               autoFocus
             />
-            <textarea
-              placeholder="Description or notes..."
+            <MacroTextarea
+              placeholder="Description or notes... (type @ for commands)"
               value={newItem.description}
-              onChange={e => setNewItem({ ...newItem, description: e.target.value })}
+              onChange={(description) => setNewItem({ ...newItem, description })}
               rows={3}
             />
             <div className="pr-form-row">
@@ -552,6 +562,17 @@ Last Updated: ${new Date().toLocaleString()}`;
                         )}
                       </div>
                     )}
+
+                    {/* File Attachments */}
+                    <div className="pr-attachments">
+                      <span className="google-action-label">Files:</span>
+                      <FileAttachments
+                        attachments={item.attachments || []}
+                        onUpdate={(attachments) => handleUpdateItem(item.id, { attachments })}
+                        maxFiles={10}
+                        compact={true}
+                      />
+                    </div>
                   </div>
                 )}
               </div>

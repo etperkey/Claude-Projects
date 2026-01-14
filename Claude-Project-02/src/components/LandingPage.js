@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { researchProjects } from '../data/projects';
 import AddProjectModal from './AddProjectModal';
 import { useApp } from '../context/AppContext';
+import { useSyncTrigger } from '../context/DataSyncContext';
 
 // Project icons
 const ProjectIcons = {
@@ -57,6 +58,7 @@ const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 
 function LandingPage() {
   const { isProjectArchived, archiveProject, unarchiveProject, archivedProjects, logActivity } = useApp();
+  const triggerSync = useSyncTrigger();
   const [customProjects, setCustomProjects] = useState([]);
   const [savedTasks, setSavedTasks] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,10 +88,11 @@ function LandingPage() {
   }, []);
 
   // Save custom projects to localStorage
-  const saveCustomProjects = (projects) => {
+  const saveCustomProjects = useCallback((projects) => {
     localStorage.setItem(CUSTOM_PROJECTS_KEY, JSON.stringify(projects));
     setCustomProjects(projects);
-  };
+    triggerSync();
+  }, [triggerSync]);
 
   const handleAddProject = (newProject) => {
     const updated = [...customProjects, newProject];

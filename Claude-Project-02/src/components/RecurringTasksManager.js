@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSyncTrigger } from '../context/DataSyncContext';
 
 const RECURRING_KEY = 'research-dashboard-recurring-tasks';
 
@@ -20,6 +21,7 @@ const DAY_OPTIONS = [
 ];
 
 function RecurringTasksManager({ projectId, projectTitle, onCreateTask, isOpen, onClose }) {
+  const triggerSync = useSyncTrigger();
   const [recurringTasks, setRecurringTasks] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newTask, setNewTask] = useState({
@@ -45,7 +47,7 @@ function RecurringTasksManager({ projectId, projectTitle, onCreateTask, isOpen, 
   }, [projectId]);
 
   // Save recurring tasks to localStorage
-  const saveRecurringTasks = (tasks) => {
+  const saveRecurringTasks = useCallback((tasks) => {
     const saved = localStorage.getItem(RECURRING_KEY);
     let all = {};
     if (saved) {
@@ -58,7 +60,8 @@ function RecurringTasksManager({ projectId, projectTitle, onCreateTask, isOpen, 
     all[projectId] = tasks;
     localStorage.setItem(RECURRING_KEY, JSON.stringify(all));
     setRecurringTasks(tasks);
-  };
+    triggerSync();
+  }, [projectId, triggerSync]);
 
   // Check and create due recurring tasks
   useEffect(() => {

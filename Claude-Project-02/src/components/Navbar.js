@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
+import { useDataSync } from '../context/DataSyncContext';
 import GlobalSearch from './GlobalSearch';
 import CalendarView from './CalendarView';
 import QuickAddModal from './QuickAddModal';
@@ -14,6 +15,7 @@ const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 function Navbar() {
   const { theme, toggleTheme } = useApp();
   const { isSignedIn, gisLoaded, hasCredentials, user, signIn, signOut } = useGoogleAuth();
+  const { syncStatus, lastSynced, syncNow, syncError } = useDataSync();
   const [showSearch, setShowSearch] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
@@ -155,6 +157,33 @@ function Navbar() {
           >
             📥 <span className="btn-label">Export</span>
           </button>
+
+          {isSignedIn && (
+            <button
+              className={`nav-btn sync-btn ${syncStatus}`}
+              onClick={syncNow}
+              disabled={syncStatus === 'syncing'}
+              title={
+                syncStatus === 'syncing' ? 'Syncing...' :
+                syncStatus === 'error' ? `Sync error: ${syncError}` :
+                lastSynced ? `Last synced: ${lastSynced.toLocaleTimeString()}` :
+                'Click to sync with Google Drive'
+              }
+            >
+              {syncStatus === 'syncing' ? (
+                <span className="sync-icon spinning">↻</span>
+              ) : syncStatus === 'success' ? (
+                <span className="sync-icon">✓</span>
+              ) : syncStatus === 'error' ? (
+                <span className="sync-icon error">!</span>
+              ) : (
+                <span className="sync-icon">☁</span>
+              )}
+              <span className="btn-label">
+                {syncStatus === 'syncing' ? 'Syncing' : 'Sync'}
+              </span>
+            </button>
+          )}
 
           {hasCredentials && (
             isSignedIn ? (

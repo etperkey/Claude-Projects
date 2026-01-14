@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TaskDependencySelector from './TaskDependencySelector';
+import MacroTextarea from './MacroTextarea';
+import FileAttachments from './FileAttachments';
 
 const PRIORITY_OPTIONS = [
   { id: 'high', label: 'High', color: '#e74c3c' },
@@ -27,7 +29,8 @@ function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete, al
     links: [],
     labels: [],
     checklist: [],
-    dependencies: []
+    dependencies: [],
+    attachments: []
   });
   const [newLink, setNewLink] = useState({ title: '', url: '' });
   const [newChecklistItem, setNewChecklistItem] = useState('');
@@ -44,7 +47,8 @@ function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete, al
         links: task.links || [],
         labels: task.labels || [],
         checklist: task.checklist || [],
-        dependencies: task.dependencies || []
+        dependencies: task.dependencies || [],
+        attachments: task.attachments || []
       });
     }
   }, [task]);
@@ -244,11 +248,11 @@ function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete, al
           {/* Description/Notes */}
           <div className="task-section">
             <label>Notes</label>
-            <textarea
+            <MacroTextarea
               className="task-description-input"
               value={editedTask.description}
-              onChange={e => setEditedTask({ ...editedTask, description: e.target.value })}
-              placeholder="Add notes, details, or context..."
+              onChange={(description) => setEditedTask({ ...editedTask, description })}
+              placeholder="Add notes, details, or context... (type @ for commands)"
               rows={4}
             />
           </div>
@@ -347,6 +351,18 @@ function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete, al
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Google Drive Attachments */}
+          <div className="task-section">
+            <div className="section-header-row">
+              <label>Google Drive Files</label>
+            </div>
+            <FileAttachments
+              attachments={editedTask.attachments}
+              onUpdate={(attachments) => setEditedTask({ ...editedTask, attachments })}
+              maxFiles={10}
+            />
           </div>
         </div>
 
