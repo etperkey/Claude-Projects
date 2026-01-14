@@ -206,18 +206,22 @@
             background: linear-gradient(135deg, #ffff00, #ffcc00);
         }
 
-        /* LymphoMaster card */
+        /* LymphoInvader card - Space Invaders Blue Theme */
         .game-card.lymphoma {
-            border-color: var(--neon-green);
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            border-color: #00bfff;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+            background: linear-gradient(180deg,
+                rgba(0, 20, 40, 0.9) 0%,
+                rgba(0, 10, 30, 0.95) 100%);
         }
 
         .game-card.lymphoma:hover {
-            box-shadow: 0 0 40px rgba(0, 255, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 40px rgba(0, 191, 255, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
         }
 
         .game-card.lymphoma .game-icon {
-            background: linear-gradient(135deg, #00ff00, #88ff88);
+            background: linear-gradient(135deg, #00bfff, #0066cc);
+            border-radius: 10px;
         }
 
         /* HemesWaldo card */
@@ -253,6 +257,159 @@
 
         .game-card.waldo .diff-dot.active { background: #cc0000; }
 
+        /* CellularCentipede card */
+        .game-card.centipede {
+            border-color: #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            background: linear-gradient(180deg,
+                rgba(0, 40, 0, 0.9) 0%,
+                rgba(0, 20, 0, 0.95) 100%);
+        }
+
+        .game-card.centipede:hover {
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.centipede .game-icon {
+            background: linear-gradient(135deg, #00ff00, #008800);
+        }
+
+        .game-card.centipede .game-title { color: #00ff00; }
+
+        .game-card.centipede .play-btn {
+            background: linear-gradient(180deg, #00ff00, #00aa00);
+            color: black;
+            box-shadow: 0 5px 0 #006600;
+        }
+
+        .game-card.centipede .diff-dot.active { background: #00ff00; }
+
+        /* MyeloidKong card - Donkey Kong Purple Theme */
+        .game-card.kong {
+            border-color: #9400D3;
+            box-shadow: 0 0 20px rgba(148, 0, 211, 0.3);
+            background: linear-gradient(180deg,
+                rgba(75, 0, 130, 0.9) 0%,
+                rgba(30, 0, 50, 0.95) 100%);
+        }
+
+        .game-card.kong:hover {
+            box-shadow: 0 0 40px rgba(148, 0, 211, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.kong .game-icon {
+            background: transparent;
+        }
+
+        .game-card.kong .game-title { color: #FF00FF; }
+
+        .game-card.kong .play-btn {
+            background: linear-gradient(180deg, #8B008B, #4B0082);
+            color: #FF00FF;
+            box-shadow: 0 5px 0 #2E0854;
+        }
+
+        .game-card.kong .diff-dot.active { background: #9400D3; }
+
+        /* Kong Icon */
+        .kong-icon {
+            position: relative;
+            width: 60px;
+            height: 70px;
+        }
+
+        .kong-icon-body {
+            width: 45px;
+            height: 35px;
+            background: linear-gradient(180deg, #8B008B 0%, #4B0082 100%);
+            border-radius: 25px 25px 15px 15px;
+            position: absolute;
+            bottom: 5px;
+            left: 8px;
+            border: 2px solid #9400D3;
+        }
+
+        .kong-icon-head {
+            width: 35px;
+            height: 30px;
+            background: linear-gradient(180deg, #9932CC 0%, #8B008B 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 13px;
+            border: 2px solid #9400D3;
+        }
+
+        .kong-icon-eye {
+            width: 8px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 8px;
+        }
+
+        .kong-icon-eye.left { left: 6px; }
+        .kong-icon-eye.right { right: 6px; }
+
+        .kong-icon-eye::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: black;
+            border-radius: 50%;
+            bottom: 1px;
+            left: 2px;
+        }
+
+        .kong-icon-arm {
+            width: 12px;
+            height: 25px;
+            background: #8B008B;
+            border-radius: 8px;
+            position: absolute;
+            top: 25px;
+            border: 1px solid #9400D3;
+            animation: kong-arm-swing 0.8s ease-in-out infinite;
+        }
+
+        .kong-icon-arm.left { left: 0; transform-origin: top center; }
+        .kong-icon-arm.right { right: 0; transform-origin: top center; animation-delay: 0.4s; }
+
+        @keyframes kong-arm-swing {
+            0%, 100% { transform: rotate(-15deg); }
+            50% { transform: rotate(15deg); }
+        }
+
+        .kong-barrel {
+            width: 25px;
+            height: 20px;
+            background: linear-gradient(90deg, #8B4513 0%, #D2691E 50%, #8B4513 100%);
+            border-radius: 3px;
+            position: absolute;
+            bottom: -5px;
+            left: 18px;
+            animation: barrel-roll-icon 1s linear infinite;
+        }
+
+        .kong-barrel::before, .kong-barrel::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: #5D3A1A;
+            border-radius: 2px;
+        }
+
+        .kong-barrel::before { top: 3px; }
+        .kong-barrel::after { bottom: 3px; }
+
+        @keyframes barrel-roll-icon {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Game icon */
         .game-icon {
             width: 100px;
@@ -272,6 +429,252 @@
             50% { transform: scale(1.05); }
         }
 
+        /* Custom Pac-Man Icon - Same method as MS-AML-Man game */
+        .pacman-wrapper {
+            position: relative;
+            width: 50px;
+            height: 50px;
+        }
+
+        .pac-body {
+            width: 50px;
+            height: 50px;
+            background: #ffff00;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: chomp 0.3s ease-in-out infinite;
+        }
+
+        @keyframes chomp {
+            0%, 100% {
+                clip-path: polygon(50% 50%, 100% 15%, 100% 0%, 0% 0%, 0% 100%, 100% 100%, 100% 85%);
+            }
+            50% {
+                clip-path: polygon(50% 50%, 100% 45%, 100% 0%, 0% 0%, 0% 100%, 100% 100%, 100% 55%);
+            }
+        }
+
+        .pac-eye {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: black;
+            border-radius: 50%;
+            top: 10px;
+            left: 28px;
+            z-index: 5;
+        }
+
+        /* Pac-Man Ghost (AML Blast) */
+        .ghost-icon {
+            width: 35px;
+            height: 40px;
+            background: #ff6666;
+            border-radius: 50% 50% 0 0;
+            position: relative;
+            margin-left: 8px;
+        }
+
+        .ghost-icon::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background:
+                radial-gradient(circle at 15% 100%, transparent 8px, #ff6666 8px),
+                radial-gradient(circle at 50% 100%, transparent 8px, #ff6666 8px),
+                radial-gradient(circle at 85% 100%, transparent 8px, #ff6666 8px);
+        }
+
+        .ghost-icon::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 6px;
+            width: 10px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 14px 0 0 white;
+        }
+
+        .ghost-eyes {
+            position: absolute;
+            top: 14px;
+            left: 10px;
+            width: 5px;
+            height: 5px;
+            background: blue;
+            border-radius: 50%;
+            box-shadow: 14px 0 0 blue;
+        }
+
+        /* Plasma Cell Icon (Myeloma) */
+        .plasma-cell-icon {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 40%, #ffcccc 0%, #ff8888 40%, #cc4444 100%);
+            border-radius: 50%;
+            position: relative;
+            border: 3px solid #aa3333;
+        }
+
+        .plasma-cell-icon::before {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 18px;
+            background: radial-gradient(circle at 70% 50%, #660033 0%, #330022 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 8px;
+            transform: translateY(-50%);
+        }
+
+        .plasma-cell-icon::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ffeeee;
+            border-radius: 50%;
+            top: 8px;
+            right: 10px;
+            box-shadow: -5px 8px 0 2px rgba(255,255,255,0.3);
+        }
+
+        /* Space Invader Lymphocyte */
+        .invader-icon {
+            width: 50px;
+            height: 40px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .invader-body {
+            width: 40px;
+            height: 24px;
+            background: #00bfff;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            box-shadow:
+                -12px 8px 0 #00bfff,
+                12px 8px 0 #00bfff,
+                -8px 16px 0 #00bfff,
+                8px 16px 0 #00bfff,
+                -16px 16px 0 #00bfff,
+                16px 16px 0 #00bfff;
+        }
+
+        .invader-body::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 8px;
+            width: 6px;
+            height: 6px;
+            background: white;
+            box-shadow: 18px 0 0 white;
+        }
+
+        /* Centipede Icon */
+        .centipede-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        .centipede-segment {
+            width: 14px;
+            height: 14px;
+            background: radial-gradient(circle at 30% 30%, #00ff00 0%, #008800 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 4px #00ff00;
+            position: relative;
+        }
+
+        .centipede-segment.head {
+            background: radial-gradient(circle at 30% 30%, #ff8800 0%, #cc5500 100%);
+            box-shadow: 0 0 6px #ff8800;
+            width: 18px;
+            height: 18px;
+        }
+
+        .centipede-segment.head::before,
+        .centipede-segment.head::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 6px;
+            background: #ffff00;
+            border-radius: 2px;
+            top: -4px;
+        }
+
+        .centipede-segment.head::before { left: 4px; transform: rotate(-20deg); }
+        .centipede-segment.head::after { right: 4px; transform: rotate(20deg); }
+
+        .centipede-segment::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 2px;
+            width: 2px;
+            height: 6px;
+            background: #006600;
+            box-shadow: 8px 0 0 #006600;
+        }
+
+        /* Stem Cell Icon */
+        .stem-cell-icon {
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle at 40% 40%, #ffd700 0%, #cc9900 100%);
+            border-radius: 50%;
+            border: 2px solid #aa7700;
+            margin: 0 3px;
+        }
+
+        .mushroom-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mushroom-cap {
+            width: 45px;
+            height: 28px;
+            background: linear-gradient(180deg, #ff4444 0%, #cc0000 100%);
+            border-radius: 50% 50% 10% 10%;
+            position: relative;
+        }
+
+        .mushroom-cap::before {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            top: 5px;
+            left: 8px;
+            box-shadow: 18px 5px 0 8px white;
+        }
+
+        .mushroom-stem {
+            width: 18px;
+            height: 20px;
+            background: linear-gradient(180deg, #ffe4c4 0%, #deb887 100%);
+            border-radius: 0 0 8px 8px;
+        }
+
         .game-title {
             font-size: 1.2em;
             margin-bottom: 10px;
@@ -281,7 +684,7 @@
 
         .game-card.myeloma .game-title { color: #ff6666; }
         .game-card.aml .game-title { color: var(--neon-yellow); }
-        .game-card.lymphoma .game-title { color: var(--neon-green); }
+        .game-card.lymphoma .game-title { color: #00bfff; }
 
         .game-theme {
             font-size: 0.6em;
@@ -320,9 +723,9 @@
         }
 
         .game-card.lymphoma .play-btn {
-            background: linear-gradient(180deg, #00ff00, #00cc00);
-            color: black;
-            box-shadow: 0 5px 0 #009900;
+            background: linear-gradient(180deg, #00bfff, #0088cc);
+            color: white;
+            box-shadow: 0 5px 0 #005588;
         }
 
         .play-btn:hover {
@@ -354,7 +757,7 @@
 
         .game-card.myeloma .diff-dot.active { background: #ff4444; }
         .game-card.aml .diff-dot.active { background: var(--neon-yellow); }
-        .game-card.lymphoma .diff-dot.active { background: var(--neon-green); }
+        .game-card.lymphoma .diff-dot.active { background: #00bfff; }
 
         /* Footer */
         .arcade-footer {
@@ -541,15 +944,20 @@
         </header>
 
         <div class="games-grid">
-            <!-- MyelomaMan -->
+            <!-- MyelomaMan - Mushroom Plasma Cell Style -->
             <div class="game-card myeloma" onclick="launchGame('myeloma')">
-                <div class="game-icon">&#127812;</div>
+                <div class="game-icon" style="background: transparent; box-shadow: none;">
+                    <div class="mushroom-icon">
+                        <div class="mushroom-cap"></div>
+                        <div class="mushroom-stem"></div>
+                    </div>
+                </div>
                 <h2 class="game-title">MyelomaMan</h2>
                 <p class="game-theme">Super Mario Style</p>
                 <p class="game-description">
                     Jump through plasma cell challenges! Test your multiple myeloma knowledge from diagnosis to treatment.
                 </p>
-                <button class="play-btn">PLAY</button>
+                <button class="play-btn">STOMP IT</button>
                 <div class="difficulty-levels">
                     <div class="diff-dot active"></div>
                     <div class="diff-dot active"></div>
@@ -559,15 +967,21 @@
                 </div>
             </div>
 
-            <!-- MS-AML-Man -->
+            <!-- MS-AML-Man - Pac-Man & Ghost Blast Style -->
             <div class="game-card aml" onclick="launchGame('aml')">
-                <div class="game-icon">&#128308;</div>
+                <div class="game-icon" style="background: transparent; box-shadow: none; display: flex; align-items: center; justify-content: center;">
+                    <div class="pacman-wrapper">
+                        <div class="pac-body"></div>
+                        <div class="pac-eye"></div>
+                    </div>
+                    <div class="ghost-icon"><div class="ghost-eyes"></div></div>
+                </div>
                 <h2 class="game-title">Ms. AML-Man</h2>
                 <p class="game-theme">Pac-Man Style</p>
                 <p class="game-description">
                     Chomp through AML blasts! Navigate ELN 2022 risk stratification and treatment decisions.
                 </p>
-                <button class="play-btn">PLAY</button>
+                <button class="play-btn">CHOMP IT</button>
                 <div class="difficulty-levels">
                     <div class="diff-dot active"></div>
                     <div class="diff-dot active"></div>
@@ -577,15 +991,19 @@
                 </div>
             </div>
 
-            <!-- LymphoMaster -->
+            <!-- LymphoInvader - Space Invaders Style -->
             <div class="game-card lymphoma" onclick="launchGame('lymphoma')">
-                <div class="game-icon">&#129516;</div>
-                <h2 class="game-title">LymphoMaster</h2>
-                <p class="game-theme">Challenge Mode</p>
+                <div class="game-icon" style="background: transparent; box-shadow: none;">
+                    <div class="invader-icon">
+                        <div class="invader-body"></div>
+                    </div>
+                </div>
+                <h2 class="game-title">LymphoInvader</h2>
+                <p class="game-theme">Space Invaders Style</p>
                 <p class="game-description">
-                    Battle lymphoma knowledge! From Hodgkin to NHL, test your lymphoproliferative expertise.
+                    Defend against lymphoma invaders! From Hodgkin to NHL, blast your lymphoproliferative expertise.
                 </p>
-                <button class="play-btn">PLAY</button>
+                <button class="play-btn">INVADE</button>
                 <div class="difficulty-levels">
                     <div class="diff-dot active"></div>
                     <div class="diff-dot active"></div>
@@ -612,6 +1030,66 @@
                     <div class="diff-dot"></div>
                 </div>
             </div>
+
+            <!-- Cellular Centipede - Centipede & Bone Marrow Style -->
+            <div class="game-card centipede" onclick="launchGame('centipede')">
+                <div class="game-icon" style="background: transparent; box-shadow: none; flex-direction: column; gap: 8px;">
+                    <div class="centipede-icon">
+                        <div class="centipede-segment head"></div>
+                        <div class="centipede-segment"></div>
+                        <div class="centipede-segment"></div>
+                        <div class="centipede-segment"></div>
+                        <div class="centipede-segment"></div>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <div class="stem-cell-icon"></div>
+                        <div class="stem-cell-icon"></div>
+                        <div class="stem-cell-icon"></div>
+                    </div>
+                </div>
+                <h2 class="game-title">Cellular Centipede</h2>
+                <p class="game-theme">Centipede Style</p>
+                <p class="game-description">
+                    Destroy the centipede with BMT & CAR-T knowledge! Master transplant and cellular therapy.
+                </p>
+                <button class="play-btn">BLAST IT</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot"></div>
+                </div>
+            </div>
+
+            <!-- Myeloid Kong - Donkey Kong Style -->
+            <div class="game-card kong" onclick="launchGame('kong')">
+                <div class="game-icon" style="background: transparent; box-shadow: none;">
+                    <div class="kong-icon">
+                        <div class="kong-icon-body"></div>
+                        <div class="kong-icon-head">
+                            <div class="kong-icon-eye left"></div>
+                            <div class="kong-icon-eye right"></div>
+                        </div>
+                        <div class="kong-icon-arm left"></div>
+                        <div class="kong-icon-arm right"></div>
+                        <div class="kong-barrel"></div>
+                    </div>
+                </div>
+                <h2 class="game-title">Myeloid Kong</h2>
+                <p class="game-theme">Donkey Kong Style</p>
+                <p class="game-description">
+                    Climb through clonal challenges! Master CML, CMML, MPN & MDS from CHIP to transformation.
+                </p>
+                <button class="play-btn">CLIMB IT</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                </div>
+            </div>
         </div>
 
         <p class="insert-coin">SELECT A GAME TO BEGIN</p>
@@ -628,12 +1106,20 @@
                 <span class="score-value" id="amlScore">---</span>
             </div>
             <div class="score-row">
-                <span class="score-game">LymphoMaster</span>
+                <span class="score-game">LymphoInvader</span>
                 <span class="score-value" id="lymphomaScore">---</span>
             </div>
             <div class="score-row">
                 <span class="score-game">Heme's Waldo</span>
                 <span class="score-value" id="waldoScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">Cellular Centipede</span>
+                <span class="score-value" id="centipedeScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">Myeloid Kong</span>
+                <span class="score-value" id="kongScore">---</span>
             </div>
         </div>
 
@@ -881,6 +1367,12 @@
                     case 'waldo':
                         window.location.href = '../HemesWaldo/hemes-waldo.html';
                         break;
+                    case 'centipede':
+                        window.location.href = '../CellularCentipede/cellular-centipede.html';
+                        break;
+                    case 'kong':
+                        window.location.href = '../MyeloidKong/myeloid-kong.html';
+                        break;
                 }
             }, 400);
         }
@@ -891,6 +1383,8 @@
             const amlScore = localStorage.getItem('msAmlManHighScore');
             const lymphomaScore = localStorage.getItem('lymphoMasterHighScore') || localStorage.getItem('lymphomaChallengeHighScore');
             const waldoScore = localStorage.getItem('hemesWaldoHighScore');
+            const centipedeScore = localStorage.getItem('cellularCentipedeHighScore');
+            const kongScore = localStorage.getItem('myeloidKongHighScore');
 
             if (myelomaScore) {
                 document.getElementById('myelomaScore').textContent = myelomaScore;
@@ -903,6 +1397,12 @@
             }
             if (waldoScore) {
                 document.getElementById('waldoScore').textContent = waldoScore;
+            }
+            if (centipedeScore) {
+                document.getElementById('centipedeScore').textContent = centipedeScore;
+            }
+            if (kongScore) {
+                document.getElementById('kongScore').textContent = kongScore;
             }
         }
         loadHighScores();
