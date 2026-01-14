@@ -127,6 +127,7 @@ const getTaskStats = (tasks) => {
 // localStorage keys
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
+const PROJECT_ORDER_KEY = 'research-dashboard-project-order';
 
 function LandingPage() {
   const { isProjectArchived, archiveProject, unarchiveProject, archivedProjects, logActivity } = useApp();
@@ -137,6 +138,9 @@ function LandingPage() {
   const [savedTasks, setSavedTasks] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
+  const [projectOrder, setProjectOrder] = useState([]);
+  const [draggedProject, setDraggedProject] = useState(null);
+  const [dragOverProject, setDragOverProject] = useState(null);
 
   // Load custom projects and saved tasks from localStorage
   useEffect(() => {
@@ -159,6 +163,16 @@ function LandingPage() {
         console.error('Failed to load saved tasks:', e);
       }
     }
+
+    // Load project order
+    const savedOrder = localStorage.getItem(PROJECT_ORDER_KEY);
+    if (savedOrder) {
+      try {
+        setProjectOrder(JSON.parse(savedOrder));
+      } catch (e) {
+        console.error('Failed to load project order:', e);
+      }
+    }
   }, []);
 
   // Save custom projects to localStorage
@@ -167,6 +181,77 @@ function LandingPage() {
     setCustomProjects(projects);
     triggerSync();
   }, [triggerSync]);
+
+  // Save project order to localStorage
+  const saveProjectOrder = useCallback((order) => {
+    localStorage.setItem(PROJECT_ORDER_KEY, JSON.stringify(order));
+    setProjectOrder(order);
+    triggerSync();
+  }, [triggerSync]);
+
+  // Drag and drop handlers
+  const handleDragStart = (e, projectId) => {
+    setDraggedProject(projectId);
+    e.dataTransfer.effectAllowed = 'move';
+    // Add a slight delay to allow the drag image to be set
+    setTimeout(() => {
+      e.target.classList.add('dragging');
+    }, 0);
+  };
+
+  const handleDragEnd = (e) => {
+    e.target.classList.remove('dragging');
+    setDraggedProject(null);
+    setDragOverProject(null);
+  };
+
+  const handleDragOver = (e, projectId) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (projectId !== draggedProject) {
+      setDragOverProject(projectId);
+    }
+  };
+
+  const handleDragLeave = (e) => {
+    // Only clear if leaving the card entirely
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setDragOverProject(null);
+    }
+  };
+
+  const handleDrop = (e, targetProjectId) => {
+    e.preventDefault();
+    if (!draggedProject || draggedProject === targetProjectId) return;
+
+    const allProjectIds = activeProjects.map(p => p.id);
+
+    // Get current order (use saved order or default order)
+    let currentOrder = projectOrder.length > 0
+      ? projectOrder.filter(id => allProjectIds.includes(id))
+      : allProjectIds;
+
+    // Add any new projects not in the order
+    allProjectIds.forEach(id => {
+      if (!currentOrder.includes(id)) {
+        currentOrder.push(id);
+      }
+    });
+
+    const draggedIndex = currentOrder.indexOf(draggedProject);
+    const targetIndex = currentOrder.indexOf(targetProjectId);
+
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    // Remove dragged item and insert at new position
+    const newOrder = [...currentOrder];
+    newOrder.splice(draggedIndex, 1);
+    newOrder.splice(targetIndex, 0, draggedProject);
+
+    saveProjectOrder(newOrder);
+    setDraggedProject(null);
+    setDragOverProject(null);
+  };
 
   const handleAddProject = (newProject) => {
     const updated = [...customProjects, newProject];
@@ -216,7 +301,19 @@ function LandingPage() {
   };
 
   const allProjects = [...researchProjects, ...customProjects];
-  const activeProjects = allProjects.filter(p => !isProjectArchived(p.id));
+  const activeProjectsUnsorted = allProjects.filter(p => !isProjectArchived(p.id));
+
+  // Sort active projects by saved order
+  const activeProjects = [...activeProjectsUnsorted].sort((a, b) => {
+    const indexA = projectOrder.indexOf(a.id);
+    const indexB = projectOrder.indexOf(b.id);
+    // Projects not in order go to the end
+    if (indexA === -1 && indexB === -1) return 0;
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
+
   const archivedProjectsList = allProjects.filter(p => isProjectArchived(p.id));
 
   return (
@@ -261,12 +358,20 @@ function LandingPage() {
             {activeProjects.map((project) => {
               const projectTasks = getProjectTasks(project);
               const stats = getTaskStats(projectTasks);
+              const isDragging = draggedProject === project.id;
+              const isDragOver = dragOverProject === project.id;
               return (
                 <Link
                   to={`/project/${project.id}`}
                   key={project.id}
-                  className="project-card"
+                  className={`project-card ${isDragging ? 'dragging' : ''} ${isDragOver ? 'drag-over' : ''}`}
                   style={{ '--project-color': project.color }}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, project.id)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={(e) => handleDragOver(e, project.id)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, project.id)}
                 >
                   <div className="project-card-actions">
                     <button
