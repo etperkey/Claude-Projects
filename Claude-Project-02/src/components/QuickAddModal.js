@@ -8,6 +8,7 @@ const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 function QuickAddModal({ isOpen, onClose }) {
   const { logActivity, isProjectArchived } = useApp();
   const [projects, setProjects] = useState([]);
+  const [customProjectIds, setCustomProjectIds] = useState(new Set());
   const [selectedProject, setSelectedProject] = useState('');
   const [selectedColumn, setSelectedColumn] = useState('backlog');
   const [taskTitle, setTaskTitle] = useState('');
@@ -23,6 +24,10 @@ function QuickAddModal({ isOpen, onClose }) {
       if (saved) customProjects = JSON.parse(saved);
     } catch {}
 
+    // Track which projects are custom
+    const customIds = new Set(customProjects.map(p => p.id));
+    setCustomProjectIds(customIds);
+
     const allProjects = [...researchProjects, ...customProjects]
       .filter(p => !isProjectArchived(p.id));
     setProjects(allProjects);
@@ -37,20 +42,8 @@ function QuickAddModal({ isOpen, onClose }) {
 
     if (!taskTitle.trim() || !selectedProject) return;
 
-    // Get current tasks for the project
-    let savedTasks = {};
-    try {
-      const saved = localStorage.getItem(TASK_STORAGE_KEY);
-      if (saved) savedTasks = JSON.parse(saved);
-    } catch {}
-
     const project = projects.find(p => p.id === selectedProject);
-    const currentTasks = savedTasks[selectedProject] || project?.tasks || {
-      backlog: [],
-      inProgress: [],
-      review: [],
-      done: []
-    };
+    const isCustomProject = customProjectIds.has(selectedProject);
 
     // Create new task
     const newTask = {
@@ -64,12 +57,57 @@ function QuickAddModal({ isOpen, onClose }) {
       links: []
     };
 
-    // Add to column
-    currentTasks[selectedColumn] = [...currentTasks[selectedColumn], newTask];
+    if (isCustomProject) {
+      // Save to custom projects storage
+      try {
+        const saved = localStorage.getItem(CUSTOM_PROJECTS_KEY);
+        if (saved) {
+          const customProjects = JSON.parse(saved);
+          const updatedProjects = customProjects.map(p => {
+            if (p.id === selectedProject) {
+              const currentTasks = p.tasks || {
+                backlog: [],
+                inProgress: [],
+                review: [],
+                done: []
+              };
+              return {
+                ...p,
+                tasks: {
+                  ...currentTasks,
+                  [selectedColumn]: [...(currentTasks[selectedColumn] || []), newTask]
+                }
+              };
+            }
+            return p;
+          });
+          localStorage.setItem(CUSTOM_PROJECTS_KEY, JSON.stringify(updatedProjects));
+        }
+      } catch (err) {
+        console.error('Failed to save task to custom project:', err);
+      }
+    } else {
+      // Save to general task storage for built-in projects
+      let savedTasks = {};
+      try {
+        const saved = localStorage.getItem(TASK_STORAGE_KEY);
+        if (saved) savedTasks = JSON.parse(saved);
+      } catch {}
 
-    // Save
-    savedTasks[selectedProject] = currentTasks;
-    localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(savedTasks));
+      const currentTasks = savedTasks[selectedProject] || project?.tasks || {
+        backlog: [],
+        inProgress: [],
+        review: [],
+        done: []
+      };
+
+      // Add to column
+      currentTasks[selectedColumn] = [...(currentTasks[selectedColumn] || []), newTask];
+
+      // Save
+      savedTasks[selectedProject] = currentTasks;
+      localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(savedTasks));
+    }
 
     // Log activity
     logActivity('task_created', {
