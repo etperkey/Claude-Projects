@@ -22,7 +22,8 @@ const SYNC_KEYS = [
   'research-dashboard-activity',
   'research-dashboard-archived',
   'research-dashboard-theme',
-  'research-dashboard-project-order'
+  'research-dashboard-project-order',
+  'research-dashboard-project-overrides'
 ];
 
 // Keys that store per-project data (need special handling)
