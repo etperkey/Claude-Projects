@@ -108,9 +108,9 @@ export function AutoBackupProvider({ children }) {
     } catch {}
     return {
       enabled: true,
-      intervalMinutes: 60, // Auto-backup every hour
+      intervalMinutes: 5, // Auto-backup every 5 minutes
       backupOnExit: true,
-      maxLocalBackups: 5
+      maxAutoBackups: 12 // Keep last 12 auto-backups
     };
   });
 
@@ -190,8 +190,44 @@ export function AutoBackupProvider({ children }) {
     return true;
   }, []);
 
+  // Cleanup old auto-backups, keeping only the most recent ones
+  const cleanupOldAutoBackups = useCallback(async (folderId) => {
+    if (!gapiLoaded || !isSignedIn || !folderId) return;
+
+    try {
+      // List all auto-backups (files starting with "auto-")
+      const response = await window.gapi.client.drive.files.list({
+        q: `'${folderId}' in parents and name contains 'auto-' and mimeType = 'application/json' and trashed = false`,
+        spaces: 'drive',
+        fields: 'files(id, name, createdTime)',
+        orderBy: 'createdTime desc',
+        pageSize: 100
+      });
+
+      const autoBackups = response.result.files || [];
+
+      // Keep only the most recent maxAutoBackups
+      const maxToKeep = settings.maxAutoBackups || 12;
+      if (autoBackups.length > maxToKeep) {
+        const toDelete = autoBackups.slice(maxToKeep);
+        console.log(`Cleaning up ${toDelete.length} old auto-backups...`);
+
+        for (const file of toDelete) {
+          try {
+            await window.gapi.client.drive.files.delete({ fileId: file.id });
+          } catch (e) {
+            console.error(`Failed to delete old backup ${file.name}:`, e);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error cleaning up old backups:', error);
+    }
+  }, [gapiLoaded, isSignedIn, settings.maxAutoBackups]);
+
   // Export backup to Google Drive
-  const exportToGoogleDrive = useCallback(async (silent = false) => {
+  // isAuto: true for automatic backups (will be cleaned up), false for manual (kept forever)
+  const exportToGoogleDrive = useCallback(async (silent = false, isAuto = false) => {
     if (!gapiLoaded || !isSignedIn) {
       if (!silent) {
         emitToast('Please sign in to Google to backup to Drive', TOAST_TYPES.WARNING);
@@ -204,7 +240,10 @@ export function AutoBackupProvider({ children }) {
     try {
       const folderId = await getOrCreateBackupFolder();
       const exportData = getAllAppData();
-      const filename = `kanlab-backup-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+
+      // Use different prefix for auto vs manual backups
+      const prefix = isAuto ? 'auto-backup' : 'manual-backup';
+      const filename = `${prefix}-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
 
       // Create file blob
       const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
@@ -219,13 +258,18 @@ export function AutoBackupProvider({ children }) {
         localStorage.setItem(LAST_BACKUP_KEY, now.toISOString());
 
         if (!silent) {
-          emitToast(`Backup saved to Google Drive: ${filename}`, TOAST_TYPES.SUCCESS);
+          emitToast(`Backup saved to Google Drive`, TOAST_TYPES.SUCCESS);
         }
 
         // Dispatch event for other components
         window.dispatchEvent(new CustomEvent('backup-completed', {
-          detail: { location: 'google-drive', filename, fileId: result.id }
+          detail: { location: 'google-drive', filename, fileId: result.id, isAuto }
         }));
+
+        // Clean up old auto-backups after successful auto-backup
+        if (isAuto) {
+          await cleanupOldAutoBackups(folderId);
+        }
 
         return result;
       } else {
@@ -240,7 +284,7 @@ export function AutoBackupProvider({ children }) {
     } finally {
       setIsBackingUp(false);
     }
-  }, [gapiLoaded, isSignedIn, getOrCreateBackupFolder, uploadFileToDrive]);
+  }, [gapiLoaded, isSignedIn, getOrCreateBackupFolder, uploadFileToDrive, cleanupOldAutoBackups]);
 
   // Import backup from Google Drive
   const importFromGoogleDrive = useCallback(async () => {
@@ -397,9 +441,10 @@ export function AutoBackupProvider({ children }) {
       }
 
       // Prefer Google Drive if signed in, otherwise skip auto-backup
+      // (local auto-download would be annoying)
       if (isSignedIn && gapiLoaded) {
         console.log('Running auto-backup to Google Drive...');
-        await exportToGoogleDrive(true); // silent backup
+        await exportToGoogleDrive(true, true); // silent, auto backup
       }
     };
 
@@ -443,7 +488,7 @@ export function AutoBackupProvider({ children }) {
       localStorage.removeItem('kanlab-needs-backup');
       // Delay to let app initialize
       setTimeout(() => {
-        exportToGoogleDrive(true);
+        exportToGoogleDrive(true, true); // silent, auto backup
       }, 3000);
     }
   }, [isSignedIn, gapiLoaded, exportToGoogleDrive]);
