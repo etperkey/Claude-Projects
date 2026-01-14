@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
 import { useDataSync } from '../context/DataSyncContext';
+import { useAutoBackup } from '../context/AutoBackupContext';
 import { useApiKeys } from '../context/ApiKeysContext';
 import { useTrash } from '../context/TrashContext';
 import GlobalSearch from './GlobalSearch';
@@ -9,6 +10,7 @@ import CalendarView from './CalendarView';
 import QuickAddModal from './QuickAddModal';
 import ActivityTimeline from './ActivityTimeline';
 import LabNotebook from './LabNotebook';
+import BackupSettingsModal from './BackupSettingsModal';
 import { researchProjects } from '../data/projects';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
@@ -18,6 +20,14 @@ function Navbar() {
   const { theme, toggleTheme } = useApp();
   const { isSignedIn, gisLoaded, hasCredentials, user, signIn, signOut } = useGoogleAuth();
   const { syncStatus, lastSynced, syncNow, syncError } = useDataSync();
+  const {
+    createLocalBackup,
+    exportToGoogleDrive,
+    importFromGoogleDrive,
+    isBackingUp,
+    lastBackup,
+    settings: backupSettings
+  } = useAutoBackup();
   const { openSettings, hasClaudeKey, hasOpenaiKey } = useApiKeys();
   const { trashedItems, openTrash } = useTrash();
   const [showSearch, setShowSearch] = useState(false);
@@ -25,6 +35,7 @@ function Navbar() {
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
   const [showLabNotebook, setShowLabNotebook] = useState(false);
+  const [showBackupSettings, setShowBackupSettings] = useState(false);
 
   // Keyboard shortcut for search
   useEffect(() => {
@@ -39,6 +50,7 @@ function Navbar() {
         setShowQuickAdd(false);
         setShowActivity(false);
         setShowLabNotebook(false);
+        setShowBackupSettings(false);
       }
     };
 
@@ -282,24 +294,50 @@ function Navbar() {
 
           <div className="export-dropdown">
             <button
-              className="nav-btn"
+              className={`nav-btn ${isBackingUp ? 'backing-up' : ''}`}
               onClick={() => setShowExportMenu(!showExportMenu)}
-              title="Export / Import data"
+              title={lastBackup ? `Last backup: ${lastBackup.toLocaleString()}` : 'Export / Import data'}
             >
-              📥 <span className="btn-label">Data</span>
+              {isBackingUp ? (
+                <span className="backup-icon spinning">↻</span>
+              ) : (
+                <>📥</>
+              )}
+              <span className="btn-label">Data</span>
+              {backupSettings.enabled && isSignedIn && (
+                <span className="auto-backup-indicator" title="Auto-backup enabled">●</span>
+              )}
             </button>
             {showExportMenu && (
               <div className="export-menu">
-                <div className="export-menu-section">Export</div>
+                <div className="export-menu-section">Google Drive</div>
+                <button
+                  onClick={() => { exportToGoogleDrive(); setShowExportMenu(false); }}
+                  disabled={!isSignedIn || isBackingUp}
+                  title={!isSignedIn ? 'Sign in to Google first' : ''}
+                >
+                  ☁️ Backup to Drive
+                </button>
+                <button
+                  onClick={() => { importFromGoogleDrive(); setShowExportMenu(false); }}
+                  disabled={!isSignedIn}
+                  title={!isSignedIn ? 'Sign in to Google first' : ''}
+                >
+                  📂 Restore from Drive
+                </button>
+                <div className="export-menu-section">Local</div>
                 <button onClick={() => { handleExportCSV(); setShowExportMenu(false); }}>
-                  📄 Tasks CSV
+                  📄 Export Tasks CSV
                 </button>
-                <button onClick={() => { handleExportJSON(); setShowExportMenu(false); }}>
-                  💾 Full Backup (JSON)
+                <button onClick={() => { createLocalBackup(); setShowExportMenu(false); }}>
+                  💾 Download Backup
                 </button>
-                <div className="export-menu-section">Import</div>
                 <button onClick={() => { handleImportJSON(); setShowExportMenu(false); }}>
-                  📤 Restore from Backup
+                  📤 Import from File
+                </button>
+                <div className="export-menu-divider"></div>
+                <button onClick={() => { setShowBackupSettings(true); setShowExportMenu(false); }}>
+                  ⚙️ Backup Settings
                 </button>
               </div>
             )}
@@ -394,6 +432,7 @@ function Navbar() {
       <QuickAddModal isOpen={showQuickAdd} onClose={() => setShowQuickAdd(false)} />
       <ActivityTimeline isOpen={showActivity} onClose={() => setShowActivity(false)} />
       <LabNotebook isOpen={showLabNotebook} onClose={() => setShowLabNotebook(false)} />
+      <BackupSettingsModal isOpen={showBackupSettings} onClose={() => setShowBackupSettings(false)} />
     </>
   );
 }

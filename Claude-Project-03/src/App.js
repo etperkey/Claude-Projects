@@ -4,6 +4,7 @@ import { initializeSampleData } from './data/sampleData';
 import { AppProvider } from './context/AppContext';
 import { GoogleAuthProvider } from './context/GoogleAuthContext';
 import { DataSyncProvider } from './context/DataSyncContext';
+import { AutoBackupProvider } from './context/AutoBackupContext';
 import { ReferencesProvider } from './context/ReferencesContext';
 import { ApiKeysProvider } from './context/ApiKeysContext';
 import { SemanticSearchProvider } from './context/SemanticSearchContext';
@@ -30,7 +31,8 @@ function App() {
       <ToastProvider>
         <GoogleAuthProvider>
           <DataSyncProvider>
-            <AppProvider>
+            <AutoBackupProvider>
+              <AppProvider>
               <ApiKeysProvider>
                 <SemanticSearchProvider>
                   <ReferencesProvider>
@@ -52,7 +54,8 @@ function App() {
                   </ReferencesProvider>
                 </SemanticSearchProvider>
               </ApiKeysProvider>
-            </AppProvider>
+              </AppProvider>
+            </AutoBackupProvider>
           </DataSyncProvider>
         </GoogleAuthProvider>
       </ToastProvider>
