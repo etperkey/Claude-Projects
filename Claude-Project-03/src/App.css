@@ -8938,3 +8938,366 @@ body {
 .literature-toolbar .export-menu button:not(:last-child) {
   border-bottom: 1px solid var(--border-color);
 }
+
+/* ==================== Backup & Auto-Backup Styles ==================== */
+
+/* Export menu disabled state */
+.export-menu button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.export-menu button:disabled:hover {
+  background: none;
+}
+
+/* Export menu divider */
+.export-menu-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 4px 0;
+}
+
+/* Auto-backup indicator */
+.auto-backup-indicator {
+  color: var(--success);
+  font-size: 8px;
+  margin-left: 4px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Backup icon spinning */
+.backup-icon.spinning {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+.nav-btn.backing-up {
+  opacity: 0.8;
+}
+
+/* ==================== Backup Settings Modal ==================== */
+
+.backup-settings-modal {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.backup-settings-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.backup-settings-modal .modal-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.backup-settings-modal .close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+}
+
+.backup-settings-modal .close-btn:hover {
+  color: var(--text-primary);
+}
+
+/* Backup tabs */
+.backup-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 24px;
+}
+
+.backup-tabs .tab-btn {
+  background: none;
+  border: none;
+  padding: 12px 16px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.15s;
+}
+
+.backup-tabs .tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.backup-tabs .tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Modal content */
+.backup-settings-modal .modal-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Settings tab */
+.settings-tab .setting-group {
+  margin-bottom: 24px;
+}
+
+.settings-tab .setting-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.settings-tab .setting-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.settings-tab .setting-description {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-left: 28px;
+}
+
+.settings-tab select {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.settings-tab select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Backup status */
+.backup-status {
+  background: var(--bg-tertiary);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.backup-status h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.backup-status p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.backup-status strong {
+  color: var(--text-primary);
+}
+
+/* Sign in prompt */
+.sign-in-prompt {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.sign-in-prompt p {
+  margin-bottom: 12px;
+}
+
+.sign-in-prompt.centered {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.sign-in-btn {
+  background: #4285f4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.sign-in-btn:hover {
+  background: #3367d6;
+}
+
+/* Backup actions */
+.backup-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.backup-actions .primary-btn,
+.backups-tab .primary-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.backup-actions .primary-btn:hover:not(:disabled),
+.backups-tab .primary-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.backup-actions .primary-btn:disabled,
+.backups-tab .primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Backups tab */
+.backups-tab .loading,
+.backups-tab .no-backups {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+
+.backups-tab .no-backups p {
+  margin-bottom: 16px;
+}
+
+.backups-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.refresh-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Backups list */
+.backups-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.backup-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.backup-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.backup-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.backup-meta {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.backup-item .backup-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: 16px;
+}
+
+.restore-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.restore-btn:hover {
+  opacity: 0.9;
+}
+
+.backup-item .delete-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.backup-item .delete-btn:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
