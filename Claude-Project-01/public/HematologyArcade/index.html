@@ -284,6 +284,58 @@
 
         .game-card.centipede .diff-dot.active { background: #00ff00; }
 
+        /* ALL Burger Time card */
+        .game-card.burger {
+            border-color: #FF8C00;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+            background: linear-gradient(180deg,
+                rgba(139, 69, 19, 0.3) 0%,
+                rgba(20, 10, 0, 0.95) 100%);
+        }
+
+        .game-card.burger:hover {
+            box-shadow: 0 0 40px rgba(255, 140, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.burger .game-icon {
+            background: linear-gradient(135deg, #FF8C00, #8B4513);
+        }
+
+        .game-card.burger .game-title { color: #FF8C00; }
+
+        .game-card.burger .play-btn {
+            background: linear-gradient(180deg, #FF8C00, #8B4513);
+            color: white;
+            box-shadow: 0 5px 0 #5D3A1A;
+        }
+
+        .game-card.burger .diff-dot.active { background: #FF8C00; }
+
+        /* Burger Icon */
+        .burger-icon {
+            font-size: 50px;
+            animation: burgerBounce 1s ease-in-out infinite;
+        }
+
+        @keyframes burgerBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Chef Icon */
+        .chef-icon {
+            font-size: 35px;
+            position: absolute;
+            bottom: -5px;
+            right: -10px;
+            animation: chefWalk 0.5s steps(2) infinite;
+        }
+
+        @keyframes chefWalk {
+            0%, 100% { transform: translateX(-3px); }
+            50% { transform: translateX(3px); }
+        }
+
         /* MyeloidKong card - Donkey Kong Purple Theme */
         .game-card.kong {
             border-color: #9400D3;
@@ -1199,6 +1251,27 @@
                     <div class="diff-dot active"></div>
                 </div>
             </div>
+
+            <!-- ALL Burger Time - Burger Time Style -->
+            <div class="game-card burger" onclick="launchGame('burger')">
+                <div class="game-icon" style="background: transparent; box-shadow: none; position: relative;">
+                    <span class="burger-icon">&#127828;</span>
+                    <span class="chef-icon">&#128104;&#8205;&#127859;</span>
+                </div>
+                <h2 class="game-title">ALL Burger Time</h2>
+                <p class="game-theme">Burger Time Style</p>
+                <p class="game-description">
+                    Build knowledge burgers! Master adult T-ALL & B-ALL from diagnosis to CAR-T and BiTEs.
+                </p>
+                <button class="play-btn">COOK IT</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                </div>
+            </div>
         </div>
 
         <p class="insert-coin">SELECT A GAME TO BEGIN</p>
@@ -1229,6 +1302,10 @@
             <div class="score-row">
                 <span class="score-game">Myeloid Kong</span>
                 <span class="score-value" id="kongScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">ALL Burger Time</span>
+                <span class="score-value" id="burgerScore">---</span>
             </div>
         </div>
 
@@ -1481,6 +1558,9 @@
                         break;
                     case 'kong':
                         window.location.href = '../MyeloidKong/myeloid-kong.html';
+                        break;
+                    case 'burger':
+                        window.location.href = '../ALLBurgerTime/all-burger-time.html';
                         break;
                 }
             }, 400);
