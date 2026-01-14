@@ -9,6 +9,7 @@ export function GoogleAuthProvider({ children }) {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [gapiLoaded, setGapiLoaded] = useState(false);
   const [gisLoaded, setGisLoaded] = useState(false);
+  const [pickerLoaded, setPickerLoaded] = useState(false);
   const [tokenClient, setTokenClient] = useState(null);
   const [user, setUser] = useState(null);
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
@@ -35,7 +36,10 @@ export function GoogleAuthProvider({ children }) {
       script.async = true;
       script.defer = true;
       script.onload = () => {
-        window.gapi.load('client', initGapi);
+        window.gapi.load('client:picker', () => {
+          initGapi();
+          setPickerLoaded(true);
+        });
       };
       document.body.appendChild(script);
     };
@@ -82,7 +86,7 @@ export function GoogleAuthProvider({ children }) {
       try {
         const client = window.google.accounts.oauth2.initTokenClient({
           client_id: GOOGLE_CLIENT_ID,
-          scope: 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/spreadsheets',
+          scope: 'openid profile email https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/spreadsheets',
           callback: (tokenResponse) => {
             if (tokenResponse && tokenResponse.access_token) {
               setIsSignedIn(true);
@@ -400,10 +404,151 @@ export function GoogleAuthProvider({ children }) {
     }
   }, [gapiLoaded, isSignedIn]);
 
+  // Upload file to Google Drive
+  const uploadFileToDrive = useCallback(async (file, folderId = null) => {
+    if (!gapiLoaded || !isSignedIn) {
+      return null;
+    }
+
+    try {
+      const metadata = {
+        name: file.name,
+        mimeType: file.type
+      };
+
+      if (folderId) {
+        metadata.parents = [folderId];
+      }
+
+      // Create form data for multipart upload
+      const form = new FormData();
+      form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+      form.append('file', file);
+
+      const token = window.gapi.client.getToken();
+      const response = await fetch(
+        'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,mimeType,webViewLink,webContentLink,thumbnailLink,iconLink',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token.access_token}`
+          },
+          body: form
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Upload failed: ${response.status}`);
+      }
+
+      const result = await response.json();
+      return {
+        id: result.id,
+        name: result.name,
+        mimeType: result.mimeType,
+        webViewLink: result.webViewLink,
+        webContentLink: result.webContentLink,
+        thumbnailLink: result.thumbnailLink,
+        iconLink: result.iconLink
+      };
+    } catch (error) {
+      console.error('Error uploading to Google Drive:', error);
+      return null;
+    }
+  }, [gapiLoaded, isSignedIn]);
+
+  // Open Google Drive file picker
+  const openFilePicker = useCallback((options = {}) => {
+    return new Promise((resolve, reject) => {
+      if (!pickerLoaded || !isSignedIn) {
+        reject(new Error('Picker not available or not signed in'));
+        return;
+      }
+
+      const token = window.gapi.client.getToken();
+      if (!token) {
+        reject(new Error('No access token available'));
+        return;
+      }
+
+      const {
+        multiSelect = false,
+        mimeTypes = null, // e.g., ['application/pdf', 'image/*']
+        viewId = 'DOCS' // DOCS, DOCS_IMAGES, DOCS_VIDEOS, SPREADSHEETS, etc.
+      } = options;
+
+      try {
+        let view;
+        if (mimeTypes && mimeTypes.length > 0) {
+          view = new window.google.picker.DocsView()
+            .setMimeTypes(mimeTypes.join(','))
+            .setIncludeFolders(false);
+        } else if (viewId === 'PDFS') {
+          view = new window.google.picker.DocsView()
+            .setMimeTypes('application/pdf')
+            .setIncludeFolders(false);
+        } else {
+          view = new window.google.picker.DocsView(window.google.picker.ViewId[viewId] || window.google.picker.ViewId.DOCS)
+            .setIncludeFolders(false);
+        }
+
+        const picker = new window.google.picker.PickerBuilder()
+          .addView(view)
+          .addView(new window.google.picker.DocsUploadView())
+          .setOAuthToken(token.access_token)
+          .setDeveloperKey(GOOGLE_API_KEY)
+          .setCallback((data) => {
+            if (data.action === window.google.picker.Action.PICKED) {
+              const files = data.docs.map(doc => ({
+                id: doc.id,
+                name: doc.name,
+                mimeType: doc.mimeType,
+                url: doc.url,
+                iconUrl: doc.iconUrl,
+                embedUrl: doc.embedUrl
+              }));
+              resolve(multiSelect ? files : files[0]);
+            } else if (data.action === window.google.picker.Action.CANCEL) {
+              resolve(null);
+            }
+          });
+
+        if (multiSelect) {
+          picker.enableFeature(window.google.picker.Feature.MULTISELECT_ENABLED);
+        }
+
+        picker.build().setVisible(true);
+      } catch (error) {
+        console.error('Error opening file picker:', error);
+        reject(error);
+      }
+    });
+  }, [pickerLoaded, isSignedIn]);
+
+  // Get file info from Google Drive
+  const getFileInfo = useCallback(async (fileId) => {
+    if (!gapiLoaded || !isSignedIn) {
+      return null;
+    }
+
+    try {
+      const response = await window.gapi.client.drive.files.get({
+        fileId: fileId,
+        fields: 'id,name,mimeType,webViewLink,webContentLink,thumbnailLink,iconLink,size'
+      });
+
+      return response.result;
+    } catch (error) {
+      console.error('Error getting file info:', error);
+      return null;
+    }
+  }, [gapiLoaded, isSignedIn]);
+
   const value = {
     isSignedIn,
     gapiLoaded,
     gisLoaded,
+    pickerLoaded,
     hasCredentials,
     user,
     showSignInPrompt,
@@ -417,7 +562,10 @@ export function GoogleAuthProvider({ children }) {
     syncToSheet,
     importFromSheet,
     getCalendarEvents,
-    createCalendarEvent
+    createCalendarEvent,
+    uploadFileToDrive,
+    openFilePicker,
+    getFileInfo
   };
 
   return (

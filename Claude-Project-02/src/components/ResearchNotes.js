@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
+import { useSyncTrigger } from '../context/DataSyncContext';
 import LiteratureManager from './LiteratureManager';
 import CitableTextarea from './CitableTextarea';
 
@@ -7,6 +8,7 @@ const RESEARCH_NOTES_KEY = 'research-dashboard-research-notes';
 
 function ResearchNotes({ projectId, projectTitle }) {
   const { isSignedIn, createDoc, syncToDoc, importFromDoc } = useGoogleAuth();
+  const triggerSync = useSyncTrigger();
 
   const [activeTab, setActiveTab] = useState('background');
   const [notes, setNotes] = useState({
@@ -36,7 +38,7 @@ function ResearchNotes({ projectId, projectTitle }) {
   }, [projectId]);
 
   // Save notes to localStorage
-  const saveNotes = (newNotes) => {
+  const saveNotes = useCallback((newNotes) => {
     const saved = localStorage.getItem(RESEARCH_NOTES_KEY);
     let all = {};
     if (saved) {
@@ -49,7 +51,8 @@ function ResearchNotes({ projectId, projectTitle }) {
     all[projectId] = newNotes;
     localStorage.setItem(RESEARCH_NOTES_KEY, JSON.stringify(all));
     setNotes(newNotes);
-  };
+    triggerSync();
+  }, [projectId, triggerSync]);
 
   // Background handlers
   const handleSaveBackground = () => {

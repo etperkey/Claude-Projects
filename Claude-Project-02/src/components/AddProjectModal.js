@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import MacroTextarea from './MacroTextarea';
 
 const PROJECT_COLORS = [
   { name: 'Red', value: '#8B2942' },
@@ -88,20 +89,20 @@ function AddProjectModal({ isOpen, onClose, onAddProject }) {
 
           <div className="form-group">
             <label>Description</label>
-            <textarea
+            <MacroTextarea
               value={formData.description}
-              onChange={e => setFormData({...formData, description: e.target.value})}
-              placeholder="Brief project description..."
+              onChange={(description) => setFormData({...formData, description})}
+              placeholder="Brief project description... (type @ for commands)"
               rows={3}
             />
           </div>
 
           <div className="form-group">
             <label>Core Hypothesis</label>
-            <textarea
+            <MacroTextarea
               value={formData.hypothesis}
-              onChange={e => setFormData({...formData, hypothesis: e.target.value})}
-              placeholder="What is your main hypothesis?"
+              onChange={(hypothesis) => setFormData({...formData, hypothesis})}
+              placeholder="What is your main hypothesis? (type @ for commands)"
               rows={3}
             />
           </div>

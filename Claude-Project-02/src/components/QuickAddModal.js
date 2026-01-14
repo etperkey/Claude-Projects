@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { researchProjects } from '../data/projects';
 import { useApp } from '../context/AppContext';
+import { useSyncTrigger } from '../context/DataSyncContext';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 
 function QuickAddModal({ isOpen, onClose }) {
   const { logActivity, isProjectArchived } = useApp();
+  const triggerSync = useSyncTrigger();
   const [projects, setProjects] = useState([]);
   const [customProjectIds, setCustomProjectIds] = useState(new Set());
   const [selectedProject, setSelectedProject] = useState('');
@@ -82,6 +84,7 @@ function QuickAddModal({ isOpen, onClose }) {
             return p;
           });
           localStorage.setItem(CUSTOM_PROJECTS_KEY, JSON.stringify(updatedProjects));
+          triggerSync();
         }
       } catch (err) {
         console.error('Failed to save task to custom project:', err);
@@ -107,6 +110,7 @@ function QuickAddModal({ isOpen, onClose }) {
       // Save
       savedTasks[selectedProject] = currentTasks;
       localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(savedTasks));
+      triggerSync();
     }
 
     // Log activity

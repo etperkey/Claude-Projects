@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useSyncTrigger } from '../context/DataSyncContext';
+import MacroTextarea from './MacroTextarea';
 
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
 
 function QuickCapture() {
+  const triggerSync = useSyncTrigger();
   const [isOpen, setIsOpen] = useState(false);
   const [entry, setEntry] = useState({
     title: '',
@@ -36,6 +39,7 @@ function QuickCapture() {
       const entries = saved ? JSON.parse(saved) : [];
       entries.unshift(newEntry); // Add to beginning
       localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(entries));
+      triggerSync();
 
       // Show success message
       setShowSuccess(true);
@@ -104,12 +108,11 @@ function QuickCapture() {
                 autoFocus
               />
 
-              <textarea
+              <MacroTextarea
                 className="quick-capture-content"
-                placeholder="Capture your idea, observation, or note..."
+                placeholder="Capture your idea... (type @ for commands)"
                 value={entry.content}
-                onChange={(e) => setEntry({ ...entry, content: e.target.value })}
-                onKeyDown={handleKeyPress}
+                onChange={(content) => setEntry({ ...entry, content })}
                 rows={4}
               />
 

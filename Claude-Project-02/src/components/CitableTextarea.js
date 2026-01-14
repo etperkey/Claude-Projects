@@ -1,26 +1,45 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useReferences } from '../context/ReferencesContext';
+import { useGoogleAuth } from '../context/GoogleAuthContext';
+import { TEXT_MACROS, MACRO_CATEGORIES } from '../hooks/useTextMacros';
 
 function CitableTextarea({
   value,
   onChange,
   projectId,
+  projectName,
   placeholder,
   rows = 4,
   className = '',
   ...props
 }) {
   const { getProjectReferences, formatCitation } = useReferences();
+  const { user } = useGoogleAuth();
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [triggerPosition, setTriggerPosition] = useState({ top: 0, left: 0 });
   const [searchQuery, setSearchQuery] = useState('');
-  const [triggerType, setTriggerType] = useState(null); // 'cite', 'bracket', or 'refs'
+  const [triggerType, setTriggerType] = useState(null); // 'cite', 'bracket', 'refs', or 'macro'
   const textareaRef = useRef(null);
   const suggestionsRef = useRef(null);
 
   const references = getProjectReferences(projectId);
+
+  // Build context-aware macros
+  const allMacros = useMemo(() => {
+    const contextMacros = [];
+    if (user?.name) {
+      contextMacros.push({ trigger: '@me', label: 'Your name', category: 'utility', icon: '👤', getValue: () => user.name });
+    }
+    if (user?.email) {
+      contextMacros.push({ trigger: '@email', label: 'Your email', category: 'utility', icon: '📧', getValue: () => user.email });
+    }
+    if (projectName) {
+      contextMacros.push({ trigger: '@project', label: 'Project name', category: 'utility', icon: '📁', getValue: () => projectName });
+    }
+    return [...contextMacros, ...TEXT_MACROS];
+  }, [user, projectName]);
 
   // Parse existing citations in the text and build a map of ref ID -> appearance order
   const citationMap = useMemo(() => {
@@ -58,7 +77,7 @@ function CitableTextarea({
     return citationMap.order.length + 1;
   };
 
-  // Detect @cite, [@, or @refs trigger
+  // Detect @cite, [@, @refs, or @ macro trigger
   const detectTrigger = (text, cursorPos) => {
     const beforeCursor = text.substring(0, cursorPos);
 
@@ -78,6 +97,13 @@ function CitableTextarea({
     if (bracketTriggerMatch) {
       return { type: 'bracket', query: bracketTriggerMatch[1], fullMatch: bracketTriggerMatch[0] };
     }
+
+    // Check for general @ macro trigger (but not @cite, @refs, or [@)
+    const macroTriggerMatch = beforeCursor.match(/@(\w*)$/);
+    if (macroTriggerMatch && !beforeCursor.match(/@cite:?\w*$/i) && !beforeCursor.match(/@refs?\w*$/i)) {
+      return { type: 'macro', query: macroTriggerMatch[1], fullMatch: macroTriggerMatch[0] };
+    }
+
     return null;
   };
 
@@ -91,6 +117,16 @@ function CitableTextarea({
       ref.authors?.toLowerCase().includes(lowerQuery) ||
       ref.year?.includes(query) ||
       ref.pmid?.includes(query)
+    ).slice(0, 10);
+  };
+
+  // Filter macros based on query
+  const filterMacros = (query) => {
+    if (!query) return allMacros.slice(0, 10);
+    const lowerQuery = query.toLowerCase();
+    return allMacros.filter(macro =>
+      macro.trigger.toLowerCase().includes('@' + lowerQuery) ||
+      macro.label.toLowerCase().includes(lowerQuery)
     ).slice(0, 10);
   };
 
@@ -112,6 +148,13 @@ function CitableTextarea({
         setSelectedIndex(0);
         setShowSuggestions(true);
         setSearchQuery('');
+      } else if (trigger.type === 'macro') {
+        // Show macro suggestions
+        const filtered = filterMacros(trigger.query);
+        setSuggestions(filtered);
+        setSearchQuery(trigger.query);
+        setSelectedIndex(0);
+        setShowSuggestions(filtered.length > 0);
       } else if (references.length > 0) {
         const filtered = filterReferences(trigger.query);
         setSuggestions(filtered);
@@ -161,6 +204,8 @@ function CitableTextarea({
         e.preventDefault();
         if (triggerType === 'refs') {
           insertReferenceList();
+        } else if (triggerType === 'macro' && suggestions[selectedIndex]) {
+          insertMacro(suggestions[selectedIndex]);
         } else if (suggestions[selectedIndex]) {
           insertCitation(suggestions[selectedIndex]);
         }
@@ -193,6 +238,42 @@ function CitableTextarea({
     // Insert as [N] with hidden marker for tracking: [N][refId:XXX]
     // The refId marker is hidden/stripped when displaying but used for tracking
     const insertion = `[${displayNum}][refId:${ref.id}]`;
+
+    const newValue = beforeTrigger + insertion + afterCursor;
+    const newCursorPos = beforeTrigger.length + insertion.length;
+
+    const syntheticEvent = {
+      target: { value: newValue, selectionStart: newCursorPos }
+    };
+    onChange(syntheticEvent);
+
+    setShowSuggestions(false);
+
+    setTimeout(() => {
+      if (textarea) {
+        textarea.selectionStart = newCursorPos;
+        textarea.selectionEnd = newCursorPos;
+        textarea.focus();
+      }
+    }, 0);
+  };
+
+  // Insert macro value at cursor
+  const insertMacro = (macro) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const cursorPos = textarea.selectionStart;
+    const text = value;
+
+    const trigger = detectTrigger(text, cursorPos);
+    if (!trigger) return;
+
+    const beforeTrigger = text.substring(0, cursorPos - trigger.fullMatch.length);
+    const afterCursor = text.substring(cursorPos);
+
+    // Get the expanded value from the macro
+    const insertion = macro.getValue();
 
     const newValue = beforeTrigger + insertion + afterCursor;
     const newCursorPos = beforeTrigger.length + insertion.length;
@@ -296,14 +377,15 @@ function CitableTextarea({
         {...props}
       />
 
-      {references.length > 0 && (
-        <div className="citation-hint">
-          <code>@cite:</code> or <code>[@</code> to cite • <code>@refs</code> to insert reference list
-          {citationMap.order.length > 0 && (
-            <span className="citation-count"> • {citationMap.order.length} citation{citationMap.order.length !== 1 ? 's' : ''}</span>
-          )}
-        </div>
-      )}
+      <div className="citation-hint">
+        <code>@</code> for commands
+        {references.length > 0 && (
+          <> • <code>@cite:</code> or <code>[@</code> to cite • <code>@refs</code> for reference list</>
+        )}
+        {citationMap.order.length > 0 && (
+          <span className="citation-count"> • {citationMap.order.length} citation{citationMap.order.length !== 1 ? 's' : ''}</span>
+        )}
+      </div>
 
       {showSuggestions && suggestions.length > 0 && (
         <div
@@ -332,6 +414,29 @@ function CitableTextarea({
               </div>
               <div className="suggestions-footer">
                 Enter to insert • Esc to cancel
+              </div>
+            </>
+          ) : triggerType === 'macro' ? (
+            <>
+              <div className="suggestions-header">
+                Insert macro {searchQuery && `(matching "${searchQuery}")`}
+              </div>
+              {suggestions.map((macro, index) => (
+                <div
+                  key={macro.trigger}
+                  className={`suggestion-item ${index === selectedIndex ? 'selected' : ''}`}
+                  onClick={() => insertMacro(macro)}
+                  onMouseEnter={() => setSelectedIndex(index)}
+                >
+                  <span className="suggestion-icon">{macro.icon}</span>
+                  <div className="suggestion-content">
+                    <span className="suggestion-trigger">{macro.trigger}</span>
+                    <span className="suggestion-label">{macro.label}</span>
+                  </div>
+                </div>
+              ))}
+              <div className="suggestions-footer">
+                ↑↓ Navigate • Enter/Tab Select • Esc Close
               </div>
             </>
           ) : (

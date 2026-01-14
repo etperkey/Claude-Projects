@@ -8,6 +8,7 @@ import ProjectLabNotebook from './ProjectLabNotebook';
 import RecurringTasksManager from './RecurringTasksManager';
 import TaskTemplatesManager from './TaskTemplatesManager';
 import { useApp } from '../context/AppContext';
+import { useSyncTrigger } from '../context/DataSyncContext';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
@@ -15,6 +16,7 @@ const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 function ProjectPage() {
   const { projectId } = useParams();
   const { logActivity, isProjectArchived } = useApp();
+  const triggerSync = useSyncTrigger();
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState({});
   const [isCustomProject, setIsCustomProject] = useState(false);
@@ -82,6 +84,7 @@ function ProjectPage() {
             p.id === projectId ? { ...p, tasks } : p
           );
           localStorage.setItem(CUSTOM_PROJECTS_KEY, JSON.stringify(updatedProjects));
+          triggerSync();
         } catch (e) {
           console.error('Failed to save tasks:', e);
         }
@@ -99,8 +102,9 @@ function ProjectPage() {
       }
       allSavedTasks[projectId] = tasks;
       localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(allSavedTasks));
+      triggerSync();
     }
-  }, [tasks, isCustomProject, project, projectId, isLoaded]);
+  }, [tasks, isCustomProject, project, projectId, isLoaded, triggerSync]);
 
   if (!project) {
     return (

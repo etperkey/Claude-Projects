@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSyncTrigger } from '../context/DataSyncContext';
+import MacroTextarea from './MacroTextarea';
+import FileAttachments from './FileAttachments';
+import { fetchMultipleCitations, fetchFromPubMed, fetchFromDOI } from '../utils/citationFetcher';
 
 const LITERATURE_KEY = 'research-dashboard-literature';
 
 function LiteratureManager({ projectId, projectTitle }) {
+  const triggerSync = useSyncTrigger();
   const [references, setReferences] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -45,17 +50,18 @@ function LiteratureManager({ projectId, projectTitle }) {
   }, [projectId]);
 
   // Save references
-  const saveReferences = (newRefs) => {
+  const saveReferences = useCallback((newRefs) => {
     try {
       const saved = localStorage.getItem(LITERATURE_KEY);
       const all = saved ? JSON.parse(saved) : {};
       all[projectId] = newRefs;
       localStorage.setItem(LITERATURE_KEY, JSON.stringify(all));
       setReferences(newRefs);
+      triggerSync();
     } catch (e) {
       console.error('Failed to save references:', e);
     }
-  };
+  }, [projectId, triggerSync]);
 
   // Fetch from PubMed by PMID
   const fetchFromPubMed = async (pmid) => {
@@ -122,114 +128,68 @@ function LiteratureManager({ projectId, projectTitle }) {
     setTimeout(() => setFetchStatus({ message: '', type: '' }), 3000);
   };
 
-  // Bulk import multiple PMIDs
+  // Bulk import multiple PMIDs and/or DOIs
   const handleBulkImport = async () => {
-    // Parse PMIDs from input (comma, space, newline, or semicolon separated)
-    const pmidList = bulkPmids
-      .split(/[\s,;\n]+/)
-      .map(p => p.trim())
-      .filter(p => p && /^\d+$/.test(p));
-
-    if (pmidList.length === 0) {
-      setFetchStatus({ message: 'No valid PMIDs found', type: 'error' });
+    if (!bulkPmids.trim()) {
+      setFetchStatus({ message: 'Enter PMIDs or DOIs to import', type: 'error' });
       setTimeout(() => setFetchStatus({ message: '', type: '' }), 3000);
       return;
     }
 
-    // Remove duplicates and already existing PMIDs
+    // Check for existing PMIDs and DOIs to avoid duplicates
     const existingPmids = new Set(references.map(r => r.pmid).filter(Boolean));
-    const uniquePmids = [...new Set(pmidList)].filter(p => !existingPmids.has(p));
+    const existingDois = new Set(references.map(r => r.doi).filter(Boolean));
 
-    if (uniquePmids.length === 0) {
-      setFetchStatus({ message: 'All PMIDs already in library', type: 'info' });
-      setTimeout(() => setFetchStatus({ message: '', type: '' }), 3000);
-      return;
-    }
+    setBulkImportProgress({ current: 0, total: 1, importing: true });
+    setFetchStatus({ message: 'Fetching references...', type: 'info' });
 
-    setBulkImportProgress({ current: 0, total: uniquePmids.length, importing: true });
-    setFetchStatus({ message: `Importing ${uniquePmids.length} references...`, type: 'info' });
+    try {
+      const results = await fetchMultipleCitations(bulkPmids);
 
-    const newReferences = [];
-    let successCount = 0;
-    let failCount = 0;
+      // Filter out duplicates
+      const newReferences = results.success.filter(ref => {
+        if (ref.pmid && existingPmids.has(ref.pmid)) return false;
+        if (ref.doi && existingDois.has(ref.doi)) return false;
+        return true;
+      }).map(ref => ({
+        ...ref,
+        notes: '',
+        tags: [],
+        attachments: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }));
 
-    for (let i = 0; i < uniquePmids.length; i++) {
-      const pmid = uniquePmids[i];
-      setBulkImportProgress(prev => ({ ...prev, current: i + 1 }));
+      const duplicateCount = results.success.length - newReferences.length;
 
-      try {
-        // Fetch article summary
-        const response = await fetch(
-          `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${pmid}&retmode=json`
-        );
-        const data = await response.json();
-
-        if (data.result && data.result[pmid] && !data.result[pmid].error) {
-          const article = data.result[pmid];
-          const authors = article.authors
-            ? article.authors.map(a => a.name).join(', ')
-            : '';
-          const year = article.pubdate ? article.pubdate.split(' ')[0] : '';
-
-          // Fetch abstract
-          let abstract = '';
-          try {
-            const abstractResponse = await fetch(
-              `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${pmid}&rettype=abstract&retmode=text`
-            );
-            const abstractText = await abstractResponse.text();
-            const abstractMatch = abstractText.match(/Abstract\n([\s\S]*?)(?=\n\n|$)/i);
-            if (abstractMatch) {
-              abstract = abstractMatch[1].trim();
-            }
-          } catch (e) {
-            // Abstract fetch failed, continue without it
-          }
-
-          newReferences.push({
-            id: `ref-${Date.now()}-${i}`,
-            pmid: pmid,
-            title: article.title || '',
-            authors: authors,
-            journal: article.source || article.fulljournalname || '',
-            year: year,
-            volume: article.volume || '',
-            pages: article.pages || '',
-            doi: article.elocationid?.replace('doi: ', '') || '',
-            abstract: abstract,
-            notes: '',
-            tags: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-          });
-          successCount++;
-        } else {
-          failCount++;
-        }
-      } catch (error) {
-        console.error(`Failed to fetch PMID ${pmid}:`, error);
-        failCount++;
+      // Save all new references
+      if (newReferences.length > 0) {
+        saveReferences([...newReferences, ...references]);
       }
 
-      // Small delay to avoid rate limiting
-      if (i < uniquePmids.length - 1) {
-        await new Promise(resolve => setTimeout(resolve, 200));
+      setBulkImportProgress({ current: 0, total: 0, importing: false });
+      setBulkPmids('');
+
+      let message = '';
+      if (newReferences.length > 0) {
+        message = `Imported ${newReferences.length} reference${newReferences.length !== 1 ? 's' : ''}`;
       }
+      if (duplicateCount > 0) {
+        message += message ? ` (${duplicateCount} duplicate${duplicateCount !== 1 ? 's' : ''} skipped)` : `${duplicateCount} duplicate${duplicateCount !== 1 ? 's' : ''} skipped`;
+      }
+      if (results.failed.length > 0) {
+        message += message ? `, ${results.failed.length} failed` : `${results.failed.length} failed`;
+      }
+
+      const type = results.failed.length > 0 ? 'warning' : newReferences.length > 0 ? 'success' : 'info';
+      setFetchStatus({ message: message || 'No new references to import', type });
+      setTimeout(() => setFetchStatus({ message: '', type: '' }), 4000);
+    } catch (error) {
+      console.error('Bulk import error:', error);
+      setBulkImportProgress({ current: 0, total: 0, importing: false });
+      setFetchStatus({ message: 'Import failed: ' + error.message, type: 'error' });
+      setTimeout(() => setFetchStatus({ message: '', type: '' }), 4000);
     }
-
-    // Save all new references
-    if (newReferences.length > 0) {
-      saveReferences([...newReferences, ...references]);
-    }
-
-    setBulkImportProgress({ current: 0, total: 0, importing: false });
-    setBulkPmids('');
-
-    const message = failCount > 0
-      ? `Imported ${successCount} references (${failCount} failed)`
-      : `Successfully imported ${successCount} references`;
-    setFetchStatus({ message, type: failCount > 0 ? 'warning' : 'success' });
-    setTimeout(() => setFetchStatus({ message: '', type: '' }), 4000);
   };
 
   // Add reference
@@ -456,12 +416,12 @@ function LiteratureManager({ projectId, projectTitle }) {
             </div>
           </div>
 
-          {/* Bulk PMID Import */}
+          {/* Bulk PMID/DOI Import */}
           <div className="bulk-pmid-section">
-            <label>Bulk Import PMIDs:</label>
+            <label>Bulk Import (PMIDs & DOIs):</label>
             <textarea
               className="bulk-pmid-input"
-              placeholder="Enter multiple PMIDs (comma, space, or newline separated)&#10;Example: 12345678, 23456789, 34567890"
+              placeholder="Enter PMIDs and/or DOIs (comma, space, or newline separated)&#10;Examples: 12345678, 10.1000/xyz123, 23456789"
               value={bulkPmids}
               onChange={(e) => setBulkPmids(e.target.value)}
               rows={3}
@@ -578,10 +538,10 @@ function LiteratureManager({ projectId, projectTitle }) {
 
             <div className="ref-form-row">
               <label>Notes</label>
-              <textarea
+              <MacroTextarea
                 value={newRef.notes}
-                onChange={(e) => setNewRef({ ...newRef, notes: e.target.value })}
-                placeholder="Your notes about this reference..."
+                onChange={(notes) => setNewRef({ ...newRef, notes })}
+                placeholder="Your notes about this reference... (type @ for commands)"
                 rows={3}
               />
             </div>
@@ -706,11 +666,22 @@ function LiteratureManager({ projectId, projectTitle }) {
                   {/* Notes */}
                   <div className="reference-notes">
                     <h4>Notes</h4>
-                    <textarea
+                    <MacroTextarea
                       value={ref.notes || ''}
-                      onChange={(e) => handleUpdateReference(ref.id, { notes: e.target.value })}
-                      placeholder="Add your notes..."
+                      onChange={(notes) => handleUpdateReference(ref.id, { notes })}
+                      placeholder="Add your notes... (type @ for commands)"
                       rows={3}
+                    />
+                  </div>
+
+                  {/* Attachments */}
+                  <div className="reference-attachments">
+                    <h4>Attachments</h4>
+                    <FileAttachments
+                      attachments={ref.attachments || []}
+                      onUpdate={(attachments) => handleUpdateReference(ref.id, { attachments })}
+                      acceptedTypes={['application/pdf', 'image/*', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']}
+                      maxFiles={5}
                     />
                   </div>
 
