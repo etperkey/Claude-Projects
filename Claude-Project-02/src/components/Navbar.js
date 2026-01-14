@@ -122,7 +122,7 @@ function Navbar() {
     const APP_KEYS = [
       'research-dashboard-custom-projects',
       'research-dashboard-tasks',
-      'research-lab-notebook',
+      'research-dashboard-lab-notebook',
       'research-dashboard-literature',
       'research-dashboard-recurring',
       'research-dashboard-templates',
