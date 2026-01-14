@@ -3858,6 +3858,104 @@ body {
   cursor: not-allowed;
 }
 
+/* Bulk PMID Import */
+.bulk-pmid-section {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px dashed var(--border-color);
+}
+
+.bulk-pmid-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.bulk-pmid-input {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: monospace;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.bulk-pmid-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.bulk-pmid-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bulk-import-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.btn-bulk-import {
+  padding: 8px 16px;
+  background: #9b59b6;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-bulk-import:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.btn-bulk-import:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bulk-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bulk-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #9b59b6, #3498db);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+/* Reference Number */
+.reference-number {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.95rem;
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
+.reference-citation {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
 .lookup-status {
   padding: 10px 14px;
   border-radius: 8px;

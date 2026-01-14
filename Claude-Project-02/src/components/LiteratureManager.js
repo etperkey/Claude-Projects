@@ -10,6 +10,8 @@ function LiteratureManager({ projectId, projectTitle }) {
   const [selectedRef, setSelectedRef] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [fetchStatus, setFetchStatus] = useState({ message: '', type: '' });
+  const [bulkPmids, setBulkPmids] = useState('');
+  const [bulkImportProgress, setBulkImportProgress] = useState({ current: 0, total: 0, importing: false });
 
   // Form state
   const [newRef, setNewRef] = useState({
@@ -118,6 +120,116 @@ function LiteratureManager({ projectId, projectTitle }) {
 
     setIsLoading(false);
     setTimeout(() => setFetchStatus({ message: '', type: '' }), 3000);
+  };
+
+  // Bulk import multiple PMIDs
+  const handleBulkImport = async () => {
+    // Parse PMIDs from input (comma, space, newline, or semicolon separated)
+    const pmidList = bulkPmids
+      .split(/[\s,;\n]+/)
+      .map(p => p.trim())
+      .filter(p => p && /^\d+$/.test(p));
+
+    if (pmidList.length === 0) {
+      setFetchStatus({ message: 'No valid PMIDs found', type: 'error' });
+      setTimeout(() => setFetchStatus({ message: '', type: '' }), 3000);
+      return;
+    }
+
+    // Remove duplicates and already existing PMIDs
+    const existingPmids = new Set(references.map(r => r.pmid).filter(Boolean));
+    const uniquePmids = [...new Set(pmidList)].filter(p => !existingPmids.has(p));
+
+    if (uniquePmids.length === 0) {
+      setFetchStatus({ message: 'All PMIDs already in library', type: 'info' });
+      setTimeout(() => setFetchStatus({ message: '', type: '' }), 3000);
+      return;
+    }
+
+    setBulkImportProgress({ current: 0, total: uniquePmids.length, importing: true });
+    setFetchStatus({ message: `Importing ${uniquePmids.length} references...`, type: 'info' });
+
+    const newReferences = [];
+    let successCount = 0;
+    let failCount = 0;
+
+    for (let i = 0; i < uniquePmids.length; i++) {
+      const pmid = uniquePmids[i];
+      setBulkImportProgress(prev => ({ ...prev, current: i + 1 }));
+
+      try {
+        // Fetch article summary
+        const response = await fetch(
+          `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${pmid}&retmode=json`
+        );
+        const data = await response.json();
+
+        if (data.result && data.result[pmid] && !data.result[pmid].error) {
+          const article = data.result[pmid];
+          const authors = article.authors
+            ? article.authors.map(a => a.name).join(', ')
+            : '';
+          const year = article.pubdate ? article.pubdate.split(' ')[0] : '';
+
+          // Fetch abstract
+          let abstract = '';
+          try {
+            const abstractResponse = await fetch(
+              `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${pmid}&rettype=abstract&retmode=text`
+            );
+            const abstractText = await abstractResponse.text();
+            const abstractMatch = abstractText.match(/Abstract\n([\s\S]*?)(?=\n\n|$)/i);
+            if (abstractMatch) {
+              abstract = abstractMatch[1].trim();
+            }
+          } catch (e) {
+            // Abstract fetch failed, continue without it
+          }
+
+          newReferences.push({
+            id: `ref-${Date.now()}-${i}`,
+            pmid: pmid,
+            title: article.title || '',
+            authors: authors,
+            journal: article.source || article.fulljournalname || '',
+            year: year,
+            volume: article.volume || '',
+            pages: article.pages || '',
+            doi: article.elocationid?.replace('doi: ', '') || '',
+            abstract: abstract,
+            notes: '',
+            tags: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          });
+          successCount++;
+        } else {
+          failCount++;
+        }
+      } catch (error) {
+        console.error(`Failed to fetch PMID ${pmid}:`, error);
+        failCount++;
+      }
+
+      // Small delay to avoid rate limiting
+      if (i < uniquePmids.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+    }
+
+    // Save all new references
+    if (newReferences.length > 0) {
+      saveReferences([...newReferences, ...references]);
+    }
+
+    setBulkImportProgress({ current: 0, total: 0, importing: false });
+    setBulkPmids('');
+
+    const message = failCount > 0
+      ? `Imported ${successCount} references (${failCount} failed)`
+      : `Successfully imported ${successCount} references`;
+    setFetchStatus({ message, type: failCount > 0 ? 'warning' : 'success' });
+    setTimeout(() => setFetchStatus({ message: '', type: '' }), 4000);
   };
 
   // Add reference
@@ -344,6 +456,38 @@ function LiteratureManager({ projectId, projectTitle }) {
             </div>
           </div>
 
+          {/* Bulk PMID Import */}
+          <div className="bulk-pmid-section">
+            <label>Bulk Import PMIDs:</label>
+            <textarea
+              className="bulk-pmid-input"
+              placeholder="Enter multiple PMIDs (comma, space, or newline separated)&#10;Example: 12345678, 23456789, 34567890"
+              value={bulkPmids}
+              onChange={(e) => setBulkPmids(e.target.value)}
+              rows={3}
+              disabled={bulkImportProgress.importing}
+            />
+            <div className="bulk-import-actions">
+              <button
+                className="btn-bulk-import"
+                onClick={handleBulkImport}
+                disabled={bulkImportProgress.importing || !bulkPmids.trim()}
+              >
+                {bulkImportProgress.importing
+                  ? `Importing ${bulkImportProgress.current}/${bulkImportProgress.total}...`
+                  : 'Import All'}
+              </button>
+              {bulkImportProgress.importing && (
+                <div className="bulk-progress-bar">
+                  <div
+                    className="bulk-progress-fill"
+                    style={{ width: `${(bulkImportProgress.current / bulkImportProgress.total) * 100}%` }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="ref-form-divider">
             <span>or enter manually</span>
           </div>
@@ -489,7 +633,7 @@ function LiteratureManager({ projectId, projectTitle }) {
             <p className="hint">Add references by PMID or enter them manually.</p>
           </div>
         ) : (
-          filteredReferences.map(ref => (
+          filteredReferences.map((ref, index) => (
             <div
               key={ref.id}
               className={`reference-item ${selectedRef?.id === ref.id ? 'expanded' : ''}`}
@@ -499,6 +643,7 @@ function LiteratureManager({ projectId, projectTitle }) {
                 onClick={() => setSelectedRef(selectedRef?.id === ref.id ? null : ref)}
               >
                 <div className="reference-citation">
+                  <span className="reference-number">{index + 1}.</span>
                   <p className="citation-text">{formatCitation(ref)}</p>
                 </div>
 
@@ -574,7 +719,7 @@ function LiteratureManager({ projectId, projectTitle }) {
                     <button
                       className="btn-action copy"
                       onClick={() => {
-                        navigator.clipboard.writeText(formatCitation(ref));
+                        navigator.clipboard.writeText(`${index + 1}. ${formatCitation(ref)}`);
                         setFetchStatus({ message: 'Citation copied!', type: 'success' });
                         setTimeout(() => setFetchStatus({ message: '', type: '' }), 2000);
                       }}
