@@ -245,11 +245,11 @@ function CalendarView({ isOpen, onClose }) {
           <h2>Calendar View</h2>
           <div className="calendar-header-actions">
             <button
-              className="btn-export-cal"
+              className={`btn-export-cal ${showExport ? 'expanded' : ''}`}
               onClick={() => setShowExport(!showExport)}
               title="Export to Calendar"
             >
-              Export
+              Export {showExport ? '▲' : '▼'}
             </button>
             <button className="modal-close" onClick={onClose}>&times;</button>
           </div>
@@ -260,6 +260,13 @@ function CalendarView({ isOpen, onClose }) {
           <div className="ical-export-section">
             <div className="ical-export-header">
               <h4>Calendar Export Options</h4>
+              <button
+                className="collapse-export-btn"
+                onClick={() => setShowExport(false)}
+                title="Collapse"
+              >
+                ✕
+              </button>
             </div>
 
             {/* Subscribe Option */}
