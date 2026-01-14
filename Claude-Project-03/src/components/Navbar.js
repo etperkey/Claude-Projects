@@ -21,7 +21,6 @@ function Navbar() {
   const {
     createLocalBackup,
     exportToGoogleDrive,
-    importFromGoogleDrive,
     isBackingUp,
     lastBackup,
     settings: backupSettings
@@ -317,7 +316,7 @@ function Navbar() {
                   ☁️ Backup to Drive
                 </button>
                 <button
-                  onClick={() => { importFromGoogleDrive(); setShowExportMenu(false); }}
+                  onClick={() => { setShowBackupSettings(true); setShowExportMenu(false); }}
                   disabled={!isSignedIn}
                   title={!isSignedIn ? 'Sign in to Google first' : ''}
                 >
@@ -372,8 +371,8 @@ function Navbar() {
               </button>
               <button
                 className="nav-btn cloud-btn"
-                onClick={importFromGoogleDrive}
-                title="Restore from Google Drive backup"
+                onClick={() => setShowBackupSettings(true)}
+                title="View and restore from Google Drive backups"
               >
                 <span className="cloud-icon">☁↓</span>
                 <span className="btn-label">Load</span>
