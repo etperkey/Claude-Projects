@@ -260,7 +260,7 @@ function Navbar() {
             onClick={() => setShowLabNotebook(true)}
             title="Lab Notebook"
           >
-            📓 <span className="btn-label">Notebook</span>
+            📓 <span className="btn-label">Lab Notebook</span>
           </button>
         </div>
 
@@ -300,7 +300,7 @@ function Navbar() {
               ) : (
                 <>📥</>
               )}
-              <span className="btn-label">Data</span>
+              <span className="btn-label">Export</span>
               {backupSettings.enabled && isSignedIn && (
                 <span className="auto-backup-indicator" title="Auto-backup enabled">●</span>
               )}
