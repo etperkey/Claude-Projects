@@ -1872,7 +1872,9 @@
             playerPosition = 0;
 
             // Get questions for selected difficulty
-            const diffKey = currentDifficulty.replace('-', '-');
+            // Map difficulty to questionBank key (mds-aml uses mds array which contains MDS-AML questions)
+            const diffKeyMap = { 'chip': 'chip', 'ccus': 'ccus', 'mds': 'mds', 'mds-aml': 'mds' };
+            const diffKey = diffKeyMap[currentDifficulty] || 'mds';
             currentQuestions = shuffleArray(questionBank[diffKey]).slice(0, questionsPerLevel);
 
             document.getElementById('titleScreen').style.display = 'none';
