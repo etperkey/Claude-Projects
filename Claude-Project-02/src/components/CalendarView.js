@@ -1,9 +1,77 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { researchProjects } from '../data/projects';
+import CalendarPublish from './CalendarPublish';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
+
+// Generate iCal format for tasks
+const generateICalContent = (tasks) => {
+  const now = new Date();
+  const formatDate = (dateStr) => {
+    // Convert YYYY-MM-DD to YYYYMMDD format
+    return dateStr.replace(/-/g, '');
+  };
+
+  const escapeText = (text) => {
+    return text
+      .replace(/\\/g, '\\\\')
+      .replace(/;/g, '\\;')
+      .replace(/,/g, '\\,')
+      .replace(/\n/g, '\\n');
+  };
+
+  const formatDateTime = (date) => {
+    return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  };
+
+  let ical = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Research Dashboard//Tasks//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:Research Dashboard Tasks',
+    'X-WR-TIMEZONE:UTC'
+  ];
+
+  tasks.forEach(task => {
+    if (!task.dueDate) return;
+
+    const uid = `${task.id}@research-dashboard`;
+    const dtstamp = formatDateTime(now);
+    const dtstart = formatDate(task.dueDate);
+    const summary = escapeText(task.title);
+    const description = escapeText(
+      `Project: ${task.projectTitle}\\nStatus: ${task.column}\\nPriority: ${task.priority || 'medium'}`
+    );
+
+    ical.push('BEGIN:VEVENT');
+    ical.push(`UID:${uid}`);
+    ical.push(`DTSTAMP:${dtstamp}`);
+    ical.push(`DTSTART;VALUE=DATE:${dtstart}`);
+    ical.push(`DTEND;VALUE=DATE:${dtstart}`);
+    ical.push(`SUMMARY:${summary}`);
+    ical.push(`DESCRIPTION:${description}`);
+    ical.push(`CATEGORIES:${escapeText(task.projectTitle)}`);
+
+    // Add color category if supported
+    if (task.priority === 'high') {
+      ical.push('PRIORITY:1');
+    } else if (task.priority === 'low') {
+      ical.push('PRIORITY:9');
+    } else {
+      ical.push('PRIORITY:5');
+    }
+
+    ical.push('END:VEVENT');
+  });
+
+  ical.push('END:VCALENDAR');
+
+  return ical.join('\r\n');
+};
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
@@ -13,7 +81,35 @@ function CalendarView({ isOpen, onClose }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [tasks, setTasks] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [showExport, setShowExport] = useState(false);
+  const [showPublish, setShowPublish] = useState(false);
+  const [exportStatus, setExportStatus] = useState('');
   const navigate = useNavigate();
+
+  // Download iCal file
+  const handleDownloadIcal = useCallback(() => {
+    const icalContent = generateICalContent(tasks);
+    const blob = new Blob([icalContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'research-dashboard-tasks.ics';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setExportStatus('Downloaded! Import this file into Google Calendar.');
+    setTimeout(() => setExportStatus(''), 3000);
+  }, [tasks]);
+
+  // Copy iCal content to clipboard
+  const handleCopyIcal = useCallback(() => {
+    const icalContent = generateICalContent(tasks);
+    navigator.clipboard.writeText(icalContent).then(() => {
+      setExportStatus('iCal content copied to clipboard!');
+      setTimeout(() => setExportStatus(''), 3000);
+    });
+  }, [tasks]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -147,8 +243,83 @@ function CalendarView({ isOpen, onClose }) {
       <div className="calendar-modal" onClick={e => e.stopPropagation()}>
         <div className="calendar-header">
           <h2>Calendar View</h2>
-          <button className="modal-close" onClick={onClose}>&times;</button>
+          <div className="calendar-header-actions">
+            <button
+              className="btn-export-cal"
+              onClick={() => setShowExport(!showExport)}
+              title="Export to Calendar"
+            >
+              Export
+            </button>
+            <button className="modal-close" onClick={onClose}>&times;</button>
+          </div>
         </div>
+
+        {/* iCal Export Section */}
+        {showExport && (
+          <div className="ical-export-section">
+            <div className="ical-export-header">
+              <h4>Calendar Export Options</h4>
+            </div>
+
+            {/* Subscribe Option */}
+            <div className="export-option subscribe-option">
+              <div className="option-header">
+                <span className="option-icon">🔄</span>
+                <div>
+                  <strong>Subscribe (Recommended)</strong>
+                  <p>Create a subscription URL that Google Calendar can auto-update</p>
+                </div>
+              </div>
+              <button className="btn-subscribe" onClick={() => setShowPublish(true)}>
+                Set Up Subscription
+              </button>
+            </div>
+
+            <div className="export-divider">
+              <span>or</span>
+            </div>
+
+            {/* One-time Export Option */}
+            <div className="export-option download-option">
+              <div className="option-header">
+                <span className="option-icon">📥</span>
+                <div>
+                  <strong>One-time Download</strong>
+                  <p>Download .ics file to manually import (won't auto-update)</p>
+                </div>
+              </div>
+              <div className="ical-export-actions">
+                <button className="btn-download-ical" onClick={handleDownloadIcal}>
+                  Download .ics File
+                </button>
+                <button className="btn-copy-ical-content" onClick={handleCopyIcal}>
+                  Copy iCal Data
+                </button>
+              </div>
+            </div>
+
+            {exportStatus && (
+              <div className="ical-export-status">{exportStatus}</div>
+            )}
+
+            <details className="import-instructions">
+              <summary>How to manually import into Google Calendar</summary>
+              <ol>
+                <li>Click "Download .ics File" above</li>
+                <li>Open <a href="https://calendar.google.com" target="_blank" rel="noopener noreferrer">Google Calendar</a></li>
+                <li>Click the gear icon → Settings</li>
+                <li>Select "Import & Export" from the left menu</li>
+                <li>Click "Select file from your computer" and choose the downloaded file</li>
+                <li>Select the calendar to add events to and click "Import"</li>
+              </ol>
+            </details>
+
+            <div className="ical-task-count">
+              {tasks.length} task{tasks.length !== 1 ? 's' : ''} with due dates
+            </div>
+          </div>
+        )}
 
         <div className="calendar-nav">
           <button onClick={prevMonth}>&lt;</button>
@@ -200,6 +371,13 @@ function CalendarView({ isOpen, onClose }) {
           </div>
         )}
       </div>
+
+      {/* Calendar Publish Modal */}
+      <CalendarPublish
+        isOpen={showPublish}
+        onClose={() => setShowPublish(false)}
+        tasks={tasks}
+      />
     </div>
   );
 }

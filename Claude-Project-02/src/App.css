@@ -1822,6 +1822,135 @@ body {
   font-size: 1.1rem;
 }
 
+.calendar-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-export-cal {
+  padding: 6px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  color: var(--accent);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-export-cal:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* iCal Export Section */
+.ical-export-section {
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ical-export-header {
+  margin-bottom: 12px;
+}
+
+.ical-export-header h4 {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.ical-export-header p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.ical-export-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-download-ical,
+.btn-copy-ical-content {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-download-ical {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-download-ical:hover {
+  filter: brightness(1.1);
+}
+
+.btn-copy-ical-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.btn-copy-ical-content:hover {
+  background: var(--border-color);
+}
+
+.ical-export-status {
+  padding: 10px 14px;
+  background: rgba(39, 174, 96, 0.15);
+  color: #27ae60;
+  border: 1px solid rgba(39, 174, 96, 0.3);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+.ical-instructions {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.ical-instructions strong {
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.ical-instructions ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.ical-instructions li {
+  margin-bottom: 4px;
+}
+
+.ical-instructions a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.ical-instructions a:hover {
+  text-decoration: underline;
+}
+
+.ical-task-count {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 .calendar-nav {
   display: flex;
   align-items: center;
@@ -3858,6 +3987,104 @@ body {
   cursor: not-allowed;
 }
 
+/* Bulk PMID Import */
+.bulk-pmid-section {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px dashed var(--border-color);
+}
+
+.bulk-pmid-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.bulk-pmid-input {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: monospace;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.bulk-pmid-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.bulk-pmid-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bulk-import-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.btn-bulk-import {
+  padding: 8px 16px;
+  background: #9b59b6;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-bulk-import:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.btn-bulk-import:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bulk-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bulk-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #9b59b6, #3498db);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+/* Reference Number */
+.reference-number {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.95rem;
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
+.reference-citation {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
 .lookup-status {
   padding: 10px 14px;
   border-radius: 8px;
@@ -5199,6 +5426,198 @@ body {
   }
 }
 
+/* ==================== Citation Autocomplete ==================== */
+.citable-textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.citable-textarea {
+  width: 100%;
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.citable-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.citation-hint {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.citation-hint code {
+  background: var(--bg-card);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  color: var(--accent);
+}
+
+.citation-suggestions {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  min-width: 350px;
+  max-width: 500px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.suggestions-header {
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-card);
+  border-radius: 10px 10px 0 0;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.suggestion-item:last-of-type {
+  border-bottom: none;
+}
+
+.suggestion-item:hover,
+.suggestion-item.selected {
+  background: var(--bg-card);
+}
+
+.suggestion-item.selected {
+  border-left: 3px solid var(--accent);
+  padding-left: 11px;
+}
+
+.suggestion-number {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.9rem;
+  min-width: 32px;
+  flex-shrink: 0;
+}
+
+.suggestion-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.suggestion-author {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+}
+
+.suggestion-year {
+  margin-left: 6px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.suggestion-title {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.suggestions-footer {
+  padding: 8px 14px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-color);
+  border-radius: 0 0 10px 10px;
+  text-align: center;
+}
+
+/* ==================== iCal Subscribe ==================== */
+.ical-subscribe-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.ical-subscribe-section label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.ical-link-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.ical-link-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.btn-copy-ical {
+  padding: 8px 14px;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-copy-ical:hover {
+  filter: brightness(1.1);
+}
+
+.ical-instructions {
+  width: 100%;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.ical-instructions ol {
+  margin: 8px 0 0 20px;
+  padding: 0;
+}
+
+.ical-instructions li {
+  margin-bottom: 4px;
+}
+
 /* ==================== Google Integration Styles for Dashboards ==================== */
 
 /* Google Auth Bar - Used in Protocols/Results and Research Notes */
@@ -5648,4 +6067,470 @@ body {
 
 .btn-import-doc:hover {
   background: var(--border-color);
+}
+
+/* ==================== Calendar Publish Styles ==================== */
+
+.calendar-publish-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.calendar-publish-modal {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.publish-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.publish-header h3 {
+  font-size: 1.25rem;
+  color: var(--text-primary);
+}
+
+.publish-content {
+  padding: 24px;
+}
+
+.publish-intro {
+  margin-bottom: 24px;
+}
+
+.publish-intro p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.token-setup h4 {
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.token-setup ol {
+  color: var(--text-secondary);
+  padding-left: 20px;
+  margin-bottom: 16px;
+  line-height: 1.8;
+}
+
+.token-setup ol a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.token-setup ol a:hover {
+  text-decoration: underline;
+}
+
+.token-setup code {
+  background: var(--bg-card);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.token-input-group {
+  margin-bottom: 24px;
+}
+
+.token-input-group label {
+  display: block;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.token-input {
+  width: 100%;
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-family: monospace;
+}
+
+.token-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.token-input.small {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+.token-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.btn-publish {
+  width: 100%;
+  padding: 14px 24px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-publish:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.btn-publish:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.publish-connected {
+  text-align: center;
+  padding: 16px 0 24px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 24px;
+}
+
+.connection-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 20px;
+  color: var(--success);
+  font-weight: 500;
+}
+
+.connection-badge .status-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+}
+
+.last-published {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 12px;
+}
+
+.subscription-urls {
+  margin-bottom: 24px;
+}
+
+.url-group {
+  margin-bottom: 16px;
+}
+
+.url-group label {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.url-display {
+  display: flex;
+  gap: 8px;
+}
+
+.url-input {
+  flex: 1;
+  padding: 10px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.btn-copy {
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-copy:hover {
+  background: var(--border-color);
+}
+
+.subscription-instructions {
+  background: var(--bg-card);
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.subscription-instructions h4 {
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.subscription-instructions ol {
+  color: var(--text-secondary);
+  padding-left: 20px;
+  line-height: 1.8;
+  font-size: 0.9rem;
+}
+
+.subscription-instructions a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.subscription-instructions a:hover {
+  text-decoration: underline;
+}
+
+.sync-note {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.publish-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.btn-update {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 20px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-update:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.btn-update:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-view-gist {
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-view-gist:hover {
+  background: var(--border-color);
+}
+
+.btn-disconnect {
+  padding: 12px 20px;
+  background: transparent;
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  color: var(--danger);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-disconnect:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.token-update {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.task-summary {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.publish-status {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.publish-status.success {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.publish-status.error {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.publish-status.info {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.publish-status.warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Export Options in Calendar View */
+.export-option {
+  background: var(--bg-card);
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.export-option .option-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.export-option .option-icon {
+  font-size: 1.5rem;
+}
+
+.export-option strong {
+  display: block;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.export-option p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.btn-subscribe {
+  width: 100%;
+  padding: 12px 20px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-subscribe:hover {
+  background: #2563eb;
+}
+
+.export-divider {
+  text-align: center;
+  color: var(--text-muted);
+  margin: 16px 0;
+  position: relative;
+}
+
+.export-divider::before,
+.export-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 20px);
+  height: 1px;
+  background: var(--border-color);
+}
+
+.export-divider::before {
+  left: 0;
+}
+
+.export-divider::after {
+  right: 0;
+}
+
+.export-divider span {
+  padding: 0 12px;
+  background: var(--bg-secondary);
+}
+
+.import-instructions {
+  margin-top: 16px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.import-instructions summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 8px 0;
+}
+
+.import-instructions summary:hover {
+  color: var(--text-secondary);
+}
+
+.import-instructions ol {
+  padding: 12px 0 0 20px;
+  line-height: 1.8;
+}
+
+.import-instructions a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.import-instructions a:hover {
+  text-decoration: underline;
 }
