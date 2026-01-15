@@ -4,7 +4,7 @@ import { useSyncTrigger } from '../context/DataSyncContext';
 import { useTrash, TRASH_ITEM_TYPES } from '../context/TrashContext';
 import { useToast } from '../context/ToastContext';
 import LiteratureManager from './LiteratureManager';
-import CitableTextarea from './CitableTextarea';
+import FileUploadTextarea from './FileUploadTextarea';
 
 const RESEARCH_NOTES_KEY = 'research-dashboard-research-notes';
 
@@ -24,6 +24,7 @@ function ResearchNotes({ projectId, projectTitle }) {
   });
   const [isEditing, setIsEditing] = useState(null);
   const [editContent, setEditContent] = useState('');
+  const [editAttachments, setEditAttachments] = useState([]);
   const [syncStatus, setSyncStatus] = useState({ message: '', type: '' });
 
   // Load notes from localStorage
@@ -60,9 +61,10 @@ function ResearchNotes({ projectId, projectTitle }) {
 
   // Background handlers
   const handleSaveBackground = () => {
-    saveNotes({ ...notes, background: editContent });
+    saveNotes({ ...notes, background: editContent, backgroundAttachments: editAttachments });
     setIsEditing(null);
     setEditContent('');
+    setEditAttachments([]);
   };
 
   // Specific Aims handlers
@@ -425,6 +427,7 @@ Last Updated: ${new Date().toLocaleString()}`;
                     onClick={() => {
                       setIsEditing('background');
                       setEditContent(notes.background);
+                      setEditAttachments(notes.backgroundAttachments || []);
                     }}
                   >
                     Edit
@@ -468,10 +471,14 @@ Last Updated: ${new Date().toLocaleString()}`;
 
             {isEditing === 'background' ? (
               <div className="background-editor">
-                <CitableTextarea
+                <FileUploadTextarea
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
+                  attachments={editAttachments}
+                  onAttachmentsChange={setEditAttachments}
+                  variant="citable"
                   projectId={projectId}
+                  projectName={projectTitle}
                   placeholder="Enter research background, context, and significance...
 
 Include:
@@ -481,7 +488,7 @@ Include:
 - Significance and innovation
 - Preliminary data (if any)
 
-Type @cite: or [@ to insert citations from your literature library."
+Type @cite: or [@ to insert citations. Drag files to upload."
                   rows={15}
                 />
                 <div className="editor-actions">
@@ -490,6 +497,7 @@ Type @cite: or [@ to insert citations from your literature library."
                     onClick={() => {
                       setIsEditing(null);
                       setEditContent('');
+                      setEditAttachments([]);
                     }}
                   >
                     Cancel
@@ -608,11 +616,15 @@ Type @cite: or [@ to insert citations from your literature library."
 
                     <div className="aim-field">
                       <label>Details</label>
-                      <CitableTextarea
+                      <FileUploadTextarea
                         value={aim.content || aim.description || ''}
                         onChange={(e) => handleUpdateAim(aim.id, 'content', e.target.value)}
+                        attachments={aim.attachments || []}
+                        onAttachmentsChange={(attachments) => handleUpdateAim(aim.id, 'attachments', attachments)}
+                        variant="citable"
                         projectId={projectId}
-                        placeholder="Describe your specific aim including hypothesis, approach, and expected outcomes... (Type @cite: to add citations)"
+                        projectName={projectTitle}
+                        placeholder="Describe your specific aim including hypothesis, approach, and expected outcomes... (Type @cite: to add citations, drag files to upload)"
                         rows={8}
                       />
                     </div>
@@ -676,12 +688,16 @@ Type @cite: or [@ to insert citations from your literature library."
                       placeholder="Note title..."
                     />
 
-                    <CitableTextarea
+                    <FileUploadTextarea
                       className="note-content"
                       value={note.content}
                       onChange={(e) => handleUpdateNote(note.id, { content: e.target.value })}
+                      attachments={note.attachments || []}
+                      onAttachmentsChange={(attachments) => handleUpdateNote(note.id, { attachments })}
+                      variant="citable"
                       projectId={projectId}
-                      placeholder="Write your note here... (Type @cite: to add citations)"
+                      projectName={projectTitle}
+                      placeholder="Write your note here... (Type @cite: to add citations, drag files to upload)"
                       rows={4}
                     />
 

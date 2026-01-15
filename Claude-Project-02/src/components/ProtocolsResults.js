@@ -4,7 +4,7 @@ import { useGoogleAuth } from '../context/GoogleAuthContext';
 import { useSyncTrigger } from '../context/DataSyncContext';
 import { useTrash, TRASH_ITEM_TYPES } from '../context/TrashContext';
 import { useToast } from '../context/ToastContext';
-import MacroTextarea from './MacroTextarea';
+import FileUploadTextarea from './FileUploadTextarea';
 import FileAttachments from './FileAttachments';
 
 const PROTOCOLS_KEY = 'research-dashboard-protocols';
@@ -56,7 +56,8 @@ function ProtocolsResults({ projectId, projectTitle }) {
     description: '',
     date: new Date().toISOString().split('T')[0],
     fileUrl: '',
-    tags: ''
+    tags: '',
+    attachments: []
   });
   const [expandedItem, setExpandedItem] = useState(null);
   const [syncStatus, setSyncStatus] = useState({ message: '', type: '' });
@@ -100,7 +101,8 @@ function ProtocolsResults({ projectId, projectTitle }) {
       description: '',
       date: new Date().toISOString().split('T')[0],
       fileUrl: '',
-      tags: ''
+      tags: '',
+      attachments: []
     });
     setShowAddForm(false);
   };
@@ -387,10 +389,13 @@ Last Updated: ${new Date().toLocaleString()}`;
               onChange={e => setNewItem({ ...newItem, title: e.target.value })}
               autoFocus
             />
-            <MacroTextarea
-              placeholder="Description or notes... (type @ for commands)"
+            <FileUploadTextarea
+              placeholder="Description or notes... (type @ for commands, drag files to upload)"
               value={newItem.description}
               onChange={(description) => setNewItem({ ...newItem, description })}
+              attachments={newItem.attachments}
+              onAttachmentsChange={(attachments) => setNewItem({ ...newItem, attachments })}
+              variant="macro"
               rows={3}
             />
             <div className="pr-form-row">
