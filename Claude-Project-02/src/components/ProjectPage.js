@@ -488,8 +488,13 @@ function ProjectPage() {
           <>
             <div className="header-main">
               <div className="header-info">
-                <div className="project-badge" style={{ backgroundColor: project.color }}>
-                  {project.subtitle || 'Research Project'}
+                <div className="header-icon-row">
+                  <div className="project-header-icon" style={{ color: project.color }}>
+                    {ProjectIcons[project.icon] || ProjectIcons.custom}
+                  </div>
+                  <div className="project-badge" style={{ backgroundColor: project.color }}>
+                    {project.subtitle || 'Research Project'}
+                  </div>
                 </div>
                 <h1>{project.title}</h1>
                 <p className="project-hypothesis">{project.hypothesis || project.description}</p>
