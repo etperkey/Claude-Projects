@@ -11,6 +11,7 @@ function CitableTextarea({
   placeholder,
   rows = 4,
   className = '',
+  onPaste,
   ...props
 }) {
   const { getProjectReferences, formatCitation } = useReferences();
@@ -364,6 +365,16 @@ function CitableTextarea({
   // Format value for display (hide refId markers)
   const displayValue = value?.replace(/\[refId:[^\]]+\]/g, '') || '';
 
+  // Handle paste with optional external handler
+  const handlePaste = (e) => {
+    if (onPaste) {
+      onPaste(e);
+      // If external handler prevented default, don't process further
+      if (e.defaultPrevented) return;
+    }
+    // Let default paste behavior continue
+  };
+
   return (
     <div className="citable-textarea-wrapper">
       <textarea
@@ -371,6 +382,7 @@ function CitableTextarea({
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
+        onPaste={handlePaste}
         placeholder={placeholder || "Type @cite: or [@ to insert a citation, @refs to insert reference list..."}
         rows={rows}
         className={`citable-textarea ${className}`}

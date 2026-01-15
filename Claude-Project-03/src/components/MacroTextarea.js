@@ -103,10 +103,21 @@ function MacroTextarea({
   className = '',
   rows = 4,
   projectName = null,
+  onPaste,
   ...props
 }) {
   const textareaRef = useRef(null);
   const { user } = useGoogleAuth();
+
+  // Handle paste with optional external handler
+  const handlePaste = (e) => {
+    if (onPaste) {
+      onPaste(e);
+      // If external handler prevented default, don't process further
+      if (e.defaultPrevented) return;
+    }
+    // Let default paste behavior continue
+  };
 
   // Context for macros
   const context = {
@@ -148,6 +159,7 @@ function MacroTextarea({
         value={value}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
+        onPaste={handlePaste}
         placeholder={placeholder || 'Type @ for commands...'}
         className={`macro-textarea ${className}`}
         rows={rows}

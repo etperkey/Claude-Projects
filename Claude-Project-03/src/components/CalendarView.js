@@ -5,9 +5,21 @@ import CalendarPublish from './CalendarPublish';
 
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
+const CALENDAR_EVENTS_KEY = 'research-dashboard-calendar-events';
 
-// Generate iCal format for tasks
-const generateICalContent = (tasks) => {
+// Event colors for calendar events
+const EVENT_COLORS = [
+  { id: 'blue', color: '#3498db', name: 'Blue' },
+  { id: 'green', color: '#27ae60', name: 'Green' },
+  { id: 'purple', color: '#9b59b6', name: 'Purple' },
+  { id: 'orange', color: '#f39c12', name: 'Orange' },
+  { id: 'red', color: '#e74c3c', name: 'Red' },
+  { id: 'teal', color: '#00bcd4', name: 'Teal' },
+  { id: 'pink', color: '#e91e63', name: 'Pink' }
+];
+
+// Generate iCal format for tasks and events
+const generateICalContent = (tasks, events = []) => {
   const now = new Date();
   const formatDate = (dateStr) => {
     // Convert YYYY-MM-DD to YYYYMMDD format
@@ -26,22 +38,32 @@ const generateICalContent = (tasks) => {
     return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
   };
 
+  // Format date with time for iCal (YYYYMMDDTHHMMSS)
+  const formatDateTimeLocal = (dateStr, timeStr) => {
+    const date = formatDate(dateStr);
+    if (timeStr) {
+      const time = timeStr.replace(/:/g, '') + '00';
+      return `${date}T${time}`;
+    }
+    return date;
+  };
+
   let ical = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//KanLab//Tasks//EN',
+    'PRODID:-//Research Dashboard//Tasks//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:KanLab Tasks',
+    'X-WR-CALNAME:Research Dashboard Tasks',
     'X-WR-TIMEZONE:UTC'
   ];
 
+  // Add tasks
   tasks.forEach(task => {
     if (!task.dueDate) return;
 
-    const uid = `${task.id}@research-dashboard`;
+    const uid = `task-${task.id}@research-dashboard`;
     const dtstamp = formatDateTime(now);
-    const dtstart = formatDate(task.dueDate);
     const summary = escapeText(task.title);
     const description = escapeText(
       `Project: ${task.projectTitle}\\nStatus: ${task.column}\\nPriority: ${task.priority || 'medium'}`
@@ -50,13 +72,22 @@ const generateICalContent = (tasks) => {
     ical.push('BEGIN:VEVENT');
     ical.push(`UID:${uid}`);
     ical.push(`DTSTAMP:${dtstamp}`);
-    ical.push(`DTSTART;VALUE=DATE:${dtstart}`);
-    ical.push(`DTEND;VALUE=DATE:${dtstart}`);
-    ical.push(`SUMMARY:${summary}`);
+
+    // Use time if available
+    if (task.dueTime) {
+      const dtstart = formatDateTimeLocal(task.dueDate, task.dueTime);
+      ical.push(`DTSTART:${dtstart}`);
+      ical.push(`DTEND:${dtstart}`);
+    } else {
+      const dtstart = formatDate(task.dueDate);
+      ical.push(`DTSTART;VALUE=DATE:${dtstart}`);
+      ical.push(`DTEND;VALUE=DATE:${dtstart}`);
+    }
+
+    ical.push(`SUMMARY:[Task] ${summary}`);
     ical.push(`DESCRIPTION:${description}`);
     ical.push(`CATEGORIES:${escapeText(task.projectTitle)}`);
 
-    // Add color category if supported
     if (task.priority === 'high') {
       ical.push('PRIORITY:1');
     } else if (task.priority === 'low') {
@@ -65,6 +96,42 @@ const generateICalContent = (tasks) => {
       ical.push('PRIORITY:5');
     }
 
+    ical.push('END:VEVENT');
+  });
+
+  // Add calendar events
+  events.forEach(event => {
+    if (!event.date) return;
+
+    const uid = `event-${event.id}@research-dashboard`;
+    const dtstamp = formatDateTime(now);
+    const summary = escapeText(event.title);
+    const description = event.description ? escapeText(event.description) : '';
+
+    ical.push('BEGIN:VEVENT');
+    ical.push(`UID:${uid}`);
+    ical.push(`DTSTAMP:${dtstamp}`);
+
+    if (event.startTime) {
+      const dtstart = formatDateTimeLocal(event.date, event.startTime);
+      ical.push(`DTSTART:${dtstart}`);
+      if (event.endTime) {
+        const dtend = formatDateTimeLocal(event.date, event.endTime);
+        ical.push(`DTEND:${dtend}`);
+      } else {
+        ical.push(`DTEND:${dtstart}`);
+      }
+    } else {
+      const dtstart = formatDate(event.date);
+      ical.push(`DTSTART;VALUE=DATE:${dtstart}`);
+      ical.push(`DTEND;VALUE=DATE:${dtstart}`);
+    }
+
+    ical.push(`SUMMARY:${summary}`);
+    if (description) {
+      ical.push(`DESCRIPTION:${description}`);
+    }
+    ical.push('CATEGORIES:Calendar Event');
     ical.push('END:VEVENT');
   });
 
@@ -80,36 +147,107 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
 function CalendarView({ isOpen, onClose }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [tasks, setTasks] = useState([]);
+  const [events, setEvents] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [showExport, setShowExport] = useState(false);
   const [showPublish, setShowPublish] = useState(false);
   const [exportStatus, setExportStatus] = useState('');
+  const [showEventForm, setShowEventForm] = useState(false);
+  const [editingEvent, setEditingEvent] = useState(null);
+  const [newEvent, setNewEvent] = useState({
+    title: '',
+    date: '',
+    startTime: '',
+    endTime: '',
+    description: '',
+    color: 'blue'
+  });
   const navigate = useNavigate();
 
   // Download iCal file
   const handleDownloadIcal = useCallback(() => {
-    const icalContent = generateICalContent(tasks);
+    const icalContent = generateICalContent(tasks, events);
     const blob = new Blob([icalContent], { type: 'text/calendar;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'research-dashboard-tasks.ics';
+    link.download = 'research-dashboard-calendar.ics';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     setExportStatus('Downloaded! Import this file into Google Calendar.');
     setTimeout(() => setExportStatus(''), 3000);
-  }, [tasks]);
+  }, [tasks, events]);
 
   // Copy iCal content to clipboard
   const handleCopyIcal = useCallback(() => {
-    const icalContent = generateICalContent(tasks);
+    const icalContent = generateICalContent(tasks, events);
     navigator.clipboard.writeText(icalContent).then(() => {
       setExportStatus('iCal content copied to clipboard!');
       setTimeout(() => setExportStatus(''), 3000);
     });
-  }, [tasks]);
+  }, [tasks, events]);
+
+  // Load events from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(CALENDAR_EVENTS_KEY);
+      if (saved) setEvents(JSON.parse(saved));
+    } catch {}
+  }, []);
+
+  // Save events to localStorage
+  const saveEvents = (newEvents) => {
+    setEvents(newEvents);
+    localStorage.setItem(CALENDAR_EVENTS_KEY, JSON.stringify(newEvents));
+  };
+
+  // Add or update event
+  const handleSaveEvent = () => {
+    if (!newEvent.title.trim() || !newEvent.date) return;
+
+    if (editingEvent) {
+      const updated = events.map(e =>
+        e.id === editingEvent.id ? { ...newEvent, id: editingEvent.id } : e
+      );
+      saveEvents(updated);
+    } else {
+      const event = {
+        ...newEvent,
+        id: Date.now().toString()
+      };
+      saveEvents([...events, event]);
+    }
+
+    setNewEvent({ title: '', date: '', startTime: '', endTime: '', description: '', color: 'blue' });
+    setEditingEvent(null);
+    setShowEventForm(false);
+  };
+
+  // Delete event
+  const handleDeleteEvent = (eventId) => {
+    if (window.confirm('Delete this event?')) {
+      saveEvents(events.filter(e => e.id !== eventId));
+    }
+  };
+
+  // Edit event
+  const handleEditEvent = (event) => {
+    setNewEvent({ ...event });
+    setEditingEvent(event);
+    setShowEventForm(true);
+  };
+
+  // Open event form for a specific day
+  const handleAddEventForDay = (day) => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    setNewEvent({ title: '', date: dateStr, startTime: '', endTime: '', description: '', color: 'blue' });
+    setEditingEvent(null);
+    setShowEventForm(true);
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -195,6 +333,11 @@ function CalendarView({ isOpen, onClose }) {
     return tasks.filter(t => t.dueDate === dateStr);
   };
 
+  const getEventsForDay = (day) => {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return events.filter(e => e.date === dateStr);
+  };
+
   const isToday = (day) => {
     return today.getFullYear() === year &&
            today.getMonth() === month &&
@@ -204,6 +347,16 @@ function CalendarView({ isOpen, onClose }) {
   const handleTaskClick = (task) => {
     navigate(`/project/${task.projectId}`);
     onClose();
+  };
+
+  // Format time for display
+  const formatTimeDisplay = (timeStr) => {
+    if (!timeStr) return '';
+    const [hours, minutes] = timeStr.split(':');
+    const h = parseInt(hours);
+    const ampm = h >= 12 ? 'pm' : 'am';
+    const hour12 = h % 12 || 12;
+    return `${hour12}:${minutes}${ampm}`;
   };
 
   const renderCalendarDays = () => {
@@ -217,6 +370,8 @@ function CalendarView({ isOpen, onClose }) {
     // Days of the month
     for (let day = 1; day <= daysInMonth; day++) {
       const dayTasks = getTasksForDay(day);
+      const dayEvents = getEventsForDay(day);
+      const totalItems = dayTasks.length + dayEvents.length;
       const hasOverdue = dayTasks.some(t => {
         const dueDate = new Date(t.dueDate);
         return dueDate < today && t.column !== 'done';
@@ -225,21 +380,30 @@ function CalendarView({ isOpen, onClose }) {
       days.push(
         <div
           key={day}
-          className={`calendar-day ${isToday(day) ? 'today' : ''} ${selectedDay === day ? 'selected' : ''} ${dayTasks.length > 0 ? 'has-tasks' : ''} ${hasOverdue ? 'has-overdue' : ''}`}
+          className={`calendar-day ${isToday(day) ? 'today' : ''} ${selectedDay === day ? 'selected' : ''} ${totalItems > 0 ? 'has-tasks' : ''} ${hasOverdue ? 'has-overdue' : ''}`}
           onClick={() => setSelectedDay(day)}
         >
           <span className="day-number">{day}</span>
-          {dayTasks.length > 0 && (
+          {totalItems > 0 && (
             <div className="day-tasks-preview">
-              {dayTasks.slice(0, 3).map(task => (
+              {/* Show event dots first */}
+              {dayEvents.slice(0, 2).map(event => (
                 <div
-                  key={task.id}
+                  key={`event-${event.id}`}
+                  className="event-dot"
+                  style={{ backgroundColor: EVENT_COLORS.find(c => c.id === event.color)?.color || '#3498db' }}
+                />
+              ))}
+              {/* Then task dots */}
+              {dayTasks.slice(0, 3 - Math.min(dayEvents.length, 2)).map(task => (
+                <div
+                  key={`task-${task.id}`}
                   className="task-dot"
                   style={{ backgroundColor: task.projectColor }}
                 />
               ))}
-              {dayTasks.length > 3 && (
-                <span className="more-tasks">+{dayTasks.length - 3}</span>
+              {totalItems > 3 && (
+                <span className="more-tasks">+{totalItems - 3}</span>
               )}
             </div>
           )}
@@ -251,6 +415,7 @@ function CalendarView({ isOpen, onClose }) {
   };
 
   const selectedDayTasks = selectedDay ? getTasksForDay(selectedDay) : [];
+  const selectedDayEvents = selectedDay ? getEventsForDay(selectedDay) : [];
 
   return (
     <div className="calendar-overlay" onClick={onClose}>
@@ -338,9 +503,24 @@ function CalendarView({ isOpen, onClose }) {
 
             <div className="ical-task-count">
               {tasks.length} task{tasks.length !== 1 ? 's' : ''} with due dates
+              {events.length > 0 && ` • ${events.length} event${events.length !== 1 ? 's' : ''}`}
             </div>
           </div>
         )}
+
+        {/* Add Event Button */}
+        <div className="calendar-actions-bar">
+          <button
+            className="btn-add-event"
+            onClick={() => {
+              setNewEvent({ title: '', date: '', startTime: '', endTime: '', description: '', color: 'blue' });
+              setEditingEvent(null);
+              setShowEventForm(true);
+            }}
+          >
+            + Add Event
+          </button>
+        </div>
 
         <div className="calendar-nav">
           <button onClick={prevMonth}>&lt;</button>
@@ -362,14 +542,57 @@ function CalendarView({ isOpen, onClose }) {
 
         {selectedDay && (
           <div className="calendar-day-detail">
-            <h4>
-              {MONTHS[month]} {selectedDay}, {year}
-              {selectedDayTasks.length > 0 && ` (${selectedDayTasks.length} tasks)`}
-            </h4>
-            {selectedDayTasks.length === 0 ? (
-              <p className="no-tasks">No tasks due on this day</p>
-            ) : (
+            <div className="day-detail-header">
+              <h4>
+                {MONTHS[month]} {selectedDay}, {year}
+                {(selectedDayTasks.length > 0 || selectedDayEvents.length > 0) &&
+                  ` (${selectedDayTasks.length} task${selectedDayTasks.length !== 1 ? 's' : ''}, ${selectedDayEvents.length} event${selectedDayEvents.length !== 1 ? 's' : ''})`}
+              </h4>
+              <button
+                className="btn-add-event-day"
+                onClick={() => handleAddEventForDay(selectedDay)}
+                title="Add event for this day"
+              >
+                +
+              </button>
+            </div>
+
+            {/* Events for this day */}
+            {selectedDayEvents.length > 0 && (
+              <div className="day-events-list">
+                <h5>Events</h5>
+                {selectedDayEvents.map(event => (
+                  <div
+                    key={event.id}
+                    className="calendar-event-item"
+                  >
+                    <div
+                      className="event-color"
+                      style={{ backgroundColor: EVENT_COLORS.find(c => c.id === event.color)?.color || '#3498db' }}
+                    />
+                    <div className="event-info">
+                      <span className="event-name">{event.title}</span>
+                      {event.startTime && (
+                        <span className="event-time">
+                          {formatTimeDisplay(event.startTime)}
+                          {event.endTime && ` - ${formatTimeDisplay(event.endTime)}`}
+                        </span>
+                      )}
+                      {event.description && <span className="event-desc">{event.description}</span>}
+                    </div>
+                    <div className="event-actions">
+                      <button onClick={() => handleEditEvent(event)} title="Edit">✏️</button>
+                      <button onClick={() => handleDeleteEvent(event.id)} title="Delete">🗑️</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Tasks for this day */}
+            {selectedDayTasks.length > 0 && (
               <div className="day-tasks-list">
+                <h5>Tasks</h5>
                 {selectedDayTasks.map(task => (
                   <div
                     key={task.id}
@@ -383,11 +606,16 @@ function CalendarView({ isOpen, onClose }) {
                     <div className="task-info">
                       <span className="task-name">{task.title}</span>
                       <span className="task-project">{task.projectTitle}</span>
+                      {task.dueTime && <span className="task-time">{formatTimeDisplay(task.dueTime)}</span>}
                     </div>
                     <span className={`task-priority-dot ${task.priority}`} />
                   </div>
                 ))}
               </div>
+            )}
+
+            {selectedDayTasks.length === 0 && selectedDayEvents.length === 0 && (
+              <p className="no-tasks">No tasks or events on this day</p>
             )}
           </div>
         )}
@@ -399,6 +627,91 @@ function CalendarView({ isOpen, onClose }) {
         onClose={() => setShowPublish(false)}
         tasks={tasks}
       />
+
+      {/* Event Form Modal */}
+      {showEventForm && (
+        <div className="event-form-overlay" onClick={() => setShowEventForm(false)}>
+          <div className="event-form-modal" onClick={e => e.stopPropagation()}>
+            <div className="event-form-header">
+              <h3>{editingEvent ? 'Edit Event' : 'New Event'}</h3>
+              <button className="modal-close" onClick={() => setShowEventForm(false)}>&times;</button>
+            </div>
+            <div className="event-form-body">
+              <div className="form-group">
+                <label>Title *</label>
+                <input
+                  type="text"
+                  value={newEvent.title}
+                  onChange={e => setNewEvent({ ...newEvent, title: e.target.value })}
+                  placeholder="Event title..."
+                  autoFocus
+                />
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Date *</label>
+                  <input
+                    type="date"
+                    value={newEvent.date}
+                    onChange={e => setNewEvent({ ...newEvent, date: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Color</label>
+                  <div className="color-picker">
+                    {EVENT_COLORS.map(c => (
+                      <button
+                        key={c.id}
+                        className={`color-option ${newEvent.color === c.id ? 'selected' : ''}`}
+                        style={{ backgroundColor: c.color }}
+                        onClick={() => setNewEvent({ ...newEvent, color: c.id })}
+                        title={c.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Start Time</label>
+                  <input
+                    type="time"
+                    value={newEvent.startTime}
+                    onChange={e => setNewEvent({ ...newEvent, startTime: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>End Time</label>
+                  <input
+                    type="time"
+                    value={newEvent.endTime}
+                    onChange={e => setNewEvent({ ...newEvent, endTime: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label>Description</label>
+                <textarea
+                  value={newEvent.description}
+                  onChange={e => setNewEvent({ ...newEvent, description: e.target.value })}
+                  placeholder="Event description (optional)..."
+                  rows={3}
+                />
+              </div>
+            </div>
+            <div className="event-form-footer">
+              <button className="btn-cancel" onClick={() => setShowEventForm(false)}>Cancel</button>
+              <button
+                className="btn-save"
+                onClick={handleSaveEvent}
+                disabled={!newEvent.title.trim() || !newEvent.date}
+              >
+                {editingEvent ? 'Update' : 'Create'} Event
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

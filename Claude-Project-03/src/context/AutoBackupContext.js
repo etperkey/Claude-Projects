@@ -4,9 +4,9 @@ import { TOAST_TYPES } from './ToastContext';
 
 const AutoBackupContext = createContext(null);
 
-const BACKUP_SETTINGS_KEY = 'kanlab-backup-settings';
-const LAST_BACKUP_KEY = 'kanlab-last-backup';
-const DRIVE_BACKUP_FOLDER = 'KanLab Backups';
+const BACKUP_SETTINGS_KEY = 'research-dashboard-backup-settings';
+const LAST_BACKUP_KEY = 'research-dashboard-last-backup';
+const DRIVE_BACKUP_FOLDER = 'Research Dashboard Backups';
 
 // Get browser and machine info for backup filename
 const getDeviceInfo = () => {
@@ -68,7 +68,7 @@ const getAllAppData = () => {
   const exportData = {
     exportVersion: '1.0',
     exportDate: new Date().toISOString(),
-    appName: 'KanLab',
+    appName: 'Research Dashboard',
     data: {}
   };
 
@@ -348,9 +348,9 @@ export function AutoBackupProvider({ children }) {
 
       const importData = response.result;
 
-      // Validate the import file (accept both KanLab and Research Dashboard)
-      if (!importData.appName || (importData.appName !== 'KanLab' && importData.appName !== 'Research Dashboard')) {
-        emitToast('Invalid backup file. Please select a valid KanLab backup.', TOAST_TYPES.ERROR);
+      // Validate the import file
+      if (!importData.appName || importData.appName !== 'Research Dashboard') {
+        emitToast('Invalid backup file. Please select a valid Research Dashboard backup.', TOAST_TYPES.ERROR);
         return false;
       }
 
@@ -416,7 +416,7 @@ export function AutoBackupProvider({ children }) {
 
       const importData = response.result;
 
-      if (!importData.appName || (importData.appName !== 'KanLab' && importData.appName !== 'Research Dashboard')) {
+      if (!importData.appName || importData.appName !== 'Research Dashboard') {
         emitToast('Invalid backup file format', TOAST_TYPES.ERROR);
         return false;
       }
@@ -502,6 +502,7 @@ export function AutoBackupProvider({ children }) {
     if (!settings.backupOnExit) return;
 
     const handleBeforeUnload = () => {
+      // Can only do synchronous operations here
       // Store a flag to backup on next load if we have unsaved changes
       const now = new Date();
       if (lastBackup) {
@@ -510,7 +511,7 @@ export function AutoBackupProvider({ children }) {
           return; // Recent backup exists, no need
         }
       }
-      localStorage.setItem('kanlab-needs-backup', 'true');
+      localStorage.setItem('research-dashboard-needs-backup', 'true');
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -519,9 +520,9 @@ export function AutoBackupProvider({ children }) {
 
   // Check for pending backup on load
   useEffect(() => {
-    const needsBackup = localStorage.getItem('kanlab-needs-backup');
+    const needsBackup = localStorage.getItem('research-dashboard-needs-backup');
     if (needsBackup === 'true' && isSignedIn && gapiLoaded) {
-      localStorage.removeItem('kanlab-needs-backup');
+      localStorage.removeItem('research-dashboard-needs-backup');
       // Delay to let app initialize
       setTimeout(() => {
         exportToGoogleDrive(true, true); // silent, auto backup

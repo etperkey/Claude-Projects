@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useGoogleAuth } from '../context/GoogleAuthContext';
 import { useSyncTrigger } from '../context/DataSyncContext';
 import { researchProjects } from '../data/projects';
-import MacroTextarea from './MacroTextarea';
+import FileUploadTextarea from './FileUploadTextarea';
 import { createAuditEntry, diffObjects, CHANGE_TYPES, formatAuditEntry, shouldAutoLock } from '../utils/auditTrail';
 
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
@@ -24,7 +24,8 @@ function LabNotebook({ isOpen, onClose }) {
     title: '',
     content: '',
     projectId: '',
-    tags: []
+    tags: [],
+    attachments: []
   });
   const [tagInput, setTagInput] = useState('');
   const [filterProject, setFilterProject] = useState('all');
@@ -154,6 +155,7 @@ function LabNotebook({ isOpen, onClose }) {
       content: newEntry.content,
       projectId: newEntry.projectId || null,
       tags: newEntry.tags,
+      attachments: newEntry.attachments || [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       googleDocId: null,
@@ -171,7 +173,7 @@ function LabNotebook({ isOpen, onClose }) {
     };
 
     saveEntries([entry, ...entries]);
-    setNewEntry({ title: '', content: '', projectId: '', tags: [] });
+    setNewEntry({ title: '', content: '', projectId: '', tags: [], attachments: [] });
     setShowNewEntry(false);
   };
 
@@ -606,11 +608,14 @@ function LabNotebook({ isOpen, onClose }) {
                 autoFocus
               />
 
-              <MacroTextarea
+              <FileUploadTextarea
                 className="entry-content-input"
-                placeholder="Write your lab notes here... (type @ for commands)"
+                placeholder="Write your lab notes here... (type @ for commands, drag files to upload)"
                 value={newEntry.content}
                 onChange={(content) => setNewEntry({ ...newEntry, content })}
+                attachments={newEntry.attachments}
+                onAttachmentsChange={(attachments) => setNewEntry({ ...newEntry, attachments })}
+                variant="macro"
                 rows={8}
               />
 
@@ -655,7 +660,7 @@ function LabNotebook({ isOpen, onClose }) {
               <div className="entry-form-actions">
                 <button className="btn-cancel" onClick={() => {
                   setShowNewEntry(false);
-                  setNewEntry({ title: '', content: '', projectId: '', tags: [] });
+                  setNewEntry({ title: '', content: '', projectId: '', tags: [], attachments: [] });
                 }}>
                   Cancel
                 </button>
@@ -761,9 +766,12 @@ function LabNotebook({ isOpen, onClose }) {
                             </div>
                           )}
                           <div className="entry-full-content">
-                            <MacroTextarea
+                            <FileUploadTextarea
                               value={entry.content}
                               onChange={(content) => handleUpdateEntry(entry.id, { content })}
+                              attachments={entry.attachments || []}
+                              onAttachmentsChange={(attachments) => handleUpdateEntry(entry.id, { attachments })}
+                              variant="macro"
                               rows={10}
                               disabled={entry.isLocked}
                             />
