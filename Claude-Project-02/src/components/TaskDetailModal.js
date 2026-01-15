@@ -26,6 +26,7 @@ function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete, al
     description: '',
     priority: 'medium',
     dueDate: '',
+    dueTime: '',
     links: [],
     labels: [],
     checklist: [],
@@ -44,6 +45,7 @@ function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete, al
         description: task.description || '',
         priority: task.priority || 'medium',
         dueDate: task.dueDate || '',
+        dueTime: task.dueTime || '',
         links: task.links || [],
         labels: task.labels || [],
         checklist: task.checklist || [],
@@ -187,8 +189,25 @@ function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete, al
               <input
                 type="date"
                 className={`date-input ${isOverdue ? 'overdue' : ''}`}
-                value={editedTask.dueDate}
-                onChange={e => setEditedTask({ ...editedTask, dueDate: e.target.value })}
+                value={editedTask.dueDate?.split('T')[0] || editedTask.dueDate || ''}
+                onChange={e => {
+                  const dateVal = e.target.value;
+                  const timeVal = editedTask.dueTime || '';
+                  setEditedTask({
+                    ...editedTask,
+                    dueDate: dateVal,
+                    dueTime: timeVal
+                  });
+                }}
+              />
+            </div>
+            <div className="task-meta-item">
+              <label>Due Time <span className="optional-hint">(optional)</span></label>
+              <input
+                type="time"
+                className="time-input"
+                value={editedTask.dueTime || ''}
+                onChange={e => setEditedTask({ ...editedTask, dueTime: e.target.value })}
               />
             </div>
           </div>

@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chicago Dive Bar Calendar 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Permanent+Marker&family=Rock+Salt&family=Roboto+Mono:wght@400;700&family=Anton&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --paper-cream: #f4e9d8;
+            --paper-aged: #e8dcc8;
+            --ink-black: #1a1a1a;
+            --punk-red: #c41e3a;
+            --mustard: #d4a017;
+            --burnt-orange: #cc5500;
+            --olive: #556b2f;
+            --brown: #5c4033;
+            --tape-yellow: rgba(255, 235, 150, 0.7);
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background: #2a2a2a;
+            color: var(--ink-black);
+            line-height: 1.5;
+        }
+
+        /* Paper texture overlay */
+        .paper-texture {
+            position: relative;
+        }
+        .paper-texture::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        /* ==================== COVER PAGE ==================== */
+        .cover-page {
+            min-height: 100vh;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0,0,0,0.03) 2px,
+                    rgba(0,0,0,0.03) 4px
+                ),
+                linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(196, 30, 58, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(212, 160, 23, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Punk stencil style title */
+        .cover-title-block {
+            background: var(--punk-red);
+            padding: 20px 60px;
+            transform: rotate(-2deg);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .neon-sign {
+            font-family: 'Anton', sans-serif;
+            font-size: 5rem;
+            color: #fff;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            -webkit-text-stroke: 2px #000;
+        }
+
+        .cover-subtitle {
+            font-family: 'Special Elite', cursive;
+            font-size: 2rem;
+            color: var(--mustard);
+            margin-top: 30px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-year {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 12rem;
+            color: var(--paper-cream);
+            text-shadow:
+                4px 4px 0 var(--punk-red),
+                8px 8px 0 rgba(0,0,0,0.3);
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+            transform: rotate(3deg);
+        }
+
+        .cover-tagline {
+            font-family: 'Rock Salt', cursive;
+            font-size: 1.1rem;
+            color: #aaa;
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+            line-height: 2;
+        }
+
+        .beer-icons {
+            font-size: 3rem;
+            margin-top: 25px;
+            position: relative;
+            z-index: 1;
+            filter: grayscale(50%);
+        }
+
+        .intro-text {
+            max-width: 600px;
+            margin-top: 50px;
+            padding: 25px 30px;
+            background: var(--paper-cream);
+            color: var(--ink-black);
+            transform: rotate(1deg);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+            position: relative;
+            z-index: 1;
+            font-family: 'Special Elite', cursive;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .intro-text::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 30%;
+            width: 80px;
+            height: 25px;
+            background: var(--tape-yellow);
+            transform: rotate(-3deg);
+        }
+
+        .bar-list-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 40px;
+            max-width: 700px;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bar-list-preview span {
+            font-family: 'Special Elite', cursive;
+            background: rgba(255,255,255,0.1);
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            color: #ccc;
+            border: 1px dashed #555;
+        }
+
+        /* ==================== MONTH PAGES ==================== */
+        .month-page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            page-break-after: always;
+            background: var(--paper-cream);
+            position: relative;
+        }
+
+        /* Spiral binding holes */
+        .month-page::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            background: repeating-linear-gradient(
+                180deg,
+                transparent 0px,
+                transparent 40px,
+                #333 40px,
+                #333 50px,
+                transparent 50px,
+                transparent 90px
+            );
+            z-index: 10;
+        }
+
+        /* Red margin line */
+        .month-page::after {
+            content: '';
+            position: absolute;
+            left: 80px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--punk-red);
+            opacity: 0.5;
+        }
+
+        .bar-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            padding-left: 90px;
+        }
+
+        .photo-container {
+            position: relative;
+            min-height: 380px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Polaroid style photo frame */
+        .photo-placeholder {
+            width: 100%;
+            max-width: 350px;
+            background: #fff;
+            padding: 15px;
+            padding-bottom: 10px;
+            box-shadow:
+                0 4px 6px rgba(0,0,0,0.1),
+                0 10px 30px rgba(0,0,0,0.15);
+            transform: rotate(-2deg);
+            position: relative;
+            overflow: visible;
+        }
+
+        /* Photo image area */
+        .photo-placeholder::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 0;
+            padding-bottom: 70%;
+            background-size: cover;
+            background-position: center;
+            filter: contrast(1.1) saturate(0.9);
+            margin-bottom: 0;
+        }
+
+        /* Tape effect on polaroid */
+        .photo-placeholder::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%) rotate(2deg);
+            width: 100px;
+            height: 30px;
+            background: var(--tape-yellow);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .photo-icon, .add-photo-text {
+            display: none;
+        }
+
+        /* Photo backgrounds for each bar - ACTUAL BAR PHOTOS */
+        .january .photo-placeholder::before {
+            background-image: url('https://scoundrelsfieldguide.com/wp-content/uploads/2022/08/Chicago-LL-Tavern-4-scaled.jpg');
+        }
+        .february .photo-placeholder::before {
+            background-image: url('https://scoundrelsfieldguide.com/wp-content/uploads/2022/08/Chicago-Old-Town-Ale-House-11-scaled.jpg');
+        }
+        .march .photo-placeholder::before {
+            background-image: url('https://scoundrelsfieldguide.com/wp-content/uploads/2022/08/Chicago-Simons-Tavern-3-scaled.jpg');
+        }
+        .april .photo-placeholder::before {
+            background-image: url('https://scoundrelsfieldguide.com/wp-content/uploads/2022/08/Chicago-Carols-Pub-1-scaled.jpg');
+        }
+        .may .photo-placeholder::before {
+            background-image: url('https://scoundrelsfieldguide.com/wp-content/uploads/2022/10/Chicago-Rainbo-Club-3-scaled.jpg');
+        }
+        .june .photo-placeholder::before {
+            background-image: url('https://scoundrelsfieldguide.com/wp-content/uploads/2022/08/Chicago-Nisei-Lounge-1-scaled.jpg');
+        }
+        .july .photo-placeholder::before {
+            background-image: url('https://scoundrelsfieldguide.com/wp-content/uploads/2024/11/Chicago-Richards-Bar-5-scaled.jpg');
+        }
+        .august .photo-placeholder::before {
+            background-image: url('https://scoundrelsfieldguide.com/wp-content/uploads/2022/10/Chicago-Inner-Town-Pub-19-scaled.jpg');
+        }
+        .september .photo-placeholder::before {
+            background-image: url('https://scoundrelsfieldguide.com/wp-content/uploads/2022/10/Chicago-Rossis-Liquors-14-scaled.jpg');
+        }
+        .october .photo-placeholder::before {
+            background-image: url('https://images.squarespace-cdn.com/content/v1/5f98312993cd044dcd33c5cf/eb59745b-ce7a-401a-9107-97b4f3bd972c/20240315_190309.jpg');
+        }
+        .november .photo-placeholder::before {
+            background-image: url('https://www.lizardsliquidlounge.com/wplizard/wp-content/uploads/2021/07/141997136_10159031058228007_6434210254057997275_n-1024x768.jpg');
+        }
+        .december .photo-placeholder::before {
+            background-image: url('https://i0.wp.com/bcc-newspack.s3.amazonaws.com/uploads/2025/11/111325-DIVE-BARS-Double-Bubble-Colin-Boyle-8995-1024x682.jpg');
+        }
+
+        .photo-caption {
+            position: relative;
+            z-index: 5;
+            margin-top: 10px;
+            padding: 10px 8px 8px 8px;
+            font-family: 'Special Elite', cursive;
+            font-size: 0.75rem;
+            color: #444;
+            text-align: center;
+            line-height: 1.5;
+            background: #fff;
+        }
+
+        .caption-title {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 0.9rem;
+            color: var(--punk-red);
+            margin-bottom: 8px;
+            display: block;
+            letter-spacing: 0.02em;
+        }
+
+        .caption-fact {
+            font-family: 'Special Elite', cursive;
+            font-size: 0.72rem;
+            color: #444;
+            line-height: 1.5;
+            display: block;
+        }
+
+        .bar-info {
+            padding: 30px 40px 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    var(--paper-cream) 0px,
+                    var(--paper-cream) 24px,
+                    #d4c9b8 24px,
+                    #d4c9b8 25px
+                );
+        }
+
+        .month-name {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.5rem;
+            color: var(--punk-red);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 3px solid var(--ink-black);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .bar-name {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 1.8rem;
+            color: var(--ink-black);
+            transform: rotate(-1deg);
+            margin-top: 5px;
+        }
+
+        .bar-address {
+            font-family: 'Special Elite', cursive;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .established {
+            display: inline-block;
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 4px 12px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-top: 12px;
+            align-self: flex-start;
+        }
+
+        .bar-description {
+            font-family: 'Special Elite', cursive;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: #333;
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255,255,255,0.5);
+            border-left: 3px solid var(--mustard);
+        }
+
+        .bar-details {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .detail-item {
+            font-family: 'Roboto Mono', monospace;
+            background: var(--paper-aged);
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            border: 1px dashed #999;
+        }
+
+        .detail-item span {
+            color: var(--punk-red);
+            font-weight: 700;
+        }
+
+        .signature {
+            font-family: 'Rock Salt', cursive;
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 15px;
+            transform: rotate(-1deg);
+        }
+
+        /* ==================== CALENDAR GRID ==================== */
+        .calendar-grid {
+            padding: 20px 40px 40px 100px;
+            background: var(--paper-cream);
+        }
+
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .calendar-table th {
+            font-family: 'Anton', sans-serif;
+            font-size: 1rem;
+            color: #fff;
+            background: var(--ink-black);
+            padding: 12px 8px;
+            text-align: center;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .calendar-table td {
+            height: 65px;
+            vertical-align: top;
+            padding: 8px;
+            border: 1px solid #ddd;
+            background: #fff;
+            transition: background 0.2s;
+        }
+
+        .calendar-table td:hover {
+            background: #f5f0e5;
+        }
+
+        .day-number {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--ink-black);
+        }
+
+        .calendar-table td.empty {
+            background: #f0ebe0;
+        }
+
+        .calendar-table td.weekend .day-number {
+            color: var(--punk-red);
+        }
+
+        /* ==================== PRINT STYLES ==================== */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                margin: 0;
+                padding: 0;
+                /* High quality rendering */
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+                text-rendering: optimizeLegibility;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            html, body {
+                width: 11in;
+                height: 8.5in;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                overflow: hidden;
+            }
+
+            /* Page size: 11x8.5 landscape - NO MARGINS */
+            @page {
+                size: 11in 8.5in landscape;
+                margin: 0 !important;
+            }
+
+            /* Cover page styling for print - FULL BLEED */
+            .cover-page {
+                width: 100%;
+                height: 100vh;
+                min-height: 100vh;
+                page-break-after: always;
+                break-after: page;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 0.3in;
+                box-sizing: border-box;
+            }
+
+            .cover-page::before {
+                display: none;
+            }
+
+            .neon-sign {
+                font-size: 3.5rem;
+            }
+
+            .cover-year {
+                font-size: 7rem;
+            }
+
+            .cover-subtitle {
+                font-size: 1.5rem;
+            }
+
+            .intro-text {
+                font-size: 0.8rem;
+                max-width: 500px;
+                padding: 15px 20px;
+            }
+
+            .bar-list-preview {
+                margin-top: 20px;
+            }
+
+            .bar-list-preview span {
+                font-size: 0.65rem;
+                padding: 3px 8px;
+            }
+
+            /* Month page styling for print - FULL BLEED */
+            .month-page {
+                width: 100%;
+                height: 100vh;
+                min-height: 100vh;
+                page-break-after: always;
+                break-after: page;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                display: grid;
+                grid-template-rows: 52% 48%;
+                background: var(--paper-cream) !important;
+                box-sizing: border-box;
+            }
+
+            /* Remove spiral binding effect for print */
+            .month-page::before {
+                display: none;
+            }
+
+            /* Remove red margin line for cleaner print */
+            .month-page::after {
+                display: none;
+            }
+
+            .bar-section {
+                padding: 0.2in 0.3in 0.1in 0.3in;
+                grid-template-columns: 42% 58%;
+            }
+
+            .photo-container {
+                min-height: unset;
+                padding: 10px;
+            }
+
+            .photo-placeholder {
+                max-width: 260px;
+                padding: 8px;
+                padding-bottom: 6px;
+            }
+
+            .photo-placeholder::before {
+                padding-bottom: 65%;
+            }
+
+            .photo-placeholder::after {
+                height: 18px;
+                width: 60px;
+                top: -6px;
+            }
+
+            .photo-caption {
+                margin-top: 6px;
+                padding: 6px 4px 4px 4px;
+            }
+
+            .caption-title {
+                font-size: 0.58rem;
+                margin-bottom: 4px;
+            }
+
+            .caption-fact {
+                font-size: 0.5rem;
+                line-height: 1.4;
+            }
+
+            .bar-info {
+                padding: 15px 20px 15px 10px;
+            }
+
+            .month-name {
+                font-size: 1.8rem;
+                padding-bottom: 5px;
+                margin-bottom: 5px;
+                border-bottom-width: 2px;
+            }
+
+            .bar-name {
+                font-size: 1.3rem;
+            }
+
+            .bar-address {
+                font-size: 0.7rem;
+                margin-top: 4px;
+            }
+
+            .established {
+                font-size: 0.6rem;
+                padding: 2px 8px;
+                margin-top: 6px;
+            }
+
+            .bar-description {
+                font-size: 0.65rem;
+                line-height: 1.5;
+                margin-top: 8px;
+                padding: 6px;
+            }
+
+            .bar-details {
+                margin-top: 8px;
+                gap: 6px;
+            }
+
+            .detail-item {
+                font-size: 0.55rem;
+                padding: 3px 6px;
+            }
+
+            .signature {
+                font-size: 0.6rem;
+                margin-top: 8px;
+            }
+
+            /* Calendar grid for print - FULL WIDTH */
+            .calendar-grid {
+                padding: 0.1in 0.3in 0.2in 0.3in;
+            }
+
+            .calendar-table {
+                box-shadow: none;
+                border: 1px solid #333;
+            }
+
+            .calendar-table th {
+                font-size: 0.7rem;
+                padding: 6px 4px;
+            }
+
+            .calendar-table td {
+                height: 38px;
+                padding: 4px;
+                border: 1px solid #ccc;
+            }
+
+            .day-number {
+                font-size: 0.85rem;
+            }
+
+            /* Photo credits page */
+            .cover-page ~ div:last-of-type {
+                page-break-before: avoid;
+            }
+
+            /* Hide scrollbars and other UI elements */
+            ::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        @media screen and (max-width: 900px) {
+            .bar-section {
+                grid-template-columns: 1fr;
+                padding-left: 20px;
+            }
+
+            .month-page::before,
+            .month-page::after {
+                display: none;
+            }
+
+            .calendar-grid {
+                padding-left: 20px;
+            }
+
+            .neon-sign {
+                font-size: 3rem;
+            }
+
+            .cover-year {
+                font-size: 6rem;
+            }
+        }
+
+        /* Coffee stain effect for authenticity */
+        .coffee-stain {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse, rgba(139, 90, 43, 0.15) 0%, rgba(139, 90, 43, 0.05) 50%, transparent 70%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== COVER PAGE ==================== -->
+    <div class="cover-page">
+        <div class="cover-title-block">
+            <div class="neon-sign">CHICAGO</div>
+        </div>
+        <div class="cover-subtitle">DIVE BAR CALENDAR</div>
+        <div class="cover-year">2026</div>
+        <div class="beer-icons">&#127866; &#127867; &#127866;</div>
+        <div class="cover-tagline">"Where cash is king, the jukebox rules, and the Chicago Handshake flows freely"</div>
+        <div class="intro-text">
+            Twelve months. Twelve legendary watering holes. From the neon-lit booths of L&L Tavern
+            where serial killers once lurked, to the honky-tonk rhythms of Carol's Pub, this calendar
+            celebrates the gritty, glorious dive bars that make Chicago the greatest drinking city
+            in America. Grab a shot of Malort, order an Old Style, and raise a glass to the dives.
+        </div>
+        <div class="bar-list-preview">
+            <span>L&L Tavern</span>
+            <span>Old Town Ale House</span>
+            <span>Simon's Tavern</span>
+            <span>Carol's Pub</span>
+            <span>Rainbo Club</span>
+            <span>Nisei Lounge</span>
+            <span>Richard's Bar</span>
+            <span>Inner Town Pub</span>
+            <span>Rossi's Liquors</span>
+            <span>Big Chicks</span>
+            <span>Lizard's Liquid Lounge</span>
+            <span>Double Bubble</span>
+        </div>
+    </div>
+
+    <!-- ==================== JANUARY - L&L Tavern ==================== -->
+    <div class="month-page january">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">Serial killers Jeffrey Dahmer & John Wayne Gacy were both regulars here. A hand-scrawled sign declares it "The Creepiest Bar in the USA."</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">JANUARY 2026</div>
+                <div class="bar-name">L&L Tavern</div>
+                <div class="bar-address">3207 N Clark St, Lakeview</div>
+                <div class="established">EST. 1934</div>
+                <div class="bar-description">
+                    Featured on Anthony Bourdain's "The Layover" and HBO's "Lovecraft Country." One of Chicago's best jukeboxes. Named after former owners "Lefty" and Lauretta.
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Hours:</span> 5PM-2AM (4AM Sat)</div>
+                    <div class="detail-item"><span>Must Try:</span> Chicago Handshake</div>
+                    <div class="detail-item"><span>Vibe:</span> Gloriously Grim</div>
+                </div>
+                <div class="signature">"The quintessential Chicago dive"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td><div class="day-number">1</div></td><td><div class="day-number">2</div></td><td class="weekend"><div class="day-number">3</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">4</div></td><td><div class="day-number">5</div></td><td><div class="day-number">6</div></td><td><div class="day-number">7</div></td><td><div class="day-number">8</div></td><td><div class="day-number">9</div></td><td class="weekend"><div class="day-number">10</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">11</div></td><td><div class="day-number">12</div></td><td><div class="day-number">13</div></td><td><div class="day-number">14</div></td><td><div class="day-number">15</div></td><td><div class="day-number">16</div></td><td class="weekend"><div class="day-number">17</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">18</div></td><td><div class="day-number">19</div></td><td><div class="day-number">20</div></td><td><div class="day-number">21</div></td><td><div class="day-number">22</div></td><td><div class="day-number">23</div></td><td class="weekend"><div class="day-number">24</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">25</div></td><td><div class="day-number">26</div></td><td><div class="day-number">27</div></td><td><div class="day-number">28</div></td><td><div class="day-number">29</div></td><td><div class="day-number">30</div></td><td class="weekend"><div class="day-number">31</div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== FEBRUARY - Old Town Ale House ==================== -->
+    <div class="month-page february">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">Owner Bruce Elliott paints nude portraits of politicians. His naked Sarah Palin on a polar bear rug went viral and brought death threats.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">FEBRUARY 2026</div>
+                <div class="bar-name">Old Town Ale House</div>
+                <div class="bar-address">219 W North Ave, Old Town</div>
+                <div class="established">EST. 1958</div>
+                <div class="bar-description">
+                    Roger Ebert called it "the best bar I know exists." Across from Second City, it hosted Belushi, Murray, and Bourdain. Cash only, open until 4AM.
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Hours:</span> 3PM-4AM Daily</div>
+                    <div class="detail-item"><span>Payment:</span> Cash Only</div>
+                    <div class="detail-item"><span>Famous For:</span> Political Nude Art</div>
+                </div>
+                <div class="signature">"A portrait gallery that serves booze"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="weekend"><div class="day-number">1</div></td><td><div class="day-number">2</div></td><td><div class="day-number">3</div></td><td><div class="day-number">4</div></td><td><div class="day-number">5</div></td><td><div class="day-number">6</div></td><td class="weekend"><div class="day-number">7</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">8</div></td><td><div class="day-number">9</div></td><td><div class="day-number">10</div></td><td><div class="day-number">11</div></td><td><div class="day-number">12</div></td><td><div class="day-number">13</div></td><td class="weekend"><div class="day-number">14</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">15</div></td><td><div class="day-number">16</div></td><td><div class="day-number">17</div></td><td><div class="day-number">18</div></td><td><div class="day-number">19</div></td><td><div class="day-number">20</div></td><td class="weekend"><div class="day-number">21</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">22</div></td><td><div class="day-number">23</div></td><td><div class="day-number">24</div></td><td><div class="day-number">25</div></td><td><div class="day-number">26</div></td><td><div class="day-number">27</div></td><td class="weekend"><div class="day-number">28</div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== MARCH - Simon's Tavern ==================== -->
+    <div class="month-page march">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">During Prohibition, owner Simon Lundberg ran a secret speakeasy here, likely getting whiskey from Al Capone. The drunk Viking fish sign = "pickled herring."</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">MARCH 2026</div>
+                <div class="bar-name">Simon's Tavern</div>
+                <div class="bar-address">5210 N Clark St, Andersonville</div>
+                <div class="established">EST. 1934</div>
+                <div class="bar-description">
+                    "The Anchor of Andersonville." Mahogany bar modeled after a steamship, Viking ship decor, and famous secret-recipe glogg. Cozy fireplace in back.
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Payment:</span> Cash Only</div>
+                    <div class="detail-item"><span>Must Try:</span> Glogg</div>
+                    <div class="detail-item"><span>Vibe:</span> Swedish Time Capsule</div>
+                </div>
+                <div class="signature">"Feel like the richest people in the world"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="weekend"><div class="day-number">1</div></td><td><div class="day-number">2</div></td><td><div class="day-number">3</div></td><td><div class="day-number">4</div></td><td><div class="day-number">5</div></td><td><div class="day-number">6</div></td><td class="weekend"><div class="day-number">7</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">8</div></td><td><div class="day-number">9</div></td><td><div class="day-number">10</div></td><td><div class="day-number">11</div></td><td><div class="day-number">12</div></td><td><div class="day-number">13</div></td><td class="weekend"><div class="day-number">14</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">15</div></td><td><div class="day-number">16</div></td><td><div class="day-number">17</div></td><td><div class="day-number">18</div></td><td><div class="day-number">19</div></td><td><div class="day-number">20</div></td><td class="weekend"><div class="day-number">21</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">22</div></td><td><div class="day-number">23</div></td><td><div class="day-number">24</div></td><td><div class="day-number">25</div></td><td><div class="day-number">26</div></td><td><div class="day-number">27</div></td><td class="weekend"><div class="day-number">28</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">29</div></td><td><div class="day-number">30</div></td><td><div class="day-number">31</div></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== APRIL - Carol's Pub ==================== -->
+    <div class="month-page april">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">In the 70s, Carol's averaged 5-6 bar fights per night. The house band Diamondback has 100+ years collective experience. Chicago's LAST honky-tonk.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">APRIL 2026</div>
+                <div class="bar-name">Carol's Pub</div>
+                <div class="bar-address">4659 N Clark St, Uptown</div>
+                <div class="established">EST. 1972</div>
+                <div class="bar-description">
+                    Chicago's only true honky-tonk, born during "Hillbilly Heaven" when 3.2 million Appalachian migrants moved here. Motto: "Drink More, Sing Better!"
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Hours:</span> Open until 4AM</div>
+                    <div class="detail-item"><span>Live Music:</span> Thu-Sun</div>
+                    <div class="detail-item"><span>Famous For:</span> Two-Stepping</div>
+                </div>
+                <div class="signature">"The last survivor of Chicago's country music history"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="empty"></td><td class="empty"></td><td class="empty"></td><td><div class="day-number">1</div></td><td><div class="day-number">2</div></td><td><div class="day-number">3</div></td><td class="weekend"><div class="day-number">4</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">5</div></td><td><div class="day-number">6</div></td><td><div class="day-number">7</div></td><td><div class="day-number">8</div></td><td><div class="day-number">9</div></td><td><div class="day-number">10</div></td><td class="weekend"><div class="day-number">11</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">12</div></td><td><div class="day-number">13</div></td><td><div class="day-number">14</div></td><td><div class="day-number">15</div></td><td><div class="day-number">16</div></td><td><div class="day-number">17</div></td><td class="weekend"><div class="day-number">18</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">19</div></td><td><div class="day-number">20</div></td><td><div class="day-number">21</div></td><td><div class="day-number">22</div></td><td><div class="day-number">23</div></td><td><div class="day-number">24</div></td><td class="weekend"><div class="day-number">25</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">26</div></td><td><div class="day-number">27</div></td><td><div class="day-number">28</div></td><td><div class="day-number">29</div></td><td><div class="day-number">30</div></td><td class="empty"></td><td class="empty"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== MAY - Rainbo Club ==================== -->
+    <div class="month-page may">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">Nelson Algren modeled "Tug and Maul" tavern after this bar. Liz Phair's "Exile in Guyville" cover was shot in the photo booth. Bartender Ken Ellis made 600+ quilts.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">MAY 2026</div>
+                <div class="bar-name">Rainbo Club</div>
+                <div class="bar-address">1150 N Damen Ave, Ukrainian Village</div>
+                <div class="established">EST. ~1933</div>
+                <div class="bar-description">
+                    Started as burlesque and jazz hall, possibly a speakeasy. Featured in "High Fidelity." Red half-circle booths, iconic neon sign, and legendary photo booth.
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Must Try:</span> $2 PBR Drafts</div>
+                    <div class="detail-item"><span>Famous For:</span> Photo Booth</div>
+                    <div class="detail-item"><span>Vibe:</span> Indie/Alt-Rock History</div>
+                </div>
+                <div class="signature">"Best photo booth in the city"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td><div class="day-number">1</div></td><td class="weekend"><div class="day-number">2</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">3</div></td><td><div class="day-number">4</div></td><td><div class="day-number">5</div></td><td><div class="day-number">6</div></td><td><div class="day-number">7</div></td><td><div class="day-number">8</div></td><td class="weekend"><div class="day-number">9</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">10</div></td><td><div class="day-number">11</div></td><td><div class="day-number">12</div></td><td><div class="day-number">13</div></td><td><div class="day-number">14</div></td><td><div class="day-number">15</div></td><td class="weekend"><div class="day-number">16</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">17</div></td><td><div class="day-number">18</div></td><td><div class="day-number">19</div></td><td><div class="day-number">20</div></td><td><div class="day-number">21</div></td><td><div class="day-number">22</div></td><td class="weekend"><div class="day-number">23</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">24</div></td><td><div class="day-number">25</div></td><td><div class="day-number">26</div></td><td><div class="day-number">27</div></td><td><div class="day-number">28</div></td><td><div class="day-number">29</div></td><td class="weekend"><div class="day-number">30</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">31</div></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== JUNE - Nisei Lounge ==================== -->
+    <div class="month-page june">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">Goes through 31 gallons of Malort per week. Invented candy cane Malort in 2016. "Malortsgiving" and "Malortsmas" are annual traditions here.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">JUNE 2026</div>
+                <div class="bar-name">Nisei Lounge</div>
+                <div class="bar-address">3439 N Sheffield Ave, Wrigleyville</div>
+                <div class="established">EST. 1951</div>
+                <div class="bar-description">
+                    "Nisei" = second-generation Japanese immigrant. After WWII internment camps closed, displaced Japanese-Americans opened this bar. Last true dive in Wrigleyville.
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Must Try:</span> Infused Malort Flight</div>
+                    <div class="detail-item"><span>Games:</span> Pool, Darts, 25+ Board Games</div>
+                    <div class="detail-item"><span>Food:</span> BYOF Policy</div>
+                </div>
+                <div class="signature">"Fine purveyors of Malort since 1951"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="empty"></td><td><div class="day-number">1</div></td><td><div class="day-number">2</div></td><td><div class="day-number">3</div></td><td><div class="day-number">4</div></td><td><div class="day-number">5</div></td><td class="weekend"><div class="day-number">6</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">7</div></td><td><div class="day-number">8</div></td><td><div class="day-number">9</div></td><td><div class="day-number">10</div></td><td><div class="day-number">11</div></td><td><div class="day-number">12</div></td><td class="weekend"><div class="day-number">13</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">14</div></td><td><div class="day-number">15</div></td><td><div class="day-number">16</div></td><td><div class="day-number">17</div></td><td><div class="day-number">18</div></td><td><div class="day-number">19</div></td><td class="weekend"><div class="day-number">20</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">21</div></td><td><div class="day-number">22</div></td><td><div class="day-number">23</div></td><td><div class="day-number">24</div></td><td><div class="day-number">25</div></td><td><div class="day-number">26</div></td><td class="weekend"><div class="day-number">27</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">28</div></td><td><div class="day-number">29</div></td><td><div class="day-number">30</div></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== JULY - Richard's Bar ==================== -->
+    <div class="month-page july">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">Openly defies Chicago's 2008 smoking ban. Paid thousands in fines, keeps a donation box for more. Strict "No Photos" policy. Victor Skrebneski published a whole book of photos here.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">JULY 2026</div>
+                <div class="bar-name">Richard's Bar</div>
+                <div class="bar-address">491 N Milwaukee Ave, West Town</div>
+                <div class="established">EST. 1925</div>
+                <div class="bar-description">
+                    At the legendary six-corner intersection that once divided North and South Side mobs. Tin ceiling, Rat Pack jukebox, hard-boiled eggs. Chicago's last smoker's bar.
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Unique:</span> Indoor Smoking</div>
+                    <div class="detail-item"><span>Snacks:</span> Hard-Boiled Eggs (75c)</div>
+                    <div class="detail-item"><span>Deal:</span> $2 Tecate Cans</div>
+                </div>
+                <div class="signature">"The smoking-friendly rebel with mob history"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="empty"></td><td class="empty"></td><td class="empty"></td><td><div class="day-number">1</div></td><td><div class="day-number">2</div></td><td><div class="day-number">3</div></td><td class="weekend"><div class="day-number">4</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">5</div></td><td><div class="day-number">6</div></td><td><div class="day-number">7</div></td><td><div class="day-number">8</div></td><td><div class="day-number">9</div></td><td><div class="day-number">10</div></td><td class="weekend"><div class="day-number">11</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">12</div></td><td><div class="day-number">13</div></td><td><div class="day-number">14</div></td><td><div class="day-number">15</div></td><td><div class="day-number">16</div></td><td><div class="day-number">17</div></td><td class="weekend"><div class="day-number">18</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">19</div></td><td><div class="day-number">20</div></td><td><div class="day-number">21</div></td><td><div class="day-number">22</div></td><td><div class="day-number">23</div></td><td><div class="day-number">24</div></td><td class="weekend"><div class="day-number">25</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">26</div></td><td><div class="day-number">27</div></td><td><div class="day-number">28</div></td><td><div class="day-number">29</div></td><td><div class="day-number">30</div></td><td><div class="day-number">31</div></td><td class="empty"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== AUGUST - Inner Town Pub ==================== -->
+    <div class="month-page august">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">Grandfathered into zoning code - if it closes, no bar can legally replace it. Don't miss the "must-see bathroom ceiling" and fabulous stained glass windows.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">AUGUST 2026</div>
+                <div class="bar-name">Inner Town Pub</div>
+                <div class="bar-address">1935 W Thomas St, West Town</div>
+                <div class="established">BLDG. 1890</div>
+                <div class="bar-description">
+                    "Home of the Arts" since the late 80s. Renaissance Revival brick building with old steam heaters, ancestral-looking photos, and an Elvis obsession. Free pool and darts.
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Games:</span> Free Pool & Darts</div>
+                    <div class="detail-item"><span>Era:</span> 1890 Building</div>
+                    <div class="detail-item"><span>Vibe:</span> Bohemian Artist Haven</div>
+                </div>
+                <div class="signature">"Stained glass, Elvis, and mystery"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="weekend"><div class="day-number">1</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">2</div></td><td><div class="day-number">3</div></td><td><div class="day-number">4</div></td><td><div class="day-number">5</div></td><td><div class="day-number">6</div></td><td><div class="day-number">7</div></td><td class="weekend"><div class="day-number">8</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">9</div></td><td><div class="day-number">10</div></td><td><div class="day-number">11</div></td><td><div class="day-number">12</div></td><td><div class="day-number">13</div></td><td><div class="day-number">14</div></td><td class="weekend"><div class="day-number">15</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">16</div></td><td><div class="day-number">17</div></td><td><div class="day-number">18</div></td><td><div class="day-number">19</div></td><td><div class="day-number">20</div></td><td><div class="day-number">21</div></td><td class="weekend"><div class="day-number">22</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">23</div></td><td><div class="day-number">24</div></td><td><div class="day-number">25</div></td><td><div class="day-number">26</div></td><td><div class="day-number">27</div></td><td><div class="day-number">28</div></td><td class="weekend"><div class="day-number">29</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">30</div></td><td><div class="day-number">31</div></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== SEPTEMBER - Rossi's Liquors ==================== -->
+    <div class="month-page september">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">"Slashie" = hybrid bar/liquor store with rare license allowing both. Sits on Kinzie Street - historic divide between North and South Side mobs.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">SEPTEMBER 2026</div>
+                <div class="bar-name">Rossi's Liquors</div>
+                <div class="bar-address">412 N State St, River North</div>
+                <div class="established">EST. 1974</div>
+                <div class="bar-description">
+                    Chicago's quintessential "slashie" - sit down for a shot, grab a six-pack for the road. Devoid of sunlight with permanent Christmas lights. Working-class oasis.
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Type:</span> Slashie (Bar + Store)</div>
+                    <div class="detail-item"><span>Payment:</span> Cash Only</div>
+                    <div class="detail-item"><span>Location:</span> Old Mob Dividing Line</div>
+                </div>
+                <div class="signature">"Grab a shot, grab a six-pack"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="empty"></td><td class="empty"></td><td><div class="day-number">1</div></td><td><div class="day-number">2</div></td><td><div class="day-number">3</div></td><td><div class="day-number">4</div></td><td class="weekend"><div class="day-number">5</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">6</div></td><td><div class="day-number">7</div></td><td><div class="day-number">8</div></td><td><div class="day-number">9</div></td><td><div class="day-number">10</div></td><td><div class="day-number">11</div></td><td class="weekend"><div class="day-number">12</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">13</div></td><td><div class="day-number">14</div></td><td><div class="day-number">15</div></td><td><div class="day-number">16</div></td><td><div class="day-number">17</div></td><td><div class="day-number">18</div></td><td class="weekend"><div class="day-number">19</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">20</div></td><td><div class="day-number">21</div></td><td><div class="day-number">22</div></td><td><div class="day-number">23</div></td><td><div class="day-number">24</div></td><td><div class="day-number">25</div></td><td class="weekend"><div class="day-number">26</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">27</div></td><td><div class="day-number">28</div></td><td><div class="day-number">29</div></td><td><div class="day-number">30</div></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== OCTOBER - Big Chicks ==================== -->
+    <div class="month-page october">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">Free jukebox - all money goes to AIDS charities. For 30+ years, they've served free Sunday BBQ to anyone who shows up. Chicago LGBT Hall of Fame inductee (2016).</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">OCTOBER 2026</div>
+                <div class="bar-name">Big Chicks</div>
+                <div class="bar-address">5024 N Sheridan Rd, Uptown</div>
+                <div class="established">EST. 1986</div>
+                <div class="bar-description">
+                    Owner Michelle Fire bought it during the AIDS epidemic and transformed it into an LGBTQ+ haven. "A place for everybody." One of world's largest private art photo collections.
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Special:</span> $1 Burgers (Mon)</div>
+                    <div class="detail-item"><span>Tradition:</span> Free Sunday BBQ</div>
+                    <div class="detail-item"><span>Jukebox:</span> Free (AIDS Charity)</div>
+                </div>
+                <div class="signature">"Where everyone belongs"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td><div class="day-number">1</div></td><td><div class="day-number">2</div></td><td class="weekend"><div class="day-number">3</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">4</div></td><td><div class="day-number">5</div></td><td><div class="day-number">6</div></td><td><div class="day-number">7</div></td><td><div class="day-number">8</div></td><td><div class="day-number">9</div></td><td class="weekend"><div class="day-number">10</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">11</div></td><td><div class="day-number">12</div></td><td><div class="day-number">13</div></td><td><div class="day-number">14</div></td><td><div class="day-number">15</div></td><td><div class="day-number">16</div></td><td class="weekend"><div class="day-number">17</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">18</div></td><td><div class="day-number">19</div></td><td><div class="day-number">20</div></td><td><div class="day-number">21</div></td><td><div class="day-number">22</div></td><td><div class="day-number">23</div></td><td class="weekend"><div class="day-number">24</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">25</div></td><td><div class="day-number">26</div></td><td><div class="day-number">27</div></td><td><div class="day-number">28</div></td><td><div class="day-number">29</div></td><td><div class="day-number">30</div></td><td class="weekend"><div class="day-number">31</div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== NOVEMBER - Lizard's Liquid Lounge ==================== -->
+    <div class="month-page november">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">Replaced "Lost and Found" - one of Chicago's longest-running lesbian bars. Dogs get treats! Members of The Ides of March and Koko Taylor's band have played here.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">NOVEMBER 2026</div>
+                <div class="bar-name">Lizard's Liquid Lounge</div>
+                <div class="bar-address">3058 W Irving Park Rd, Albany Park</div>
+                <div class="established">EST. 2008</div>
+                <div class="bar-description">
+                    Friendliest dog-friendly bar in Chicago - your four-legged friend gets treats! Free live music Thu-Sat, plus trivia, karaoke, bingo, and monthly Scrabble tournaments.
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Dogs:</span> Welcome (Treats!)</div>
+                    <div class="detail-item"><span>Music:</span> Free Live (Thu-Sat)</div>
+                    <div class="detail-item"><span>Events:</span> Trivia, Karaoke, Bingo</div>
+                </div>
+                <div class="signature">"Albany Park's living room"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="weekend"><div class="day-number">1</div></td><td><div class="day-number">2</div></td><td><div class="day-number">3</div></td><td><div class="day-number">4</div></td><td><div class="day-number">5</div></td><td><div class="day-number">6</div></td><td class="weekend"><div class="day-number">7</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">8</div></td><td><div class="day-number">9</div></td><td><div class="day-number">10</div></td><td><div class="day-number">11</div></td><td><div class="day-number">12</div></td><td><div class="day-number">13</div></td><td class="weekend"><div class="day-number">14</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">15</div></td><td><div class="day-number">16</div></td><td><div class="day-number">17</div></td><td><div class="day-number">18</div></td><td><div class="day-number">19</div></td><td><div class="day-number">20</div></td><td class="weekend"><div class="day-number">21</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">22</div></td><td><div class="day-number">23</div></td><td><div class="day-number">24</div></td><td><div class="day-number">25</div></td><td><div class="day-number">26</div></td><td><div class="day-number">27</div></td><td class="weekend"><div class="day-number">28</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">29</div></td><td><div class="day-number">30</div></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== DECEMBER - Double Bubble ==================== -->
+    <div class="month-page december">
+        <div class="bar-section">
+            <div class="photo-container">
+                <div class="photo-placeholder">
+                    <div class="photo-caption">
+                        <div class="caption-title">DID YOU KNOW?</div>
+                        <div class="caption-fact">Die-hard Sox bar that showed Cubs winning 2016 World Series. Corner renamed "Double Bubble Way" after owner Larry Swoboda's death in 2020. Secret back patio with charcoal grill.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-info">
+                <div class="month-name">DECEMBER 2026</div>
+                <div class="bar-name">Double Bubble</div>
+                <div class="bar-address">6036 N Broadway, Edgewater</div>
+                <div class="established">EST. 1977</div>
+                <div class="bar-description">
+                    "The Bubble." Family-owned Far North Side institution with turquoise-and-white tile facade. Melting pot of Loyola students, young professionals, and blue-collar regulars.
+                </div>
+                <div class="bar-details">
+                    <div class="detail-item"><span>Team:</span> White Sox</div>
+                    <div class="detail-item"><span>Payment:</span> Cash Only (ATM)</div>
+                    <div class="detail-item"><span>Secret:</span> Back Patio w/ Grill</div>
+                </div>
+                <div class="signature">"Where everybody knows your name"</div>
+            </div>
+        </div>
+        <div class="calendar-grid">
+            <table class="calendar-table">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="empty"></td><td class="empty"></td><td><div class="day-number">1</div></td><td><div class="day-number">2</div></td><td><div class="day-number">3</div></td><td><div class="day-number">4</div></td><td class="weekend"><div class="day-number">5</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">6</div></td><td><div class="day-number">7</div></td><td><div class="day-number">8</div></td><td><div class="day-number">9</div></td><td><div class="day-number">10</div></td><td><div class="day-number">11</div></td><td class="weekend"><div class="day-number">12</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">13</div></td><td><div class="day-number">14</div></td><td><div class="day-number">15</div></td><td><div class="day-number">16</div></td><td><div class="day-number">17</div></td><td><div class="day-number">18</div></td><td class="weekend"><div class="day-number">19</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">20</div></td><td><div class="day-number">21</div></td><td><div class="day-number">22</div></td><td><div class="day-number">23</div></td><td><div class="day-number">24</div></td><td><div class="day-number">25</div></td><td class="weekend"><div class="day-number">26</div></td>
+                    </tr>
+                    <tr>
+                        <td class="weekend"><div class="day-number">27</div></td><td><div class="day-number">28</div></td><td><div class="day-number">29</div></td><td><div class="day-number">30</div></td><td><div class="day-number">31</div></td><td class="empty"></td><td class="empty"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Photo Credits -->
+    <div class="photo-credits" style="background: var(--paper-cream); padding: 40px 100px; font-family: 'Special Elite', cursive; font-size: 0.8rem; color: #666;">
+        <strong>Photo Credits:</strong> Scoundrel's Field Guide, Block Club Chicago (Colin Boyle), Big Chicks, Lizard's Liquid Lounge. All bars verified open as of 2025.
+    </div>
+
+    <!-- Print Instructions (hidden when printing) -->
+    <div class="print-instructions" style="background: #1a1a1a; padding: 40px; text-align: center; font-family: 'Roboto Mono', monospace;">
+        <h2 style="color: var(--punk-red); font-family: 'Anton', sans-serif; font-size: 1.5rem; margin-bottom: 20px;">DOWNLOAD / PRINT</h2>
+
+        <!-- Download Button -->
+        <div style="margin-bottom: 30px;">
+            <a href="chicago-dive-bar-calendar-2026.pdf" download style="display: inline-block; background: var(--mustard); color: #1a1a1a; text-decoration: none; padding: 15px 40px; font-family: 'Anton', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; transition: transform 0.2s, background 0.2s; border: none;">
+                DOWNLOAD PDF
+            </a>
+            <p style="color: #888; font-size: 0.75rem; margin-top: 10px;">Quick download - external images load on view</p>
+        </div>
+
+        <div style="border-top: 1px solid #444; padding-top: 25px; margin-top: 10px;">
+            <p style="color: var(--mustard); font-size: 0.9rem; margin-bottom: 15px; font-family: 'Anton', sans-serif; letter-spacing: 0.1em;">FOR HIGHEST QUALITY PRINT:</p>
+            <div style="color: #ccc; font-size: 0.85rem; max-width: 600px; margin: 0 auto; line-height: 1.8;">
+                <p style="margin-bottom: 15px;"><strong style="color: var(--mustard);">Size:</strong> 11" x 8.5" (Landscape) - Standard Wall Calendar</p>
+                <ol style="text-align: left; margin-left: 40px; color: #aaa;">
+                    <li>Press <strong style="color: #fff;">Ctrl+P</strong> (or Cmd+P on Mac)</li>
+                    <li>Set Destination to <strong style="color: #fff;">"Save as PDF"</strong></li>
+                    <li>Set Layout to <strong style="color: #fff;">"Landscape"</strong></li>
+                    <li>Set Paper size to <strong style="color: #fff;">"Letter"</strong></li>
+                    <li>Enable <strong style="color: #fff;">"Background graphics"</strong></li>
+                    <li>Set Margins to <strong style="color: #fff;">"None"</strong> (full bleed)</li>
+                    <li>Click <strong style="color: #fff;">"Save"</strong></li>
+                </ol>
+            </div>
+            <button onclick="window.print()" style="margin-top: 25px; background: var(--punk-red); color: white; border: none; padding: 15px 40px; font-family: 'Anton', sans-serif; font-size: 1.2rem; cursor: pointer; letter-spacing: 0.1em; transition: transform 0.2s, background 0.2s;">
+                PRINT CALENDAR
+            </button>
+        </div>
+
+        <style>
+            .print-instructions a:hover {
+                background: #c49000 !important;
+                transform: scale(1.05);
+            }
+            .print-instructions button:hover {
+                background: #a01830;
+                transform: scale(1.05);
+            }
+            @media print {
+                .print-instructions {
+                    display: none !important;
+                }
+                .photo-credits {
+                    page-break-before: avoid;
+                    padding: 10px 0.5in !important;
+                    font-size: 0.6rem !important;
+                }
+            }
+        </style>
+    </div>
+
+</body>
+</html>
