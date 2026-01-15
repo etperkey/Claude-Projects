@@ -104,6 +104,7 @@ Tasks automatically reorder within columns.
 | **Description** | Detailed task information |
 | **Priority** | High, Medium, or Low |
 | **Due Date** | Target completion date |
+| **Due Time** | Optional specific time for deadline |
 | **Labels** | Color-coded categories |
 | **Checklist** | Subtasks with checkboxes |
 | **Links** | External URLs related to the task |
@@ -283,6 +284,74 @@ Click thumbnails to open images in Google Drive.
 - Google Drive must be connected
 - Upload buttons are disabled without authentication
 - Files are stored in your Google Drive
+
+---
+
+## Calendar
+
+### Opening the Calendar
+
+1. Click the calendar icon in the navigation bar
+2. The calendar shows all tasks with due dates and calendar events
+
+### Navigating the Calendar
+
+- Use **<** and **>** buttons to change months
+- Click **Today** to jump to the current date
+- Click any day to see details for that date
+
+### Creating Calendar Events
+
+Events are standalone calendar items, separate from tasks.
+
+**From the Calendar View:**
+1. Click **"+ Add Event"** at the top of the calendar
+2. Fill in event details:
+   - **Title** (required)
+   - **Date** (required)
+   - **Start/End Time** (optional)
+   - **Description** (optional)
+   - **Color** - choose from 7 color options
+3. Click **"Create Event"**
+
+**For a Specific Day:**
+1. Click a day on the calendar to select it
+2. Click the **+** button in the day detail header
+3. The date is pre-filled for that day
+
+### Editing Events
+
+1. Select a day with events
+2. Find the event in the "Events" section
+3. Click the ✏️ (edit) button
+4. Modify details and click **"Update Event"**
+
+### Deleting Events
+
+1. Select a day with events
+2. Find the event in the "Events" section
+3. Click the 🗑️ (delete) button
+4. Confirm deletion
+
+### Exporting to Google Calendar
+
+**One-time Download:**
+1. Click **Export** in the calendar header
+2. Click **"Download .ics File"**
+3. Import the file into Google Calendar
+
+**Set Up Subscription (Recommended):**
+1. Click **Export** in the calendar header
+2. Click **"Set Up Subscription"**
+3. Follow the instructions to create a sync URL
+
+### Task Times
+
+Tasks can have optional due times:
+1. Open a task's detail modal
+2. Set a **Due Date**
+3. Optionally set a **Due Time**
+4. Times display on task cards (e.g., "Today 2:30pm")
 
 ---
 

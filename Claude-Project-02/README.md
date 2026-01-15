@@ -11,7 +11,8 @@ KanLab is a comprehensive research management platform that combines Kanban-styl
 ### Task Management
 - **Kanban Board** - 4-column workflow: Backlog → In Progress → Review → Done
 - **Drag-and-Drop** - Reorder tasks within and between columns
-- **Task Properties** - Priority levels, due dates, labels, checklists, links, and dependencies
+- **Task Properties** - Priority levels, due dates with optional times, labels, checklists, links, and dependencies
+- **Due Times** - Set specific times for task deadlines (e.g., "Jan 15 2:30pm")
 - **Inline Editing** - Double-click to quickly edit task titles
 - **Quick-Add Forms** - Rapidly create new tasks in any column
 
@@ -46,10 +47,16 @@ KanLab is a comprehensive research management platform that combines Kanban-styl
 - **Results Tracking** - Document findings and link to related tasks
 - **Structured Format** - Maintain consistent documentation across projects
 
+### Calendar & Scheduling
+- **Calendar View** - Visual calendar showing tasks and events by date
+- **Calendar Events** - Create standalone events separate from tasks
+- **Event Properties** - Title, date, start/end times, description, and color
+- **iCal Export** - Download calendar as .ics file for Google Calendar import
+- **Calendar Subscription** - Set up auto-syncing calendar URL
+
 ### Automation & Templates
 - **Recurring Tasks** - Schedule automatic task creation (daily, weekly, monthly)
 - **Task Templates** - Save and reuse common task configurations
-- **Google Calendar** - View and sync calendar events
 
 ### Data Management
 - **Google Drive Sync** - Automatic cloud backup and synchronization
@@ -185,6 +192,7 @@ All data is stored locally in browser localStorage:
 | `research-dashboard-activity` | Activity log (max 100) |
 | `research-dashboard-archived` | Archived project IDs |
 | `research-dashboard-trash` | Soft-deleted items (30 days) |
+| `research-dashboard-calendar-events` | Calendar events |
 
 ---
 
