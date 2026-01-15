@@ -176,7 +176,7 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
 
   const getColumnCount = (columnId) => tasks[columnId]?.length || 0;
 
-  const formatDueDate = (dateStr) => {
+  const formatDueDate = (dateStr, timeStr) => {
     if (!dateStr) return null;
     const date = new Date(dateStr);
     const today = new Date();
@@ -184,15 +184,27 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+    // Format time if provided
+    const formatTime = (time) => {
+      if (!time) return '';
+      const [hours, minutes] = time.split(':');
+      const h = parseInt(hours);
+      const ampm = h >= 12 ? 'pm' : 'am';
+      const hour12 = h % 12 || 12;
+      return ` ${hour12}:${minutes}${ampm}`;
+    };
+
+    const timeText = formatTime(timeStr);
+
     if (date < today) {
-      return { text: 'Overdue', className: 'overdue' };
+      return { text: 'Overdue' + timeText, className: 'overdue' };
     } else if (date.toDateString() === today.toDateString()) {
-      return { text: 'Today', className: 'due-today' };
+      return { text: 'Today' + timeText, className: 'due-today' };
     } else if (date.toDateString() === tomorrow.toDateString()) {
-      return { text: 'Tomorrow', className: 'due-soon' };
+      return { text: 'Tomorrow' + timeText, className: 'due-soon' };
     } else {
       return {
-        text: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        text: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + timeText,
         className: ''
       };
     }
@@ -258,7 +270,7 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
               )}
 
               {tasks[column.id]?.map((task, index) => {
-                const dueInfo = formatDueDate(task.dueDate);
+                const dueInfo = formatDueDate(task.dueDate, task.dueTime);
                 const checklistProgress = getChecklistProgress(task.checklist);
                 const hasDescription = task.description && task.description.trim().length > 0;
                 const hasLinks = task.links && task.links.length > 0;
