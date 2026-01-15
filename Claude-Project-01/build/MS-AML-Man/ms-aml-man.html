@@ -1,0 +1,3617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms. AML-Man: The Leukemia Quest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pac-yellow: #FFFF00;
+            --pac-blue: #2121DE;
+            --pac-black: #000000;
+            --maze-blue: #2121FF;
+            --pellet-color: #FFB897;
+            --power-pellet: #FFB8FF;
+            --ghost-red: #FF0000;
+            --ghost-pink: #FFB8FF;
+            --ghost-cyan: #00FFFF;
+            --ghost-orange: #FFB852;
+            --blast-purple: #8B008B;
+            --aml-orange: #FF6B35;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: var(--pac-black);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white;
+        }
+
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .game-container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .title-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .game-logo {
+            margin-bottom: 30px;
+        }
+
+        .logo-text {
+            font-size: 2.5em;
+            color: var(--pac-yellow);
+            text-shadow:
+                4px 4px 0 var(--aml-orange),
+                8px 8px 0 var(--ghost-red);
+            letter-spacing: 4px;
+            animation: logo-pulse 2s ease-in-out infinite;
+        }
+
+        .logo-subtitle {
+            font-size: 0.8em;
+            color: var(--power-pellet);
+            margin-top: 15px;
+            text-shadow: 2px 2px 0 var(--blast-purple);
+        }
+
+        @keyframes logo-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        /* Pac-Man Dr. Johnston preview */
+        .dr-johnston-preview {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 30px auto;
+        }
+
+        .pac-body {
+            width: 100px;
+            height: 100px;
+            background: var(--pac-yellow);
+            border-radius: 50%;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            animation: chomp 0.3s ease-in-out infinite;
+        }
+
+        @keyframes chomp {
+            0%, 100% {
+                /* Mouth open - wedge from center to right */
+                clip-path: polygon(50% 50%, 100% 15%, 100% 0%, 0% 0%, 0% 100%, 100% 100%, 100% 85%);
+            }
+            50% {
+                /* Mouth closed */
+                clip-path: polygon(50% 50%, 100% 45%, 100% 0%, 0% 0%, 0% 100%, 100% 100%, 100% 55%);
+            }
+        }
+
+        .pac-eye {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--pac-black);
+            border-radius: 50%;
+            top: 25px;
+            left: 55px;
+            z-index: 2;
+        }
+
+        .pac-stethoscope {
+            position: absolute;
+            top: 45px;
+            left: 5px;
+            width: 25px;
+            height: 25px;
+            border: 4px solid #333;
+            border-radius: 50%;
+            border-top: none;
+            transform: rotate(-30deg);
+        }
+
+        /* Ghost preview */
+        .ghost-preview {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .ghost-container {
+            text-align: center;
+        }
+
+        .ghost-label {
+            font-size: 0.5em;
+            margin-top: 8px;
+            color: var(--pellet-color);
+        }
+
+        .ghost {
+            width: 50px;
+            height: 55px;
+            position: relative;
+            animation: ghost-float 1s ease-in-out infinite;
+        }
+
+        .ghost-body {
+            width: 50px;
+            height: 40px;
+            border-radius: 25px 25px 0 0;
+            position: absolute;
+            top: 0;
+        }
+
+        .ghost-skirt {
+            position: absolute;
+            bottom: 0;
+            width: 50px;
+            height: 15px;
+            display: flex;
+        }
+
+        .ghost-wave {
+            width: 12.5px;
+            height: 15px;
+            border-radius: 0 0 50% 50%;
+        }
+
+        .ghost-eyes {
+            position: absolute;
+            top: 12px;
+            left: 8px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .ghost-eye {
+            width: 12px;
+            height: 14px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .ghost-pupil {
+            width: 6px;
+            height: 6px;
+            background: var(--pac-blue);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            left: 3px;
+        }
+
+        .ghost.blinky .ghost-body, .ghost.blinky .ghost-wave { background: var(--ghost-red); }
+        .ghost.pinky .ghost-body, .ghost.pinky .ghost-wave { background: var(--ghost-pink); }
+        .ghost.inky .ghost-body, .ghost.inky .ghost-wave { background: var(--ghost-cyan); }
+        .ghost.clyde .ghost-body, .ghost.clyde .ghost-wave { background: var(--ghost-orange); }
+
+        @keyframes ghost-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Difficulty buttons */
+        .difficulty-section {
+            margin: 40px 0;
+        }
+
+        .section-title {
+            font-size: 1em;
+            color: var(--pac-yellow);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .difficulty-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .difficulty-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+            padding: 15px 10px;
+            border: 3px solid;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .difficulty-btn.intern {
+            background: #50C878;
+            border-color: #3da35d;
+            color: black;
+        }
+
+        .difficulty-btn.resident {
+            background: #4169E1;
+            border-color: #2850c8;
+            color: white;
+        }
+
+        .difficulty-btn.fellow {
+            background: #FF8C00;
+            border-color: #cc7000;
+            color: white;
+        }
+
+        .difficulty-btn.attending {
+            background: #DC143C;
+            border-color: #a50f2e;
+            color: white;
+        }
+
+        .difficulty-btn.stock {
+            background: linear-gradient(180deg, #4B0082 0%, #8B008B 50%, #4B0082 100%);
+            border-color: #9400D3;
+            color: #FFD700;
+            animation: stock-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes stock-pulse {
+            0%, 100% { box-shadow: 0 0 10px #8B008B, 0 0 20px #4B0082; }
+            50% { box-shadow: 0 0 20px #9400D3, 0 0 40px #8B008B; }
+        }
+
+        .difficulty-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .difficulty-btn.selected {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .start-btn {
+            display: block;
+            margin: 30px auto;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.2em;
+            padding: 20px 40px;
+            background: var(--pac-yellow);
+            color: var(--pac-black);
+            border: 4px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px var(--pac-yellow);
+        }
+
+        /* Game Screen */
+        .game-screen {
+            display: none;
+        }
+
+        .game-screen.active {
+            display: block;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .score-display {
+            font-size: 0.8em;
+        }
+
+        .score-display span {
+            color: var(--pac-yellow);
+        }
+
+        .lives-display {
+            display: flex;
+            gap: 8px;
+        }
+
+        .life-icon {
+            width: 25px;
+            height: 25px;
+            background: var(--pac-yellow);
+            border-radius: 50%;
+            clip-path: polygon(50% 50%, 100% 15%, 100% 0%, 0% 0%, 0% 100%, 100% 100%, 100% 85%);
+        }
+
+        .life-icon.lost {
+            background: #333;
+        }
+
+        /* Maze container */
+        .maze-container {
+            position: relative;
+            background: var(--pac-black);
+            border: 4px solid var(--maze-blue);
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 100px;
+        }
+
+        .pac-dots {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+            padding: 25px 80px;
+            position: relative;
+        }
+
+        .pac-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--pellet-color);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .pac-dot.eaten {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .pac-dot.power {
+            width: 20px;
+            height: 20px;
+            background: var(--power-pellet);
+            animation: power-pulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes power-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        /* Game Pac-Man */
+        .game-pacman {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            left: 3%;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: left 0.5s ease-out;
+            z-index: 20;
+        }
+
+        .game-pacman .pac-body {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            top: 0;
+            left: 0;
+            background: var(--pac-yellow);
+            border-radius: 50%;
+            animation: chomp 0.3s ease-in-out infinite;
+        }
+
+        .game-pacman .pac-eye {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--pac-black);
+            border-radius: 50%;
+            top: 10px;
+            left: 28px;
+            z-index: 2;
+        }
+
+        /* Game ghosts */
+        .game-ghosts {
+            position: absolute;
+            right: 3%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 15;
+        }
+
+        .game-ghost {
+            width: 45px;
+            height: 50px;
+            position: relative;
+            animation: ghost-float 0.8s ease-in-out infinite;
+        }
+
+        .game-ghost .ghost-body {
+            position: absolute;
+            width: 45px;
+            height: 35px;
+            border-radius: 22px 22px 0 0;
+            top: 0;
+        }
+
+        .game-ghost.blinky .ghost-body { background: var(--ghost-red); }
+        .game-ghost.pinky .ghost-body { background: var(--ghost-pink); }
+        .game-ghost.inky .ghost-body { background: var(--ghost-cyan); }
+        .game-ghost.clyde .ghost-body { background: var(--ghost-orange); }
+
+        .game-ghost .ghost-skirt {
+            position: absolute;
+            bottom: 0;
+            width: 45px;
+            height: 15px;
+            display: flex;
+        }
+
+        .game-ghost .ghost-wave {
+            width: 11.25px;
+            height: 15px;
+            border-radius: 0 0 50% 50%;
+        }
+
+        .game-ghost.blinky .ghost-wave { background: var(--ghost-red); }
+        .game-ghost.pinky .ghost-wave { background: var(--ghost-pink); }
+        .game-ghost.inky .ghost-wave { background: var(--ghost-cyan); }
+        .game-ghost.clyde .ghost-wave { background: var(--ghost-orange); }
+
+        .game-ghost .ghost-eyes {
+            position: absolute;
+            display: flex;
+            top: 10px;
+            left: 8px;
+            gap: 8px;
+        }
+
+        .game-ghost .ghost-eye {
+            position: relative;
+            width: 12px;
+            height: 14px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .game-ghost .ghost-pupil {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--pac-blue);
+            border-radius: 50%;
+            bottom: 2px;
+            left: 3px;
+        }
+
+        .game-ghost.scared .ghost-body,
+        .game-ghost.scared .ghost-wave {
+            background: var(--pac-blue) !important;
+        }
+
+        .game-ghost.eaten {
+            opacity: 0.3;
+        }
+
+        /* Question area */
+        .question-area {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            border: 3px solid var(--maze-blue);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-type {
+            font-size: 0.6em;
+            padding: 5px 12px;
+            border-radius: 5px;
+            background: var(--aml-orange);
+            color: white;
+        }
+
+        .difficulty-badge {
+            font-size: 0.55em;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 2px solid;
+        }
+
+        .difficulty-badge.intern { background: #50C878; color: black; }
+        .difficulty-badge.resident { background: #4169E1; color: white; }
+        .difficulty-badge.fellow { background: #FF8C00; color: white; }
+        .difficulty-badge.attending { background: #DC143C; color: white; }
+        .difficulty-badge.stock { background: #8B008B; color: #FFD700; }
+
+        .level-number {
+            font-size: 0.6em;
+            color: var(--pellet-color);
+        }
+
+        .case-box {
+            background: rgba(0,0,0,0.3);
+            border: 2px solid var(--ghost-cyan);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .case-title {
+            font-size: 0.7em;
+            color: var(--ghost-cyan);
+            margin-bottom: 10px;
+        }
+
+        .case-text {
+            font-size: 0.6em;
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        .labs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .lab-item {
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 0.5em;
+        }
+
+        .lab-item.abnormal {
+            border: 2px solid var(--ghost-red);
+            color: var(--ghost-red);
+        }
+
+        .lab-name {
+            color: #888;
+            display: block;
+        }
+
+        .lab-value {
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Histopathology Panel Styles */
+        .histopath-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .histopath-panel {
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            padding: 10px;
+            border: 2px solid var(--ghost-cyan);
+        }
+
+        .histopath-panel-label {
+            font-size: 0.4em;
+            color: var(--ghost-cyan);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .histopath-image-wrapper {
+            width: 100%;
+            height: 120px;
+            background: #1a1a2e;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .histopath-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .histopath-fallback {
+            color: #666;
+            font-size: 0.35em;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .histopath-caption {
+            font-size: 0.35em;
+            color: #888;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .histopath-description {
+            font-size: 0.4em;
+            color: #aaa;
+            line-height: 1.4;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .histopath-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .question-text {
+            font-size: 0.75em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.55em;
+            padding: 15px;
+            background: rgba(33, 33, 222, 0.3);
+            border: 2px solid var(--maze-blue);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            text-align: left;
+            line-height: 1.6;
+            transition: all 0.3s;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: rgba(33, 33, 222, 0.5);
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            background: rgba(80, 200, 120, 0.5);
+            border-color: #50C878;
+        }
+
+        .option-btn.incorrect {
+            background: rgba(220, 20, 60, 0.5);
+            border-color: #DC143C;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .explanation-box {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid var(--pac-yellow);
+            border-radius: 10px;
+        }
+
+        .explanation-box.show {
+            display: block;
+        }
+
+        .explanation-text {
+            font-size: 0.6em;
+            line-height: 1.8;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .key-point {
+            font-size: 0.55em;
+            color: var(--pac-yellow);
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .citation {
+            font-size: 0.5em;
+            color: #888;
+            font-style: italic;
+        }
+
+        /* Reference Links */
+        .ref-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ref-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            color: #4fc3f7;
+            text-decoration: none;
+            font-size: 1em;
+            font-style: normal;
+            transition: all 0.2s;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+
+        .ref-link:hover {
+            background: rgba(79, 195, 247, 0.3);
+            transform: scale(1.05);
+            border-color: #4fc3f7;
+        }
+
+        .next-btn {
+            display: block;
+            margin: 20px auto 0;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8em;
+            padding: 15px 30px;
+            background: var(--pac-yellow);
+            color: var(--pac-black);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--pac-yellow);
+        }
+
+        /* Results screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .results-screen.active {
+            display: block;
+        }
+
+        .results-title {
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+
+        .results-title.win {
+            color: var(--pac-yellow);
+            text-shadow: 0 0 20px var(--pac-yellow);
+        }
+
+        .results-title.lose {
+            color: var(--ghost-red);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .stat-item {
+            background: rgba(33, 33, 222, 0.3);
+            border: 2px solid var(--maze-blue);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            color: var(--pac-yellow);
+        }
+
+        .stat-label {
+            font-size: 0.5em;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .play-again-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1em;
+            padding: 20px 40px;
+            background: var(--pac-yellow);
+            color: var(--pac-black);
+            border: 4px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-again-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px var(--pac-yellow);
+        }
+
+        /* Stock mode */
+        body.stock-mode {
+            background: linear-gradient(180deg, #1a0a2e 0%, #2d1b4e 50%, #1a0a2e 100%);
+        }
+
+        body.stock-mode .maze-container {
+            border-color: var(--blast-purple);
+            box-shadow: 0 0 30px rgba(139, 0, 139, 0.5);
+        }
+
+        /* Floating score text */
+        .waka-text {
+            position: absolute;
+            font-size: 1.2em;
+            color: var(--pac-yellow);
+            animation: float-up 1s ease-out forwards;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes float-up {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
+        }
+
+        @keyframes incorrect-shake {
+            0%, 100% { transform: translateX(0) translateY(-50%); }
+            25% { transform: translateX(-10px) translateY(-50%); }
+            75% { transform: translateX(10px) translateY(-50%); }
+        }
+
+        /* Volume Toggle */
+        .volume-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(33, 33, 222, 0.8);
+            border: 3px solid var(--maze-blue);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            transition: all 0.3s;
+        }
+
+        .volume-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--maze-blue);
+        }
+
+        .volume-toggle.muted {
+            background: rgba(100, 100, 100, 0.8);
+            border-color: #666;
+        }
+
+        /* Responsive - Tablet */
+        @media (max-width: 1024px) and (min-width: 601px) {
+            .game-container { padding: 15px; }
+            .logo-text { font-size: 2em; }
+        }
+
+        /* Responsive - Mobile */
+        @media (max-width: 600px) {
+            .logo-text { font-size: 1.5em; }
+            .difficulty-grid { grid-template-columns: 1fr 1fr; }
+            .ghost-preview { gap: 15px; }
+            .game-header { font-size: 0.7em; }
+            .pac-dots { padding: 20px 60px; }
+            .volume-toggle { width: 40px; height: 40px; font-size: 1.2em; }
+        }
+
+        /* Responsive - Small Mobile */
+        @media (max-width: 400px) {
+            .logo-text { font-size: 1.2em; }
+            .difficulty-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Device info badge */
+        .device-info {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #ffff00;
+            border-radius: 5px;
+            padding: 6px 10px;
+            font-size: 0.7em;
+            color: white;
+            z-index: 100;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        .device-info:hover { opacity: 1; }
+        .device-info .device-type { color: #ffff00; text-transform: uppercase; }
+        .device-info .resolution { color: #ffcc00; margin-left: 8px; }
+    </style>
+</head>
+<body>
+    <div class="starfield" id="starfield"></div>
+
+    <div class="device-info" id="deviceInfo">
+        <span class="device-type" id="deviceType">--</span>
+        <span class="resolution" id="resolution">--</span>
+    </div>
+
+    <!-- Volume Toggle -->
+    <button class="volume-toggle" id="volumeToggle" onclick="toggleVolume()">
+        <span id="volumeIcon">&#128266;</span>
+    </button>
+
+    <div class="game-container">
+        <!-- Title Screen -->
+        <div class="title-screen" id="titleScreen">
+            <div class="game-logo">
+                <div class="logo-text">Ms. AML-Man</div>
+                <div class="logo-subtitle">The Leukemia Quest</div>
+            </div>
+
+            <!-- Dr. Johnston Preview -->
+            <div class="dr-johnston-preview">
+                <div class="pac-body"></div>
+                <div class="pac-eye"></div>
+                <div class="pac-stethoscope"></div>
+            </div>
+
+            <p style="font-size: 0.6em; color: #888; margin-bottom: 20px;">Dr. Johnston vs. The AML Blasts</p>
+
+            <!-- Ghost Enemies Preview -->
+            <div class="ghost-preview">
+                <div class="ghost-container">
+                    <div class="ghost blinky">
+                        <div class="ghost-body"></div>
+                        <div class="ghost-skirt">
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                        </div>
+                        <div class="ghost-eyes">
+                            <div class="ghost-eye"><div class="ghost-pupil"></div></div>
+                            <div class="ghost-eye"><div class="ghost-pupil"></div></div>
+                        </div>
+                    </div>
+                    <div class="ghost-label">FLT3-ITD</div>
+                </div>
+                <div class="ghost-container">
+                    <div class="ghost pinky">
+                        <div class="ghost-body"></div>
+                        <div class="ghost-skirt">
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                        </div>
+                        <div class="ghost-eyes">
+                            <div class="ghost-eye"><div class="ghost-pupil"></div></div>
+                            <div class="ghost-eye"><div class="ghost-pupil"></div></div>
+                        </div>
+                    </div>
+                    <div class="ghost-label">NPM1</div>
+                </div>
+                <div class="ghost-container">
+                    <div class="ghost inky">
+                        <div class="ghost-body"></div>
+                        <div class="ghost-skirt">
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                        </div>
+                        <div class="ghost-eyes">
+                            <div class="ghost-eye"><div class="ghost-pupil"></div></div>
+                            <div class="ghost-eye"><div class="ghost-pupil"></div></div>
+                        </div>
+                    </div>
+                    <div class="ghost-label">IDH1/2</div>
+                </div>
+                <div class="ghost-container">
+                    <div class="ghost clyde">
+                        <div class="ghost-body"></div>
+                        <div class="ghost-skirt">
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                        </div>
+                        <div class="ghost-eyes">
+                            <div class="ghost-eye"><div class="ghost-pupil"></div></div>
+                            <div class="ghost-eye"><div class="ghost-pupil"></div></div>
+                        </div>
+                    </div>
+                    <div class="ghost-label">TP53</div>
+                </div>
+            </div>
+
+            <!-- Difficulty Selection -->
+            <div class="difficulty-section">
+                <div class="section-title">SELECT DIFFICULTY</div>
+                <div class="difficulty-grid">
+                    <button class="difficulty-btn intern" onclick="selectDifficulty('intern')">INTERN</button>
+                    <button class="difficulty-btn resident" onclick="selectDifficulty('resident')">RESIDENT</button>
+                    <button class="difficulty-btn fellow" onclick="selectDifficulty('fellow')">FELLOW</button>
+                    <button class="difficulty-btn attending" onclick="selectDifficulty('attending')">ATTENDING</button>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button class="difficulty-btn stock" onclick="selectDifficulty('stock')">
+                        DR. STOCK
+                        <span style="display: block; font-size: 0.7em; margin-top: 5px;">EXTREME</span>
+                    </button>
+                </div>
+            </div>
+
+            <button class="start-btn" onclick="startGame()">START GAME</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="game-screen" id="gameScreen">
+            <div class="game-header">
+                <div class="score-display">
+                    SCORE: <span id="scoreValue">0</span>
+                    <br><span style="font-size: 0.7em; color: #888;">HIGH: <span id="highScore">0</span></span>
+                </div>
+                <div class="lives-display" id="livesDisplay">
+                    <div class="life-icon"></div>
+                    <div class="life-icon"></div>
+                    <div class="life-icon"></div>
+                </div>
+            </div>
+
+            <!-- Maze Area -->
+            <div class="maze-container">
+                <div class="pac-dots" id="pacDots">
+                    <div class="pac-dot"></div>
+                    <div class="pac-dot"></div>
+                    <div class="pac-dot power"></div>
+                    <div class="pac-dot"></div>
+                    <div class="pac-dot"></div>
+                    <div class="pac-dot"></div>
+                    <div class="pac-dot power"></div>
+                    <div class="pac-dot"></div>
+                    <div class="pac-dot"></div>
+                    <div class="pac-dot"></div>
+                </div>
+
+                <div class="game-pacman" id="gamePacman">
+                    <div class="pac-body"></div>
+                    <div class="pac-eye"></div>
+                </div>
+
+                <div class="game-ghosts" id="gameGhosts">
+                    <div class="game-ghost blinky" id="ghostBlinky">
+                        <div class="ghost-body"></div>
+                        <div class="ghost-skirt">
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                            <div class="ghost-wave"></div>
+                        </div>
+                        <div class="ghost-eyes">
+                            <div class="ghost-eye"><div class="ghost-pupil"></div></div>
+                            <div class="ghost-eye"><div class="ghost-pupil"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Area -->
+            <div class="question-area" id="questionArea">
+                <div class="question-header">
+                    <span class="question-type" id="questionType">Diagnosis</span>
+                    <span class="difficulty-badge" id="difficultyBadge">INTERN</span>
+                    <span class="level-number" id="levelNumber">LEVEL 1 OF 10</span>
+                </div>
+
+                <div id="caseBox" class="case-box" style="display: none;">
+                    <div class="case-title">PATIENT CASE</div>
+                    <div class="case-text" id="caseText"></div>
+                    <div class="labs-grid" id="labsGrid"></div>
+                    <div class="histopath-container" id="histopathContainer" style="display: none;">
+                        <div class="histopath-panel">
+                            <div class="histopath-panel-label">H&E Morphology</div>
+                            <div class="histopath-image-wrapper">
+                                <img id="histopathImage" src="" alt="Histopathology" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="histopath-fallback" style="display:none;">Image from ASH Image Bank</div>
+                            </div>
+                            <div class="histopath-caption" id="histopathCaption"></div>
+                        </div>
+                        <div class="histopath-panel">
+                            <div class="histopath-panel-label">Key Features</div>
+                            <div class="histopath-description" id="histopathDescription"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-text" id="questionText">Loading question...</div>
+
+                <div class="options-grid" id="optionsGrid"></div>
+
+                <div class="explanation-box" id="explanationBox">
+                    <div class="explanation-text" id="explanationText"></div>
+                    <div class="key-point" id="keyPoint"></div>
+                    <div class="citation" id="citation"></div>
+                    <button class="next-btn" onclick="nextQuestion()">NEXT LEVEL</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen">
+            <div class="results-title" id="resultsTitle">GAME OVER</div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="finalScore">0</div>
+                    <div class="stat-label">FINAL SCORE</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="ghostsEaten">0</div>
+                    <div class="stat-label">BLASTS DEFEATED</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="accuracy">0%</div>
+                    <div class="stat-label">ACCURACY</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="bestStreak">0</div>
+                    <div class="stat-label">BEST STREAK</div>
+                </div>
+            </div>
+
+            <div style="font-size: 0.6em; color: #888; margin-bottom: 20px;">
+                Levels Cleared: <span id="levelsCleared">0</span>
+            </div>
+
+            <button class="play-again-btn" onclick="resetGame()">PLAY AGAIN</button>
+        </div>
+    </div>
+
+    <script>
+        // Device Detection System
+        const DeviceDetector = {
+            getDeviceType: function() {
+                const width = window.innerWidth;
+                const userAgent = navigator.userAgent.toLowerCase();
+                const isMobileUA = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+                const isTabletUA = /ipad|tablet|playbook|silk/i.test(userAgent) || (isMobileUA && width >= 768);
+                if (width <= 480 || (isMobileUA && !isTabletUA && width < 768)) return 'mobile';
+                else if (width <= 1024 || isTabletUA) return 'tablet';
+                else return 'desktop';
+            },
+            getResolution: function() { return `${window.innerWidth}x${window.innerHeight}`; },
+            updateDisplay: function() {
+                document.getElementById('deviceType').textContent = this.getDeviceType();
+                document.getElementById('resolution').textContent = this.getResolution();
+                document.body.classList.remove('device-mobile', 'device-tablet', 'device-desktop');
+                document.body.classList.add('device-' + this.getDeviceType());
+            },
+            init: function() {
+                this.updateDisplay();
+                window.addEventListener('resize', () => this.updateDisplay());
+                window.addEventListener('orientationchange', () => setTimeout(() => this.updateDisplay(), 100));
+            }
+        };
+        DeviceDetector.init();
+
+        // Reference Links Helper
+        function renderReferenceLinks(question) {
+            let links = '';
+            if (question.pmid) {
+                links += `<a href="https://pubmed.ncbi.nlm.nih.gov/${question.pmid}/" target="_blank" rel="noopener" class="ref-link" title="View on PubMed">📄 PubMed</a>`;
+            }
+            if (question.doi) {
+                links += `<a href="https://doi.org/${question.doi}" target="_blank" rel="noopener" class="ref-link" title="View Full Text">🔗 DOI</a>`;
+            }
+            if (question.guideline) {
+                links += `<a href="${question.guideline.url}" target="_blank" rel="noopener" class="ref-link" title="View Guidelines">📋 ${question.guideline.name}</a>`;
+            }
+            return links ? `<div class="ref-links">${links}</div>` : '';
+        }
+
+        let selectedDifficulty = null;
+        let currentQuestion = 0;
+        let score = 0;
+        let lives = 3;
+        let streak = 0;
+        let bestStreak = 0;
+        let correctAnswers = 0;
+        let totalAnswered = 0;
+        let gameActive = false;
+        let filteredQuestions = [];
+        let pacmanPosition = 5;
+        let audioContext = null;
+        let isMuted = false;
+        let musicStarted = false;
+
+        // Create starfield
+        function createStarfield() {
+            const starfield = document.getElementById('starfield');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starfield.appendChild(star);
+            }
+        }
+        createStarfield();
+
+        // Volume toggle
+        function toggleVolume() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('volumeToggle');
+            const icon = document.getElementById('volumeIcon');
+
+            if (isMuted) {
+                btn.classList.add('muted');
+                icon.innerHTML = '&#128263;'; // Muted speaker
+                stopMusic();
+            } else {
+                btn.classList.remove('muted');
+                icon.innerHTML = '&#128266;'; // Speaker with sound
+                startMusic();
+            }
+        }
+
+        // Start music on first interaction
+        function initMusicOnInteraction() {
+            if (!musicStarted && !isMuted) {
+                musicStarted = true;
+                startMusic();
+            }
+            document.removeEventListener('click', initMusicOnInteraction);
+        }
+        document.addEventListener('click', initMusicOnInteraction);
+
+        // Audio
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        function playWakaWaka() {
+            if (isMuted) return;
+            try {
+                const ctx = initAudio();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 440;
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.1);
+            } catch(e) {}
+        }
+
+        function playCorrectSound() {
+            if (isMuted) return;
+            try {
+                const ctx = initAudio();
+                [523, 659, 784].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime + i * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.1 + 0.15);
+                    osc.start(ctx.currentTime + i * 0.1);
+                    osc.stop(ctx.currentTime + i * 0.1 + 0.15);
+                });
+            } catch(e) {}
+        }
+
+        function playWrongSound() {
+            if (isMuted) return;
+            try {
+                const ctx = initAudio();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 150;
+                osc.type = 'sawtooth';
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.3);
+            } catch(e) {}
+        }
+
+        // Background Music System
+        let musicPlaying = false;
+        let musicInterval = null;
+        let bassInterval = null;
+        let currentBeat = 0;
+
+        // Original 8-bit arcade melody (not copyrighted)
+        const melody = [
+            392, 440, 494, 523, 587, 523, 494, 440,  // G4 A4 B4 C5 D5 C5 B4 A4
+            392, 349, 330, 294, 330, 349, 392, 440,  // G4 F4 E4 D4 E4 F4 G4 A4
+            523, 494, 440, 392, 440, 494, 523, 587,  // C5 B4 A4 G4 A4 B4 C5 D5
+            659, 587, 523, 494, 440, 392, 349, 392   // E5 D5 C5 B4 A4 G4 F4 G4
+        ];
+
+        const bassLine = [
+            196, 196, 220, 220, 246, 246, 262, 262,  // G3 G3 A3 A3 B3 B3 C4 C4
+            294, 294, 262, 262, 246, 246, 220, 220,  // D4 D4 C4 C4 B3 B3 A3 A3
+            196, 196, 175, 175, 165, 165, 147, 147,  // G3 G3 F3 F3 E3 E3 D3 D3
+            165, 165, 175, 175, 196, 196, 220, 220   // E3 E3 F3 F3 G3 G3 A3 A3
+        ];
+
+        function startMusic() {
+            if (musicPlaying || isMuted) return;
+            musicPlaying = true;
+            currentBeat = 0;
+
+            const ctx = initAudio();
+
+            // Play melody notes
+            musicInterval = setInterval(() => {
+                if (!musicPlaying) return;
+
+                try {
+                    const ctx = initAudio();
+
+                    // Melody
+                    const osc1 = ctx.createOscillator();
+                    const gain1 = ctx.createGain();
+                    osc1.type = 'square';
+                    osc1.connect(gain1);
+                    gain1.connect(ctx.destination);
+                    osc1.frequency.value = melody[currentBeat % melody.length];
+                    gain1.gain.setValueAtTime(0.06, ctx.currentTime);
+                    gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+                    osc1.start(ctx.currentTime);
+                    osc1.stop(ctx.currentTime + 0.12);
+
+                    // Bass
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.type = 'triangle';
+                    osc2.connect(gain2);
+                    gain2.connect(ctx.destination);
+                    osc2.frequency.value = bassLine[currentBeat % bassLine.length];
+                    gain2.gain.setValueAtTime(0.08, ctx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.14);
+                    osc2.start(ctx.currentTime);
+                    osc2.stop(ctx.currentTime + 0.14);
+
+                    // Percussion on every 4th beat
+                    if (currentBeat % 4 === 0) {
+                        const noise = ctx.createOscillator();
+                        const noiseGain = ctx.createGain();
+                        noise.type = 'square';
+                        noise.connect(noiseGain);
+                        noiseGain.connect(ctx.destination);
+                        noise.frequency.value = 100;
+                        noiseGain.gain.setValueAtTime(0.05, ctx.currentTime);
+                        noiseGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                        noise.start(ctx.currentTime);
+                        noise.stop(ctx.currentTime + 0.05);
+                    }
+
+                    currentBeat++;
+                } catch(e) {}
+            }, 150); // Tempo: ~100 BPM
+        }
+
+        function stopMusic() {
+            musicPlaying = false;
+            if (musicInterval) {
+                clearInterval(musicInterval);
+                musicInterval = null;
+            }
+        }
+
+        // Title screen intro jingle
+        function playIntroJingle() {
+            if (isMuted) return;
+            try {
+                const ctx = initAudio();
+                const jingle = [523, 587, 659, 784, 659, 784, 880];
+                jingle.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime + i * 0.15);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.15 + 0.14);
+                    osc.start(ctx.currentTime + i * 0.15);
+                    osc.stop(ctx.currentTime + i * 0.15 + 0.14);
+                });
+            } catch(e) {}
+        }
+
+        // Game over sound
+        function playGameOverSound() {
+            if (isMuted) return;
+            try {
+                const ctx = initAudio();
+                const notes = [392, 349, 330, 294, 262, 247, 220, 196];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime + i * 0.2);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.2 + 0.19);
+                    osc.start(ctx.currentTime + i * 0.2);
+                    osc.stop(ctx.currentTime + i * 0.2 + 0.19);
+                });
+            } catch(e) {}
+        }
+
+        // Victory fanfare
+        function playVictorySound() {
+            if (isMuted) return;
+            try {
+                const ctx = initAudio();
+                const fanfare = [523, 523, 523, 523, 415, 466, 523, 466, 523, 698];
+                const durations = [0.15, 0.15, 0.15, 0.4, 0.15, 0.15, 0.15, 0.15, 0.15, 0.6];
+                let time = 0;
+                fanfare.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime + time);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + time + durations[i] - 0.02);
+                    osc.start(ctx.currentTime + time);
+                    osc.stop(ctx.currentTime + time + durations[i]);
+                    time += durations[i];
+                });
+            } catch(e) {}
+        }
+
+        // Questions database
+        const questions = [
+            // INTERN LEVEL
+            {
+                type: "simple",
+                typeLabel: "Diagnosis",
+                difficulty: "intern",
+                question: "What percentage of bone marrow blasts is required to diagnose AML?",
+                options: [
+                    "5% or more",
+                    "10% or more",
+                    "20% or more",
+                    "30% or more"
+                ],
+                correct: 2,
+                explanation: "AML is diagnosed when there are 20% or more blasts in the bone marrow or peripheral blood, according to WHO classification. Certain genetic abnormalities (t(8;21), inv(16), t(15;17)) can define AML regardless of blast count.",
+                keyPoint: "AML = 20% or more blasts. Exception: AML-defining genetic abnormalities.",
+                citation: "WHO Classification of Tumours of Haematopoietic and Lymphoid Tissues, 2022",
+                pmid: "35767897",
+                doi: "10.1182/blood.2022015850"
+            },
+            {
+                type: "simple",
+                typeLabel: "Diagnosis",
+                difficulty: "intern",
+                question: "Which stain is most commonly used to identify myeloid blasts?",
+                options: [
+                    "Periodic acid-Schiff (PAS)",
+                    "Myeloperoxidase (MPO)",
+                    "Oil Red O",
+                    "Sudan Black B only"
+                ],
+                correct: 1,
+                explanation: "Myeloperoxidase (MPO) is the most specific cytochemical stain for myeloid lineage. Blasts are considered myeloid if 3% or more are MPO positive. Sudan Black B also stains myeloid cells but is less specific.",
+                keyPoint: "MPO positive in 3% or more blasts = myeloid lineage.",
+                citation: "WHO Classification 2022",
+                pmid: "35767897"
+            },
+            {
+                type: "simple",
+                typeLabel: "Classification",
+                difficulty: "intern",
+                question: "Which cytogenetic abnormality defines acute promyelocytic leukemia (APL)?",
+                options: [
+                    "t(8;21)(q22;q22)",
+                    "t(15;17)(q24;q21)",
+                    "inv(16)(p13q22)",
+                    "t(9;11)(p22;q23)"
+                ],
+                correct: 1,
+                explanation: "APL is defined by t(15;17) which creates the PML-RARA fusion gene. This is critical to identify early as APL requires different treatment (ATRA + ATO) and has high cure rates but early mortality risk from coagulopathy.",
+                keyPoint: "APL = t(15;17) = PML-RARA. Medical emergency - start ATRA immediately if suspected.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35767897",
+                doi: "10.1182/blood.2022015850",
+                guideline: { name: "NCCN AML", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1411" }
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "intern",
+                question: "What is the standard induction chemotherapy regimen for fit AML patients?",
+                options: [
+                    "CHOP",
+                    "7+3 (cytarabine + anthracycline)",
+                    "Hyper-CVAD",
+                    "R-EPOCH"
+                ],
+                correct: 1,
+                explanation: "The '7+3' regimen consists of 7 days of continuous cytarabine plus 3 days of an anthracycline (typically daunorubicin or idarubicin). This has been the backbone of AML induction for decades.",
+                keyPoint: "7+3 = 7 days cytarabine + 3 days anthracycline. Standard intensive induction.",
+                citation: "NCCN Guidelines AML, 2024",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/aml.pdf" },
+                guideline: { name: "NCCN AML", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1411" }
+            },
+            {
+                type: "simple",
+                typeLabel: "Genetics",
+                difficulty: "intern",
+                question: "NPM1 mutation without FLT3-ITD in AML is classified as which risk category?",
+                options: [
+                    "Adverse",
+                    "Intermediate",
+                    "Favorable",
+                    "Very high risk"
+                ],
+                correct: 2,
+                explanation: "NPM1 mutation without FLT3-ITD (or with low FLT3-ITD allelic ratio) is classified as favorable risk in ELN 2022. NPM1 is the most commonly mutated gene in AML (~30% of cases).",
+                keyPoint: "NPM1 mutated without FLT3-ITD = favorable risk. Most common AML mutation.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+
+            // RESIDENT LEVEL
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "resident",
+                question: "Which targeted therapy is added to intensive chemotherapy for FLT3-mutated AML?",
+                options: [
+                    "Venetoclax",
+                    "Midostaurin",
+                    "Ivosidenib",
+                    "Enasidenib"
+                ],
+                correct: 1,
+                explanation: "Midostaurin is a FLT3 inhibitor added to 7+3 induction and consolidation for FLT3-mutated AML based on the RATIFY trial, which showed improved overall survival.",
+                keyPoint: "FLT3+ AML: Add midostaurin to 7+3. Gilteritinib for relapsed/refractory.",
+                citation: "Stone RM, et al. N Engl J Med. 2017;377:454-464",
+                pmid: "28644114",
+                doi: "10.1056/NEJMoa1614359"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "resident",
+                question: "What is the preferred regimen for older/unfit AML patients?",
+                options: [
+                    "7+3 induction",
+                    "Venetoclax + azacitidine",
+                    "High-dose cytarabine alone",
+                    "Hydroxyurea only"
+                ],
+                correct: 1,
+                explanation: "Venetoclax + azacitidine (or decitabine) is the standard of care for older or unfit patients who cannot tolerate intensive chemotherapy, based on the VIALE-A trial showing superior survival.",
+                keyPoint: "Unfit for intensive chemo: Venetoclax + HMA (azacitidine or decitabine).",
+                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971"
+            },
+            {
+                type: "simple",
+                typeLabel: "Genetics",
+                difficulty: "resident",
+                question: "Which mutation is specifically targeted by ivosidenib?",
+                options: [
+                    "FLT3-ITD",
+                    "IDH1",
+                    "IDH2",
+                    "NPM1"
+                ],
+                correct: 1,
+                explanation: "Ivosidenib targets IDH1 mutations, while enasidenib targets IDH2 mutations. These are oral targeted therapies that can be used as monotherapy or combined with other agents.",
+                keyPoint: "IDH1 = ivosidenib. IDH2 = enasidenib. Both cause differentiation.",
+                citation: "DiNardo CD, et al. N Engl J Med. 2018;378:2386-2398",
+                pmid: "29860938",
+                doi: "10.1056/NEJMoa1716984"
+            },
+            {
+                type: "simple",
+                typeLabel: "Classification",
+                difficulty: "resident",
+                question: "According to ELN 2022, which genetic abnormality is classified as adverse risk?",
+                options: [
+                    "NPM1 mutation",
+                    "t(8;21)",
+                    "Complex karyotype (3 or more abnormalities)",
+                    "Biallelic CEBPA mutation"
+                ],
+                correct: 2,
+                explanation: "Complex karyotype (3 or more unrelated chromosomal abnormalities) is adverse risk. Other adverse markers include TP53 mutation, RUNX1 mutation, ASXL1 mutation, monosomal karyotype, and certain translocations.",
+                keyPoint: "Adverse: complex karyotype, TP53, ASXL1, RUNX1, monosomal karyotype, -5/-7.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "case",
+                typeLabel: "Clinical Decision",
+                difficulty: "resident",
+                case: {
+                    presentation: "A 65-year-old man presents with fatigue and bruising. CBC shows WBC 45,000 with 60% blasts, Hgb 7.2, platelets 25,000.",
+                    labs: [
+                        { name: "WBC", value: "45,000/uL", abnormal: true },
+                        { name: "Blasts", value: "60%", abnormal: true },
+                        { name: "Hemoglobin", value: "7.2 g/dL", abnormal: true },
+                        { name: "Platelets", value: "25,000/uL", abnormal: true }
+                    ]
+                },
+                question: "Before starting treatment, which test result is MOST critical to obtain?",
+                options: [
+                    "Vitamin B12 level",
+                    "PML-RARA (for APL)",
+                    "Hepatitis B serology",
+                    "Bone density scan"
+                ],
+                correct: 1,
+                explanation: "Ruling out APL is critical before starting standard AML therapy. APL requires immediate ATRA treatment and has high early mortality from DIC if not recognized. Do not give cytotoxic chemo alone if APL is suspected.",
+                keyPoint: "Always rule out APL first! Check for t(15;17)/PML-RARA. APL is a medical emergency.",
+                citation: "NCCN Guidelines APL, 2024",
+                guideline: { name: "NCCN AML", url: "https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1411" }
+            },
+
+            // FELLOW LEVEL
+            {
+                type: "simple",
+                typeLabel: "Risk Stratification",
+                difficulty: "fellow",
+                question: "In ELN 2022, what defines a 'favorable' NPM1-mutated case if FLT3-ITD is present?",
+                options: [
+                    "Any FLT3-ITD makes it intermediate risk",
+                    "FLT3-ITD with low allelic ratio (<0.5) remains favorable",
+                    "FLT3-ITD with high allelic ratio (>=0.5) remains favorable",
+                    "NPM1 with FLT3-ITD is always adverse risk"
+                ],
+                correct: 1,
+                explanation: "ELN 2022 changed the classification: NPM1-mutated AML with FLT3-ITD low allelic ratio (<0.5) remains favorable risk. High allelic ratio (>=0.5) moves it to intermediate risk.",
+                keyPoint: "NPM1+/FLT3-ITD low ratio (<0.5) = favorable. High ratio (>=0.5) = intermediate.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "simple",
+                typeLabel: "MRD",
+                difficulty: "fellow",
+                question: "What is the preferred method for MRD monitoring in NPM1-mutated AML?",
+                options: [
+                    "Flow cytometry only",
+                    "Cytogenetics",
+                    "RT-qPCR for NPM1 transcript",
+                    "NGS panel"
+                ],
+                correct: 2,
+                explanation: "RT-qPCR for NPM1 mutation transcript is the preferred MRD method as it has high sensitivity (10^-5 to 10^-6) and NPM1 is a stable marker that doesn't disappear at relapse. PCR-based MRD is more sensitive than flow cytometry.",
+                keyPoint: "NPM1 MRD: RT-qPCR preferred. Sensitivity 10^-5. Stable marker at relapse.",
+                citation: "Ivey A, et al. N Engl J Med. 2016;374:422-433",
+                pmid: "26789727",
+                doi: "10.1056/NEJMoa1507471"
+            },
+            {
+                type: "simple",
+                typeLabel: "Transplant",
+                difficulty: "fellow",
+                question: "Which ELN 2022 risk category generally warrants allogeneic HCT in first remission?",
+                options: [
+                    "Favorable risk only",
+                    "Intermediate and adverse risk",
+                    "Adverse risk only",
+                    "All AML patients"
+                ],
+                correct: 1,
+                explanation: "Intermediate and adverse risk AML patients benefit from allo-HCT in CR1 if eligible. Favorable risk patients (NPM1+/FLT3-ITD-, CBF-AML) can be treated with chemotherapy alone and transplanted at relapse.",
+                keyPoint: "Allo-HCT in CR1: Intermediate and adverse risk. Favorable: chemo, transplant at relapse.",
+                citation: "Cornelissen JJ, et al. Blood. 2012;119:4014-4022",
+                pmid: "22383796",
+                doi: "10.1182/blood-2012-01-403212"
+            },
+            {
+                type: "case",
+                typeLabel: "Treatment Decision",
+                difficulty: "fellow",
+                case: {
+                    presentation: "A 55-year-old woman with newly diagnosed AML. Cytogenetics show t(8;21). NGS reveals KIT D816V mutation. She achieves CR after 7+3 induction.",
+                    labs: [
+                        { name: "Cytogenetics", value: "t(8;21)(q22;q22)", abnormal: false },
+                        { name: "KIT", value: "D816V mutated", abnormal: true },
+                        { name: "NPM1", value: "Wild type", abnormal: false },
+                        { name: "FLT3", value: "Wild type", abnormal: false }
+                    ]
+                },
+                question: "How does the KIT mutation affect her management?",
+                options: [
+                    "No change - still favorable risk, chemotherapy consolidation",
+                    "KIT mutation in CBF-AML may increase relapse risk; consider transplant",
+                    "Switch to venetoclax-based therapy",
+                    "Add midostaurin to consolidation"
+                ],
+                correct: 1,
+                explanation: "KIT mutations in core binding factor AML (t(8;21) or inv(16)) are associated with higher relapse risk. ELN 2022 suggests KIT-mutated CBF-AML may be considered for allo-HCT in CR1, though this remains debated.",
+                keyPoint: "KIT mutation in CBF-AML: higher relapse risk. Consider transplant despite CBF.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+
+            // ATTENDING LEVEL
+            {
+                type: "simple",
+                typeLabel: "Molecular",
+                difficulty: "attending",
+                question: "What defines TP53 'multi-hit' status according to ELN 2022?",
+                options: [
+                    "Any TP53 mutation",
+                    "TP53 mutation with VAF >10%",
+                    "TP53 mutation with loss of 17p, second TP53 mutation, or copy-neutral LOH",
+                    "TP53 mutation with complex karyotype"
+                ],
+                correct: 2,
+                explanation: "TP53 multi-hit (biallelic) is defined as TP53 mutation plus: deletion of 17p, second TP53 mutation, or copy-neutral loss of heterozygosity. Multi-hit TP53 has worse prognosis than single-hit and is adverse risk regardless of other features.",
+                keyPoint: "TP53 multi-hit: mutation + 17p loss OR second mutation OR CN-LOH. Very poor prognosis.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "attending",
+                question: "What is the mechanism of differentiation syndrome with IDH inhibitors?",
+                options: [
+                    "Allergic reaction to the drug",
+                    "Rapid differentiation of leukemic blasts causing inflammation",
+                    "Drug-induced liver toxicity",
+                    "Bone marrow suppression"
+                ],
+                correct: 1,
+                explanation: "IDH inhibitors cause leukemic blasts to differentiate, which can cause differentiation syndrome similar to APL. Symptoms include fever, dyspnea, pulmonary infiltrates, pleural effusions, and rising WBC. Treat with steroids.",
+                keyPoint: "IDH inhibitor differentiation syndrome: fever, dyspnea, weight gain, rising WBC. Treat with dexamethasone.",
+                citation: "DiNardo CD, et al. Blood. 2020;135:676-687",
+                pmid: "31697823",
+                doi: "10.1182/blood.2019001808"
+            },
+            {
+                type: "case",
+                typeLabel: "Complex Management",
+                difficulty: "attending",
+                case: {
+                    presentation: "A 70-year-old man with AML achieves CR on venetoclax/azacitidine. Now day 35 of cycle 3 with ANC 200 and platelet 40,000 despite G-CSF.",
+                    labs: [
+                        { name: "ANC", value: "200/uL", abnormal: true },
+                        { name: "Platelets", value: "40,000/uL", abnormal: true },
+                        { name: "Bone marrow", value: "Hypocellular, <5% blasts", abnormal: false },
+                        { name: "Cycle day", value: "35", abnormal: true }
+                    ]
+                },
+                question: "What is the MOST appropriate next step?",
+                options: [
+                    "Continue same doses, give more time",
+                    "Reduce venetoclax duration and/or HMA dose for next cycle",
+                    "Stop treatment - patient is in remission",
+                    "Switch to intensive chemotherapy"
+                ],
+                correct: 1,
+                explanation: "Prolonged cytopenias despite remission are common with venetoclax-based therapy. Dose modifications include reducing venetoclax duration (e.g., 21 days instead of 28) or reducing HMA dose. Maintain efficacy while improving count recovery.",
+                keyPoint: "Ven-HMA prolonged cytopenias in remission: reduce venetoclax duration or HMA dose. Don't stop.",
+                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971"
+            },
+            {
+                type: "simple",
+                typeLabel: "Transplant",
+                difficulty: "attending",
+                question: "What is the role of post-transplant FLT3 inhibitor maintenance?",
+                options: [
+                    "Not recommended",
+                    "Sorafenib or gilteritinib post-allo-HCT reduces relapse in FLT3-ITD AML",
+                    "Only beneficial in matched sibling donor transplants",
+                    "Should replace GVHD prophylaxis"
+                ],
+                correct: 1,
+                explanation: "SORMAIN and other trials showed that sorafenib maintenance post-allo-HCT reduces relapse and improves survival in FLT3-ITD AML. Gilteritinib is also used. This has become standard practice for FLT3-ITD patients post-transplant.",
+                keyPoint: "FLT3 inhibitor post-HCT: sorafenib reduces relapse (SORMAIN). Start 30-60 days post-HCT.",
+                citation: "Burchert A, et al. J Clin Oncol. 2020;38:2993-3002",
+                pmid: "32459600",
+                doi: "10.1200/JCO.19.03345"
+            },
+
+            // DR. STOCK LEVEL (EXTREME)
+            {
+                type: "case",
+                typeLabel: "Ultra-Complex",
+                difficulty: "stock",
+                case: {
+                    presentation: "A 58-year-old man with secondary AML from MDS. Cytogenetics: complex karyotype with -7, -5, del(17p). TP53 multi-hit (VAF 45%), ASXL1 mutation. ECOG 1.",
+                    labs: [
+                        { name: "TP53 VAF", value: "45% (multi-hit)", abnormal: true },
+                        { name: "Cytogenetics", value: "Complex with -5, -7, del(17p)", abnormal: true },
+                        { name: "Prior therapy", value: "Azacitidine x 8 cycles", abnormal: true },
+                        { name: "ASXL1", value: "Mutated", abnormal: true }
+                    ]
+                },
+                question: "What is the MOST appropriate treatment strategy?",
+                options: [
+                    "Standard 7+3 induction",
+                    "Ven-HMA; consider TP53-targeting trial; allo-HCT if CR despite high relapse risk",
+                    "Best supportive care only",
+                    "Repeat azacitidine monotherapy"
+                ],
+                correct: 1,
+                explanation: "TP53-mutated AML has dismal prognosis with intensive chemo (~20% CR, short duration). Ven-HMA has similar efficacy with less toxicity. Novel TP53-targeting agents (magrolimab, eprenetapopt) are being studied. Allo-HCT if CR, but expect high relapse.",
+                keyPoint: "TP53 multi-hit: worst AML biology. Ven-HMA not inferior to intensive. Clinical trials important.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "simple",
+                typeLabel: "Genomic Precision",
+                difficulty: "stock",
+                question: "According to ELN 2022, how does FLT3-TKD (vs FLT3-ITD) affect risk stratification?",
+                options: [
+                    "FLT3-TKD confers adverse risk",
+                    "FLT3-TKD does not modify risk; only ITD with allelic ratio matters",
+                    "FLT3-TKD and FLT3-ITD are equivalent",
+                    "FLT3-TKD makes NPM1-mutated AML favorable regardless"
+                ],
+                correct: 1,
+                explanation: "ELN 2022: FLT3-TKD does not modify risk category. Only FLT3-ITD matters, where high allelic ratio (>=0.5) with NPM1 = intermediate, low ratio with NPM1 = favorable. FLT3-TKD still qualifies for FLT3 inhibitor therapy.",
+                keyPoint: "FLT3-ITD allelic ratio matters. FLT3-TKD doesn't change risk (still gets FLT3 inhibitor).",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "simple",
+                typeLabel: "Drug Interactions",
+                difficulty: "stock",
+                question: "What venetoclax dose modification is needed with posaconazole?",
+                options: [
+                    "No adjustment needed",
+                    "Reduce to 70-100 mg due to 5-6 fold increase in venetoclax exposure",
+                    "Increase venetoclax dose",
+                    "Posaconazole is contraindicated"
+                ],
+                correct: 1,
+                explanation: "Venetoclax is a CYP3A4 substrate. Strong inhibitors like posaconazole increase exposure 5-6 fold. Reduce venetoclax to 70-100 mg with strong CYP3A4 inhibitors. Moderate inhibitors (fluconazole) require 50% reduction.",
+                keyPoint: "Venetoclax + posaconazole: reduce ven to 70-100mg. + fluconazole: 50% reduction.",
+                citation: "Venetoclax (VENCLEXTA) Package Insert, FDA",
+                url: "https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/208573s009lbl.pdf"
+            },
+            {
+                type: "simple",
+                typeLabel: "MRD Technology",
+                difficulty: "stock",
+                question: "Which mutations should NOT be used for MRD monitoring in AML?",
+                options: [
+                    "NPM1",
+                    "RUNX1-RUNX1T1 fusion",
+                    "DNMT3A, TET2, ASXL1 (DTA mutations)",
+                    "CBFB-MYH11 fusion"
+                ],
+                correct: 2,
+                explanation: "DNMT3A, TET2, and ASXL1 (DTA) mutations represent age-related clonal hematopoiesis (CHIP) that persists after treatment. They are NOT reliable MRD markers. NPM1 and fusion transcripts are reliable markers.",
+                keyPoint: "DTA mutations = CHIP, not MRD markers. NPM1 and fusions are good MRD markers.",
+                citation: "Jongen-Lavrencic M, et al. N Engl J Med. 2018;378:1189-1199",
+                pmid: "29601269",
+                doi: "10.1056/NEJMoa1716863"
+            },
+            {
+                type: "case",
+                typeLabel: "Differentiation Challenge",
+                difficulty: "stock",
+                case: {
+                    presentation: "A 55-year-old woman on ivosidenib-azacitidine for IDH1-mutated AML. Day 21: WBC rises from 2,000 to 28,000, fever 38.5C, dyspnea, pulmonary infiltrates, weight gain 4 kg.",
+                    labs: [
+                        { name: "WBC", value: "28,000 (from 2,000)", abnormal: true },
+                        { name: "Blasts", value: "3% (from 45%)", abnormal: false },
+                        { name: "Temperature", value: "38.5C", abnormal: true },
+                        { name: "Weight change", value: "+4 kg", abnormal: true }
+                    ]
+                },
+                question: "What is this syndrome and how should it be managed?",
+                options: [
+                    "Disease progression - stop IDH inhibitor",
+                    "IDH differentiation syndrome - dexamethasone 10mg BID, continue IDH inhibitor",
+                    "Infection only - antibiotics",
+                    "Fluid overload - diuretics only"
+                ],
+                correct: 1,
+                explanation: "IDH inhibitor differentiation syndrome: fever, dyspnea, weight gain, rising WBC with differentiating cells (blasts decreasing). NOT progression. Treat with dexamethasone 10 mg BID. Usually can continue IDH inhibitor.",
+                keyPoint: "IDH DS: fever, dyspnea, rising WBC, falling blasts. Steroids. Don't stop IDH inhibitor.",
+                citation: "DiNardo CD, et al. Blood. 2020;135:676-687"
+            },
+
+            // ADDITIONAL INTERN LEVEL QUESTIONS
+            {
+                type: "simple",
+                typeLabel: "Basics",
+                difficulty: "intern",
+                question: "What is the most common cytogenetic abnormality in AML overall?",
+                options: [
+                    "t(15;17)",
+                    "Normal karyotype",
+                    "t(8;21)",
+                    "inv(16)"
+                ],
+                correct: 1,
+                explanation: "Normal karyotype (CN-AML) is the most common finding, occurring in 40-50% of AML cases. Risk stratification in CN-AML depends heavily on molecular mutations (NPM1, FLT3, CEBPA).",
+                keyPoint: "Normal karyotype = most common AML cytogenetics (40-50%). Need molecular testing for risk.",
+                citation: "Grimwade D, et al. Blood. 2016;127:29-41"
+            },
+            {
+                type: "simple",
+                typeLabel: "Diagnosis",
+                difficulty: "intern",
+                question: "Which finding on peripheral blood smear is characteristic of APL?",
+                options: [
+                    "Hairy cells",
+                    "Auer rods (often in bundles called 'faggot cells')",
+                    "Smudge cells",
+                    "Target cells"
+                ],
+                correct: 1,
+                explanation: "APL promyelocytes often contain multiple Auer rods bundled together, called 'faggot cells.' Auer rods are crystallized granules. Single Auer rods can be seen in other AML subtypes.",
+                keyPoint: "Faggot cells (bundled Auer rods) = strongly suggestive of APL. Start ATRA if suspected.",
+                citation: "Tallman MS, et al. Blood. 2002;99:759-767"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "intern",
+                question: "What is the treatment for acute promyelocytic leukemia (APL)?",
+                options: [
+                    "7+3 chemotherapy only",
+                    "ATRA + arsenic trioxide (ATO) for low-risk; add chemo for high-risk",
+                    "Venetoclax + azacitidine",
+                    "Allogeneic stem cell transplant in first remission"
+                ],
+                correct: 1,
+                explanation: "APL is treated with all-trans retinoic acid (ATRA) + arsenic trioxide (ATO). Low-risk APL (WBC ≤10,000) can be treated without chemotherapy. High-risk (WBC >10,000) adds anthracycline. Cure rate >90%.",
+                keyPoint: "APL = ATRA + ATO. Low-risk: no chemo needed. High-risk: add anthracycline. >90% cure rate.",
+                citation: "Lo-Coco F, et al. N Engl J Med. 2013;369:111-121",
+                pmid: "23841729",
+                doi: "10.1056/NEJMoa1300874"
+            },
+            {
+                type: "simple",
+                typeLabel: "Complications",
+                difficulty: "intern",
+                question: "What is the most common cause of early death in APL?",
+                options: [
+                    "Infection",
+                    "Bleeding (DIC-related hemorrhage)",
+                    "Differentiation syndrome",
+                    "Tumor lysis syndrome"
+                ],
+                correct: 1,
+                explanation: "APL causes severe DIC with both bleeding and clotting. Hemorrhagic complications (especially intracranial) cause most early deaths. Start ATRA immediately when APL is suspected; don't wait for molecular confirmation.",
+                keyPoint: "APL early death = bleeding/DIC. Start ATRA immediately on clinical suspicion. Support with platelets, fibrinogen.",
+                citation: "Sanz MA, et al. Blood. 2009;113:1875-1891",
+                pmid: "18812465",
+                doi: "10.1182/blood-2008-04-150250"
+            },
+            {
+                type: "simple",
+                typeLabel: "Classification",
+                difficulty: "intern",
+                question: "Which translocation defines core-binding factor AML (CBF-AML)?",
+                options: [
+                    "t(15;17) only",
+                    "t(8;21) or inv(16)/t(16;16)",
+                    "t(9;11)",
+                    "t(6;9)"
+                ],
+                correct: 1,
+                explanation: "CBF-AML includes t(8;21)(q22;q22) involving RUNX1-RUNX1T1 and inv(16)(p13q22)/t(16;16) involving CBFB-MYH11. Both are favorable risk and respond well to high-dose cytarabine consolidation.",
+                keyPoint: "CBF-AML = t(8;21) or inv(16). Favorable risk. High-dose cytarabine consolidation is key.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "simple",
+                typeLabel: "Basics",
+                difficulty: "intern",
+                question: "At what age does the incidence of AML significantly increase?",
+                options: [
+                    "After age 30",
+                    "After age 45",
+                    "After age 65",
+                    "Incidence is constant across all ages"
+                ],
+                correct: 2,
+                explanation: "AML incidence increases dramatically after age 65, with median age at diagnosis of 68 years. Older patients often have secondary AML, adverse genetics, and are less able to tolerate intensive therapy.",
+                keyPoint: "AML median age = 68 years. Incidence increases sharply after 65. Age affects treatment options.",
+                citation: "SEER Cancer Statistics Review, NCI"
+            },
+
+            // ADDITIONAL RESIDENT LEVEL QUESTIONS
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "resident",
+                question: "What is gilteritinib used for in AML?",
+                options: [
+                    "First-line induction for all AML",
+                    "Relapsed/refractory FLT3-mutated AML",
+                    "IDH1-mutated AML only",
+                    "Maintenance after transplant for all patients"
+                ],
+                correct: 1,
+                explanation: "Gilteritinib is a FLT3 inhibitor approved for relapsed/refractory FLT3-mutated AML based on the ADMIRAL trial. It showed improved OS compared to salvage chemotherapy (9.3 vs 5.6 months).",
+                keyPoint: "Gilteritinib = FLT3 inhibitor for R/R FLT3+ AML. ADMIRAL trial showed OS benefit over chemo.",
+                citation: "Perl AE, et al. N Engl J Med. 2019;381:1728-1740",
+                pmid: "31665578",
+                doi: "10.1056/NEJMoa1902688"
+            },
+            {
+                type: "simple",
+                typeLabel: "Genetics",
+                difficulty: "resident",
+                question: "What percentage of AML patients have NPM1 mutations?",
+                options: [
+                    "5-10%",
+                    "15-20%",
+                    "25-35%",
+                    "50-60%"
+                ],
+                correct: 2,
+                explanation: "NPM1 is the most commonly mutated gene in AML, occurring in 25-35% of cases (even higher, ~50%, in cytogenetically normal AML). NPM1 mutation without FLT3-ITD confers favorable prognosis.",
+                keyPoint: "NPM1 = most common AML mutation (25-35% overall, ~50% of CN-AML). Favorable if no FLT3-ITD.",
+                citation: "Falini B, et al. N Engl J Med. 2005;352:254-266"
+            },
+            {
+                type: "simple",
+                typeLabel: "Supportive Care",
+                difficulty: "resident",
+                question: "What is the indication for leukapheresis in AML?",
+                options: [
+                    "All patients with WBC >50,000",
+                    "Symptomatic leukostasis (typically WBC >100,000 with neurologic/pulmonary symptoms)",
+                    "Standard of care before all inductions",
+                    "Only in APL"
+                ],
+                correct: 1,
+                explanation: "Leukapheresis is indicated for symptomatic leukostasis, typically with very high WBC (>100,000) plus neurologic or pulmonary symptoms. Asymptomatic hyperleukocytosis should be treated with chemotherapy, not leukapheresis.",
+                keyPoint: "Leukapheresis for symptomatic leukostasis. Start chemo immediately. Don't delay for leukapheresis.",
+                citation: "Rollig C, et al. J Clin Oncol. 2015;33:4188-4194"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "resident",
+                question: "What defines complete remission (CR) in AML?",
+                options: [
+                    "No blasts visible on peripheral smear",
+                    "Bone marrow blasts <5%, ANC ≥1000, platelets ≥100,000, no Auer rods, no extramedullary disease",
+                    "Negative MRD by flow cytometry only",
+                    "Resolution of all symptoms"
+                ],
+                correct: 1,
+                explanation: "CR requires: <5% bone marrow blasts, ANC ≥1,000/μL, platelets ≥100,000/μL, no Auer rods, no extramedullary disease, and transfusion independence. CRi (incomplete) has cytopenias not meeting thresholds.",
+                keyPoint: "CR = <5% blasts, ANC ≥1000, plt ≥100k, no Auer rods, no EMD. CRi = CR with incomplete count recovery.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "case",
+                typeLabel: "Clinical Decision",
+                difficulty: "resident",
+                case: {
+                    presentation: "A 72-year-old man with new AML diagnosis. ECOG 2, Cr 1.8, LVEF 40%. Genetics show NPM1 mutation, normal karyotype, no FLT3.",
+                    labs: [
+                        { name: "Age", value: "72 years", abnormal: true },
+                        { name: "ECOG PS", value: "2", abnormal: true },
+                        { name: "LVEF", value: "40%", abnormal: true },
+                        { name: "NPM1", value: "Mutated", abnormal: false }
+                    ]
+                },
+                question: "What is the most appropriate treatment approach?",
+                options: [
+                    "Intensive 7+3 chemotherapy",
+                    "Venetoclax + azacitidine",
+                    "Best supportive care only",
+                    "High-dose cytarabine alone"
+                ],
+                correct: 1,
+                explanation: "This elderly patient with comorbidities (poor PS, reduced cardiac function, renal impairment) is not a candidate for intensive chemotherapy. Venetoclax + HMA is the standard of care for unfit patients, with good efficacy in NPM1-mutated disease.",
+                keyPoint: "Unfit for intensive: age, PS ≥2, cardiac, renal, hepatic issues. Ven + HMA is standard. NPM1+ responds well.",
+                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971"
+            },
+            {
+                type: "simple",
+                typeLabel: "Genetics",
+                difficulty: "resident",
+                question: "Which mutation often co-occurs with FLT3-ITD and worsens prognosis?",
+                options: [
+                    "NPM1 alone",
+                    "DNMT3A",
+                    "Biallelic CEBPA",
+                    "t(8;21)"
+                ],
+                correct: 1,
+                explanation: "DNMT3A mutations frequently co-occur with FLT3-ITD and are associated with worse outcomes. The combination of DNMT3A, NPM1, and FLT3-ITD mutations is common and has intermediate-adverse prognosis.",
+                keyPoint: "DNMT3A often co-occurs with NPM1 and FLT3. Triple-mutated (DNF) is a recognized adverse pattern.",
+                citation: "Papaemmanuil E, et al. N Engl J Med. 2016;374:2209-2221"
+            },
+
+            // ADDITIONAL FELLOW LEVEL QUESTIONS
+            {
+                type: "simple",
+                typeLabel: "MRD",
+                difficulty: "fellow",
+                question: "What is the sensitivity threshold recommended for MRD assessment in AML?",
+                options: [
+                    "10^-2 (1%)",
+                    "10^-3 (0.1%)",
+                    "10^-4 to 10^-5 (0.01-0.001%)",
+                    "Any level detectable by morphology"
+                ],
+                correct: 2,
+                explanation: "ELN recommends MRD sensitivity of at least 10^-4 (0.01%), with 10^-5 or better preferred for molecular methods (RT-qPCR, NGS). Flow cytometry typically achieves 10^-4, while PCR can reach 10^-5 to 10^-6.",
+                keyPoint: "MRD sensitivity: ≥10^-4 required, 10^-5-10^-6 preferred. RT-qPCR for fusions/NPM1 most sensitive.",
+                citation: "Schuurhuis GJ, et al. Blood. 2018;131:1275-1291"
+            },
+            {
+                type: "case",
+                typeLabel: "Management",
+                difficulty: "fellow",
+                case: {
+                    presentation: "A 45-year-old woman with AML in CR1 after 7+3 + midostaurin. She has FLT3-ITD (high allelic ratio 0.7), NPM1 wild-type, normal karyotype. Planning for allo-HCT.",
+                    labs: [
+                        { name: "FLT3-ITD", value: "Positive, AR 0.7", abnormal: true },
+                        { name: "NPM1", value: "Wild-type", abnormal: true },
+                        { name: "Cytogenetics", value: "Normal", abnormal: false },
+                        { name: "ELN Risk", value: "Intermediate", abnormal: true }
+                    ]
+                },
+                question: "What post-transplant maintenance is recommended?",
+                options: [
+                    "No maintenance needed",
+                    "FLT3 inhibitor (sorafenib or gilteritinib) maintenance",
+                    "Azacitidine maintenance only",
+                    "Lenalidomide maintenance"
+                ],
+                correct: 1,
+                explanation: "FLT3 inhibitor maintenance post-allo-HCT reduces relapse in FLT3-ITD AML. The SORMAIN trial showed sorafenib improved RFS (HR 0.39). Gilteritinib and quizartinib are also options. Start 30-100 days post-HCT.",
+                keyPoint: "FLT3-ITD AML: FLT3 inhibitor maintenance post-HCT (sorafenib, gilteritinib). SORMAIN: RFS HR 0.39.",
+                citation: "Burchert A, et al. J Clin Oncol. 2020;38:2993-3002"
+            },
+            {
+                type: "simple",
+                typeLabel: "Transplant",
+                difficulty: "fellow",
+                question: "What is the role of allo-HCT in favorable-risk AML (NPM1+/FLT3-ITD-, CBF-AML)?",
+                options: [
+                    "Standard of care in CR1 for all favorable-risk",
+                    "Reserved for relapse or MRD-positive after consolidation",
+                    "Never indicated",
+                    "Only if matched sibling donor available"
+                ],
+                correct: 1,
+                explanation: "Favorable-risk AML (NPM1+/FLT3-ITD-, CBF-AML) should not routinely receive allo-HCT in CR1 as chemotherapy alone has excellent outcomes. HCT is considered at relapse or if MRD persists after consolidation.",
+                keyPoint: "Favorable-risk AML: chemo consolidation in CR1. Reserve HCT for relapse or persistent MRD.",
+                citation: "Cornelissen JJ, et al. Blood. 2012;119:4014-4022"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "fellow",
+                question: "What is the mechanism of CPX-351 (Vyxeos) and its indication?",
+                options: [
+                    "FLT3 inhibitor for FLT3+ AML",
+                    "Liposomal daunorubicin:cytarabine in 5:1 molar ratio for therapy-related or AML-MRC",
+                    "BCL-2 inhibitor for elderly AML",
+                    "IDH2 inhibitor for IDH2+ AML"
+                ],
+                correct: 1,
+                explanation: "CPX-351 is a liposomal formulation with fixed 5:1 molar ratio of cytarabine:daunorubicin. FDA-approved for newly diagnosed therapy-related AML (t-AML) or AML with myelodysplasia-related changes (AML-MRC).",
+                keyPoint: "CPX-351: liposomal ara-C:daunorubicin 5:1 ratio. For t-AML and AML-MRC. Better OS than 7+3 in these subtypes.",
+                citation: "Lancet JE, et al. J Clin Oncol. 2018;36:2684-2692"
+            },
+            {
+                type: "simple",
+                typeLabel: "Genetics",
+                difficulty: "fellow",
+                question: "What is the significance of RUNX1 mutation in AML per ELN 2022?",
+                options: [
+                    "Favorable risk",
+                    "Adverse risk (when not with favorable-risk defining lesions)",
+                    "Only significant with concurrent TP53",
+                    "Intermediate risk always"
+                ],
+                correct: 1,
+                explanation: "RUNX1 mutation is classified as adverse risk in ELN 2022 when not occurring with favorable-risk defining genetic abnormalities. RUNX1-mutated AML often has poor response to standard chemotherapy.",
+                keyPoint: "RUNX1 mutation = adverse risk per ELN 2022 (unless with favorable lesion). Poor chemo response.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+
+            // ADDITIONAL ATTENDING LEVEL QUESTIONS
+            {
+                type: "case",
+                typeLabel: "Complex Case",
+                difficulty: "attending",
+                case: {
+                    presentation: "A 50-year-old man in CR after venetoclax-azacitidine for AML with IDH2 mutation and normal karyotype. After 12 cycles, bone marrow shows <5% blasts but IDH2 mutation persists by NGS at 2% VAF.",
+                    labs: [
+                        { name: "BM blasts", value: "<5%", abnormal: false },
+                        { name: "IDH2 VAF", value: "2%", abnormal: true },
+                        { name: "Cytogenetics", value: "Normal", abnormal: false }
+                    ]
+                },
+                question: "How should the persistent IDH2 mutation be interpreted?",
+                options: [
+                    "This represents disease relapse requiring therapy change",
+                    "IDH2 can persist as clonal hematopoiesis; monitor clinically, not necessarily relapse",
+                    "Must add enasidenib immediately",
+                    "Proceed to transplant urgently"
+                ],
+                correct: 1,
+                explanation: "IDH mutations can persist as clonal hematopoiesis (CHIP) even in morphologic CR. Unlike NPM1 (which should clear in CR), persistent IDH doesn't necessarily indicate active disease. Clinical and morphologic assessment are key.",
+                keyPoint: "IDH1/2 can persist as CHIP in remission. Unlike NPM1, persistence doesn't equal MRD. Follow morphology.",
+                citation: "Jongen-Lavrencic M, et al. N Engl J Med. 2018;378:1189-1199",
+                pmid: "29601269",
+                doi: "10.1056/NEJMoa1716863"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "attending",
+                question: "What is the recommended duration of venetoclax-HMA therapy for responding patients?",
+                options: [
+                    "Fixed 6 cycles then stop",
+                    "Continue until progression or intolerance",
+                    "Stop after achieving MRD negativity",
+                    "Switch to maintenance after 12 cycles"
+                ],
+                correct: 1,
+                explanation: "Unlike intensive chemotherapy which has defined cycles, venetoclax-HMA is typically continued until disease progression or intolerance. Dose modifications for cytopenias are common. Stopping risks relapse.",
+                keyPoint: "Ven-HMA: continue until progression/intolerance. Not time-limited. Dose modify for cytopenias.",
+                citation: "NCCN Guidelines AML, 2024",
+                guideline: { name: "NCCN", url: "https://www.nccn.org/professionals/physician_gls/pdf/aml.pdf" }
+            },
+            {
+                type: "simple",
+                typeLabel: "Molecular",
+                difficulty: "attending",
+                question: "What defines a 'secondary-type' mutation pattern in AML?",
+                options: [
+                    "Any mutation acquired during chemotherapy",
+                    "Mutations in SRSF2, SF3B1, U2AF1, ZRSR2, ASXL1, EZH2, BCOR, STAG2 suggesting MDS origin",
+                    "Only RUNX1 and TP53",
+                    "High FLT3-ITD allelic ratio"
+                ],
+                correct: 1,
+                explanation: "Secondary-type mutations (splicing factors, chromatin modifiers) suggest evolution from MDS/CHIP even without prior MDS diagnosis. ELN 2022 classifies AML-MR by these mutations, independent of morphology.",
+                keyPoint: "Secondary-type mutations: SRSF2, SF3B1, U2AF1, ZRSR2, ASXL1, EZH2, BCOR, STAG2. Define AML-MR per WHO/ELN.",
+                citation: "Lindsley RC, et al. Blood. 2017;130:846-858"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "attending",
+                question: "What is menin inhibitor therapy and its role in AML?",
+                options: [
+                    "Standard of care for all AML",
+                    "Targeting KMT2A-rearranged and NPM1-mutated AML via menin-KMT2A interaction",
+                    "Only for FLT3-mutated AML",
+                    "Post-transplant maintenance"
+                ],
+                correct: 1,
+                explanation: "Menin inhibitors (revumenib, ziftomenib) disrupt the menin-KMT2A interaction critical in KMT2A-rearranged and NPM1-mutated AML. They cause differentiation of leukemic blasts. Revumenib FDA-approved in 2024 for R/R KMT2A-r AML.",
+                keyPoint: "Menin inhibitors: revumenib (FDA 2024), ziftomenib. For KMT2A-r and NPM1-mutated AML. Cause differentiation.",
+                citation: "Issa GC, et al. N Engl J Med. 2023;389:1821-1832"
+            },
+
+            // ADDITIONAL DR. STOCK (EXTREME) LEVEL QUESTIONS
+            {
+                type: "case",
+                typeLabel: "Expert Decision",
+                difficulty: "stock",
+                case: {
+                    presentation: "A 62-year-old man with R/R AML after venetoclax-azacitidine and gilteritinib. Triple refractory. Has FLT3-ITD, NPM1 mutation, DNMT3A mutation. Now with WBC 45,000, 70% blasts. No suitable donor identified yet.",
+                    labs: [
+                        { name: "FLT3-ITD", value: "Positive", abnormal: true },
+                        { name: "NPM1", value: "Mutated", abnormal: false },
+                        { name: "DNMT3A", value: "Mutated", abnormal: true },
+                        { name: "Prior therapy", value: "Ven-aza, gilteritinib", abnormal: true }
+                    ]
+                },
+                question: "What treatment approach has best evidence in this setting?",
+                options: [
+                    "Repeat venetoclax-azacitidine",
+                    "Menin inhibitor (revumenib) given NPM1 mutation",
+                    "Best supportive care only",
+                    "Standard 7+3 induction"
+                ],
+                correct: 1,
+                explanation: "For NPM1-mutated R/R AML, menin inhibitors (revumenib) offer a novel mechanism. AUGMENT-101 showed 23% CR+CRh rate in heavily pretreated NPM1-mutated AML. This provides a bridge to transplant option.",
+                keyPoint: "Menin inhibitors (revumenib) target NPM1-mutated AML. Novel mechanism for R/R disease. Can bridge to transplant.",
+                citation: "Issa GC, et al. N Engl J Med. 2023;389:1821-1832"
+            },
+            {
+                type: "simple",
+                typeLabel: "Precision Medicine",
+                difficulty: "stock",
+                question: "How do MECOM (EVI1) rearrangements affect AML prognosis?",
+                options: [
+                    "Favorable prognosis like CBF-AML",
+                    "One of the worst prognostic factors; adverse risk with very poor outcomes",
+                    "Intermediate prognosis, similar to normal karyotype",
+                    "Only significant if combined with FLT3-ITD"
+                ],
+                correct: 1,
+                explanation: "MECOM (3q26.2/EVI1) rearrangements define adverse-risk AML with extremely poor prognosis (median OS <1 year). Often resistant to standard chemotherapy. Allo-HCT should be pursued aggressively if possible.",
+                keyPoint: "MECOM/EVI1 rearrangements: among worst AML prognoses. Very chemoresistant. Aggressive HCT pursuit.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "simple",
+                typeLabel: "Drug Combinations",
+                difficulty: "stock",
+                question: "What is the rationale for triplet therapy (venetoclax + azacitidine + targeted agent)?",
+                options: [
+                    "No evidence supports triplets",
+                    "Combining BCL-2 inhibition with targeted agents (FLT3i, IDHi) may deepen responses",
+                    "Triplets are only for relapsed disease",
+                    "Triplets replace transplant"
+                ],
+                correct: 1,
+                explanation: "Triplet combinations (ven-aza + FLT3 inhibitor or IDH inhibitor) are being studied to deepen responses, particularly in targetable mutations. Early data shows high CR rates. Balance efficacy against increased myelosuppression.",
+                keyPoint: "Triplet therapy (ven-aza + targeted agent): promising for mutation-specific AML. Higher CR rates but more cytopenias.",
+                citation: "DiNardo CD, et al. Lancet Oncol. 2021;22:1575-1586"
+            },
+            {
+                type: "case",
+                typeLabel: "Ultra-Complex",
+                difficulty: "stock",
+                case: {
+                    presentation: "A 55-year-old woman with de novo AML. Cytogenetics: t(8;21). NGS: KIT D816V (VAF 35%), additionally ASXL1 mutation. After 7+3, achieved CR. MRD by RUNX1-RUNX1T1 transcript: 0.1% at end of consolidation 2.",
+                    labs: [
+                        { name: "t(8;21)", value: "Positive", abnormal: false },
+                        { name: "KIT D816V", value: "VAF 35%", abnormal: true },
+                        { name: "ASXL1", value: "Mutated", abnormal: true },
+                        { name: "MRD (transcript)", value: "0.1%", abnormal: true }
+                    ]
+                },
+                question: "How does this constellation affect management?",
+                options: [
+                    "Still favorable risk; continue chemotherapy consolidation only",
+                    "KIT mutation + MRD positivity in CBF-AML increases relapse risk; consider allo-HCT",
+                    "Switch to venetoclax-based therapy",
+                    "Add midostaurin to remaining consolidation"
+                ],
+                correct: 1,
+                explanation: "While t(8;21) is traditionally favorable, high-VAF KIT mutations significantly increase relapse risk. Persistent MRD (detectable transcript after consolidation) further increases risk. ELN 2022 suggests considering HCT for KIT+ CBF-AML.",
+                keyPoint: "KIT mutation in CBF-AML: higher relapse risk. MRD positivity adds risk. Consider HCT despite 'favorable' cytogenetics.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377; Paschka P, et al. J Clin Oncol. 2006;24:3904-3911",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+
+            // ============ H&E HISTOPATHOLOGY QUESTIONS ============
+            {
+                type: "simple",
+                typeLabel: "Histopathology",
+                difficulty: "intern",
+                question: "On bone marrow biopsy, what blast percentage defines AML (excluding APL and AML with defining genetic abnormalities)?",
+                options: [
+                    "≥5% blasts",
+                    "≥10% blasts",
+                    "≥20% blasts",
+                    "≥30% blasts"
+                ],
+                correct: 2,
+                explanation: "AML is defined by ≥20% blasts in bone marrow or peripheral blood (WHO/ICC criteria). However, AML can be diagnosed with <20% blasts if specific genetic abnormalities are present (t(8;21), inv(16), t(15;17), or other AML-defining lesions per WHO 2022).",
+                keyPoint: "AML = ≥20% blasts OR any blast % with AML-defining genetic abnormality. APL, CBF-AML can have <20% blasts.",
+                citation: "WHO Classification 2022; Khoury JD, et al. Leukemia. 2022;36:1703-1719",
+                pmid: "35732831",
+                doi: "10.1038/s41375-022-01613-1"
+            },
+            {
+                type: "case",
+                typeLabel: "Histopathology",
+                difficulty: "intern",
+                case: {
+                    presentation: "A 45-year-old presents with fatigue and bruising. CBC shows WBC 35K, Hgb 8.2, Plt 45K. Peripheral smear shows large blasts with the finding shown.",
+                    labs: [
+                        { name: "WBC", value: "35,000/μL", abnormal: true },
+                        { name: "Hemoglobin", value: "8.2 g/dL", abnormal: true },
+                        { name: "Platelets", value: "45,000/μL", abnormal: true },
+                        { name: "Blasts", value: "65%", abnormal: true }
+                    ],
+                    histopath: {
+                        type: "aml_auer",
+                        description: "Large blast cell with pink/red rod-like cytoplasmic inclusion (Auer rod). The crystallized structure represents fused azurophilic granules and is pathognomonic for myeloid neoplasms."
+                    }
+                },
+                question: "What is the cytoplasmic structure indicated, and what does it signify?",
+                options: [
+                    "Russell body - indicates plasma cell neoplasm",
+                    "Auer rod - pathognomonic for myeloid lineage, confirms AML",
+                    "Howell-Jolly body - indicates splenic dysfunction",
+                    "Dohle body - indicates severe infection"
+                ],
+                correct: 1,
+                explanation: "Auer rods are crystallized azurophilic granules seen in myeloid blasts, pathognomonic for myeloid neoplasms. They appear as pink/red rod-like cytoplasmic inclusions. Multiple Auer rods ('faggot cells') strongly suggest APL.",
+                keyPoint: "Auer rods = pathognomonic for myeloid lineage. Pink rods on Wright-Giemsa. Multiple = think APL.",
+                citation: "Auer J. Am J Med Sci. 1906;131:1002-1015"
+            },
+            {
+                type: "simple",
+                typeLabel: "Histopathology",
+                difficulty: "resident",
+                question: "On peripheral blood smear, what morphologic finding suggests acute monocytic leukemia (AML-M5)?",
+                options: [
+                    "Small lymphocytes with scant cytoplasm",
+                    "Large cells with folded/convoluted nuclei, abundant gray-blue cytoplasm, and cytoplasmic vacuoles",
+                    "Hypersegmented neutrophils",
+                    "Target cells"
+                ],
+                correct: 1,
+                explanation: "Monocytic blasts have folded, lobulated, or convoluted nuclei ('brain-like'), abundant gray-blue cytoplasm often with vacuoles, and fine azurophilic granules. Monoblasts are large with round nuclei; promonocytes have folded nuclei.",
+                keyPoint: "Monocytic AML: folded/convoluted nuclei, abundant gray cytoplasm, vacuoles. NSE (non-specific esterase) positive.",
+                citation: "Swerdlow SH, et al. WHO Classification 2017"
+            },
+            {
+                type: "case",
+                typeLabel: "Histopathology",
+                difficulty: "resident",
+                case: {
+                    presentation: "A 28-year-old with pancytopenia. Bone marrow shows 55% blasts with the morphology shown. Cytogenetics pending.",
+                    labs: [
+                        { name: "WBC", value: "2,800/μL", abnormal: true },
+                        { name: "Hemoglobin", value: "9.1 g/dL", abnormal: true },
+                        { name: "Platelets", value: "68,000/μL", abnormal: true },
+                        { name: "Blasts", value: "55%", abnormal: true }
+                    ],
+                    histopath: {
+                        type: "aml_t821",
+                        description: "Large blast with abundant salmon-pink cytoplasm, prominent perinuclear clearing (hof), and a distinctive long, slender Auer rod. This morphology is characteristic of AML with t(8;21)(q22;q22)."
+                    }
+                },
+                question: "Based on this morphology, what cytogenetic abnormality would you predict?",
+                options: [
+                    "t(15;17) - APL",
+                    "t(8;21) - favorable risk AML with RUNX1-RUNX1T1",
+                    "inv(3) - adverse risk AML",
+                    "Normal karyotype"
+                ],
+                correct: 1,
+                explanation: "AML with t(8;21) shows characteristic morphology: large blasts with abundant salmon-pink cytoplasm, prominent perinuclear clearing (hof), and distinctive long, thin Auer rods. Often has maturing granulocytes with abnormal granulation. This is a favorable-risk AML.",
+                keyPoint: "t(8;21) AML: large blasts, salmon-pink cytoplasm, perinuclear hof, long thin Auer rods. Favorable prognosis.",
+                citation: "Arber DA, et al. Blood. 2016;127:2391-2405"
+            },
+            {
+                type: "simple",
+                typeLabel: "Histopathology",
+                difficulty: "resident",
+                question: "What morphologic feature distinguishes AML with inv(16)/t(16;16)?",
+                options: [
+                    "Monocytoid blasts only",
+                    "Abnormal eosinophils with large basophilic and eosinophilic granules",
+                    "Megakaryocytic proliferation",
+                    "Erythroid predominance"
+                ],
+                correct: 1,
+                explanation: "AML with inv(16) characteristically shows abnormal eosinophils at all stages with unusually large basophilic granules mixed with eosinophilic granules. These abnormal eosinophils are a morphologic clue even before cytogenetics return.",
+                keyPoint: "inv(16) AML: abnormal eosinophils with mixed basophilic + eosinophilic granules. Look for this clue on smear!",
+                citation: "Haferlach T, et al. Leukemia. 2003;17:2249-2260"
+            },
+            {
+                type: "simple",
+                typeLabel: "Histopathology",
+                difficulty: "fellow",
+                question: "On bone marrow biopsy, what finding suggests AML with myelodysplasia-related changes (AML-MRC)?",
+                options: [
+                    "Hypercellular marrow with monotonous blast population",
+                    "Multilineage dysplasia: megaloblastoid erythropoiesis, hypolobated megakaryocytes, hypogranular neutrophils",
+                    "Normal trilineage hematopoiesis",
+                    "Pure erythroid proliferation"
+                ],
+                correct: 1,
+                explanation: "AML-MRC shows multilineage dysplasia (≥50% dysplastic cells in ≥2 lineages): megaloblastoid erythroid precursors, small hypolobated megakaryocytes, hypogranular/hyposegmented neutrophils. History of MDS or MDS-related cytogenetics also qualifies.",
+                keyPoint: "AML-MRC morphology: multilineage dysplasia in ≥2 lineages. Look for hypolobated megas, hypogranular neutrophils.",
+                citation: "Arber DA, et al. Blood. 2016;127:2391-2405"
+            },
+            {
+                type: "simple",
+                typeLabel: "Histopathology",
+                difficulty: "fellow",
+                question: "What is the characteristic morphology of APL (AML with PML::RARA)?",
+                options: [
+                    "Small blasts with scant cytoplasm",
+                    "Hypergranular promyelocytes with bilobed nuclei, heavy azurophilic granules, and Auer rods/faggot cells",
+                    "Blasts with monocytic differentiation",
+                    "Erythroid precursor predominance"
+                ],
+                correct: 1,
+                explanation: "Classic APL: hypergranular promyelocytes with reniform/bilobed nuclei, cytoplasm packed with coarse azurophilic granules (may obscure nucleus), and multiple Auer rods (faggot cells). Microgranular variant has bilobed nuclei with scant/absent visible granules.",
+                keyPoint: "APL: hypergranular promyelocytes, bilobed nuclei, faggot cells. Microgranular variant: bilobed nuclei, few granules.",
+                citation: "Grimwade D, et al. Blood. 2000;96:1297-1308"
+            },
+            {
+                type: "simple",
+                typeLabel: "Histopathology",
+                difficulty: "attending",
+                question: "What morphologic feature helps distinguish acute megakaryoblastic leukemia (AMKL)?",
+                options: [
+                    "Myeloperoxidase-positive blasts",
+                    "Blasts with cytoplasmic blebbing, platelet shedding, and often associated marrow fibrosis",
+                    "Auer rods",
+                    "Hypergranular cytoplasm"
+                ],
+                correct: 1,
+                explanation: "AMKL blasts show cytoplasmic blebs/pseudopods, platelet budding, and variable size. Often associated with marrow fibrosis (dry tap). Blasts are MPO-negative but positive for CD41, CD42b, CD61. Consider Down syndrome-associated AMKL in children.",
+                keyPoint: "AMKL: cytoplasmic blebbing, platelet shedding, marrow fibrosis. MPO-neg, CD41/CD61-pos.",
+                citation: "Tallman MS, et al. Blood. 2000;96:2405-2411"
+            },
+            {
+                type: "simple",
+                typeLabel: "Histopathology",
+                difficulty: "attending",
+                question: "On bone marrow examination, what distinguishes pure erythroid leukemia from other AML subtypes?",
+                options: [
+                    "≥20% myeloblasts with Auer rods",
+                    "≥80% erythroid precursors with ≥30% proerythroblasts; no significant myeloblast component",
+                    "Mixed erythroid and megakaryocytic proliferation",
+                    "Predominantly mature erythroid cells"
+                ],
+                correct: 1,
+                explanation: "Pure erythroid leukemia (PEL) requires ≥80% erythroid lineage with ≥30% proerythroblasts, in absence of significant myeloblast population. Proerythroblasts are large with round nuclei, prominent nucleoli, deeply basophilic cytoplasm. PEL is rare and aggressive.",
+                keyPoint: "Pure erythroid leukemia: ≥80% erythroid, ≥30% proerythroblasts. No myeloblasts. Very aggressive.",
+                citation: "Arber DA, et al. Blood. 2016;127:2391-2405"
+            },
+            {
+                type: "simple",
+                typeLabel: "Histopathology",
+                difficulty: "stock",
+                question: "What is the morphologic hallmark of AML with NPM1 mutation?",
+                options: [
+                    "Always shows Auer rods",
+                    "Cup-like nuclear indentations in blasts; cytoplasmic (not nuclear) NPM1 localization on IHC",
+                    "Hypergranular cytoplasm",
+                    "Ringed sideroblasts"
+                ],
+                correct: 1,
+                explanation: "NPM1-mutated AML often shows cup-like nuclear invaginations in blasts. Critically, IHC shows aberrant cytoplasmic NPM1 staining (normal is nuclear). This cytoplasmic localization results from the frameshift mutation affecting the nucleolar localization signal.",
+                keyPoint: "NPM1-mutated AML: cup-like nuclear indentations, cytoplasmic NPM1 on IHC (normally nuclear). No consistent Auer rods.",
+                citation: "Falini B, et al. N Engl J Med. 2005;352:254-266"
+            },
+
+            // ============ ADDITIONAL QUESTIONS ============
+            {
+                type: "simple",
+                typeLabel: "Cytogenetics",
+                difficulty: "intern",
+                question: "What does 'complex karyotype' mean in AML, and what is its prognosis?",
+                options: [
+                    "Any chromosomal abnormality; neutral prognosis",
+                    "≥3 unrelated chromosomal abnormalities; adverse prognosis",
+                    "t(8;21) with additional abnormalities; favorable prognosis",
+                    "Normal karyotype with mutations; intermediate prognosis"
+                ],
+                correct: 1,
+                explanation: "Complex karyotype is defined as ≥3 unrelated chromosomal abnormalities (excluding recurrent translocations). It confers adverse risk per ELN 2022 and is associated with TP53 mutations, therapy-related AML, and poor response to chemotherapy.",
+                keyPoint: "Complex karyotype = ≥3 unrelated abnormalities = adverse risk. Often associated with TP53 mutations.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "resident",
+                question: "What is the role of FLAG-IDA in AML?",
+                options: [
+                    "First-line induction for all AML",
+                    "Salvage regimen for relapsed/refractory AML",
+                    "Maintenance therapy",
+                    "Only for APL"
+                ],
+                correct: 1,
+                explanation: "FLAG-IDA (fludarabine, cytarabine, G-CSF, idarubicin) is a commonly used salvage regimen for relapsed/refractory AML. It can achieve remission rates of 40-60% in R/R disease. Also used as intensified induction in some high-risk protocols.",
+                keyPoint: "FLAG-IDA: salvage for R/R AML. ~40-60% CR rates in relapsed disease. Intensified regimen.",
+                citation: "Parker JE, et al. Leukemia. 1997;11:1379-1382"
+            },
+            {
+                type: "simple",
+                typeLabel: "Complications",
+                difficulty: "resident",
+                question: "What electrolyte abnormality is characteristic of tumor lysis syndrome (TLS)?",
+                options: [
+                    "Low potassium, low phosphorus, high calcium",
+                    "High potassium, high phosphorus, high uric acid, low calcium",
+                    "Low sodium only",
+                    "Normal electrolytes with elevated LDH only"
+                ],
+                correct: 1,
+                explanation: "TLS causes hyperkalemia, hyperphosphatemia, hyperuricemia, and hypocalcemia (from calcium-phosphate precipitation). Can lead to acute kidney injury, arrhythmias, seizures. Prevent with hydration, allopurinol/rasburicase. High-risk in high WBC/high LDH.",
+                keyPoint: "TLS: high K, high phos, high uric acid, low Ca. AKI, arrhythmias, seizures. Rasburicase for high-risk.",
+                citation: "Cairo MS, Bishop M. Br J Haematol. 2004;127:3-11"
+            },
+            {
+                type: "simple",
+                typeLabel: "Genetics",
+                difficulty: "fellow",
+                question: "What is the significance of FLT3-TKD mutations compared to FLT3-ITD?",
+                options: [
+                    "FLT3-TKD has worse prognosis than FLT3-ITD",
+                    "FLT3-TKD has less adverse impact than FLT3-ITD; both respond to FLT3 inhibitors",
+                    "FLT3-TKD is not targetable",
+                    "FLT3-TKD only occurs in APL"
+                ],
+                correct: 1,
+                explanation: "FLT3-TKD (tyrosine kinase domain) mutations are point mutations with less adverse prognostic impact than FLT3-ITD (internal tandem duplication). Both are targetable with FLT3 inhibitors. ITD allelic ratio affects prognosis (high AR = worse).",
+                keyPoint: "FLT3-ITD worse prognosis than FLT3-TKD. Both respond to FLT3 inhibitors. ITD AR matters.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "fellow",
+                question: "What is the CC-486 (oral azacitidine) maintenance story in AML?",
+                options: [
+                    "No benefit in any population",
+                    "Improved OS in older patients in CR1 not proceeding to transplant (QUAZAR AML-001)",
+                    "Only for MDS, not AML",
+                    "Replaced by venetoclax maintenance"
+                ],
+                correct: 1,
+                explanation: "QUAZAR AML-001 showed oral azacitidine (CC-486) maintenance improved OS (24.7 vs 14.8 months) in patients ≥55 years in CR1 not proceeding to transplant. FDA approved 2020. Different formulation than injectable azacitidine.",
+                keyPoint: "Oral azacitidine (CC-486) maintenance: OS benefit in older CR1 patients not getting HCT. QUAZAR AML-001.",
+                citation: "Wei AH, et al. N Engl J Med. 2020;383:2526-2537"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "attending",
+                question: "What is glasdegib and its role in AML?",
+                options: [
+                    "FLT3 inhibitor",
+                    "Hedgehog pathway inhibitor; approved with LDAC for unfit newly diagnosed AML",
+                    "BCL-2 inhibitor",
+                    "IDH inhibitor"
+                ],
+                correct: 1,
+                explanation: "Glasdegib is a Hedgehog pathway (Smoothened) inhibitor. Approved with low-dose cytarabine for newly diagnosed AML in patients ineligible for intensive chemotherapy. Improved OS vs LDAC alone (8.8 vs 4.9 months). Less commonly used since venetoclax-HMA.",
+                keyPoint: "Glasdegib: Hedgehog inhibitor + LDAC for unfit AML. Less used since venetoclax-HMA era.",
+                citation: "Cortes JE, et al. Leukemia. 2019;33:379-389"
+            },
+            {
+                type: "case",
+                typeLabel: "Clinical Decision",
+                difficulty: "stock",
+                case: {
+                    presentation: "A 35-year-old woman with AML in CR1 after 7+3 induction. Genetics: normal karyotype, NPM1 mutated, FLT3-ITD negative. MRD by NPM1 RT-qPCR after consolidation 2: undetectable (<0.01%).",
+                    labs: [
+                        { name: "NPM1", value: "Mutated", abnormal: false },
+                        { name: "FLT3-ITD", value: "Negative", abnormal: false },
+                        { name: "MRD", value: "Undetectable", abnormal: false },
+                        { name: "Karyotype", value: "Normal", abnormal: false }
+                    ]
+                },
+                question: "What is the recommended consolidation approach per ELN 2022?",
+                options: [
+                    "Proceed to allogeneic HCT in CR1",
+                    "Continue chemotherapy consolidation (HiDAC); allo-HCT not recommended in CR1 for favorable-risk MRD-negative",
+                    "Switch to venetoclax-azacitidine",
+                    "No further therapy needed"
+                ],
+                correct: 1,
+                explanation: "NPM1-mutated/FLT3-ITD-negative AML is favorable risk. With undetectable MRD after consolidation, chemotherapy alone is appropriate; allo-HCT is reserved for relapse. HiDAC consolidation (3-4 cycles) is standard. Transplant adds TRM without clear OS benefit.",
+                keyPoint: "Favorable-risk AML + MRD negative: consolidation chemo, no HCT in CR1. HCT for relapse or MRD persistence.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+
+            // ============ ROUND 2: MORE CLINICAL QUESTIONS ============
+            {
+                type: "simple",
+                typeLabel: "Supportive Care",
+                difficulty: "intern",
+                question: "What is the recommended platelet transfusion threshold for AML patients without bleeding?",
+                options: [
+                    "<50,000/μL",
+                    "<20,000/μL (or <10,000/μL in stable patients)",
+                    "<100,000/μL",
+                    "Only transfuse for active bleeding"
+                ],
+                correct: 1,
+                explanation: "Prophylactic platelet transfusion threshold is typically <10,000-20,000/μL for stable AML patients. Higher thresholds (<50,000-100,000) for procedures, active bleeding, or conditions like APL with DIC. Avoid unnecessary transfusions to prevent alloimmunization.",
+                keyPoint: "Platelet threshold: <10-20K prophylactic, higher for bleeding/procedures/DIC. Avoid over-transfusion.",
+                citation: "ASCO Guidelines, Schiffer CA, et al. J Clin Oncol. 2018;36:199-227"
+            },
+            {
+                type: "simple",
+                typeLabel: "Infections",
+                difficulty: "intern",
+                question: "What is the definition of febrile neutropenia?",
+                options: [
+                    "Any fever in a cancer patient",
+                    "ANC <500/μL (or expected to decline) with single temp ≥38.3°C or sustained ≥38°C for 1 hour",
+                    "ANC <1000 only",
+                    "Fever only after chemotherapy"
+                ],
+                correct: 1,
+                explanation: "Febrile neutropenia: ANC <500/μL (or <1000 with expected decline to <500) PLUS single temperature ≥38.3°C (101°F) or ≥38.0°C (100.4°F) sustained for ≥1 hour. Requires immediate broad-spectrum antibiotics.",
+                keyPoint: "Febrile neutropenia: ANC <500 + fever ≥38.3°C. Medical emergency. Start antibiotics within 1 hour.",
+                citation: "IDSA Guidelines, Freifeld AG, et al. Clin Infect Dis. 2011;52:e56-e93"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "resident",
+                question: "What is the standard 'induction' dose of cytarabine in 7+3?",
+                options: [
+                    "100 mg/m²/day continuous infusion days 1-7",
+                    "3 g/m² every 12 hours",
+                    "20 mg/m² daily",
+                    "200 mg/m² bolus"
+                ],
+                correct: 0,
+                explanation: "Standard dose cytarabine (SDAC) in 7+3: 100-200 mg/m²/day continuous infusion for 7 days. High-dose cytarabine (HiDAC, 1-3 g/m² q12h) is used in consolidation and some induction protocols. Intermediate dose (1-1.5 g/m²) sometimes used.",
+                keyPoint: "7+3 induction: cytarabine 100-200 mg/m²/day CI x 7 days + anthracycline x 3 days. HiDAC for consolidation.",
+                citation: "Dohner H, et al. Blood. 2017;129:424-447"
+            },
+            {
+                type: "simple",
+                typeLabel: "Complications",
+                difficulty: "resident",
+                question: "What central nervous system complication can occur with high-dose cytarabine?",
+                options: [
+                    "Only headache",
+                    "Cerebellar toxicity (ataxia, dysarthria, nystagmus); more common if age >60 or renal dysfunction",
+                    "No CNS effects",
+                    "Seizures only"
+                ],
+                correct: 1,
+                explanation: "High-dose cytarabine can cause cerebellar toxicity: ataxia, dysarthria, nystagmus. Risk factors: age >60, renal impairment, cumulative dose. Usually reversible if caught early. Requires neurologic monitoring and dose adjustment or discontinuation if symptoms appear.",
+                keyPoint: "HiDAC cerebellar toxicity: ataxia, dysarthria, nystagmus. Risk: age >60, renal dysfunction. Monitor closely.",
+                citation: "Herzig RH, et al. J Clin Oncol. 1987;5:927-932"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "fellow",
+                question: "What is quizartinib and its distinguishing characteristic?",
+                options: [
+                    "Pan-kinase inhibitor",
+                    "Highly selective type II FLT3 inhibitor; approved for FLT3-ITD+ AML (more specific than midostaurin/gilteritinib)",
+                    "IDH inhibitor",
+                    "BCL-2 inhibitor"
+                ],
+                correct: 1,
+                explanation: "Quizartinib is a highly selective type II FLT3 inhibitor, more potent against FLT3-ITD than midostaurin. FDA approved 2023 for newly diagnosed FLT3-ITD+ AML with chemotherapy. QuANTUM-First trial showed OS benefit. Main toxicity: QTc prolongation.",
+                keyPoint: "Quizartinib: selective FLT3-ITD inhibitor. QuANTUM-First trial. Watch QTc. Added to 7+3 for FLT3-ITD+ AML.",
+                citation: "Erba HP, et al. Lancet. 2023;401:1571-1583"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "fellow",
+                question: "What is magrolimab and its mechanism in AML?",
+                options: [
+                    "CD33 antibody",
+                    "Anti-CD47 antibody blocking 'don't eat me' signal; enhances macrophage phagocytosis of leukemia cells",
+                    "PD-1 inhibitor",
+                    "FLT3 inhibitor"
+                ],
+                correct: 1,
+                explanation: "Magrolimab targets CD47, a 'don't eat me' signal overexpressed on AML cells. Blocking CD47 enables macrophage phagocytosis of leukemia. Being studied with azacitidine. ENHANCE-2 trial ongoing for TP53-mutated AML where outcomes are particularly poor.",
+                keyPoint: "Magrolimab: anti-CD47, blocks 'don't eat me' signal. Studied in TP53-mutated AML. Macrophage-mediated killing.",
+                citation: "Daver N, et al. Blood. 2022;140:supplement 1:abstract"
+            },
+            {
+                type: "case",
+                typeLabel: "Clinical Decision",
+                difficulty: "attending",
+                case: {
+                    presentation: "A 70-year-old man with de novo AML, ECOG 0, normal cardiac and renal function. Genetics: TP53 mutation (VAF 45%), complex karyotype with -5, -7, -17.",
+                    labs: [
+                        { name: "TP53", value: "Mutated VAF 45%", abnormal: true },
+                        { name: "Karyotype", value: "Complex with -5,-7,-17", abnormal: true },
+                        { name: "ECOG", value: "0", abnormal: false },
+                        { name: "Cardiac/Renal", value: "Normal", abnormal: false }
+                    ]
+                },
+                question: "What is the prognosis and treatment consideration?",
+                options: [
+                    "Favorable prognosis; standard 7+3",
+                    "Very poor prognosis (~10% OS at 2 years); consider clinical trial, venetoclax-aza, or HMA + novel agents targeting TP53-mutated AML",
+                    "Intermediate prognosis; proceed to HCT in CR1",
+                    "APL-like favorable prognosis with differentiation therapy"
+                ],
+                correct: 1,
+                explanation: "TP53-mutated AML with complex karyotype has dismal prognosis (median OS 5-7 months, <10% 2-year OS). Standard chemotherapy poorly effective. Options: venetoclax-HMA (modest benefit), clinical trials (magrolimab, eprenetapopt), or HMA alone. HCT if CR achieved, but high relapse risk.",
+                keyPoint: "TP53-mutated AML: worst prognosis (<10% 2-yr OS). Standard chemo fails. Clinical trials preferred. HCT if CR, but relapses.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "stock",
+                question: "What is the VIALE-A regimen and its impact on AML treatment?",
+                options: [
+                    "Intensive chemotherapy regimen",
+                    "Venetoclax + azacitidine; showed OS benefit over azacitidine alone in unfit AML, transforming the treatment landscape",
+                    "Transplant conditioning",
+                    "Maintenance therapy after HCT"
+                ],
+                correct: 1,
+                explanation: "VIALE-A: venetoclax + azacitidine vs placebo + azacitidine in unfit AML. Showed significant OS benefit (14.7 vs 9.6 months), with high CR rates (~66% CR+CRi). Changed standard of care for unfit patients. Venetoclax dose adjustments needed with azoles.",
+                keyPoint: "VIALE-A: ven-aza vs aza, OS 14.7 vs 9.6 mo. New standard for unfit AML. CYP3A4 interactions crucial.",
+                citation: "DiNardo CD, et al. N Engl J Med. 2020;383:617-629",
+                pmid: "32786187",
+                doi: "10.1056/NEJMoa2012971"
+            },
+            {
+                type: "simple",
+                typeLabel: "Emerging Therapy",
+                difficulty: "stock",
+                question: "What are the CD123-targeted therapies in development for AML?",
+                options: [
+                    "None in development",
+                    "Tagraxofusp (CD123-IL3 conjugate), CD123 CAR-T, CD123 bispecifics (flotetuzumab); CD123 is expressed on leukemic stem cells",
+                    "CD20-directed only",
+                    "Same as ALL treatments"
+                ],
+                correct: 1,
+                explanation: "CD123 (IL-3 receptor alpha) is expressed on AML blasts and leukemic stem cells. Therapies include: tagraxofusp (CD123-diphtheria toxin, approved for BPDCN), CD123×CD3 bispecifics (flotetuzumab, vibecotamab), and CD123 CAR-T in trials.",
+                keyPoint: "CD123: on AML blasts + LSCs. Tagraxofusp (BPDCN approved), bispecifics, CAR-T in development for AML.",
+                citation: "Uy GL, et al. Blood. 2021;137:751-762"
+            },
+            // ============ ROUND 3: ADDITIONAL CLINICAL QUESTIONS ============
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "fellow",
+                question: "What is the role of oral azacitidine (CC-486) maintenance after intensive chemotherapy?",
+                options: [
+                    "No benefit in any patient",
+                    "QUAZAR AML-001: improved OS in AML patients ≥55 years in CR1 after intensive chemo; given until progression",
+                    "Only used before transplant",
+                    "Replaces transplant in all patients"
+                ],
+                correct: 1,
+                explanation: "QUAZAR AML-001 showed oral azacitidine (CC-486) maintenance improved OS (24.7 vs 14.8 months) in AML patients ≥55 years in CR1 after intensive chemotherapy who were not proceeding to transplant. Continue until progression or unacceptable toxicity.",
+                keyPoint: "CC-486 (oral aza): QUAZAR maintenance. Age ≥55, CR1 after intensive chemo, not going to transplant. OS benefit.",
+                citation: "Wei AH, et al. N Engl J Med. 2020;383:2526-2537"
+            },
+            {
+                type: "simple",
+                typeLabel: "Diagnosis",
+                difficulty: "fellow",
+                question: "What is the significance of measurable residual disease (MRD) in AML?",
+                options: [
+                    "MRD has no prognostic value",
+                    "MRD positivity (by flow or PCR) in CR predicts higher relapse risk; informs transplant decisions and may guide therapy",
+                    "Only useful in APL",
+                    "MRD testing should be avoided"
+                ],
+                correct: 1,
+                explanation: "MRD detected by multiparameter flow cytometry (0.1% sensitivity) or molecular methods (NPM1, CBF-rearrangements) strongly predicts relapse. ELN 2022 recommends MRD assessment. MRD-positive patients may benefit from transplant or intensification. MRD response is increasingly used as trial endpoint.",
+                keyPoint: "MRD: flow (0.1%) or molecular (NPM1, CBF). MRD+ predicts relapse. Informs transplant decision. ELN 2022 recommends.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "simple",
+                typeLabel: "Emerging Therapy",
+                difficulty: "stock",
+                question: "What are menin inhibitors and which AML subtype do they target?",
+                options: [
+                    "IDH inhibitors for all AML",
+                    "Revumenib and ziftomenib target menin-KMT2A interaction in KMT2A-rearranged and NPM1-mutated AML",
+                    "BCL-2 inhibitors",
+                    "FLT3 inhibitors"
+                ],
+                correct: 1,
+                explanation: "Menin inhibitors (revumenib, ziftomenib) block the menin-KMT2A (MLL) interaction required for leukemogenesis in KMT2A-rearranged AML. Also active in NPM1-mutated AML which depends on similar transcriptional programs. AUGMENT-101 trial showed high response rates.",
+                keyPoint: "Menin inhibitors: revumenib, ziftomenib. Target KMT2A-rearranged and NPM1-mutated AML. Block menin-MLL interaction.",
+                citation: "Issa GC, et al. N Engl J Med. 2023;389:1821-1831"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "attending",
+                question: "How do gilteritinib and midostaurin differ in FLT3-mutated AML treatment?",
+                options: [
+                    "They are identical",
+                    "Midostaurin: added to intensive chemo in newly diagnosed; Gilteritinib: single-agent for R/R FLT3+ AML; both target FLT3-ITD and TKD",
+                    "Gilteritinib only for newly diagnosed",
+                    "Neither is FDA-approved"
+                ],
+                correct: 1,
+                explanation: "Midostaurin is multikinase inhibitor added to 7+3 in newly diagnosed FLT3+ AML (RATIFY trial). Gilteritinib is more selective FLT3 inhibitor approved as single-agent for R/R FLT3+ AML (ADMIRAL trial). Both target ITD and TKD mutations. Quizartinib approved for ITD-only.",
+                keyPoint: "Midostaurin: + 7+3 for new FLT3+ (RATIFY). Gilteritinib: R/R FLT3+ (ADMIRAL). Quizartinib: ITD only.",
+                citation: "Stone RM, et al. N Engl J Med. 2017;377:454-464"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "resident",
+                question: "What is gemtuzumab ozogamicin (GO) and when is it used in AML?",
+                options: [
+                    "BCL-2 inhibitor",
+                    "Anti-CD33 antibody-drug conjugate; added to induction in favorable/intermediate-risk AML for survival benefit",
+                    "Anti-CD123 bispecific",
+                    "FLT3 inhibitor"
+                ],
+                correct: 1,
+                explanation: "Gemtuzumab ozogamicin is an anti-CD33 ADC with calicheamicin payload. ALFA-0701 showed survival benefit when fractionated dosing (3 mg/m² D1,4,7) added to 7+3 in favorable/intermediate-risk AML. Watch for VOD/SOS especially if proceeding to transplant.",
+                keyPoint: "GO: anti-CD33 ADC. Added to 7+3 in fav/int AML (ALFA-0701). Fractionated 3 mg/m² D1,4,7. VOD risk.",
+                citation: "Castaigne S, et al. Lancet. 2012;379:1508-1516"
+            },
+            {
+                type: "simple",
+                typeLabel: "Diagnosis",
+                difficulty: "intern",
+                question: "What percentage of AML cases arise as secondary AML (s-AML)?",
+                options: [
+                    "Less than 5%",
+                    "Approximately 25-30%; from prior MDS, MPN, or therapy-related (t-AML)",
+                    "Over 80%",
+                    "Secondary AML doesn't exist"
+                ],
+                correct: 1,
+                explanation: "About 25-30% of AML is secondary: arising from prior MDS, CMML, MPN (s-AML), or treatment-related (t-AML from prior chemo/radiation). s-AML and t-AML have worse prognosis with adverse genetic features. CPX-351 approved for t-AML/AML-MRC.",
+                keyPoint: "s-AML/t-AML: ~25-30% of AML. Worse prognosis. CPX-351 (liposomal daunorubicin/cytarabine) approved for these subtypes.",
+                citation: "Lancet JE, et al. J Clin Oncol. 2018;36:2684-2692"
+            },
+            {
+                type: "case",
+                typeLabel: "Clinical Decision",
+                difficulty: "fellow",
+                case: {
+                    presentation: "A 55-year-old woman with NPM1-mutated AML achieved CR1 with 7+3. MRD is negative by PCR. She has an HLA-matched sibling donor. What is the transplant recommendation?",
+                    labs: [
+                        { name: "NPM1", value: "Mutated (no FLT3)", abnormal: false },
+                        { name: "MRD (PCR)", value: "Negative", abnormal: false },
+                        { name: "Donor", value: "Matched sibling", abnormal: false },
+                        { name: "Risk", value: "Favorable", abnormal: false }
+                    ]
+                },
+                question: "Should this patient proceed to allogeneic transplant in CR1?",
+                options: [
+                    "Always transplant all AML",
+                    "NPM1-mutated without FLT3-ITD is favorable risk; MRD-negative patients may defer transplant to CR2 with close MRD monitoring",
+                    "Never transplant NPM1-mutated AML",
+                    "Transplant is contraindicated at age 55"
+                ],
+                correct: 1,
+                explanation: "NPM1-mutated AML without FLT3-ITD is favorable-risk (ELN 2022). MRD-negative patients in CR1 have excellent outcomes with chemotherapy alone (~65% OS). Transplant reserved for MRD+ or relapse. Close MRD monitoring essential. Some centers still offer transplant given curative potential.",
+                keyPoint: "NPM1+/FLT3-neg: favorable. MRD-neg in CR1: can defer transplant with MRD monitoring. Transplant at relapse/MRD+.",
+                citation: "Dohner H, et al. Blood. 2022;140:1345-1377",
+                pmid: "35797463",
+                doi: "10.1182/blood.2022016867"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "attending",
+                question: "What is the role of donor lymphocyte infusion (DLI) in post-transplant AML relapse?",
+                options: [
+                    "No role in AML",
+                    "Can induce remission in some patients; more effective in low disease burden, may be combined with azacitidine; GVHD risk",
+                    "Only used for viral infections",
+                    "First-line treatment for all relapses"
+                ],
+                correct: 1,
+                explanation: "DLI can restore graft-vs-leukemia effect in post-HCT relapse. Best responses in low disease burden (molecular relapse, <20% blasts). Often combined with HMA (azacitidine) to upregulate tumor antigens. Risk of GVHD. Less effective than in CML relapse.",
+                keyPoint: "DLI: graft-vs-leukemia for relapse. Better in low burden. Combine with azacitidine. GVHD risk.",
+                citation: "Schmid C, et al. J Clin Oncol. 2012;30:2889-2897"
+            },
+            {
+                type: "simple",
+                typeLabel: "Diagnosis",
+                difficulty: "resident",
+                question: "What is the blast threshold for AML diagnosis in WHO 2022 and ICC classifications?",
+                options: [
+                    "50% blasts always required",
+                    "≥20% blasts generally, but AML-defining genetic abnormalities can diagnose AML with ≥10% blasts (ICC) or any blast percentage (WHO 2022)",
+                    "No blast threshold exists",
+                    "Only 5% blasts needed"
+                ],
+                correct: 1,
+                explanation: "Traditional threshold is ≥20% blasts. However, WHO 2022 allows AML diagnosis at any blast% with defining genetic abnormalities (e.g., PML-RARA, RUNX1-RUNX1T1). ICC 2022 requires ≥10% blasts with these abnormalities. Both recognize genetic lesions can be more important than blast count.",
+                keyPoint: "AML: ≥20% blasts traditional. AML-defining genetics: WHO 2022 = any %, ICC = ≥10%. Genetics trump blast count.",
+                citation: "Khoury JD, et al. Leukemia. 2022;36:1703-1719"
+            },
+            // ============ ROUND 4: ADDITIONAL CLINICAL QUESTIONS ============
+            {
+                type: "simple",
+                typeLabel: "Complications",
+                difficulty: "fellow",
+                question: "What is differentiation syndrome in APL and how is it managed?",
+                options: [
+                    "Always benign, no treatment needed",
+                    "Potentially fatal; presents with fever, dyspnea, weight gain, pulmonary infiltrates; treat with dexamethasone 10mg BID",
+                    "Only occurs with chemotherapy",
+                    "Treated with aspirin"
+                ],
+                correct: 1,
+                explanation: "Differentiation syndrome occurs in ~25% of APL patients on ATRA/ATO due to cytokine release from maturing cells. Symptoms: fever, dyspnea, weight gain, hypotension, pleural/pericardial effusions, pulmonary infiltrates. Treat immediately with dexamethasone 10mg BID. Consider holding ATRA/ATO if severe. Can be fatal.",
+                keyPoint: "Differentiation syndrome: fever, dyspnea, weight gain, infiltrates. Dex 10mg BID immediately. Can be fatal. ~25% of APL.",
+                citation: "Tallman MS, et al. Blood. 2000;95:90-95"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "resident",
+                question: "What is the mechanism of all-trans retinoic acid (ATRA) in APL?",
+                options: [
+                    "DNA alkylation",
+                    "Binds to PML-RARA fusion protein and induces terminal differentiation of promyelocytes",
+                    "Proteasome inhibition",
+                    "Tyrosine kinase inhibition"
+                ],
+                correct: 1,
+                explanation: "ATRA binds to the RARA portion of PML-RARA fusion oncoprotein. This releases the transcriptional repression block and induces terminal differentiation of promyelocytes into mature granulocytes. Revolutionary treatment that changed APL from fatal to highly curable.",
+                keyPoint: "ATRA: binds PML-RARA, releases transcriptional block, induces differentiation. APL now >90% curable.",
+                citation: "de The H, et al. Nature Rev Drug Discov. 2012;11:721-735"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "attending",
+                question: "How is arsenic trioxide (ATO) dosed and what are its main toxicities?",
+                options: [
+                    "Weekly dosing only",
+                    "0.15 mg/kg IV daily during induction; causes QTc prolongation, electrolyte abnormalities, hepatotoxicity, hyperleukocytosis",
+                    "Oral only",
+                    "No significant toxicities"
+                ],
+                correct: 1,
+                explanation: "ATO given 0.15 mg/kg IV daily. Toxicities: QTc prolongation (monitor ECG, keep K>4, Mg>2), hepatotoxicity (monitor LFTs), hyperleukocytosis/differentiation syndrome, peripheral neuropathy with prolonged use. Keep QTc <500ms. Avoid QT-prolonging drugs.",
+                keyPoint: "ATO: 0.15 mg/kg IV daily. QTc prolongation - keep K>4, Mg>2, QTc<500. Hepatotoxicity. Differentiation syndrome.",
+                citation: "Lo-Coco F, et al. N Engl J Med. 2013;369:111-121",
+                pmid: "23841729",
+                doi: "10.1056/NEJMoa1300874"
+            },
+            {
+                type: "simple",
+                typeLabel: "Diagnosis",
+                difficulty: "stock",
+                question: "What is clonal hematopoiesis of indeterminate potential (CHIP) and its implications?",
+                options: [
+                    "Normal aging finding with no significance",
+                    "Clonal mutations (DNMT3A, TET2, ASXL1) in blood without cytopenia/malignancy; increases with age; ~0.5-1%/year progression to myeloid neoplasm; cardiovascular risk",
+                    "Always progresses to AML",
+                    "Same as MDS"
+                ],
+                correct: 1,
+                explanation: "CHIP: somatic mutations (most common: DNMT3A, TET2, ASXL1) at VAF≥2% in persons without hematologic malignancy or unexplained cytopenia. Increases with age (10-20% in >70yo). ~0.5-1%/year progression to MDS/AML. Associated with increased cardiovascular mortality (atherosclerosis). Not same as CCUS.",
+                keyPoint: "CHIP: mutations without cytopenia. DNMT3A, TET2, ASXL1 common. ~1%/yr to malignancy. CV risk elevated.",
+                citation: "Jaiswal S, et al. N Engl J Med. 2014;371:2488-2498"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "fellow",
+                question: "What molecular monitoring is required in APL?",
+                options: [
+                    "No monitoring needed",
+                    "PML-RARA RT-qPCR at end of consolidation then every 3 months for 2-3 years; molecular relapse predicts hematologic relapse",
+                    "Only bone marrow biopsies",
+                    "Monitor only if clinically relapsing"
+                ],
+                correct: 1,
+                explanation: "RT-qPCR for PML-RARA transcript should be done at end of consolidation (should be negative) then every 3 months for 2-3 years. Molecular relapse (PCR conversion to positive, confirmed) predicts hematologic relapse by months. Early intervention at molecular relapse improves outcomes.",
+                keyPoint: "APL monitoring: PML-RARA RT-qPCR q3mo x 2-3 years. Molecular relapse precedes hematologic by months. Treat early.",
+                citation: "Sanz MA, et al. Blood. 2019;133:1630-1643"
+            },
+            {
+                type: "case",
+                typeLabel: "Clinical Decision",
+                difficulty: "stock",
+                question: "A patient has isolated thrombocytosis, splenomegaly, and a bone marrow showing hypocellularity with ring sideroblasts but <5% blasts. Karyotype shows -7. What is the diagnosis and concern?",
+                case: {
+                    presentation: "58-year-old with fatigue and thrombocytosis (650K). Splenomegaly. No prior chemo/radiation. BM: hypocellular with 30% ring sideroblasts, <5% blasts.",
+                    labs: [
+                        { name: "Platelets", value: "650K", abnormal: true },
+                        { name: "Ring sideroblasts", value: "30%", abnormal: true },
+                        { name: "Blasts", value: "<5%", abnormal: false },
+                        { name: "Karyotype", value: "Monosomy 7", abnormal: true }
+                    ]
+                },
+                options: [
+                    "Normal finding",
+                    "MDS with ring sideroblasts and -7; despite RS, -7 makes this high-risk with poor prognosis; consider HCT if fit",
+                    "Definitely will respond to luspatercept",
+                    "Benign sideroblastic anemia"
+                ],
+                correct: 1,
+                explanation: "Ring sideroblasts often suggest favorable prognosis (SF3B1 mutation), but -7 (monosomy 7) is adverse regardless. Risk stratification uses IPSS-M which incorporates cytogenetics. This patient has high-risk disease despite RS. HCT is treatment of choice if fit. -7 trumps RS phenotype.",
+                keyPoint: "MDS risk: -7 is adverse regardless of RS. IPSS-M for risk. HCT if fit for high-risk. Genetics > morphology.",
+                citation: "Bernard E, et al. NEJM Evidence. 2022;1(7)"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "attending",
+                question: "What is glasdegib and when is it used in AML?",
+                options: [
+                    "FLT3 inhibitor",
+                    "Hedgehog pathway inhibitor; approved with LDAC for unfit newly diagnosed AML; modest benefit",
+                    "BCL-2 inhibitor",
+                    "IDH inhibitor"
+                ],
+                correct: 1,
+                explanation: "Glasdegib is a SMO (Smoothened) inhibitor blocking Hedgehog pathway. BRIGHT-1001 showed improved OS when added to LDAC in unfit AML (8.8 vs 4.9 months). Less used now that venetoclax-azacitidine is preferred for unfit patients with generally better outcomes.",
+                keyPoint: "Glasdegib: Hedgehog/SMO inhibitor. + LDAC for unfit. Modest benefit. Ven-aza generally preferred.",
+                citation: "Cortes JE, et al. Lancet Haematol. 2019;6:e51-e61"
+            },
+            {
+                type: "simple",
+                typeLabel: "Diagnosis",
+                difficulty: "intern",
+                question: "What leukemia should be immediately considered in a patient with gum hypertrophy and leukocytosis?",
+                options: [
+                    "CLL",
+                    "Acute monocytic/myelomonocytic leukemia (AML-M4/M5); extramedullary infiltration is common in monocytic variants",
+                    "Hairy cell leukemia",
+                    "Chronic myeloid leukemia"
+                ],
+                correct: 1,
+                explanation: "Gum hypertrophy (gingival infiltration) is classic for acute monocytic (M5) and myelomonocytic (M4) leukemia. Monocytic AML has propensity for extramedullary involvement: gums, skin, CNS. Check for DIC. Often associated with KMT2A (MLL) rearrangements.",
+                keyPoint: "Gum hypertrophy: think monocytic AML (M4/M5). Extramedullary involvement common. Check DIC, CNS.",
+                citation: "Swerdlow SH, et al. WHO Classification of Tumours, 5th ed. 2022"
+            },
+            {
+                type: "simple",
+                typeLabel: "Treatment",
+                difficulty: "resident",
+                question: "What is the CPX-351 regimen and its indication?",
+                options: [
+                    "Standard 7+3",
+                    "Liposomal cytarabine:daunorubicin in fixed 5:1 molar ratio; approved for t-AML and AML-MRC with survival benefit over 7+3",
+                    "Oral chemotherapy",
+                    "Low-dose therapy for elderly"
+                ],
+                correct: 1,
+                explanation: "CPX-351 (Vyxeos) is liposomal formulation of cytarabine and daunorubicin in optimized 5:1 molar ratio for synergistic killing. Phase 3 showed OS benefit over 7+3 in t-AML and AML-MRC (9.6 vs 5.9 months). More myelosuppression but fewer early deaths.",
+                keyPoint: "CPX-351: liposomal cytarabine/daunorubicin 5:1 ratio. For t-AML, AML-MRC. OS benefit vs 7+3.",
+                citation: "Lancet JE, et al. J Clin Oncol. 2018;36:2684-2692"
+            }
+        ];
+
+        // ASH Image Bank URLs for H&E histopathology images
+        const histopathImages = {
+            aml_auer: {
+                url: "https://imagebank.hematology.org/getimagebyid/60924?size=3",
+                source: "ASH Image Bank #60924",
+                author: "Teresa Scordino"
+            },
+            aml_t821: {
+                url: "https://imagebank.hematology.org/getimagebyid/64130?size=3",
+                source: "ASH Image Bank #64130",
+                author: "Deepika V, DNB"
+            },
+            apl_hypergranular: {
+                url: "https://imagebank.hematology.org/getimagebyid/15793?size=3",
+                source: "ASH Image Bank #15793",
+                author: "ASH Image Bank"
+            },
+            apl_microgranular: {
+                url: "https://imagebank.hematology.org/getimagebyid/64814?size=3",
+                source: "ASH Image Bank #64814",
+                author: "ASH Image Bank"
+            },
+            aml_monocytic: {
+                url: "https://imagebank.hematology.org/getimagebyid/60924?size=3",
+                source: "ASH Image Bank #60924",
+                author: "ASH Image Bank"
+            },
+            aml_blasts: {
+                url: "https://imagebank.hematology.org/getimagebyid/65626?size=3",
+                source: "ASH Image Bank #65626",
+                author: "Akanksha Singh, MD"
+            }
+        };
+
+        function selectDifficulty(difficulty) {
+            selectedDifficulty = difficulty;
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`.difficulty-btn.${difficulty}`).classList.add('selected');
+
+            if (difficulty === 'stock') {
+                document.body.classList.add('stock-mode');
+                playIntroJingle();
+            } else {
+                document.body.classList.remove('stock-mode');
+                playWakaWaka();
+            }
+        }
+
+        function startGame() {
+            if (!selectedDifficulty) {
+                alert('Please select a difficulty level!');
+                return;
+            }
+
+            filteredQuestions = questions.filter(q => q.difficulty === selectedDifficulty);
+            if (filteredQuestions.length === 0) {
+                alert('No questions available for this difficulty!');
+                return;
+            }
+
+            filteredQuestions = filteredQuestions.sort(() => Math.random() - 0.5).slice(0, 10);
+
+            gameActive = true;
+            currentQuestion = 0;
+            score = 0;
+            lives = 3;
+            streak = 0;
+            bestStreak = 0;
+            correctAnswers = 0;
+            totalAnswered = 0;
+            pacmanPosition = 5;
+
+            document.getElementById('titleScreen').style.display = 'none';
+            document.getElementById('gameScreen').classList.add('active');
+            document.getElementById('resultsScreen').classList.remove('active');
+
+            updateScoreDisplay();
+            updateLivesDisplay();
+            resetPacDots();
+            loadQuestion();
+            startMusic();
+        }
+
+        function resetPacDots() {
+            document.querySelectorAll('.pac-dot').forEach(dot => {
+                dot.classList.remove('eaten');
+            });
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('scoreValue').textContent = score;
+            const highScore = localStorage.getItem('msAmlManHighScore') || 0;
+            document.getElementById('highScore').textContent = highScore;
+        }
+
+        function updateLivesDisplay() {
+            const livesContainer = document.getElementById('livesDisplay');
+            livesContainer.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                const life = document.createElement('div');
+                life.className = 'life-icon' + (i >= lives ? ' lost' : '');
+                livesContainer.appendChild(life);
+            }
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= filteredQuestions.length) {
+                endGame(true);
+                return;
+            }
+
+            const q = filteredQuestions[currentQuestion];
+
+            document.getElementById('questionType').textContent = q.typeLabel;
+            const diffLabel = q.difficulty === 'stock' ? 'DR. STOCK' : q.difficulty.toUpperCase();
+            document.getElementById('difficultyBadge').textContent = diffLabel;
+            document.getElementById('difficultyBadge').className = `difficulty-badge ${q.difficulty}`;
+            document.getElementById('levelNumber').textContent = `LEVEL ${currentQuestion + 1} OF ${filteredQuestions.length}`;
+
+            const caseBox = document.getElementById('caseBox');
+            const histopathContainer = document.getElementById('histopathContainer');
+            if (q.case) {
+                caseBox.style.display = 'block';
+                document.getElementById('caseText').textContent = q.case.presentation;
+                const labsGrid = document.getElementById('labsGrid');
+                labsGrid.innerHTML = '';
+                if (q.case.labs) {
+                    q.case.labs.forEach(lab => {
+                        const labDiv = document.createElement('div');
+                        labDiv.className = 'lab-item' + (lab.abnormal ? ' abnormal' : '');
+                        labDiv.innerHTML = `<span class="lab-name">${lab.name}</span><span class="lab-value">${lab.value}</span>`;
+                        labsGrid.appendChild(labDiv);
+                    });
+                }
+
+                // Handle histopathology display
+                if (q.case.histopath && histopathImages[q.case.histopath.type]) {
+                    histopathContainer.style.display = 'grid';
+                    const imgData = histopathImages[q.case.histopath.type];
+                    document.getElementById('histopathImage').src = imgData.url;
+                    document.getElementById('histopathImage').style.display = 'block';
+                    document.getElementById('histopathCaption').textContent = imgData.source;
+                    document.getElementById('histopathDescription').textContent = q.case.histopath.description;
+                } else {
+                    histopathContainer.style.display = 'none';
+                }
+            } else {
+                caseBox.style.display = 'none';
+                histopathContainer.style.display = 'none';
+            }
+
+            document.getElementById('questionText').textContent = q.question;
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+                btn.onclick = () => selectAnswer(index);
+                optionsGrid.appendChild(btn);
+            });
+
+            document.getElementById('explanationBox').classList.remove('show');
+            updateGhost();
+        }
+
+        function updateGhost() {
+            const ghostTypes = ['blinky', 'pinky', 'inky', 'clyde'];
+            const ghost = document.getElementById('ghostBlinky');
+            const ghostType = ghostTypes[currentQuestion % 4];
+            ghost.className = `game-ghost ${ghostType}`;
+        }
+
+        function selectAnswer(index) {
+            const q = filteredQuestions[currentQuestion];
+            const options = document.querySelectorAll('.option-btn');
+
+            options.forEach(btn => btn.disabled = true);
+            totalAnswered++;
+
+            if (index === q.correct) {
+                options[index].classList.add('correct');
+                correctAnswers++;
+                streak++;
+                if (streak > bestStreak) bestStreak = streak;
+
+                const points = 100 * streak;
+                score += points;
+
+                playCorrectSound();
+                eatDots();
+                movePacman();
+                scareGhost();
+                showFloatingScore(points);
+            } else {
+                options[index].classList.add('incorrect');
+                options[q.correct].classList.add('correct');
+                streak = 0;
+                lives--;
+
+                playWrongSound();
+                updateLivesDisplay();
+                pacmanHit();
+
+                if (lives <= 0) {
+                    setTimeout(() => endGame(false), 1500);
+                    return;
+                }
+            }
+
+            document.getElementById('explanationText').textContent = q.explanation;
+            document.getElementById('keyPoint').textContent = q.keyPoint;
+            document.getElementById('citation').innerHTML = '📚 ' + q.citation + renderReferenceLinks(q);
+            document.getElementById('explanationBox').classList.add('show');
+
+            updateScoreDisplay();
+        }
+
+        function eatDots() {
+            const dots = document.querySelectorAll('.pac-dot:not(.eaten)');
+            const toEat = Math.min(2, dots.length);
+            for (let i = 0; i < toEat; i++) {
+                setTimeout(() => {
+                    if (dots[i]) {
+                        dots[i].classList.add('eaten');
+                        playWakaWaka();
+                    }
+                }, i * 150);
+            }
+        }
+
+        function movePacman() {
+            const pacman = document.getElementById('gamePacman');
+            pacmanPosition = Math.min(pacmanPosition + 8, 85);
+            pacman.style.left = pacmanPosition + '%';
+        }
+
+        function scareGhost() {
+            const ghost = document.querySelector('.game-ghost');
+            ghost.classList.add('scared');
+            setTimeout(() => ghost.classList.add('eaten'), 500);
+            setTimeout(() => ghost.classList.remove('scared', 'eaten'), 1500);
+        }
+
+        function pacmanHit() {
+            const pacman = document.getElementById('gamePacman');
+            pacman.style.animation = 'none';
+            pacman.offsetHeight;
+            pacman.style.animation = 'incorrect-shake 0.5s ease-in-out';
+        }
+
+        function showFloatingScore(points) {
+            const wakaText = document.createElement('div');
+            wakaText.className = 'waka-text';
+            wakaText.textContent = `+${points}`;
+            wakaText.style.left = '50%';
+            wakaText.style.top = '30%';
+            wakaText.style.transform = 'translateX(-50%)';
+            document.querySelector('.maze-container').appendChild(wakaText);
+            setTimeout(() => wakaText.remove(), 1000);
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion >= filteredQuestions.length) {
+                endGame(true);
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function endGame(won) {
+            gameActive = false;
+            stopMusic();
+
+            const highScore = localStorage.getItem('msAmlManHighScore') || 0;
+            if (score > highScore) {
+                localStorage.setItem('msAmlManHighScore', score);
+            }
+
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('resultsScreen').classList.add('active');
+
+            const resultsTitle = document.getElementById('resultsTitle');
+            if (won) {
+                resultsTitle.textContent = 'YOU WIN!';
+                resultsTitle.className = 'results-title win';
+                playVictorySound();
+            } else {
+                resultsTitle.textContent = 'GAME OVER';
+                resultsTitle.className = 'results-title lose';
+                playGameOverSound();
+            }
+
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('ghostsEaten').textContent = correctAnswers;
+            document.getElementById('accuracy').textContent = totalAnswered > 0
+                ? Math.round((correctAnswers / totalAnswered) * 100) + '%'
+                : '0%';
+            document.getElementById('bestStreak').textContent = bestStreak;
+            document.getElementById('levelsCleared').textContent = currentQuestion;
+        }
+
+        function resetGame() {
+            document.getElementById('resultsScreen').classList.remove('active');
+            document.getElementById('titleScreen').style.display = 'block';
+            document.body.classList.remove('stock-mode');
+
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            selectedDifficulty = null;
+        }
+    </script>
+</body>
+</html>

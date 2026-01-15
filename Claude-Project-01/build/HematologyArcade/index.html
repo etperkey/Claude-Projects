@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hematology Arcade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-blue: #00ffff;
+            --neon-green: #00ff00;
+            --neon-yellow: #ffff00;
+            --neon-orange: #ff8800;
+            --arcade-purple: #8B008B;
+            --arcade-dark: #0a0a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: var(--arcade-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white;
+        }
+
+        /* Animated background */
+        .arcade-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse at top, #1a0a2e 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, #0a1a2e 0%, transparent 50%),
+                var(--arcade-dark);
+            overflow: hidden;
+        }
+
+        /* Grid lines */
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 20s linear infinite;
+        }
+
+        @keyframes grid-move {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: float-up 10s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+        }
+
+        /* Main container */
+        .arcade-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header */
+        .arcade-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .main-title {
+            font-size: 3em;
+            background: linear-gradient(180deg,
+                var(--neon-pink) 0%,
+                var(--neon-blue) 50%,
+                var(--neon-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            animation: title-glow 3s ease-in-out infinite;
+            letter-spacing: 4px;
+        }
+
+        @keyframes title-glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 10px var(--neon-pink)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 20px var(--neon-blue)); }
+        }
+
+        .subtitle {
+            font-size: 0.8em;
+            color: var(--neon-blue);
+            margin-top: 20px;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .tagline {
+            font-size: 0.5em;
+            color: #888;
+            margin-top: 15px;
+            letter-spacing: 2px;
+        }
+
+        /* Game cards container */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* Game card */
+        .game-card {
+            background: linear-gradient(180deg,
+                rgba(20, 20, 40, 0.9) 0%,
+                rgba(10, 10, 30, 0.95) 100%);
+            border: 3px solid;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .game-card:hover::before {
+            opacity: 1;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* MyelomaMan card */
+        .game-card.myeloma {
+            border-color: #ff4444;
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+        }
+
+        .game-card.myeloma:hover {
+            box-shadow: 0 0 40px rgba(255, 68, 68, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.myeloma .game-icon {
+            background: linear-gradient(135deg, #ff4444, #ff8888);
+        }
+
+        /* MS-AML-Man card */
+        .game-card.aml {
+            border-color: var(--neon-yellow);
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+        }
+
+        .game-card.aml:hover {
+            box-shadow: 0 0 40px rgba(255, 255, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.aml .game-icon {
+            background: linear-gradient(135deg, #ffff00, #ffcc00);
+        }
+
+        /* LymphoInvader card - Space Invaders Blue Theme */
+        .game-card.lymphoma {
+            border-color: #00bfff;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+            background: linear-gradient(180deg,
+                rgba(0, 20, 40, 0.9) 0%,
+                rgba(0, 10, 30, 0.95) 100%);
+        }
+
+        .game-card.lymphoma:hover {
+            box-shadow: 0 0 40px rgba(0, 191, 255, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.lymphoma .game-icon {
+            background: linear-gradient(135deg, #00bfff, #0066cc);
+            border-radius: 10px;
+        }
+
+        /* HemesWaldo card */
+        .game-card.waldo {
+            border-color: #cc0000;
+            box-shadow: 0 0 20px rgba(204, 0, 0, 0.3);
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(204, 0, 0, 0.1) 0px,
+                rgba(204, 0, 0, 0.1) 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            ), linear-gradient(180deg,
+                rgba(20, 20, 40, 0.9) 0%,
+                rgba(10, 10, 30, 0.95) 100%);
+        }
+
+        .game-card.waldo:hover {
+            box-shadow: 0 0 40px rgba(204, 0, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.waldo .game-icon {
+            background: linear-gradient(135deg, #cc0000, #ff4444);
+        }
+
+        .game-card.waldo .game-title { color: #ff4444; }
+
+        .game-card.waldo .play-btn {
+            background: linear-gradient(180deg, #cc0000, #990000);
+            color: white;
+            box-shadow: 0 5px 0 #660000;
+        }
+
+        .game-card.waldo .diff-dot.active { background: #cc0000; }
+
+        /* CellularCentipede card */
+        .game-card.centipede {
+            border-color: #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            background: linear-gradient(180deg,
+                rgba(0, 40, 0, 0.9) 0%,
+                rgba(0, 20, 0, 0.95) 100%);
+        }
+
+        .game-card.centipede:hover {
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.centipede .game-icon {
+            background: linear-gradient(135deg, #00ff00, #008800);
+        }
+
+        .game-card.centipede .game-title { color: #00ff00; }
+
+        .game-card.centipede .play-btn {
+            background: linear-gradient(180deg, #00ff00, #00aa00);
+            color: black;
+            box-shadow: 0 5px 0 #006600;
+        }
+
+        .game-card.centipede .diff-dot.active { background: #00ff00; }
+
+        /* ALL Burger Time card */
+        .game-card.burger {
+            border-color: #FF8C00;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+            background: linear-gradient(180deg,
+                rgba(139, 69, 19, 0.3) 0%,
+                rgba(20, 10, 0, 0.95) 100%);
+        }
+
+        .game-card.burger:hover {
+            box-shadow: 0 0 40px rgba(255, 140, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.burger .game-icon {
+            background: linear-gradient(135deg, #FF8C00, #8B4513);
+        }
+
+        .game-card.burger .game-title { color: #FF8C00; }
+
+        .game-card.burger .play-btn {
+            background: linear-gradient(180deg, #FF8C00, #8B4513);
+            color: white;
+            box-shadow: 0 5px 0 #5D3A1A;
+        }
+
+        .game-card.burger .diff-dot.active { background: #FF8C00; }
+
+        /* Burger Icon */
+        .burger-icon {
+            font-size: 50px;
+            animation: burgerBounce 1s ease-in-out infinite;
+        }
+
+        @keyframes burgerBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Chef Icon */
+        .chef-icon {
+            font-size: 35px;
+            position: absolute;
+            bottom: -5px;
+            right: -10px;
+            animation: chefWalk 0.5s steps(2) infinite;
+        }
+
+        @keyframes chefWalk {
+            0%, 100% { transform: translateX(-3px); }
+            50% { transform: translateX(3px); }
+        }
+
+        /* MyeloidKong card - Donkey Kong Purple Theme */
+        .game-card.kong {
+            border-color: #9400D3;
+            box-shadow: 0 0 20px rgba(148, 0, 211, 0.3);
+            background: linear-gradient(180deg,
+                rgba(75, 0, 130, 0.9) 0%,
+                rgba(30, 0, 50, 0.95) 100%);
+        }
+
+        .game-card.kong:hover {
+            box-shadow: 0 0 40px rgba(148, 0, 211, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.kong .game-icon {
+            background: transparent;
+        }
+
+        .game-card.kong .game-title { color: #FF00FF; }
+
+        .game-card.kong .play-btn {
+            background: linear-gradient(180deg, #8B008B, #4B0082);
+            color: #FF00FF;
+            box-shadow: 0 5px 0 #2E0854;
+        }
+
+        .game-card.kong .diff-dot.active { background: #9400D3; }
+
+        /* Kong Icon - Classic DK Style */
+        .kong-icon {
+            position: relative;
+            width: 70px;
+            height: 85px;
+        }
+
+        /* Barrel held above head */
+        .kong-icon-barrel {
+            width: 30px;
+            height: 22px;
+            background: linear-gradient(90deg, #6B3410 0%, #8B4513 20%, #D2691E 50%, #8B4513 80%, #6B3410 100%);
+            border-radius: 4px;
+            position: absolute;
+            top: 0;
+            left: 20px;
+            border: 2px solid #5D3A1A;
+            animation: kong-barrel-shake 0.5s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .kong-icon-barrel::before, .kong-icon-barrel::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            background: #5D3A1A;
+            border-radius: 2px;
+        }
+
+        .kong-icon-barrel::before { top: 3px; }
+        .kong-icon-barrel::after { bottom: 3px; }
+
+        @keyframes kong-barrel-shake {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        .kong-icon-head {
+            width: 40px;
+            height: 32px;
+            background: linear-gradient(180deg, #9932CC 0%, #8B008B 100%);
+            border-radius: 20px 20px 16px 16px;
+            position: absolute;
+            top: 18px;
+            left: 15px;
+            border: 2px solid #9400D3;
+            z-index: 5;
+        }
+
+        /* Brow ridge */
+        .kong-icon-brow {
+            width: 34px;
+            height: 10px;
+            background: #4B0082;
+            border-radius: 17px 17px 0 0;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+        }
+
+        .kong-icon-eye {
+            width: 8px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px;
+        }
+
+        .kong-icon-eye.left { left: 8px; }
+        .kong-icon-eye.right { right: 8px; }
+
+        .kong-icon-eye::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: black;
+            border-radius: 50%;
+            bottom: 1px;
+            left: 2px;
+        }
+
+        /* Snout */
+        .kong-icon-snout {
+            width: 22px;
+            height: 12px;
+            background: linear-gradient(180deg, #D4A574 0%, #C4956A 100%);
+            border-radius: 11px;
+            position: absolute;
+            bottom: 3px;
+            left: 9px;
+            border: 1px solid #A67B5B;
+        }
+
+        .kong-icon-body {
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(180deg, #8B008B 0%, #4B0082 100%);
+            border-radius: 25px 25px 18px 18px;
+            position: absolute;
+            top: 45px;
+            left: 10px;
+            border: 2px solid #9400D3;
+            z-index: 3;
+        }
+
+        /* Chest */
+        .kong-icon-chest {
+            width: 28px;
+            height: 22px;
+            background: linear-gradient(180deg, #D4A574 0%, #C4956A 100%);
+            border-radius: 14px 14px 12px 12px;
+            position: absolute;
+            top: 8px;
+            left: 11px;
+            border: 1px solid #A67B5B;
+        }
+
+        .kong-icon-arm {
+            width: 14px;
+            height: 28px;
+            background: linear-gradient(90deg, #4B0082 0%, #8B008B 50%, #4B0082 100%);
+            border-radius: 7px;
+            position: absolute;
+            top: 48px;
+            border: 2px solid #9400D3;
+            z-index: 6;
+        }
+
+        .kong-icon-arm.left {
+            left: 0;
+            transform-origin: top center;
+            animation: kong-arm-pound-left 1.5s ease-in-out infinite;
+        }
+        .kong-icon-arm.right {
+            right: 0;
+            transform-origin: top center;
+            animation: kong-arm-pound-right 1.5s ease-in-out infinite;
+            animation-delay: 0.75s;
+        }
+
+        @keyframes kong-arm-pound-left {
+            0%, 100% { transform: rotate(-12deg); }
+            50% { transform: rotate(-5deg) translateY(3px); }
+        }
+
+        @keyframes kong-arm-pound-right {
+            0%, 100% { transform: rotate(12deg); }
+            50% { transform: rotate(5deg) translateY(3px); }
+        }
+
+        /* Fists */
+        .kong-icon-fist {
+            width: 12px;
+            height: 11px;
+            background: #8B008B;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -2px;
+            left: 1px;
+            border: 1px solid #9400D3;
+        }
+
+        /* Legs */
+        .kong-icon-leg {
+            width: 12px;
+            height: 18px;
+            background: #4B0082;
+            border-radius: 6px 6px 4px 4px;
+            position: absolute;
+            bottom: 0;
+            border: 1px solid #9400D3;
+            z-index: 2;
+        }
+
+        .kong-icon-leg.left { left: 18px; }
+        .kong-icon-leg.right { right: 18px; }
+
+        /* Legacy barrel class - no longer rotating at bottom */
+        .kong-barrel {
+            display: none;
+        }
+
+        .kong-barrel::before { top: 3px; }
+        .kong-barrel::after { bottom: 3px; }
+
+        @keyframes barrel-roll-icon {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Game icon */
+        .game-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            animation: icon-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes icon-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Custom Pac-Man Icon - Same method as MS-AML-Man game */
+        .pacman-wrapper {
+            position: relative;
+            width: 50px;
+            height: 50px;
+        }
+
+        .pac-body {
+            width: 50px;
+            height: 50px;
+            background: #ffff00;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: chomp 0.3s ease-in-out infinite;
+        }
+
+        @keyframes chomp {
+            0%, 100% {
+                clip-path: polygon(50% 50%, 100% 15%, 100% 0%, 0% 0%, 0% 100%, 100% 100%, 100% 85%);
+            }
+            50% {
+                clip-path: polygon(50% 50%, 100% 45%, 100% 0%, 0% 0%, 0% 100%, 100% 100%, 100% 55%);
+            }
+        }
+
+        .pac-eye {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: black;
+            border-radius: 50%;
+            top: 10px;
+            left: 28px;
+            z-index: 5;
+        }
+
+        /* Pac-Man Ghost (AML Blast) */
+        .ghost-icon {
+            width: 35px;
+            height: 40px;
+            background: #ff6666;
+            border-radius: 50% 50% 0 0;
+            position: relative;
+            margin-left: 8px;
+        }
+
+        .ghost-icon::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background:
+                radial-gradient(circle at 15% 100%, transparent 8px, #ff6666 8px),
+                radial-gradient(circle at 50% 100%, transparent 8px, #ff6666 8px),
+                radial-gradient(circle at 85% 100%, transparent 8px, #ff6666 8px);
+        }
+
+        .ghost-icon::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 6px;
+            width: 10px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 14px 0 0 white;
+        }
+
+        .ghost-eyes {
+            position: absolute;
+            top: 14px;
+            left: 10px;
+            width: 5px;
+            height: 5px;
+            background: blue;
+            border-radius: 50%;
+            box-shadow: 14px 0 0 blue;
+        }
+
+        /* Plasma Cell Icon (Myeloma) */
+        .plasma-cell-icon {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 40%, #ffcccc 0%, #ff8888 40%, #cc4444 100%);
+            border-radius: 50%;
+            position: relative;
+            border: 3px solid #aa3333;
+        }
+
+        .plasma-cell-icon::before {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 18px;
+            background: radial-gradient(circle at 70% 50%, #660033 0%, #330022 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 8px;
+            transform: translateY(-50%);
+        }
+
+        .plasma-cell-icon::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ffeeee;
+            border-radius: 50%;
+            top: 8px;
+            right: 10px;
+            box-shadow: -5px 8px 0 2px rgba(255,255,255,0.3);
+        }
+
+        /* Space Invader Lymphocyte */
+        .invader-icon {
+            width: 50px;
+            height: 40px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .invader-body {
+            width: 40px;
+            height: 24px;
+            background: #00bfff;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            box-shadow:
+                -12px 8px 0 #00bfff,
+                12px 8px 0 #00bfff,
+                -8px 16px 0 #00bfff,
+                8px 16px 0 #00bfff,
+                -16px 16px 0 #00bfff,
+                16px 16px 0 #00bfff;
+        }
+
+        .invader-body::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 8px;
+            width: 6px;
+            height: 6px;
+            background: white;
+            box-shadow: 18px 0 0 white;
+        }
+
+        /* Centipede Icon */
+        .centipede-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        .centipede-segment {
+            width: 14px;
+            height: 14px;
+            background: radial-gradient(circle at 30% 30%, #00ff00 0%, #008800 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 4px #00ff00;
+            position: relative;
+        }
+
+        .centipede-segment.head {
+            background: radial-gradient(circle at 30% 30%, #ff8800 0%, #cc5500 100%);
+            box-shadow: 0 0 6px #ff8800;
+            width: 18px;
+            height: 18px;
+        }
+
+        .centipede-segment.head::before,
+        .centipede-segment.head::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 6px;
+            background: #ffff00;
+            border-radius: 2px;
+            top: -4px;
+        }
+
+        .centipede-segment.head::before { left: 4px; transform: rotate(-20deg); }
+        .centipede-segment.head::after { right: 4px; transform: rotate(20deg); }
+
+        .centipede-segment::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 2px;
+            width: 2px;
+            height: 6px;
+            background: #006600;
+            box-shadow: 8px 0 0 #006600;
+        }
+
+        /* Stem Cell Icon */
+        .stem-cell-icon {
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle at 40% 40%, #ffd700 0%, #cc9900 100%);
+            border-radius: 50%;
+            border: 2px solid #aa7700;
+            margin: 0 3px;
+        }
+
+        .mushroom-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mushroom-cap {
+            width: 45px;
+            height: 28px;
+            background: linear-gradient(180deg, #ff4444 0%, #cc0000 100%);
+            border-radius: 50% 50% 10% 10%;
+            position: relative;
+        }
+
+        .mushroom-cap::before {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            top: 5px;
+            left: 8px;
+            box-shadow: 18px 5px 0 8px white;
+        }
+
+        .mushroom-stem {
+            width: 18px;
+            height: 20px;
+            background: linear-gradient(180deg, #ffe4c4 0%, #deb887 100%);
+            border-radius: 0 0 8px 8px;
+        }
+
+        .game-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: white;
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        .game-card.myeloma .game-title { color: #ff6666; }
+        .game-card.aml .game-title { color: var(--neon-yellow); }
+        .game-card.lymphoma .game-title { color: #00bfff; }
+
+        .game-theme {
+            font-size: 0.6em;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .game-description {
+            font-size: 0.5em;
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .play-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .game-card.myeloma .play-btn {
+            background: linear-gradient(180deg, #ff4444, #cc0000);
+            color: white;
+            box-shadow: 0 5px 0 #990000;
+        }
+
+        .game-card.aml .play-btn {
+            background: linear-gradient(180deg, #ffff00, #cccc00);
+            color: black;
+            box-shadow: 0 5px 0 #999900;
+        }
+
+        .game-card.lymphoma .play-btn {
+            background: linear-gradient(180deg, #00bfff, #0088cc);
+            color: white;
+            box-shadow: 0 5px 0 #005588;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.2);
+        }
+
+        .play-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 currentColor;
+        }
+
+        /* Difficulty indicators */
+        .difficulty-levels {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .diff-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+        }
+
+        .diff-dot.active { background: currentColor; }
+
+        .game-card.myeloma .diff-dot.active { background: #ff4444; }
+        .game-card.aml .diff-dot.active { background: var(--neon-yellow); }
+        .game-card.lymphoma .diff-dot.active { background: #00bfff; }
+
+        /* Footer */
+        .arcade-footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 0.5em;
+            color: #666;
+        }
+
+        .arcade-footer a {
+            color: var(--neon-blue);
+            text-decoration: none;
+        }
+
+        .arcade-footer a:hover {
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Insert coin animation */
+        .insert-coin {
+            font-size: 0.7em;
+            color: var(--neon-yellow);
+            margin-top: 40px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* High scores section */
+        .high-scores {
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-blue);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .high-scores h3 {
+            font-size: 0.8em;
+            color: var(--neon-blue);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.5em;
+            padding: 8px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .score-row:last-child {
+            border-bottom: none;
+        }
+
+        .score-game {
+            color: #888;
+        }
+
+        .score-value {
+            color: var(--neon-yellow);
+        }
+
+        /* Responsive - Tablet */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .arcade-container { padding: 30px 15px; }
+            .main-title { font-size: 2.5em; }
+            .games-grid { gap: 30px; max-width: 800px; }
+        }
+
+        /* Responsive - Mobile */
+        @media (max-width: 768px) {
+            .main-title { font-size: 1.8em; }
+            .games-grid { gap: 25px; grid-template-columns: 1fr; }
+            .game-card { padding: 20px; }
+            .game-icon { width: 80px; height: 80px; font-size: 2.5em; }
+            .game-title { font-size: 1em; }
+            .subtitle { font-size: 0.6em; }
+            .tagline { font-size: 0.4em; }
+            .arcade-header { margin-bottom: 40px; }
+            .volume-toggle { width: 40px; height: 40px; font-size: 1.2em; top: 10px; right: 10px; }
+        }
+
+        /* Responsive - Small Mobile */
+        @media (max-width: 480px) {
+            .main-title { font-size: 1.4em; letter-spacing: 2px; }
+            .arcade-container { padding: 20px 10px; }
+            .game-card { padding: 15px; border-radius: 15px; }
+            .game-icon { width: 60px; height: 60px; font-size: 2em; }
+            .game-title { font-size: 0.9em; }
+            .game-description { font-size: 0.45em; }
+            .play-btn { font-size: 0.6em; padding: 12px 24px; }
+            .high-scores { padding: 15px; }
+            .high-scores h3 { font-size: 0.7em; }
+            .score-row { font-size: 0.45em; }
+        }
+
+        /* Device info badge */
+        .device-info {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 0.4em;
+            color: var(--neon-blue);
+            z-index: 100;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .device-info:hover {
+            opacity: 1;
+        }
+
+        .device-info .device-type {
+            color: var(--neon-green);
+            text-transform: uppercase;
+        }
+
+        .device-info .resolution {
+            color: var(--neon-yellow);
+            margin-left: 10px;
+        }
+
+        /* Volume toggle */
+        .volume-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid var(--neon-blue);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            transition: all 0.3s;
+        }
+
+        .volume-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        .volume-toggle.muted {
+            background: rgba(100, 100, 100, 0.3);
+            border-color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="arcade-bg">
+        <div class="grid-lines"></div>
+        <div id="particles"></div>
+    </div>
+
+    <button class="volume-toggle" id="volumeToggle" onclick="toggleVolume()">
+        <span id="volumeIcon">&#128266;</span>
+    </button>
+
+    <div class="device-info" id="deviceInfo">
+        <span class="device-type" id="deviceType">--</span>
+        <span class="resolution" id="resolution">--</span>
+    </div>
+
+    <div class="arcade-container">
+        <header class="arcade-header">
+            <h1 class="main-title">HEMATOLOGY ARCADE</h1>
+            <p class="subtitle">Master Blood Cancers Through Play</p>
+            <p class="tagline">Educational Gaming for Hematology/Oncology</p>
+        </header>
+
+        <div class="games-grid">
+            <!-- MyelomaMan - Mushroom Plasma Cell Style -->
+            <div class="game-card myeloma" onclick="launchGame('myeloma')">
+                <div class="game-icon" style="background: transparent; box-shadow: none;">
+                    <div class="mushroom-icon">
+                        <div class="mushroom-cap"></div>
+                        <div class="mushroom-stem"></div>
+                    </div>
+                </div>
+                <h2 class="game-title">MyelomaMan</h2>
+                <p class="game-theme">Super Mario Style</p>
+                <p class="game-description">
+                    Jump through plasma cell challenges! Test your multiple myeloma knowledge from diagnosis to treatment.
+                </p>
+                <button class="play-btn">STOMP IT</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                </div>
+            </div>
+
+            <!-- MS-AML-Man - Pac-Man & Ghost Blast Style -->
+            <div class="game-card aml" onclick="launchGame('aml')">
+                <div class="game-icon" style="background: transparent; box-shadow: none; display: flex; align-items: center; justify-content: center;">
+                    <div class="pacman-wrapper">
+                        <div class="pac-body"></div>
+                        <div class="pac-eye"></div>
+                    </div>
+                    <div class="ghost-icon"><div class="ghost-eyes"></div></div>
+                </div>
+                <h2 class="game-title">Ms. AML-Man</h2>
+                <p class="game-theme">Pac-Man Style</p>
+                <p class="game-description">
+                    Chomp through AML blasts! Navigate ELN 2022 risk stratification and treatment decisions.
+                </p>
+                <button class="play-btn">CHOMP IT</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                </div>
+            </div>
+
+            <!-- LymphoInvader - Space Invaders Style -->
+            <div class="game-card lymphoma" onclick="launchGame('lymphoma')">
+                <div class="game-icon" style="background: transparent; box-shadow: none;">
+                    <div class="invader-icon">
+                        <div class="invader-body"></div>
+                    </div>
+                </div>
+                <h2 class="game-title">LymphoInvader</h2>
+                <p class="game-theme">Space Invaders Style</p>
+                <p class="game-description">
+                    Defend against lymphoma invaders! From Hodgkin to NHL, blast your lymphoproliferative expertise.
+                </p>
+                <button class="play-btn">INVADE</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                </div>
+            </div>
+
+            <!-- HemesWaldo -->
+            <div class="game-card waldo" onclick="launchGame('waldo')">
+                <div class="game-icon">&#128269;</div>
+                <h2 class="game-title">Heme's Waldo</h2>
+                <p class="game-theme">Spot the Finding</p>
+                <p class="game-description">
+                    Where's the pathology? Identify malignant and benign findings in ASH Image Bank cases.
+                </p>
+                <button class="play-btn">FIND IT</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot"></div>
+                    <div class="diff-dot"></div>
+                    <div class="diff-dot"></div>
+                    <div class="diff-dot"></div>
+                </div>
+            </div>
+
+            <!-- Cellular Centipede - Centipede & Bone Marrow Style -->
+            <div class="game-card centipede" onclick="launchGame('centipede')">
+                <div class="game-icon" style="background: transparent; box-shadow: none; flex-direction: column; gap: 8px;">
+                    <div class="centipede-icon">
+                        <div class="centipede-segment head"></div>
+                        <div class="centipede-segment"></div>
+                        <div class="centipede-segment"></div>
+                        <div class="centipede-segment"></div>
+                        <div class="centipede-segment"></div>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <div class="stem-cell-icon"></div>
+                        <div class="stem-cell-icon"></div>
+                        <div class="stem-cell-icon"></div>
+                    </div>
+                </div>
+                <h2 class="game-title">Cellular Centipede</h2>
+                <p class="game-theme">Centipede Style</p>
+                <p class="game-description">
+                    Destroy the centipede with BMT & CAR-T knowledge! Master transplant and cellular therapy.
+                </p>
+                <button class="play-btn">BLAST IT</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot"></div>
+                </div>
+            </div>
+
+            <!-- Myeloid Kong - Donkey Kong Style -->
+            <div class="game-card kong" onclick="launchGame('kong')">
+                <div class="game-icon" style="background: transparent; box-shadow: none;">
+                    <div class="kong-icon">
+                        <!-- Barrel above head -->
+                        <div class="kong-icon-barrel"></div>
+                        <!-- Head with features -->
+                        <div class="kong-icon-head">
+                            <div class="kong-icon-brow"></div>
+                            <div class="kong-icon-eye left"></div>
+                            <div class="kong-icon-eye right"></div>
+                            <div class="kong-icon-snout"></div>
+                        </div>
+                        <!-- Body with chest -->
+                        <div class="kong-icon-body">
+                            <div class="kong-icon-chest"></div>
+                        </div>
+                        <!-- Arms with fists -->
+                        <div class="kong-icon-arm left">
+                            <div class="kong-icon-fist"></div>
+                        </div>
+                        <div class="kong-icon-arm right">
+                            <div class="kong-icon-fist"></div>
+                        </div>
+                        <!-- Legs -->
+                        <div class="kong-icon-leg left"></div>
+                        <div class="kong-icon-leg right"></div>
+                    </div>
+                </div>
+                <h2 class="game-title">Myeloid Kong</h2>
+                <p class="game-theme">Donkey Kong Style</p>
+                <p class="game-description">
+                    Climb through clonal challenges! Master CML, CMML, MPN & MDS from CHIP to transformation.
+                </p>
+                <button class="play-btn">CLIMB IT</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                </div>
+            </div>
+
+            <!-- ALL Burger Time - Burger Time Style -->
+            <div class="game-card burger" onclick="launchGame('burger')">
+                <div class="game-icon" style="background: transparent; box-shadow: none; position: relative;">
+                    <span class="burger-icon">&#127828;</span>
+                    <span class="chef-icon">&#128104;&#8205;&#127859;</span>
+                </div>
+                <h2 class="game-title">ALL Burger Time</h2>
+                <p class="game-theme">Burger Time Style</p>
+                <p class="game-description">
+                    Build knowledge burgers! Master adult T-ALL & B-ALL from diagnosis to CAR-T and BiTEs.
+                </p>
+                <button class="play-btn">COOK IT</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                </div>
+            </div>
+        </div>
+
+        <p class="insert-coin">SELECT A GAME TO BEGIN</p>
+
+        <!-- High Scores -->
+        <div class="high-scores">
+            <h3>HIGH SCORES</h3>
+            <div class="score-row">
+                <span class="score-game">MyelomaMan</span>
+                <span class="score-value" id="myelomaScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">Ms. AML-Man</span>
+                <span class="score-value" id="amlScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">LymphoInvader</span>
+                <span class="score-value" id="lymphomaScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">Heme's Waldo</span>
+                <span class="score-value" id="waldoScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">Cellular Centipede</span>
+                <span class="score-value" id="centipedeScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">Myeloid Kong</span>
+                <span class="score-value" id="kongScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">ALL Burger Time</span>
+                <span class="score-value" id="burgerScore">---</span>
+            </div>
+        </div>
+
+        <footer class="arcade-footer">
+            <p>Educational Use Only | Not Medical Advice</p>
+            <p style="margin-top: 10px;">Created with retro gaming love for hematology education</p>
+        </footer>
+    </div>
+
+    <script>
+        // Device Detection System
+        const DeviceDetector = {
+            getDeviceType: function() {
+                const width = window.innerWidth;
+                const userAgent = navigator.userAgent.toLowerCase();
+
+                // Check user agent for mobile devices
+                const isMobileUA = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+                const isTabletUA = /ipad|tablet|playbook|silk/i.test(userAgent) ||
+                                   (isMobileUA && width >= 768);
+
+                // Determine device type based on width and user agent
+                if (width <= 480 || (isMobileUA && !isTabletUA && width < 768)) {
+                    return 'mobile';
+                } else if (width <= 1024 || isTabletUA) {
+                    return 'tablet';
+                } else {
+                    return 'desktop';
+                }
+            },
+
+            getResolution: function() {
+                return `${window.innerWidth}x${window.innerHeight}`;
+            },
+
+            getPixelRatio: function() {
+                return window.devicePixelRatio || 1;
+            },
+
+            getOrientation: function() {
+                return window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+            },
+
+            getFullInfo: function() {
+                return {
+                    type: this.getDeviceType(),
+                    resolution: this.getResolution(),
+                    pixelRatio: this.getPixelRatio(),
+                    orientation: this.getOrientation(),
+                    screenWidth: window.screen.width,
+                    screenHeight: window.screen.height
+                };
+            },
+
+            updateDisplay: function() {
+                const info = this.getFullInfo();
+                document.getElementById('deviceType').textContent = info.type;
+                document.getElementById('resolution').textContent = info.resolution;
+
+                // Add device class to body for CSS targeting
+                document.body.classList.remove('device-mobile', 'device-tablet', 'device-desktop');
+                document.body.classList.add('device-' + info.type);
+            },
+
+            init: function() {
+                this.updateDisplay();
+                window.addEventListener('resize', () => this.updateDisplay());
+                window.addEventListener('orientationchange', () => {
+                    setTimeout(() => this.updateDisplay(), 100);
+                });
+            }
+        };
+
+        // Initialize device detection
+        DeviceDetector.init();
+
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const colors = ['#ff00ff', '#00ffff', '#00ff00', '#ffff00', '#ff8800'];
+
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 6) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Audio
+        let audioContext = null;
+        let isMuted = false;
+        let musicPlaying = false;
+        let musicInterval = null;
+
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        // Arcade-style background music
+        const arcadeMelody = [
+            523, 587, 659, 698, 784, 698, 659, 587,
+            523, 494, 440, 392, 440, 494, 523, 587,
+            659, 698, 784, 880, 784, 698, 659, 587,
+            523, 587, 659, 698, 659, 587, 523, 494
+        ];
+
+        const arcadeBass = [
+            262, 262, 294, 294, 330, 330, 349, 349,
+            392, 392, 349, 349, 330, 330, 294, 294,
+            262, 262, 247, 247, 220, 220, 196, 196,
+            220, 220, 247, 247, 262, 262, 294, 294
+        ];
+
+        let currentBeat = 0;
+
+        function startMusic() {
+            if (musicPlaying || isMuted) return;
+            musicPlaying = true;
+
+            musicInterval = setInterval(() => {
+                if (!musicPlaying || isMuted) return;
+
+                try {
+                    const ctx = initAudio();
+
+                    // Melody
+                    const osc1 = ctx.createOscillator();
+                    const gain1 = ctx.createGain();
+                    osc1.type = 'square';
+                    osc1.connect(gain1);
+                    gain1.connect(ctx.destination);
+                    osc1.frequency.value = arcadeMelody[currentBeat % arcadeMelody.length];
+                    gain1.gain.setValueAtTime(0.05, ctx.currentTime);
+                    gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+                    osc1.start(ctx.currentTime);
+                    osc1.stop(ctx.currentTime + 0.12);
+
+                    // Bass
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.type = 'triangle';
+                    osc2.connect(gain2);
+                    gain2.connect(ctx.destination);
+                    osc2.frequency.value = arcadeBass[currentBeat % arcadeBass.length];
+                    gain2.gain.setValueAtTime(0.07, ctx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.14);
+                    osc2.start(ctx.currentTime);
+                    osc2.stop(ctx.currentTime + 0.14);
+
+                    // Percussion
+                    if (currentBeat % 4 === 0) {
+                        const perc = ctx.createOscillator();
+                        const percGain = ctx.createGain();
+                        perc.type = 'square';
+                        perc.connect(percGain);
+                        percGain.connect(ctx.destination);
+                        perc.frequency.value = 80;
+                        percGain.gain.setValueAtTime(0.04, ctx.currentTime);
+                        percGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                        perc.start(ctx.currentTime);
+                        perc.stop(ctx.currentTime + 0.05);
+                    }
+
+                    currentBeat++;
+                } catch(e) {}
+            }, 160);
+        }
+
+        function stopMusic() {
+            musicPlaying = false;
+            if (musicInterval) {
+                clearInterval(musicInterval);
+                musicInterval = null;
+            }
+        }
+
+        function toggleVolume() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('volumeToggle');
+            const icon = document.getElementById('volumeIcon');
+
+            if (isMuted) {
+                btn.classList.add('muted');
+                icon.innerHTML = '&#128263;';
+                stopMusic();
+            } else {
+                btn.classList.remove('muted');
+                icon.innerHTML = '&#128266;';
+                startMusic();
+            }
+        }
+
+        // Start music on first interaction
+        document.addEventListener('click', function initMusic() {
+            if (!musicPlaying && !isMuted) {
+                startMusic();
+            }
+            document.removeEventListener('click', initMusic);
+        });
+
+        // Play selection sound
+        function playSelectSound() {
+            if (isMuted) return;
+            try {
+                const ctx = initAudio();
+                [523, 659, 784, 1047].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime + i * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.08 + 0.1);
+                    osc.start(ctx.currentTime + i * 0.08);
+                    osc.stop(ctx.currentTime + i * 0.08 + 0.1);
+                });
+            } catch(e) {}
+        }
+
+        // Launch game
+        function launchGame(game) {
+            playSelectSound();
+            stopMusic();
+
+            setTimeout(() => {
+                switch(game) {
+                    case 'myeloma':
+                        window.location.href = '../MyelomaMan/myeloma-man.html';
+                        break;
+                    case 'aml':
+                        window.location.href = '../MS-AML-Man/ms-aml-man.html';
+                        break;
+                    case 'lymphoma':
+                        window.location.href = '../LymphoInvader/lymphoma-challenge.html';
+                        break;
+                    case 'waldo':
+                        window.location.href = '../HemesWaldo/hemes-waldo.html';
+                        break;
+                    case 'centipede':
+                        window.location.href = '../CellularCentipede/cellular-centipede.html';
+                        break;
+                    case 'kong':
+                        window.location.href = '../MyeloidKong/myeloid-kong.html';
+                        break;
+                    case 'burger':
+                        window.location.href = '../ALLBurgerTime/all-burger-time.html';
+                        break;
+                }
+            }, 400);
+        }
+
+        // Load high scores from localStorage
+        function loadHighScores() {
+            const myelomaScore = localStorage.getItem('myelomaManHighScore');
+            const amlScore = localStorage.getItem('msAmlManHighScore');
+            const lymphomaScore = localStorage.getItem('lymphoMasterHighScore') || localStorage.getItem('lymphomaChallengeHighScore');
+            const waldoScore = localStorage.getItem('hemesWaldoHighScore');
+            const centipedeScore = localStorage.getItem('cellularCentipedeHighScore');
+            const kongScore = localStorage.getItem('myeloidKongHighScore');
+            const burgerScore = localStorage.getItem('allBurgerTimeHighScore');
+
+            if (myelomaScore) {
+                document.getElementById('myelomaScore').textContent = myelomaScore;
+            }
+            if (amlScore) {
+                document.getElementById('amlScore').textContent = amlScore;
+            }
+            if (lymphomaScore) {
+                document.getElementById('lymphomaScore').textContent = lymphomaScore;
+            }
+            if (waldoScore) {
+                document.getElementById('waldoScore').textContent = waldoScore;
+            }
+            if (centipedeScore) {
+                document.getElementById('centipedeScore').textContent = centipedeScore;
+            }
+            if (kongScore) {
+                document.getElementById('kongScore').textContent = kongScore;
+            }
+            if (burgerScore) {
+                document.getElementById('burgerScore').textContent = burgerScore;
+            }
+        }
+        loadHighScores();
+
+        // Hover sound effect
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                if (isMuted) return;
+                try {
+                    const ctx = initAudio();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = 880;
+                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.1);
+                } catch(e) {}
+            });
+        });
+    </script>
+</body>
+</html>
