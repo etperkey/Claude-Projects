@@ -8,7 +8,159 @@ import { useTrash, TRASH_ITEM_TYPES } from '../context/TrashContext';
 import { useToast } from '../context/ToastContext';
 
 // Project icons
+// Science/Biology Project Icons
 const ProjectIcons = {
+  // DNA Double Helix
+  dna: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M20 8 Q32 20 20 32 Q8 44 20 56" stroke="currentColor" strokeWidth="4" fill="none"/>
+      <path d="M44 8 Q32 20 44 32 Q56 44 44 56" stroke="currentColor" strokeWidth="4" fill="none"/>
+      <line x1="22" y1="14" x2="42" y2="14" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
+      <line x1="18" y1="26" x2="46" y2="26" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
+      <line x1="18" y1="38" x2="46" y2="38" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
+      <line x1="22" y1="50" x2="42" y2="50" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
+    </svg>
+  ),
+  // Cell
+  cell: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <ellipse cx="32" cy="32" rx="26" ry="22" fill="currentColor" opacity="0.9"/>
+      <ellipse cx="32" cy="34" rx="12" ry="10" fill="currentColor"/>
+      <circle cx="32" cy="34" r="5" fill="white" opacity="0.3"/>
+      <circle cx="20" cy="26" r="3" fill="white" opacity="0.2"/>
+      <circle cx="44" cy="38" r="4" fill="white" opacity="0.2"/>
+    </svg>
+  ),
+  // Microscope
+  microscope: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <rect x="28" y="8" width="8" height="20" rx="2" fill="currentColor"/>
+      <circle cx="32" cy="32" r="8" fill="currentColor" opacity="0.8"/>
+      <rect x="30" y="40" width="4" height="12" fill="currentColor"/>
+      <rect x="20" y="52" width="24" height="4" rx="2" fill="currentColor"/>
+      <ellipse cx="32" cy="32" rx="4" ry="4" fill="white" opacity="0.3"/>
+    </svg>
+  ),
+  // Flask/Beaker
+  flask: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M24 8 L24 24 L12 52 Q10 56 14 58 L50 58 Q54 56 52 52 L40 24 L40 8" fill="currentColor" opacity="0.9"/>
+      <rect x="22" y="6" width="20" height="4" rx="1" fill="currentColor"/>
+      <path d="M16 44 Q32 38 48 44 L52 52 Q54 56 50 58 L14 58 Q10 56 12 52 Z" fill="currentColor"/>
+      <circle cx="24" cy="50" r="3" fill="white" opacity="0.3"/>
+      <circle cx="38" cy="48" r="2" fill="white" opacity="0.3"/>
+    </svg>
+  ),
+  // Antibody (Y-shape)
+  antibody: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M32 56 L32 36 M32 36 L18 20 M32 36 L46 20" stroke="currentColor" strokeWidth="6" strokeLinecap="round" fill="none"/>
+      <circle cx="18" cy="16" r="8" fill="currentColor"/>
+      <circle cx="46" cy="16" r="8" fill="currentColor"/>
+      <circle cx="32" cy="56" r="6" fill="currentColor"/>
+    </svg>
+  ),
+  // Virus
+  virus: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <circle cx="32" cy="32" r="16" fill="currentColor"/>
+      <circle cx="32" cy="8" r="4" fill="currentColor"/>
+      <circle cx="32" cy="56" r="4" fill="currentColor"/>
+      <circle cx="8" cy="32" r="4" fill="currentColor"/>
+      <circle cx="56" cy="32" r="4" fill="currentColor"/>
+      <circle cx="15" cy="15" r="3" fill="currentColor"/>
+      <circle cx="49" cy="15" r="3" fill="currentColor"/>
+      <circle cx="15" cy="49" r="3" fill="currentColor"/>
+      <circle cx="49" cy="49" r="3" fill="currentColor"/>
+    </svg>
+  ),
+  // Brain
+  brain: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <ellipse cx="24" cy="28" rx="14" ry="16" fill="currentColor"/>
+      <ellipse cx="40" cy="28" rx="14" ry="16" fill="currentColor"/>
+      <ellipse cx="24" cy="44" rx="10" ry="10" fill="currentColor" opacity="0.9"/>
+      <ellipse cx="40" cy="44" rx="10" ry="10" fill="currentColor" opacity="0.9"/>
+      <path d="M24 20 Q28 24 24 28 Q20 32 24 36" stroke="white" strokeWidth="2" fill="none" opacity="0.3"/>
+      <path d="M40 20 Q36 24 40 28 Q44 32 40 36" stroke="white" strokeWidth="2" fill="none" opacity="0.3"/>
+    </svg>
+  ),
+  // Heart
+  heart: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M32 56 L12 36 Q4 28 12 18 Q20 10 32 22 Q44 10 52 18 Q60 28 52 36 Z" fill="currentColor"/>
+      <path d="M20 24 Q24 20 28 24" stroke="white" strokeWidth="2" fill="none" opacity="0.3"/>
+    </svg>
+  ),
+  // Molecule
+  molecule: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <circle cx="32" cy="32" r="10" fill="currentColor"/>
+      <circle cx="16" cy="16" r="6" fill="currentColor" opacity="0.8"/>
+      <circle cx="48" cy="16" r="6" fill="currentColor" opacity="0.8"/>
+      <circle cx="16" cy="48" r="6" fill="currentColor" opacity="0.8"/>
+      <circle cx="48" cy="48" r="6" fill="currentColor" opacity="0.8"/>
+      <line x1="26" y1="26" x2="20" y2="20" stroke="currentColor" strokeWidth="3"/>
+      <line x1="38" y1="26" x2="44" y2="20" stroke="currentColor" strokeWidth="3"/>
+      <line x1="26" y1="38" x2="20" y2="44" stroke="currentColor" strokeWidth="3"/>
+      <line x1="38" y1="38" x2="44" y2="44" stroke="currentColor" strokeWidth="3"/>
+    </svg>
+  ),
+  // Petri Dish
+  petri: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <ellipse cx="32" cy="36" rx="26" ry="16" fill="currentColor" opacity="0.6"/>
+      <ellipse cx="32" cy="32" rx="26" ry="16" fill="currentColor"/>
+      <circle cx="24" cy="30" r="4" fill="white" opacity="0.3"/>
+      <circle cx="38" cy="34" r="3" fill="white" opacity="0.3"/>
+      <circle cx="30" cy="38" r="2" fill="white" opacity="0.3"/>
+    </svg>
+  ),
+  // Test Tube
+  testtube: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M24 8 L24 44 Q24 56 32 56 Q40 56 40 44 L40 8" fill="currentColor" opacity="0.9"/>
+      <rect x="22" y="6" width="20" height="4" rx="1" fill="currentColor"/>
+      <path d="M24 32 L40 32 L40 44 Q40 56 32 56 Q24 56 24 44 Z" fill="currentColor"/>
+      <circle cx="30" cy="44" r="3" fill="white" opacity="0.3"/>
+    </svg>
+  ),
+  // Syringe
+  syringe: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <rect x="20" y="12" width="24" height="36" rx="2" fill="currentColor" opacity="0.9"/>
+      <rect x="28" y="4" width="8" height="10" rx="1" fill="currentColor"/>
+      <rect x="30" y="48" width="4" height="12" fill="currentColor"/>
+      <line x1="24" y1="20" x2="40" y2="20" stroke="white" strokeWidth="2" opacity="0.3"/>
+      <line x1="24" y1="28" x2="40" y2="28" stroke="white" strokeWidth="2" opacity="0.3"/>
+      <line x1="24" y1="36" x2="40" y2="36" stroke="white" strokeWidth="2" opacity="0.3"/>
+    </svg>
+  ),
+  // Chromosome
+  chromosome: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M20 8 Q14 16 20 32 Q14 48 20 56" stroke="currentColor" strokeWidth="8" strokeLinecap="round" fill="none"/>
+      <path d="M44 8 Q50 16 44 32 Q50 48 44 56" stroke="currentColor" strokeWidth="8" strokeLinecap="round" fill="none"/>
+      <rect x="18" y="28" width="28" height="8" rx="2" fill="currentColor"/>
+    </svg>
+  ),
+  // Protein
+  protein: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M12 32 Q20 16 32 24 Q44 32 32 40 Q20 48 32 56 Q44 48 52 32" stroke="currentColor" strokeWidth="6" strokeLinecap="round" fill="none"/>
+      <circle cx="12" cy="32" r="4" fill="currentColor"/>
+      <circle cx="52" cy="32" r="4" fill="currentColor"/>
+    </svg>
+  ),
+  // Leaf/Plant
+  leaf: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M32 56 L32 32 Q16 24 16 16 Q16 8 32 8 Q48 8 48 16 Q48 24 32 32" fill="currentColor"/>
+      <path d="M32 32 L32 16" stroke="white" strokeWidth="2" opacity="0.3"/>
+      <path d="M28 24 L32 20 L36 24" stroke="white" strokeWidth="2" fill="none" opacity="0.3"/>
+    </svg>
+  ),
+  // Original icons kept for backwards compatibility
   tp53: (
     <svg viewBox="0 0 64 64" className="project-card-icon">
       <circle cx="32" cy="32" r="26" fill="currentColor"/>
@@ -45,6 +197,28 @@ const ProjectIcons = {
     </svg>
   )
 };
+
+// Icon options for the selector (id and display name)
+export const ICON_OPTIONS = [
+  { id: 'dna', name: 'DNA Helix' },
+  { id: 'cell', name: 'Cell' },
+  { id: 'microscope', name: 'Microscope' },
+  { id: 'flask', name: 'Flask' },
+  { id: 'antibody', name: 'Antibody' },
+  { id: 'virus', name: 'Virus' },
+  { id: 'brain', name: 'Brain' },
+  { id: 'heart', name: 'Heart' },
+  { id: 'molecule', name: 'Molecule' },
+  { id: 'petri', name: 'Petri Dish' },
+  { id: 'testtube', name: 'Test Tube' },
+  { id: 'syringe', name: 'Syringe' },
+  { id: 'chromosome', name: 'Chromosome' },
+  { id: 'protein', name: 'Protein' },
+  { id: 'leaf', name: 'Plant/Leaf' },
+  { id: 'custom', name: 'Default' }
+];
+
+export { ProjectIcons };
 
 // Calculate task stats
 const getTaskStats = (tasks) => {

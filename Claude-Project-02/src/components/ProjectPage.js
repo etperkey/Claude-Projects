@@ -7,6 +7,7 @@ import ResearchNotes from './ResearchNotes';
 import ProjectLabNotebook from './ProjectLabNotebook';
 import RecurringTasksManager from './RecurringTasksManager';
 import TaskTemplatesManager from './TaskTemplatesManager';
+import { ProjectIcons, ICON_OPTIONS } from './LandingPage';
 import { useApp } from '../context/AppContext';
 import { useSyncTrigger } from '../context/DataSyncContext';
 import { useTrash, TRASH_ITEM_TYPES } from '../context/TrashContext';
@@ -180,7 +181,8 @@ function ProjectPage() {
       description: project.description || '',
       hypothesis: project.hypothesis || '',
       approaches: project.approaches?.join(', ') || '',
-      color: project.color || '#6366f1'
+      color: project.color || '#6366f1',
+      icon: project.icon || 'custom'
     });
     setIsEditingProject(true);
   };
@@ -196,7 +198,8 @@ function ProjectPage() {
       description: editedProject.description.trim(),
       hypothesis: editedProject.hypothesis.trim(),
       approaches: editedProject.approaches.split(',').map(a => a.trim()).filter(a => a),
-      color: editedProject.color
+      color: editedProject.color,
+      icon: editedProject.icon
     };
 
     if (isCustomProject) {
@@ -225,7 +228,8 @@ function ProjectPage() {
           description: updatedProject.description,
           hypothesis: updatedProject.hypothesis,
           approaches: updatedProject.approaches,
-          color: updatedProject.color
+          color: updatedProject.color,
+          icon: updatedProject.icon
         };
         localStorage.setItem(PROJECT_OVERRIDES_KEY, JSON.stringify(overrides));
         triggerSync();
@@ -457,6 +461,23 @@ function ProjectPage() {
                 value={editedProject.color}
                 onChange={(e) => setEditedProject({ ...editedProject, color: e.target.value })}
               />
+            </div>
+            <div className="edit-form-row">
+              <label>Icon</label>
+              <div className="icon-selector">
+                {ICON_OPTIONS.map(option => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    className={`icon-option ${editedProject.icon === option.id ? 'selected' : ''}`}
+                    onClick={() => setEditedProject({ ...editedProject, icon: option.id })}
+                    title={option.name}
+                    style={{ color: editedProject.color }}
+                  >
+                    {ProjectIcons[option.id]}
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="edit-form-actions">
               <button className="btn-cancel" onClick={handleCancelEdit}>Cancel</button>
