@@ -305,7 +305,8 @@ getEntryHistory(entryId) → [{ timestamp, type, user, changes }]
   column: string,          // Current column (backlog/inprogress/review/done)
   position: number,        // Order within column
   priority: string,        // high/medium/low
-  dueDate: string,         // ISO date string
+  dueDate: string,         // ISO date string (YYYY-MM-DD)
+  dueTime: string,         // Optional time (HH:MM)
   labels: string[],        // Color labels
   checklist: [             // Subtasks
     { id: string, text: string, completed: boolean }
@@ -316,6 +317,20 @@ getEntryHistory(entryId) → [{ timestamp, type, user, changes }]
     { id: string, name: string, mimeType: string, isImage: boolean,
       webViewLink: string, thumbnailLink: string }
   ]
+}
+```
+
+### Calendar Event
+
+```javascript
+{
+  id: string,              // Unique identifier
+  title: string,           // Event title
+  date: string,            // ISO date string (YYYY-MM-DD)
+  startTime: string,       // Optional start time (HH:MM)
+  endTime: string,         // Optional end time (HH:MM)
+  description: string,     // Event description
+  color: string            // Color ID (blue/green/purple/orange/red/teal/pink)
 }
 ```
 
