@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /s /b \"C:\\\\Users\\\\ericp\\\\Claude-Projects\")",
+      "Bash(dir /s /b /ad \"C:\\\\Users\\\\ericp\")",
+      "Bash(findstr:*)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit - Add all Claude projects\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit - Add all Claude projects\n\nIncludes:\n- Claude-Project-01\n- HematologyArcade\n- LymphoMaster\n- MS-AML-Man\n- MyelomaMan\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(git commit --amend -m \"$\\(cat <<''EOF''\nInitial commit - Add all Claude projects\n\nIncludes:\n- Claude-Project-01\n- HematologyArcade\n- LymphoMaster\n- MS-AML-Man\n- MyelomaMan\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "WebSearch",
+      "WebFetch(domain:soundbible.com)",
+      "Bash(powershell -Command \"Invoke-WebRequest -Uri ''http://soundbible.com/grab.php?id=1531&type=mp3'' -OutFile ''C:\\\\Users\\\\ericp\\\\.claude\\\\sounds\\\\1-temple-bell.mp3''\")",
+      "Bash(powershell -Command \"Invoke-WebRequest -Uri ''http://soundbible.com/grab.php?id=1496&type=mp3'' -OutFile ''C:\\\\Users\\\\ericp\\\\.claude\\\\sounds\\\\2-japanese-temple-bell.mp3''\")",
+      "Bash(dir:*)",
+      "Bash(powershell -WindowStyle Hidden -Command \"Add-Type -AssemblyName presentationCore; $player = New-Object System.Windows.Media.MediaPlayer; $player.Open\\(''C:\\\\Users\\\\ericp\\\\.claude\\\\sounds\\\\3-lovely-meditation-bell.mp3''\\); $player.Play\\(\\); Start-Sleep -Seconds 3; $player.Close\\(\\)\")",
+      "Bash(powershell:*)",
+      "Bash(cmd.exe /c \"dir /s /b /o-s %TEMP% 2>nul\")",
+      "Bash(cmd.exe /c \"dir /s /b /o-s %USERPROFILE%\\\\Downloads 2>nul\")",
+      "Bash(cmd.exe /c \"dir %USERPROFILE%\\\\AppData\\\\Local\\\\Temp /s 2>nul\")",
+      "Bash(powershell.exe:*)",
+      "Bash(git config:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo create:*)",
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" auth status)",
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" auth login --web --git-protocol https)",
+      "WebFetch(domain:pixabay.com)",
+      "WebFetch(domain:bigsoundbank.com)",
+      "WebFetch(domain:freesound.org)",
+      "Bash(curl:*)",
+      "WebFetch(domain:www.looperman.com)",
+      "WebFetch(domain:archive.org)",
+      "Bash(grep:*)",
+      "Bash(wscript.exe:*)",
+      "Bash(ffmpeg:*)"
+    ]
+  }
+}

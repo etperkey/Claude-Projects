@@ -12,13 +12,12 @@ const compressMode = process.argv.includes('--compress');
     });
     const page = await browser.newPage();
 
-    // Letter landscape - use lower DPI for compressed version
-    const dpi = compressMode ? 100 : 150;
+    // Letter landscape at 150 DPI - SAME dimensions for both modes
+    const dpi = 150;
     const pageWidth = Math.round(11 * dpi);
     const pageHeight = Math.round(8.5 * dpi);
-    const scaleFactor = compressMode ? 1.5 : 2;
 
-    await page.setViewport({ width: pageWidth, height: pageHeight, deviceScaleFactor: scaleFactor });
+    await page.setViewport({ width: pageWidth, height: pageHeight, deviceScaleFactor: 2 });
 
     console.log('Loading page...');
     await page.goto('http://127.0.0.1:8080/chicago-dive-bar-calendar-2026.html', {

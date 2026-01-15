@@ -1,0 +1,71 @@
+﻿{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$e=[char]27; Write-Host \\\"$e]0;$([char]::ConvertFromUtf32(0x1F504)) Claude$e\\\\\\\" -NoNewline\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$e=[char]27; Write-Host \\\"$e]0;$([char]::ConvertFromUtf32(0x1F54A)) Claude$e\\\\\\\" -NoNewline\""
+          },
+          {
+            "type": "command",
+            "command": "wscript.exe \"C:\\Users\\ericp\\.claude\\sounds\\play-sound-hidden.vbs\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$e=[char]27; Write-Host \\\"$e]0;$([char]::ConvertFromUtf32(0x1F514)) Claude$e\\\\\\\" -NoNewline\""
+          },
+          {
+            "type": "command",
+            "command": "wscript.exe \"C:\\Users\\ericp\\.claude\\sounds\\play-sound-hidden.vbs\""
+          }
+        ]
+      },
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$e=[char]27; Write-Host \\\"$e]0;$([char]::ConvertFromUtf32(0x2753)) Claude$e\\\\\\\" -NoNewline\""
+          },
+          {
+            "type": "command",
+            "command": "wscript.exe \"C:\\Users\\ericp\\.claude\\sounds\\play-sound-hidden.vbs\""
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$e=[char]27; Write-Host \\\"$e]0;$([char]::ConvertFromUtf32(0x2705)) Claude$e\\\\\\\" -NoNewline\""
+          },
+          {
+            "type": "command",
+            "command": "wscript.exe \"C:\\Users\\ericp\\.claude\\sounds\\play-sound-hidden.vbs\""
+          }
+        ]
+      }
+    ]
+  }
+}
+

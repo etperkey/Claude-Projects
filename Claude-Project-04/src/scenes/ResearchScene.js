@@ -20,50 +20,55 @@ export default class ResearchScene extends Phaser.Scene {
   }
 
   create() {
-    // Double check gameState exists
-    if (!this.gameState) {
-      console.error('gameState is null in ResearchScene create');
-      this.scene.start('MenuScene');
-      return;
+    try {
+      // Double check gameState exists
+      if (!this.gameState) {
+        console.error('gameState is null in ResearchScene create');
+        this.scene.start('MenuScene');
+        return;
+      }
+
+      const { width, height } = this.cameras.main;
+
+      // Dark overlay
+      this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.8);
+
+      // Main panel
+      this.add.rectangle(width / 2, height / 2, 1000, 600, 0x1a1a2e, 0.98)
+        .setStrokeStyle(3, 0x4ecdc4);
+
+      // Title (with satirical subtitle)
+      this.add.text(width / 2, 90, 'RESEARCH TREE', {
+        fontFamily: 'Arial Black',
+        fontSize: '36px',
+        color: '#4ecdc4'
+      }).setOrigin(0.5);
+
+      this.add.text(width / 2, 125, '"Pending Congressional Approval"', {
+        fontFamily: 'Arial',
+        fontSize: '14px',
+        color: '#ff6b6b',
+        fontStyle: 'italic'
+      }).setOrigin(0.5);
+
+      // Research points display
+      this.add.image(width / 2 - 80, 150, 'research_point').setScale(1.5);
+      this.rpText = this.add.text(width / 2 - 55, 142, `${this.gameState.researchPoints}`, {
+        fontFamily: 'Arial',
+        fontSize: '24px',
+        color: '#a55eea',
+        fontStyle: 'bold'
+      });
+
+      // Create research branches
+      this.createResearchBranches(width, height);
+
+      // Close button
+      this.createCloseButton(width, height);
+    } catch (error) {
+      console.error('ResearchScene create error:', error);
+      this.scene.start('LabScene');
     }
-
-    const { width, height } = this.cameras.main;
-
-    // Dark overlay
-    this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.8);
-
-    // Main panel
-    this.add.rectangle(width / 2, height / 2, 1000, 600, 0x1a1a2e, 0.98)
-      .setStrokeStyle(3, 0x4ecdc4);
-
-    // Title (with satirical subtitle)
-    this.add.text(width / 2, 90, 'RESEARCH TREE', {
-      fontFamily: 'Arial Black',
-      fontSize: '36px',
-      color: '#4ecdc4'
-    }).setOrigin(0.5);
-
-    this.add.text(width / 2, 125, '"Pending Congressional Approval"', {
-      fontFamily: 'Arial',
-      fontSize: '14px',
-      color: '#ff6b6b',
-      fontStyle: 'italic'
-    }).setOrigin(0.5);
-
-    // Research points display
-    this.add.image(width / 2 - 80, 150, 'research_point').setScale(1.5);
-    this.rpText = this.add.text(width / 2 - 55, 142, `${this.gameState.researchPoints}`, {
-      fontFamily: 'Arial',
-      fontSize: '24px',
-      color: '#a55eea',
-      fontStyle: 'bold'
-    });
-
-    // Create research branches
-    this.createResearchBranches(width, height);
-
-    // Close button
-    this.createCloseButton(width, height);
   }
 
   createResearchBranches(width, height) {
