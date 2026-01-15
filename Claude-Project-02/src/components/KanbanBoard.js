@@ -328,6 +328,33 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
                       </p>
                     )}
 
+                    {/* Attachment thumbnails */}
+                    {task.attachments && task.attachments.length > 0 && (
+                      <div className="task-card-attachments">
+                        {task.attachments
+                          .filter(att => att.isImage)
+                          .slice(0, 3)
+                          .map(att => (
+                            <img
+                              key={att.id}
+                              src={att.thumbnailLink || `https://drive.google.com/thumbnail?id=${att.id}&sz=w64`}
+                              alt={att.name}
+                              className="task-card-thumbnail"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(att.webViewLink || `https://drive.google.com/file/d/${att.id}/view`, '_blank');
+                              }}
+                              title={att.name}
+                            />
+                          ))}
+                        {task.attachments.filter(att => att.isImage).length > 3 && (
+                          <span className="task-card-more-attachments">
+                            +{task.attachments.filter(att => att.isImage).length - 3}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
                     {/* Task metadata icons */}
                     <div className="task-metadata">
                       {dueInfo && (
@@ -344,6 +371,11 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
                       {hasLinks && (
                         <span className="meta-icon" title={`${task.links.length} link(s)`}>
                           🔗
+                        </span>
+                      )}
+                      {task.attachments && task.attachments.length > 0 && (
+                        <span className="meta-icon" title={`${task.attachments.length} attachment(s)`}>
+                          📎 {task.attachments.length}
                         </span>
                       )}
                       {checklistProgress && (

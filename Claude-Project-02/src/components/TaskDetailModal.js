@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TaskDependencySelector from './TaskDependencySelector';
-import MacroTextarea from './MacroTextarea';
+import FileUploadTextarea from './FileUploadTextarea';
 import FileAttachments from './FileAttachments';
 
 const PRIORITY_OPTIONS = [
@@ -248,11 +248,14 @@ function TaskDetailModal({ task, columnId, isOpen, onClose, onSave, onDelete, al
           {/* Description/Notes */}
           <div className="task-section">
             <label>Notes</label>
-            <MacroTextarea
+            <FileUploadTextarea
               className="task-description-input"
               value={editedTask.description}
               onChange={(description) => setEditedTask({ ...editedTask, description })}
-              placeholder="Add notes, details, or context... (type @ for commands)"
+              attachments={editedTask.attachments}
+              onAttachmentsChange={(attachments) => setEditedTask({ ...editedTask, attachments })}
+              variant="macro"
+              placeholder="Add notes, details, or context... (type @ for commands, drag files to upload)"
               rows={4}
             />
           </div>
