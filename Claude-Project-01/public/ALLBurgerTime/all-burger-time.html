@@ -1184,17 +1184,65 @@
     <!-- Background Effects -->
     <div class="game-background"></div>
 
-    <!-- Floating Ingredients -->
-    <div class="floating-ingredient" style="left: 5%; animation-delay: 0s;">&#127828;</div>
-    <div class="floating-ingredient" style="left: 15%; animation-delay: 3s;">&#129385;</div>
-    <div class="floating-ingredient" style="left: 25%; animation-delay: 6s;">&#127813;</div>
-    <div class="floating-ingredient" style="left: 35%; animation-delay: 9s;">&#129472;</div>
-    <div class="floating-ingredient" style="left: 45%; animation-delay: 12s;">&#127830;</div>
-    <div class="floating-ingredient" style="left: 55%; animation-delay: 2s;">&#129361;</div>
-    <div class="floating-ingredient" style="left: 65%; animation-delay: 5s;">&#127828;</div>
-    <div class="floating-ingredient" style="left: 75%; animation-delay: 8s;">&#129385;</div>
-    <div class="floating-ingredient" style="left: 85%; animation-delay: 11s;">&#127813;</div>
-    <div class="floating-ingredient" style="left: 95%; animation-delay: 14s;">&#129472;</div>
+    <!-- Classic Burger Time Enemies -->
+    <div class="enemies-container">
+        <!-- Mr. Hot Dogs -->
+        <div class="enemy mr-hotdog" style="left: 5%; animation-delay: 0s;">
+            <div class="hotdog-bun"></div>
+            <div class="hotdog-meat"></div>
+            <div class="hotdog-eyes"><div class="hotdog-eye"></div><div class="hotdog-eye"></div></div>
+            <div class="hotdog-feet"><div class="hotdog-foot"></div><div class="hotdog-foot"></div></div>
+        </div>
+        <div class="enemy mr-hotdog" style="left: 35%; animation-delay: 5s;">
+            <div class="hotdog-bun"></div>
+            <div class="hotdog-meat"></div>
+            <div class="hotdog-eyes"><div class="hotdog-eye"></div><div class="hotdog-eye"></div></div>
+            <div class="hotdog-feet"><div class="hotdog-foot"></div><div class="hotdog-foot"></div></div>
+        </div>
+        <div class="enemy mr-hotdog" style="left: 70%; animation-delay: 10s;">
+            <div class="hotdog-bun"></div>
+            <div class="hotdog-meat"></div>
+            <div class="hotdog-eyes"><div class="hotdog-eye"></div><div class="hotdog-eye"></div></div>
+            <div class="hotdog-feet"><div class="hotdog-foot"></div><div class="hotdog-foot"></div></div>
+        </div>
+
+        <!-- Mr. Pickles -->
+        <div class="enemy mr-pickle" style="left: 15%; animation-delay: 3s;">
+            <div class="pickle-body"></div>
+            <div class="pickle-eyes"><div class="pickle-eye"></div><div class="pickle-eye"></div></div>
+            <div class="pickle-feet"><div class="pickle-foot"></div><div class="pickle-foot"></div></div>
+        </div>
+        <div class="enemy mr-pickle" style="left: 50%; animation-delay: 8s;">
+            <div class="pickle-body"></div>
+            <div class="pickle-eyes"><div class="pickle-eye"></div><div class="pickle-eye"></div></div>
+            <div class="pickle-feet"><div class="pickle-foot"></div><div class="pickle-foot"></div></div>
+        </div>
+        <div class="enemy mr-pickle" style="left: 85%; animation-delay: 13s;">
+            <div class="pickle-body"></div>
+            <div class="pickle-eyes"><div class="pickle-eye"></div><div class="pickle-eye"></div></div>
+            <div class="pickle-feet"><div class="pickle-foot"></div><div class="pickle-foot"></div></div>
+        </div>
+
+        <!-- Mr. Eggs -->
+        <div class="enemy mr-egg" style="left: 25%; animation-delay: 2s;">
+            <div class="egg-white"></div>
+            <div class="egg-yolk"></div>
+            <div class="egg-eyes"><div class="egg-eye"></div><div class="egg-eye"></div></div>
+            <div class="egg-feet"><div class="egg-foot"></div><div class="egg-foot"></div></div>
+        </div>
+        <div class="enemy mr-egg" style="left: 60%; animation-delay: 7s;">
+            <div class="egg-white"></div>
+            <div class="egg-yolk"></div>
+            <div class="egg-eyes"><div class="egg-eye"></div><div class="egg-eye"></div></div>
+            <div class="egg-feet"><div class="egg-foot"></div><div class="egg-foot"></div></div>
+        </div>
+        <div class="enemy mr-egg" style="left: 90%; animation-delay: 12s;">
+            <div class="egg-white"></div>
+            <div class="egg-yolk"></div>
+            <div class="egg-eyes"><div class="egg-eye"></div><div class="egg-eye"></div></div>
+            <div class="egg-feet"><div class="egg-foot"></div><div class="egg-foot"></div></div>
+        </div>
+    </div>
 
     <!-- Volume Control -->
     <button class="volume-btn" id="volumeBtn" onclick="toggleVolume()">&#128266;</button>
@@ -1211,7 +1259,22 @@
             <p class="disease-subtitle">Adult Acute Lymphoblastic Leukemia (T-ALL & B-ALL)</p>
         </div>
 
-        <div class="chef-character">&#128104;&#8205;&#127859;</div>
+        <div class="peter-pepper">
+            <div class="peter-head">
+                <div class="peter-hat"></div>
+                <div class="peter-eyes">
+                    <div class="peter-eye"></div>
+                    <div class="peter-eye"></div>
+                </div>
+            </div>
+            <div class="peter-body">
+                <div class="peter-apron"></div>
+            </div>
+            <div class="peter-legs">
+                <div class="peter-leg"></div>
+                <div class="peter-leg right"></div>
+            </div>
+        </div>
 
         <div class="menu-container">
             <h2 class="menu-title">SELECT YOUR ORDER</h2>
@@ -3580,23 +3643,30 @@
             showExplanation(q);
         }
 
+        function renderReferenceLinks(question) {
+            let links = '';
+            if (question.pmid) {
+                links += `<a href="https://pubmed.ncbi.nlm.nih.gov/${question.pmid}/" target="_blank" rel="noopener" class="ref-link" title="View on PubMed">📄 PubMed</a>`;
+            }
+            if (question.doi) {
+                links += `<a href="https://doi.org/${question.doi}" target="_blank" rel="noopener" class="ref-link" title="View Full Text">🔗 DOI</a>`;
+            }
+            if (question.url) {
+                links += `<a href="${question.url}" target="_blank" rel="noopener" class="ref-link" title="View Source">📋 Link</a>`;
+            }
+            if (question.guideline) {
+                links += `<a href="${question.guideline.url}" target="_blank" rel="noopener" class="ref-link" title="View Guidelines">📋 ${question.guideline.name}</a>`;
+            }
+            return links ? `<div class="ref-links">${links}</div>` : '';
+        }
+
         function showExplanation(q) {
             const section = document.getElementById('explanationSection');
             document.getElementById('explanationText').textContent = q.explanation;
             document.getElementById('keyPoint').innerHTML = '&#127828; Key Point: ' + q.keyPoint;
 
-            // Build citation with links
-            let citationHTML = q.citation;
-            if (q.pmid) {
-                citationHTML += ` <a href="https://pubmed.ncbi.nlm.nih.gov/${q.pmid}/" target="_blank">[PMID: ${q.pmid}]</a>`;
-            }
-            if (q.doi) {
-                citationHTML += ` <a href="https://doi.org/${q.doi}" target="_blank">[DOI]</a>`;
-            }
-            if (q.url) {
-                citationHTML += ` <a href="${q.url}" target="_blank">[Link]</a>`;
-            }
-            document.getElementById('citation').innerHTML = citationHTML;
+            // Build citation with styled reference links
+            document.getElementById('citation').innerHTML = `📚 ${q.citation}${renderReferenceLinks(q)}`;
 
             section.classList.add('show');
         }
