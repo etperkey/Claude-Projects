@@ -113,8 +113,188 @@ const ProjectIcons = {
       <circle cx="32" cy="28" r="8" fill="white" opacity="0.3"/>
       <rect x="24" y="40" width="16" height="4" rx="2" fill="white" opacity="0.3"/>
     </svg>
+  ),
+  // Science/Biology Icons
+  dna: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M20 4 Q38 16 20 32 Q2 48 20 60" stroke="currentColor" strokeWidth="4" fill="none"/>
+      <path d="M44 4 Q26 16 44 32 Q62 48 44 60" stroke="currentColor" strokeWidth="4" fill="none"/>
+      <line x1="20" y1="10" x2="44" y2="10" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
+      <line x1="14" y1="22" x2="50" y2="22" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
+      <line x1="14" y1="42" x2="50" y2="42" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
+      <line x1="20" y1="54" x2="44" y2="54" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
+    </svg>
+  ),
+  cell: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <ellipse cx="32" cy="32" rx="26" ry="22" fill="currentColor" opacity="0.3"/>
+      <ellipse cx="32" cy="32" rx="24" ry="20" stroke="currentColor" strokeWidth="3" fill="none"/>
+      <ellipse cx="32" cy="34" rx="10" ry="8" fill="currentColor" opacity="0.8"/>
+      <circle cx="20" cy="26" r="3" fill="currentColor" opacity="0.5"/>
+      <circle cx="44" cy="28" r="2" fill="currentColor" opacity="0.5"/>
+      <circle cx="22" cy="40" r="2" fill="currentColor" opacity="0.5"/>
+    </svg>
+  ),
+  microscope: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <rect x="28" y="4" width="8" height="24" rx="2" fill="currentColor"/>
+      <ellipse cx="32" cy="32" rx="6" ry="4" fill="currentColor" opacity="0.8"/>
+      <line x1="32" y1="36" x2="32" y2="52" stroke="currentColor" strokeWidth="4"/>
+      <ellipse cx="32" cy="56" rx="16" ry="4" fill="currentColor" opacity="0.6"/>
+      <rect x="16" y="18" width="8" height="6" rx="1" fill="currentColor" opacity="0.7"/>
+      <line x1="16" y1="21" x2="8" y2="26" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+    </svg>
+  ),
+  flask: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M24 4 L24 24 L8 52 Q6 56 10 58 L54 58 Q58 56 56 52 L40 24 L40 4" stroke="currentColor" strokeWidth="3" fill="none"/>
+      <line x1="20" y1="4" x2="44" y2="4" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M12 48 Q32 40 52 48 L54 54 Q32 46 10 54 Z" fill="currentColor" opacity="0.4"/>
+      <circle cx="20" cy="50" r="2" fill="currentColor"/>
+      <circle cx="32" cy="46" r="3" fill="currentColor"/>
+      <circle cx="44" cy="52" r="2" fill="currentColor"/>
+    </svg>
+  ),
+  antibody: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M32 56 L32 36" stroke="currentColor" strokeWidth="4"/>
+      <path d="M32 36 L20 24 L12 16" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M32 36 L44 24 L52 16" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
+      <circle cx="12" cy="12" r="6" fill="currentColor" opacity="0.8"/>
+      <circle cx="52" cy="12" r="6" fill="currentColor" opacity="0.8"/>
+      <rect x="28" y="54" width="8" height="6" rx="2" fill="currentColor" opacity="0.6"/>
+    </svg>
+  ),
+  virus: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <circle cx="32" cy="32" r="16" fill="currentColor" opacity="0.8"/>
+      <circle cx="32" cy="32" r="12" fill="currentColor"/>
+      {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+        const rad = (angle * Math.PI) / 180;
+        const x1 = 32 + Math.cos(rad) * 16;
+        const y1 = 32 + Math.sin(rad) * 16;
+        const x2 = 32 + Math.cos(rad) * 26;
+        const y2 = 32 + Math.sin(rad) * 26;
+        return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>;
+      })}
+      {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+        const rad = (angle * Math.PI) / 180;
+        const cx = 32 + Math.cos(rad) * 26;
+        const cy = 32 + Math.sin(rad) * 26;
+        return <circle key={i} cx={cx} cy={cy} r="4" fill="currentColor"/>;
+      })}
+    </svg>
+  ),
+  brain: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <ellipse cx="24" cy="28" rx="14" ry="16" fill="currentColor" opacity="0.8"/>
+      <ellipse cx="40" cy="28" rx="14" ry="16" fill="currentColor" opacity="0.8"/>
+      <path d="M18 20 Q24 16 32 20 Q40 16 46 20" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.6"/>
+      <path d="M16 32 Q24 28 32 32 Q40 28 48 32" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.6"/>
+      <ellipse cx="32" cy="48" rx="8" ry="6" fill="currentColor"/>
+      <line x1="32" y1="54" x2="32" y2="60" stroke="currentColor" strokeWidth="4"/>
+    </svg>
+  ),
+  heart: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M32 56 L12 36 Q4 28 4 20 Q4 8 16 8 Q24 8 32 18 Q40 8 48 8 Q60 8 60 20 Q60 28 52 36 Z" fill="currentColor"/>
+      <path d="M20 24 Q28 24 32 32" stroke="white" strokeWidth="2" fill="none" opacity="0.4"/>
+    </svg>
+  ),
+  molecule: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <circle cx="32" cy="20" r="8" fill="currentColor"/>
+      <circle cx="16" cy="44" r="8" fill="currentColor" opacity="0.8"/>
+      <circle cx="48" cy="44" r="8" fill="currentColor" opacity="0.8"/>
+      <line x1="32" y1="28" x2="20" y2="38" stroke="currentColor" strokeWidth="3"/>
+      <line x1="32" y1="28" x2="44" y2="38" stroke="currentColor" strokeWidth="3"/>
+      <line x1="24" y1="44" x2="40" y2="44" stroke="currentColor" strokeWidth="3"/>
+    </svg>
+  ),
+  petri: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <ellipse cx="32" cy="36" rx="26" ry="12" fill="currentColor" opacity="0.3"/>
+      <ellipse cx="32" cy="32" rx="26" ry="12" stroke="currentColor" strokeWidth="3" fill="none"/>
+      <ellipse cx="32" cy="28" rx="26" ry="12" stroke="currentColor" strokeWidth="3" fill="none"/>
+      <circle cx="24" cy="30" r="4" fill="currentColor" opacity="0.6"/>
+      <circle cx="38" cy="28" r="3" fill="currentColor" opacity="0.6"/>
+      <circle cx="28" cy="34" r="2" fill="currentColor" opacity="0.6"/>
+      <circle cx="42" cy="32" r="3" fill="currentColor" opacity="0.6"/>
+    </svg>
+  ),
+  testtube: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M24 8 L24 44 Q24 56 32 56 Q40 56 40 44 L40 8" stroke="currentColor" strokeWidth="3" fill="none"/>
+      <line x1="20" y1="8" x2="44" y2="8" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M24 36 Q32 32 40 36 L40 44 Q40 52 32 52 Q24 52 24 44 Z" fill="currentColor" opacity="0.4"/>
+      <circle cx="30" cy="44" r="2" fill="currentColor"/>
+      <circle cx="36" cy="40" r="2" fill="currentColor"/>
+    </svg>
+  ),
+  syringe: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <rect x="18" y="28" width="28" height="12" rx="2" fill="currentColor"/>
+      <rect x="46" y="30" width="12" height="8" rx="1" fill="currentColor" opacity="0.8"/>
+      <line x1="58" y1="34" x2="62" y2="34" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+      <rect x="6" y="32" width="12" height="4" fill="currentColor" opacity="0.6"/>
+      <line x1="4" y1="34" x2="6" y2="34" stroke="currentColor" strokeWidth="2"/>
+      <line x1="26" y1="30" x2="26" y2="38" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+      <line x1="34" y1="30" x2="34" y2="38" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+      <rect x="10" y="26" width="4" height="16" fill="currentColor" opacity="0.7"/>
+    </svg>
+  ),
+  chromosome: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M20 8 Q12 8 12 16 L12 28 Q12 32 16 32 Q12 32 12 36 L12 48 Q12 56 20 56" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round"/>
+      <path d="M44 8 Q52 8 52 16 L52 28 Q52 32 48 32 Q52 32 52 36 L52 48 Q52 56 44 56" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round"/>
+      <ellipse cx="32" cy="32" rx="6" ry="4" fill="currentColor" opacity="0.6"/>
+    </svg>
+  ),
+  protein: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M8 32 Q16 16 28 24 Q40 32 32 44 Q24 56 40 48 Q56 40 56 32" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round"/>
+      <circle cx="8" cy="32" r="4" fill="currentColor"/>
+      <circle cx="28" cy="24" r="4" fill="currentColor" opacity="0.8"/>
+      <circle cx="32" cy="44" r="4" fill="currentColor" opacity="0.8"/>
+      <circle cx="56" cy="32" r="4" fill="currentColor"/>
+    </svg>
+  ),
+  leaf: (
+    <svg viewBox="0 0 64 64" className="project-card-icon">
+      <path d="M32 58 Q32 40 24 32 Q8 16 32 8 Q56 16 40 32 Q32 40 32 58" fill="currentColor" opacity="0.8"/>
+      <path d="M32 58 L32 20" stroke="currentColor" strokeWidth="2"/>
+      <path d="M32 28 Q24 32 20 28" stroke="currentColor" strokeWidth="2" fill="none"/>
+      <path d="M32 36 Q40 40 44 36" stroke="currentColor" strokeWidth="2" fill="none"/>
+      <path d="M32 44 Q26 48 22 44" stroke="currentColor" strokeWidth="2" fill="none"/>
+    </svg>
   )
 };
+
+// Icon options for the icon selector
+export const ICON_OPTIONS = [
+  { id: 'custom', name: 'Custom' },
+  { id: 'cart', name: 'CAR-T Cell' },
+  { id: 'crispr', name: 'CRISPR' },
+  { id: 'tme', name: 'Tumor Microenvironment' },
+  { id: 'scrna', name: 'Single-cell RNA' },
+  { id: 'dna', name: 'DNA Helix' },
+  { id: 'cell', name: 'Cell' },
+  { id: 'microscope', name: 'Microscope' },
+  { id: 'flask', name: 'Flask' },
+  { id: 'antibody', name: 'Antibody' },
+  { id: 'virus', name: 'Virus' },
+  { id: 'brain', name: 'Brain' },
+  { id: 'heart', name: 'Heart' },
+  { id: 'molecule', name: 'Molecule' },
+  { id: 'petri', name: 'Petri Dish' },
+  { id: 'testtube', name: 'Test Tube' },
+  { id: 'syringe', name: 'Syringe' },
+  { id: 'chromosome', name: 'Chromosome' },
+  { id: 'protein', name: 'Protein' },
+  { id: 'leaf', name: 'Leaf' }
+];
+
+export { ProjectIcons };
 
 // Calculate task stats
 const getTaskStats = (tasks) => {
@@ -128,6 +308,7 @@ const getTaskStats = (tasks) => {
 const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 const PROJECT_ORDER_KEY = 'research-dashboard-project-order';
+const PROJECT_OVERRIDES_KEY = 'research-dashboard-project-overrides';
 
 function LandingPage() {
   const { isProjectArchived, archiveProject, unarchiveProject, archivedProjects, logActivity } = useApp();
@@ -139,6 +320,7 @@ function LandingPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
   const [projectOrder, setProjectOrder] = useState([]);
+  const [projectOverrides, setProjectOverrides] = useState({});
   const [draggedProject, setDraggedProject] = useState(null);
   const [dragOverProject, setDragOverProject] = useState(null);
 
@@ -171,6 +353,16 @@ function LandingPage() {
         setProjectOrder(JSON.parse(savedOrder));
       } catch (e) {
         console.error('Failed to load project order:', e);
+      }
+    }
+
+    // Load project overrides
+    const savedOverrides = localStorage.getItem(PROJECT_OVERRIDES_KEY);
+    if (savedOverrides) {
+      try {
+        setProjectOverrides(JSON.parse(savedOverrides));
+      } catch (e) {
+        console.error('Failed to load project overrides:', e);
       }
     }
   }, []);
@@ -300,7 +492,15 @@ function LandingPage() {
     return savedTasks[project.id] || project.tasks;
   };
 
-  const allProjects = [...researchProjects, ...customProjects];
+  // Apply overrides to built-in projects
+  const projectsWithOverrides = researchProjects.map(p => {
+    if (projectOverrides[p.id]) {
+      return { ...p, ...projectOverrides[p.id] };
+    }
+    return p;
+  });
+
+  const allProjects = [...projectsWithOverrides, ...customProjects];
   const activeProjectsUnsorted = allProjects.filter(p => !isProjectArchived(p.id));
 
   // Sort active projects by saved order

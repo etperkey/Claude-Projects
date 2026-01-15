@@ -51,7 +51,8 @@ const APP_KEYS = [
   'research-dashboard-archived',
   'research-dashboard-theme',
   'research-dashboard-trash',
-  'research-dashboard-project-order'
+  'research-dashboard-project-order',
+  'research-dashboard-project-overrides'
 ];
 
 // Project-specific key prefixes

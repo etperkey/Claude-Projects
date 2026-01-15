@@ -7,6 +7,7 @@ import ResearchNotes from './ResearchNotes';
 import ProjectLabNotebook from './ProjectLabNotebook';
 import RecurringTasksManager from './RecurringTasksManager';
 import TaskTemplatesManager from './TaskTemplatesManager';
+import { ProjectIcons, ICON_OPTIONS } from './LandingPage';
 import { useApp } from '../context/AppContext';
 import { useSyncTrigger } from '../context/DataSyncContext';
 import { useTrash, TRASH_ITEM_TYPES } from '../context/TrashContext';
@@ -16,6 +17,7 @@ const CUSTOM_PROJECTS_KEY = 'research-dashboard-custom-projects';
 const TASK_STORAGE_KEY = 'research-dashboard-tasks';
 const NOTEBOOK_KEY = 'research-dashboard-lab-notebook';
 const LITERATURE_KEY = 'research-dashboard-literature';
+const PROJECT_OVERRIDES_KEY = 'research-dashboard-project-overrides';
 
 function ProjectPage() {
   const { projectId } = useParams();
@@ -40,6 +42,20 @@ function ProjectPage() {
     let foundProject = getProjectById(projectId);
 
     if (foundProject) {
+      // Check for any saved overrides for this built-in project
+      const savedOverrides = localStorage.getItem(PROJECT_OVERRIDES_KEY);
+      if (savedOverrides) {
+        try {
+          const overrides = JSON.parse(savedOverrides);
+          if (overrides[projectId]) {
+            // Merge overrides with built-in project data
+            foundProject = { ...foundProject, ...overrides[projectId] };
+          }
+        } catch (e) {
+          console.error('Failed to load project overrides:', e);
+        }
+      }
+
       setProject(foundProject);
       setIsCustomProject(false);
 
@@ -165,7 +181,8 @@ function ProjectPage() {
       description: project.description || '',
       hypothesis: project.hypothesis || '',
       approaches: project.approaches?.join(', ') || '',
-      color: project.color || '#6366f1'
+      color: project.color || '#6366f1',
+      icon: project.icon || 'custom'
     });
     setIsEditingProject(true);
   };
@@ -181,7 +198,8 @@ function ProjectPage() {
       description: editedProject.description.trim(),
       hypothesis: editedProject.hypothesis.trim(),
       approaches: editedProject.approaches.split(',').map(a => a.trim()).filter(a => a),
-      color: editedProject.color
+      color: editedProject.color,
+      icon: editedProject.icon
     };
 
     if (isCustomProject) {
@@ -199,6 +217,28 @@ function ProjectPage() {
           console.error('Failed to save project:', e);
         }
       }
+    } else {
+      // Save overrides for built-in project
+      const savedOverrides = localStorage.getItem(PROJECT_OVERRIDES_KEY);
+      let overrides = {};
+      if (savedOverrides) {
+        try {
+          overrides = JSON.parse(savedOverrides);
+        } catch (e) {
+          console.error('Failed to parse overrides:', e);
+        }
+      }
+      overrides[projectId] = {
+        title: updatedProject.title,
+        subtitle: updatedProject.subtitle,
+        description: updatedProject.description,
+        hypothesis: updatedProject.hypothesis,
+        approaches: updatedProject.approaches,
+        color: updatedProject.color,
+        icon: updatedProject.icon
+      };
+      localStorage.setItem(PROJECT_OVERRIDES_KEY, JSON.stringify(overrides));
+      triggerSync();
     }
 
     setProject(updatedProject);
@@ -364,7 +404,7 @@ function ProjectPage() {
       <header className="project-header">
         <div className="header-nav">
           <Link to="/" className="back-link">← Dashboard</Link>
-          {isCustomProject && !isEditingProject && (
+          {!isEditingProject && (
             <button className="edit-project-btn" onClick={handleEditProject} title="Edit project details">
               ✏️ Edit
             </button>
@@ -425,6 +465,23 @@ function ProjectPage() {
                 onChange={(e) => setEditedProject({ ...editedProject, color: e.target.value })}
               />
             </div>
+            <div className="edit-form-row">
+              <label>Icon</label>
+              <div className="icon-selector">
+                {ICON_OPTIONS.map(option => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    className={`icon-option ${editedProject.icon === option.id ? 'selected' : ''}`}
+                    onClick={() => setEditedProject({ ...editedProject, icon: option.id })}
+                    title={option.name}
+                    style={{ color: editedProject.color }}
+                  >
+                    {ProjectIcons[option.id]}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="edit-form-actions">
               <button className="btn-cancel" onClick={handleCancelEdit}>Cancel</button>
               <button className="btn-save" onClick={handleSaveProject}>Save Changes</button>
@@ -434,8 +491,13 @@ function ProjectPage() {
           <>
             <div className="header-main">
               <div className="header-info">
-                <div className="project-badge" style={{ backgroundColor: project.color }}>
-                  {project.subtitle || 'Research Project'}
+                <div className="header-icon-row">
+                  <div className="project-header-icon" style={{ color: project.color }}>
+                    {ProjectIcons[project.icon] || ProjectIcons.custom}
+                  </div>
+                  <div className="project-badge" style={{ backgroundColor: project.color }}>
+                    {project.subtitle || 'Research Project'}
+                  </div>
                 </div>
                 <h1>{project.title}</h1>
                 <p className="project-hypothesis">{project.hypothesis || project.description}</p>
