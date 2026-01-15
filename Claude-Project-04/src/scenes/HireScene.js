@@ -20,75 +20,80 @@ export default class HireScene extends Phaser.Scene {
   }
 
   create() {
-    // Double check gameState exists
-    if (!this.gameState) {
-      this.scene.start('MenuScene');
-      return;
+    try {
+      // Double check gameState exists
+      if (!this.gameState) {
+        this.scene.start('MenuScene');
+        return;
+      }
+
+      const { width, height } = this.cameras.main;
+
+      // Dark overlay
+      this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.8);
+
+      // Main panel
+      this.add.rectangle(width / 2, height / 2, 900, 550, 0x1a1a2e, 0.98)
+        .setStrokeStyle(3, 0x4ecdc4);
+
+      // Title with satirical subtitle
+      this.add.text(width / 2, 100, 'HIRE SCIENTISTS', {
+        fontFamily: 'Arial Black',
+        fontSize: '36px',
+        color: '#4ecdc4'
+      }).setOrigin(0.5);
+
+      // Rotating dark taglines
+      const darkTaglines = [
+        '"Will Work for Grant Money"',
+        '"Exploiting Dreams Since 1088 AD"',
+        '"Where PhDs Come to Die"',
+        '"Cheaper Than Automation (For Now)"',
+        '"Why Pay Living Wages?"',
+        '"Fresh Meat for the Academic Mill"',
+        '"Your Suffering, Our Publications"',
+        '"H-Index > Human Rights"'
+      ];
+      const selectedTagline = darkTaglines[Phaser.Math.Between(0, darkTaglines.length - 1)];
+
+      this.add.text(width / 2, 135, selectedTagline, {
+        fontFamily: 'Arial',
+        fontSize: '14px',
+        color: '#ff6b6b',
+        fontStyle: 'italic'
+      }).setOrigin(0.5);
+
+      // Funding display
+      this.add.image(width / 2 - 80, 160, 'coin').setScale(1.2);
+      this.fundingText = this.add.text(width / 2 - 55, 152, `$${this.gameState.funding.toLocaleString()}`, {
+        fontFamily: 'Arial',
+        fontSize: '24px',
+        color: '#ffd93d',
+        fontStyle: 'bold'
+      });
+
+      // Current scientists count
+      this.add.text(width / 2 + 50, 152, `Scientists: ${this.gameState.scientists.length}/10`, {
+        fontFamily: 'Arial',
+        fontSize: '20px',
+        color: '#ffffff'
+      });
+
+      // Generate candidates
+      this.generateCandidates();
+
+      // Display candidates
+      this.displayCandidates(width, height);
+
+      // Close button
+      this.createCloseButton(width, height);
+
+      // Refresh button
+      this.createRefreshButton(width, height);
+    } catch (error) {
+      console.error('HireScene create error:', error);
+      this.scene.start('LabScene');
     }
-
-    const { width, height } = this.cameras.main;
-
-    // Dark overlay
-    this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.8);
-
-    // Main panel
-    this.add.rectangle(width / 2, height / 2, 900, 550, 0x1a1a2e, 0.98)
-      .setStrokeStyle(3, 0x4ecdc4);
-
-    // Title with satirical subtitle
-    this.add.text(width / 2, 100, 'HIRE SCIENTISTS', {
-      fontFamily: 'Arial Black',
-      fontSize: '36px',
-      color: '#4ecdc4'
-    }).setOrigin(0.5);
-
-    // Rotating dark taglines
-    const darkTaglines = [
-      '"Will Work for Grant Money"',
-      '"Exploiting Dreams Since 1088 AD"',
-      '"Where PhDs Come to Die"',
-      '"Cheaper Than Automation (For Now)"',
-      '"Why Pay Living Wages?"',
-      '"Fresh Meat for the Academic Mill"',
-      '"Your Suffering, Our Publications"',
-      '"H-Index > Human Rights"'
-    ];
-    const selectedTagline = darkTaglines[Phaser.Math.Between(0, darkTaglines.length - 1)];
-
-    this.add.text(width / 2, 135, selectedTagline, {
-      fontFamily: 'Arial',
-      fontSize: '14px',
-      color: '#ff6b6b',
-      fontStyle: 'italic'
-    }).setOrigin(0.5);
-
-    // Funding display
-    this.add.image(width / 2 - 80, 160, 'coin').setScale(1.2);
-    this.fundingText = this.add.text(width / 2 - 55, 152, `$${this.gameState.funding.toLocaleString()}`, {
-      fontFamily: 'Arial',
-      fontSize: '24px',
-      color: '#ffd93d',
-      fontStyle: 'bold'
-    });
-
-    // Current scientists count
-    this.add.text(width / 2 + 50, 152, `Scientists: ${this.gameState.scientists.length}/10`, {
-      fontFamily: 'Arial',
-      fontSize: '20px',
-      color: '#ffffff'
-    });
-
-    // Generate candidates
-    this.generateCandidates();
-
-    // Display candidates
-    this.displayCandidates(width, height);
-
-    // Close button
-    this.createCloseButton(width, height);
-
-    // Refresh button
-    this.createRefreshButton(width, height);
   }
 
   generateCandidates() {

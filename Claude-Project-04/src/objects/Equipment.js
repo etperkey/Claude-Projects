@@ -98,6 +98,7 @@ export default class Equipment extends Phaser.GameObjects.Container {
   }
 
   startIdleAnimation() {
+    if (!this.scene || !this.scene.tweens) return;
     // Subtle floating animation
     this.scene.tweens.add({
       targets: this.sprite,
@@ -109,21 +110,47 @@ export default class Equipment extends Phaser.GameObjects.Container {
     });
   }
 
+  // Clean up resources when destroyed
+  destroy(fromScene) {
+    // Remove event listeners first
+    this.off('pointerover', this.onHover, this);
+    this.off('pointerout', this.onHoverEnd, this);
+
+    // Kill any tweens targeting this object's components
+    if (this.scene && this.scene.tweens) {
+      this.scene.tweens.killTweensOf(this);
+      if (this.sprite) this.scene.tweens.killTweensOf(this.sprite);
+      if (this.glow) this.scene.tweens.killTweensOf(this.glow);
+    }
+    // Clean up upgrade info if open
+    if (this.upgradeInfo) {
+      this.upgradeInfo.destroy();
+      this.upgradeInfo = null;
+    }
+    super.destroy(fromScene);
+  }
+
   onHover() {
+    // Safety check - don't do anything if scene or sprite is gone
+    if (!this.scene || !this.sprite || !this.active) return;
     this.sprite.setTint(0xaaffaa);
     this.showUpgradeInfo();
   }
 
   onHoverEnd() {
+    // Safety check - don't do anything if scene or sprite is gone
+    if (!this.sprite) return;
     this.sprite.clearTint();
     this.hideUpgradeInfo();
   }
 
   showUpgradeInfo() {
     if (this.upgradeInfo) return;
+    if (!this.scene || !this.scene.registry) return;
 
     const upgradeCost = this.getUpgradeCost();
     const gameState = this.scene.registry.get('gameState');
+    if (!gameState) return;
     const canAfford = gameState.funding >= upgradeCost;
 
     this.upgradeInfo = this.scene.add.container(70, 0);
@@ -181,8 +208,10 @@ export default class Equipment extends Phaser.GameObjects.Container {
   }
 
   upgrade() {
+    if (!this.scene || !this.scene.registry) return;
     const cost = this.getUpgradeCost();
     const gameState = this.scene.registry.get('gameState');
+    if (!gameState) return;
 
     if (gameState.funding >= cost) {
       gameState.funding -= cost;
@@ -221,13 +250,15 @@ export default class Equipment extends Phaser.GameObjects.Container {
     this.statusText.setColor('#4ecdc4');
 
     // Start glow effect
-    this.scene.tweens.add({
-      targets: this.glow,
-      alpha: 0.3,
-      duration: 500,
-      yoyo: true,
-      repeat: -1
-    });
+    if (this.scene && this.scene.tweens) {
+      this.scene.tweens.add({
+        targets: this.glow,
+        alpha: 0.3,
+        duration: 500,
+        yoyo: true,
+        repeat: -1
+      });
+    }
   }
 
   unassignScientist() {
@@ -237,7 +268,9 @@ export default class Equipment extends Phaser.GameObjects.Container {
     this.statusText.setColor('#888888');
 
     // Stop glow
-    this.scene.tweens.killTweensOf(this.glow);
+    if (this.scene && this.scene.tweens) {
+      this.scene.tweens.killTweensOf(this.glow);
+    }
     this.glow.setAlpha(0);
   }
 

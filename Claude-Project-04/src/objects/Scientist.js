@@ -10,6 +10,7 @@ export default class Scientist extends Phaser.GameObjects.Container {
     this.assignedEquipment = null;
     this.wanderTarget = null;
     this.wanderTimer = 0;
+    this.wanderEvent = null; // Track for cleanup
 
     // Create sprite
     this.sprite = scene.add.image(0, 0, `scientist_${data.type}`);
@@ -67,6 +68,7 @@ export default class Scientist extends Phaser.GameObjects.Container {
   }
 
   startIdleAnimation() {
+    if (!this.scene || !this.scene.tweens) return;
     this.scene.tweens.add({
       targets: this.sprite,
       y: -3,
@@ -78,18 +80,40 @@ export default class Scientist extends Phaser.GameObjects.Container {
   }
 
   startWandering() {
-    this.scene.time.addEvent({
+    if (!this.scene || !this.scene.time) return;
+    this.wanderEvent = this.scene.time.addEvent({
       delay: Phaser.Math.Between(2000, 5000),
       callback: () => {
-        if (!this.data.assigned && this.active) {
+        // Safety check - make sure scene and object are still valid
+        if (!this.scene || !this.active || !this.data) return;
+        if (!this.data.assigned) {
           this.wanderToNewPosition();
         }
       },
+      callbackScope: this,
       loop: true
     });
   }
 
+  // Clean up resources when destroyed
+  destroy(fromScene) {
+    // Destroy wander event
+    if (this.wanderEvent) {
+      this.wanderEvent.destroy();
+      this.wanderEvent = null;
+    }
+    // Kill any tweens targeting this object
+    if (this.scene && this.scene.tweens) {
+      this.scene.tweens.killTweensOf(this);
+      this.scene.tweens.killTweensOf(this.sprite);
+      this.scene.tweens.killTweensOf(this.selectionRing);
+    }
+    super.destroy(fromScene);
+  }
+
   wanderToNewPosition() {
+    if (!this.scene || !this.scene.tweens || !this.active) return;
+
     const targetX = Phaser.Math.Between(150, 1100);
     const targetY = Phaser.Math.Between(250, 550);
 
@@ -110,28 +134,34 @@ export default class Scientist extends Phaser.GameObjects.Container {
   }
 
   select() {
+    if (!this.scene || !this.active) return;
     this.isSelected = true;
     this.selectionRing.setVisible(true);
 
     // Pulsing effect
-    this.scene.tweens.add({
-      targets: this.selectionRing,
-      alpha: 0.3,
-      scaleX: 1.2,
-      scaleY: 1.2,
-      duration: 500,
-      yoyo: true,
-      repeat: -1
-    });
+    if (this.scene.tweens) {
+      this.scene.tweens.add({
+        targets: this.selectionRing,
+        alpha: 0.3,
+        scaleX: 1.2,
+        scaleY: 1.2,
+        duration: 500,
+        yoyo: true,
+        repeat: -1
+      });
+    }
 
     // Show info tooltip
     this.showTooltip();
   }
 
   deselect() {
+    if (!this.selectionRing) return;
     this.isSelected = false;
     this.selectionRing.setVisible(false);
-    this.scene.tweens.killTweensOf(this.selectionRing);
+    if (this.scene && this.scene.tweens) {
+      this.scene.tweens.killTweensOf(this.selectionRing);
+    }
     this.selectionRing.setAlpha(1);
     this.selectionRing.setScale(1);
 
@@ -140,6 +170,7 @@ export default class Scientist extends Phaser.GameObjects.Container {
 
   showTooltip() {
     if (this.tooltip) return;
+    if (!this.scene || !this.scene.add) return;
 
     const tooltipWidth = 180;
     const tooltipHeight = 120;
@@ -217,35 +248,39 @@ export default class Scientist extends Phaser.GameObjects.Container {
   }
 
   assignTo(equipment) {
+    if (!equipment || !equipment.data) return;
     this.data.assigned = equipment.data.slotIndex;
     this.assignedEquipment = equipment;
 
     // Move to equipment position
-    this.scene.tweens.killTweensOf(this);
-    this.scene.tweens.add({
-      targets: this,
-      x: equipment.x - 50,
-      y: equipment.y + 20,
-      duration: 500,
-      ease: 'Power2'
-    });
+    if (this.scene && this.scene.tweens) {
+      this.scene.tweens.killTweensOf(this);
+      this.scene.tweens.add({
+        targets: this,
+        x: equipment.x - 50,
+        y: equipment.y + 20,
+        duration: 500,
+        ease: 'Power2'
+      });
+    }
 
-    this.workingIndicator.setVisible(true);
+    if (this.workingIndicator) this.workingIndicator.setVisible(true);
 
     // Face the equipment
-    this.sprite.setFlipX(false);
+    if (this.sprite) this.sprite.setFlipX(false);
   }
 
   unassign() {
     this.data.assigned = null;
     this.assignedEquipment = null;
-    this.workingIndicator.setVisible(false);
+    if (this.workingIndicator) this.workingIndicator.setVisible(false);
 
     // Start wandering again
     this.wanderToNewPosition();
   }
 
   levelUp() {
+    if (!this.data) return;
     this.data.level++;
     this.data.xp = 0;
 
@@ -255,23 +290,27 @@ export default class Scientist extends Phaser.GameObjects.Container {
     this.data.stats.luck = Math.min(100, this.data.stats.luck + Phaser.Math.Between(1, 5));
 
     // Update level badge
-    this.levelBadge.setText(`Lv${this.data.level}`);
+    if (this.levelBadge) this.levelBadge.setText(`Lv${this.data.level}`);
 
-    // Level up effect
-    const levelUpText = this.scene.add.text(this.x, this.y - 50, 'LEVEL UP!', {
-      fontFamily: 'Arial',
-      fontSize: '16px',
-      color: '#ffd93d',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
+    // Level up effect (only if scene is still valid)
+    if (this.scene && this.scene.add && this.scene.tweens) {
+      const levelUpText = this.scene.add.text(this.x, this.y - 50, 'LEVEL UP!', {
+        fontFamily: 'Arial',
+        fontSize: '16px',
+        color: '#ffd93d',
+        fontStyle: 'bold'
+      }).setOrigin(0.5);
 
-    this.scene.tweens.add({
-      targets: levelUpText,
-      y: levelUpText.y - 30,
-      alpha: 0,
-      duration: 1500,
-      onComplete: () => levelUpText.destroy()
-    });
+      this.scene.tweens.add({
+        targets: levelUpText,
+        y: levelUpText.y - 30,
+        alpha: 0,
+        duration: 1500,
+        onComplete: () => {
+          if (levelUpText && levelUpText.destroy) levelUpText.destroy();
+        }
+      });
+    }
   }
 
   getBounds() {

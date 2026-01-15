@@ -783,6 +783,38 @@ function Projects() {
               <span className="arcade-cta">Play Now →</span>
             </div>
           </a>
+
+          {/* Lab Tycoon */}
+          <a
+            href="/LabTycoon/index.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="arcade-link-card"
+            style={{ marginTop: '1rem' }}
+          >
+            <div className="arcade-icon">
+              <svg viewBox="0 0 64 64" className="project-icon arcade-icon-svg">
+                <rect x="8" y="8" width="48" height="48" rx="4" fill="#1a1a2e"/>
+                <path d="M20 20 L20 40 L28 52 L36 52 L44 40 L44 20" stroke="#4ecdc4" strokeWidth="3" fill="none"/>
+                <ellipse cx="32" cy="44" rx="8" ry="4" fill="#ff6b6b" opacity="0.6"/>
+                <circle cx="26" cy="32" r="3" fill="#ffd93d"/>
+                <circle cx="38" cy="28" r="2" fill="#4ecdc4"/>
+                <circle cx="32" cy="36" r="2.5" fill="#ff6b6b"/>
+                <text x="32" y="60" textAnchor="middle" fill="#666666" fontSize="6">BETA</text>
+              </svg>
+            </div>
+            <div className="arcade-link-content">
+              <h4 className="arcade-title">Lab Tycoon: Academic Survival Simulator</h4>
+              <p className="arcade-description">
+                A Dark Satire (read: accurate simulation) of Lab Management. Navigate grant rejections,
+                manage burned-out postdocs, survive DOGE audits, and try not to cry.
+                <span style={{ display: 'block', marginTop: '0.5rem', fontSize: '0.75rem', color: '#888' }}>
+                  v0.1 BETA - AI Slop Game in Development
+                </span>
+              </p>
+              <span className="arcade-cta">Enter Academia →</span>
+            </div>
+          </a>
         </div>
       </div>
     </section>

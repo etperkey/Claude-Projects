@@ -13,121 +13,154 @@ export default class LabScene extends Phaser.Scene {
     this.equipmentSlots = [];
     this.newsTickerText = null;
     this.crisisActive = false;
+    this.timeEvents = []; // Track time events for cleanup
+    this.shopOpen = false; // Track if shop popup is open
+    this.shopElements = []; // Track shop elements for cleanup
   }
 
   create() {
-    this.gameState = this.registry.get('gameState');
+    try {
+      this.gameState = this.registry.get('gameState');
 
-    // Safety check - if no gameState, go back to menu
-    if (!this.gameState) {
-      console.error('No gameState found, returning to menu');
+      // Safety check - if no gameState, go back to menu
+      if (!this.gameState) {
+        console.error('No gameState found, returning to menu');
+        this.scene.start('MenuScene');
+        return;
+      }
+
+      const { width, height } = this.cameras.main;
+
+      // Reset all state on create for clean initialization
+      this.scientists = [];
+      this.equipment = [];
+      this.equipmentSlots = [];
+      this.selectedScientist = null;
+      this.crisisActive = false;
+      this.newsTickerText = null;
+      this.timeEvents = [];
+      this.shopOpen = false;
+      this.shopElements = [];
+
+      // Create lab floor
+      this.createLabFloor(width, height);
+
+      // Create equipment slots
+      this.createEquipmentSlots();
+
+      // Create UI
+      this.createUI(width, height);
+
+      // Load existing scientists and equipment
+      this.loadGameObjects();
+
+      // Update UI after loading (to show correct counts)
+      this.updateUI();
+
+      // Start game loop - store reference for cleanup
+      const gameLoopEvent = this.time.addEvent({
+        delay: 1000,
+        callback: this.gameLoop,
+        callbackScope: this,
+        loop: true
+      });
+      this.timeEvents.push(gameLoopEvent);
+
+      // Auto-save every 30 seconds
+      const autoSaveEvent = this.time.addEvent({
+        delay: 30000,
+        callback: this.saveGame,
+        callbackScope: this,
+        loop: true
+      });
+      this.timeEvents.push(autoSaveEvent);
+
+      // Input handling
+      this.input.on('pointerdown', this.handleClick, this);
+
+      // Clean up when scene shuts down
+      this.events.once('shutdown', this.onShutdown, this);
+
+      // Setup dark humor news ticker
+      this.setupNewsTicker(width, height);
+
+      // Random crisis events (every 45-90 seconds)
+      const crisisEvent = this.time.addEvent({
+        delay: Phaser.Math.Between(45000, 90000),
+        callback: this.triggerRandomCrisis,
+        callbackScope: this,
+        loop: true
+      });
+      this.timeEvents.push(crisisEvent);
+
+      // News ticker update (every 10 seconds)
+      const tickerEvent = this.time.addEvent({
+        delay: 10000,
+        callback: this.updateNewsTicker,
+        callbackScope: this,
+        loop: true
+      });
+      this.timeEvents.push(tickerEvent);
+    } catch (error) {
+      console.error('LabScene create error:', error);
       this.scene.start('MenuScene');
-      return;
     }
-
-    const { width, height } = this.cameras.main;
-
-    // Reset all state on create for clean initialization
-    this.scientists = [];
-    this.equipment = [];
-    this.equipmentSlots = [];
-    this.selectedScientist = null;
-    this.crisisActive = false;
-    this.newsTickerText = null;
-
-    // Create lab floor
-    this.createLabFloor(width, height);
-
-    // Create equipment slots
-    this.createEquipmentSlots();
-
-    // Create UI
-    this.createUI(width, height);
-
-    // Load existing scientists and equipment
-    this.loadGameObjects();
-
-    // Update UI after loading (to show correct counts)
-    this.updateUI();
-
-    // Start game loop
-    this.time.addEvent({
-      delay: 1000,
-      callback: this.gameLoop,
-      callbackScope: this,
-      loop: true
-    });
-
-    // Auto-save every 30 seconds
-    this.time.addEvent({
-      delay: 30000,
-      callback: this.saveGame,
-      callbackScope: this,
-      loop: true
-    });
-
-    // Input handling
-    this.input.on('pointerdown', this.handleClick, this);
-
-    // Handle wake event when resuming from other scenes
-    this.events.on('wake', this.onWake, this);
-    this.events.on('resume', this.onWake, this);
-
-    // Clean up when scene shuts down
-    this.events.on('shutdown', this.onShutdown, this);
-
-    // Setup dark humor news ticker
-    this.setupNewsTicker(width, height);
-
-    // Random crisis events (every 45-90 seconds)
-    this.time.addEvent({
-      delay: Phaser.Math.Between(45000, 90000),
-      callback: this.triggerRandomCrisis,
-      callbackScope: this,
-      loop: true
-    });
-
-    // News ticker update (every 10 seconds)
-    this.time.addEvent({
-      delay: 10000,
-      callback: this.updateNewsTicker,
-      callbackScope: this,
-      loop: true
-    });
   }
 
   onShutdown() {
-    // Clean up event listeners
-    this.input.off('pointerdown', this.handleClick, this);
-    this.events.off('wake', this.onWake, this);
-    this.events.off('resume', this.onWake, this);
+    try {
+      // Clean up all time events
+      if (this.timeEvents) {
+        this.timeEvents.forEach(event => {
+          if (event) event.destroy();
+        });
+        this.timeEvents = [];
+      }
+
+      // Clean up shop elements if shop is open
+      if (this.shopElements && this.shopElements.length > 0) {
+        this.shopElements.forEach(el => {
+          if (el && el.destroy) el.destroy();
+        });
+        this.shopElements = [];
+        this.shopOpen = false;
+      }
+
+      // Explicitly destroy all equipment (triggers their cleanup)
+      if (this.equipment) {
+        this.equipment.forEach(equip => {
+          if (equip && equip.destroy) equip.destroy();
+        });
+        this.equipment = [];
+      }
+
+      // Explicitly destroy all scientists (triggers their cleanup)
+      if (this.scientists) {
+        this.scientists.forEach(sci => {
+          if (sci && sci.destroy) sci.destroy();
+        });
+        this.scientists = [];
+      }
+
+      // Stop all tweens
+      this.tweens.killAll();
+
+      // Clean up event listeners
+      this.input.off('pointerdown', this.handleClick, this);
+    } catch (error) {
+      console.error('LabScene shutdown error:', error);
+    }
   }
 
   // Properly launch overlay scenes using start() for reliable initialization
   launchOverlay(sceneKey) {
-    this.saveGame();
-    // Use scene.start() which fully stops current scene and starts the new one
-    // This is more reliable than sleep/launch/wake patterns
-    this.scene.start(sceneKey);
-  }
-
-  onWake() {
-    // Sync scientists with gameState
-    this.gameState = this.registry.get('gameState');
-
-    // Find scientists in gameState that don't exist in our array
-    this.gameState.scientists.forEach(sciData => {
-      const exists = this.scientists.find(s => s.data.id === sciData.id);
-      if (!exists) {
-        // Create new scientist object
-        const startX = sciData.x || Phaser.Math.Between(150, 1100);
-        const startY = sciData.y || Phaser.Math.Between(250, 550);
-        const scientist = new Scientist(this, startX, startY, sciData);
-        this.scientists.push(scientist);
-      }
-    });
-
-    this.updateUI();
+    try {
+      this.saveGame();
+      // Use scene.start() which fully stops current scene and starts the new one
+      this.scene.start(sceneKey);
+    } catch (error) {
+      console.error('Error launching overlay:', sceneKey, error);
+    }
   }
 
   createLabFloor(width, height) {
@@ -300,15 +333,23 @@ export default class LabScene extends Phaser.Scene {
   }
 
   showEquipmentShop(slot) {
+    // Prevent opening multiple shops
+    if (this.shopOpen) return;
+    this.shopOpen = true;
+    this.shopElements = [];
+
     // Create shop panel
     const { width, height } = this.cameras.main;
 
-    // Overlay
+    // Overlay - blocks clicks on scene below
     const overlay = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.7)
-      .setInteractive();
+      .setInteractive()
+      .setDepth(1000);
+    this.shopElements.push(overlay);
 
     // Panel
-    const panel = this.add.image(width / 2, height / 2, 'panel').setScale(1.5);
+    const panel = this.add.image(width / 2, height / 2, 'panel').setScale(1.5).setDepth(1001);
+    this.shopElements.push(panel);
 
     // Items array to track popup elements for cleanup
     const items = [];
@@ -319,14 +360,15 @@ export default class LabScene extends Phaser.Scene {
       fontSize: '28px',
       color: '#4ecdc4',
       fontStyle: 'bold'
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(1002);
+    this.shopElements.push(title);
 
     const shopSubtitle = this.add.text(width / 2, height / 2 - 135, '"Depreciate this on your grant budget"', {
       fontFamily: 'Arial',
       fontSize: '12px',
       color: '#ff6b6b',
       fontStyle: 'italic'
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(1002);
     items.push(shopSubtitle);
 
     const equipmentTypes = [
@@ -346,36 +388,36 @@ export default class LabScene extends Phaser.Scene {
 
       // Equipment icon
       const icon = this.add.image(width / 2 - 150, y, unlocked ? equip.type : 'equipment_locked')
-        .setScale(0.8);
+        .setScale(0.8).setDepth(1002);
 
       // Name
       const nameText = this.add.text(width / 2 - 100, y - 10, equip.name, {
         fontFamily: 'Arial',
         fontSize: '18px',
         color: unlocked ? '#ffffff' : '#666666'
-      });
+      }).setDepth(1002);
 
       // Cost
       const costText = this.add.text(width / 2 - 100, y + 10, `$${equip.cost.toLocaleString()}`, {
         fontFamily: 'Arial',
         fontSize: '14px',
         color: canAfford && unlocked ? '#4ecdc4' : '#ff6b6b'
-      });
+      }).setDepth(1002);
 
       // Buy button
       if (unlocked) {
         const buyBtn = this.add.rectangle(width / 2 + 120, y, 60, 30, canAfford ? 0x4ecdc4 : 0x666666)
-          .setInteractive();
+          .setInteractive().setDepth(1002);
         const buyText = this.add.text(width / 2 + 120, y, 'Buy', {
           fontFamily: 'Arial',
           fontSize: '14px',
           color: '#1a1a2e'
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setDepth(1003);
 
         if (canAfford) {
           buyBtn.on('pointerdown', () => {
             this.buyEquipment(slot, equip);
-            this.closeShop(overlay, panel, title, items);
+            this.closeAllShopElements();
           });
         }
 
@@ -385,7 +427,7 @@ export default class LabScene extends Phaser.Scene {
           fontFamily: 'Arial',
           fontSize: '14px',
           color: '#666666'
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setDepth(1002);
         items.push(lockText);
       }
 
@@ -394,25 +436,42 @@ export default class LabScene extends Phaser.Scene {
 
     // Close button
     const closeBtn = this.add.rectangle(width / 2, height / 2 + 170, 100, 40, 0xff6b6b)
-      .setInteractive();
+      .setInteractive().setDepth(1002);
     const closeText = this.add.text(width / 2, height / 2 + 170, 'Close', {
       fontFamily: 'Arial',
       fontSize: '18px',
       color: '#ffffff'
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(1003);
 
     closeBtn.on('pointerdown', () => {
-      this.closeShop(overlay, panel, title, [...items, closeBtn, closeText]);
+      this.closeAllShopElements();
     });
 
     items.push(closeBtn, closeText);
+
+    // Add all items to shopElements for cleanup
+    items.forEach(item => this.shopElements.push(item));
+  }
+
+  closeAllShopElements() {
+    this.shopOpen = false;
+    if (this.shopElements) {
+      this.shopElements.forEach(el => {
+        if (el && el.destroy) el.destroy();
+      });
+      this.shopElements = [];
+    }
   }
 
   closeShop(overlay, panel, title, items) {
+    this.shopOpen = false;
     overlay.destroy();
     panel.destroy();
     title.destroy();
-    items.forEach(item => item.destroy());
+    items.forEach(item => {
+      if (item && item.destroy) item.destroy();
+    });
+    this.shopElements = [];
   }
 
   buyEquipment(slot, equip) {
