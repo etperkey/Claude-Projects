@@ -176,7 +176,7 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
 
   const getColumnCount = (columnId) => tasks[columnId]?.length || 0;
 
-  const formatDueDate = (dateStr) => {
+  const formatDueDate = (dateStr, timeStr) => {
     if (!dateStr) return null;
     const date = new Date(dateStr);
     const today = new Date();
@@ -184,15 +184,27 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+    // Format time if provided
+    const formatTime = (time) => {
+      if (!time) return '';
+      const [hours, minutes] = time.split(':');
+      const h = parseInt(hours);
+      const ampm = h >= 12 ? 'pm' : 'am';
+      const hour12 = h % 12 || 12;
+      return ` ${hour12}:${minutes}${ampm}`;
+    };
+
+    const timeText = formatTime(timeStr);
+
     if (date < today) {
-      return { text: 'Overdue', className: 'overdue' };
+      return { text: 'Overdue' + timeText, className: 'overdue' };
     } else if (date.toDateString() === today.toDateString()) {
-      return { text: 'Today', className: 'due-today' };
+      return { text: 'Today' + timeText, className: 'due-today' };
     } else if (date.toDateString() === tomorrow.toDateString()) {
-      return { text: 'Tomorrow', className: 'due-soon' };
+      return { text: 'Tomorrow' + timeText, className: 'due-soon' };
     } else {
       return {
-        text: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        text: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + timeText,
         className: ''
       };
     }
@@ -258,7 +270,7 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
               )}
 
               {tasks[column.id]?.map((task, index) => {
-                const dueInfo = formatDueDate(task.dueDate);
+                const dueInfo = formatDueDate(task.dueDate, task.dueTime);
                 const checklistProgress = getChecklistProgress(task.checklist);
                 const hasDescription = task.description && task.description.trim().length > 0;
                 const hasLinks = task.links && task.links.length > 0;
@@ -328,6 +340,33 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
                       </p>
                     )}
 
+                    {/* Attachment thumbnails */}
+                    {task.attachments && task.attachments.length > 0 && (
+                      <div className="task-card-attachments">
+                        {task.attachments
+                          .filter(att => att.isImage)
+                          .slice(0, 3)
+                          .map(att => (
+                            <img
+                              key={att.id}
+                              src={att.thumbnailLink || `https://drive.google.com/thumbnail?id=${att.id}&sz=w64`}
+                              alt={att.name}
+                              className="task-card-thumbnail"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(att.webViewLink || `https://drive.google.com/file/d/${att.id}/view`, '_blank');
+                              }}
+                              title={att.name}
+                            />
+                          ))}
+                        {task.attachments.filter(att => att.isImage).length > 3 && (
+                          <span className="task-card-more-attachments">
+                            +{task.attachments.filter(att => att.isImage).length - 3}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
                     {/* Task metadata icons */}
                     <div className="task-metadata">
                       {dueInfo && (
@@ -344,6 +383,11 @@ function KanbanBoard({ tasks, projectColor, onTaskMove, onAddTask, onDeleteTask,
                       {hasLinks && (
                         <span className="meta-icon" title={`${task.links.length} link(s)`}>
                           🔗
+                        </span>
+                      )}
+                      {task.attachments && task.attachments.length > 0 && (
+                        <span className="meta-icon" title={`${task.attachments.length} attachment(s)`}>
+                          📎 {task.attachments.length}
                         </span>
                       )}
                       {checklistProgress && (
