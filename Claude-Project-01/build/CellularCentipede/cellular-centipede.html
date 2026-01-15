@@ -1,0 +1,2572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cellular Centipede: BMT & CAR-T Challenge!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        :root {
+            --centipede-green: #00FF00;
+            --centipede-dark-green: #008800;
+            --centipede-orange: #FF8800;
+            --centipede-purple: #AA00FF;
+            --mushroom-red: #FF4444;
+            --mushroom-tan: #FFD8B1;
+            --spider-yellow: #FFFF00;
+            --flea-pink: #FF66FF;
+            --scorpion-blue: #00FFFF;
+            --bg-black: #000000;
+            --bg-dark: #0a0a1a;
+            --text-white: #FFFFFF;
+            --stem-cell-gold: #FFD700;
+            --car-t-blue: #00BFFF;
+            --gvhd-red: #DC143C;
+            --engraft-green: #32CD32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: var(--bg-black);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text-white);
+            image-rendering: pixelated;
+        }
+
+        /* Animated starfield background */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Mushroom field decoration */
+        .mushroom-field {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .mushroom {
+            position: absolute;
+            bottom: 10px;
+            width: 24px;
+            height: 32px;
+        }
+
+        .mushroom-cap {
+            width: 24px;
+            height: 16px;
+            background: var(--mushroom-red);
+            border-radius: 50% 50% 10% 10%;
+            position: relative;
+        }
+
+        .mushroom-cap::before,
+        .mushroom-cap::after {
+            content: '';
+            position: absolute;
+            background: var(--mushroom-tan);
+            border-radius: 50%;
+        }
+
+        .mushroom-cap::before {
+            width: 6px;
+            height: 6px;
+            top: 3px;
+            left: 4px;
+        }
+
+        .mushroom-cap::after {
+            width: 4px;
+            height: 4px;
+            top: 6px;
+            right: 5px;
+        }
+
+        .mushroom-stem {
+            width: 10px;
+            height: 16px;
+            background: var(--mushroom-tan);
+            margin: 0 auto;
+            border-radius: 0 0 4px 4px;
+        }
+
+        /* Centipede animation */
+        .centipede-container {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            z-index: 2;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .centipede {
+            display: flex;
+            position: absolute;
+            animation: centipede-march 15s linear infinite;
+        }
+
+        @keyframes centipede-march {
+            0% { left: -400px; top: 0; }
+            20% { left: 100%; top: 0; }
+            21% { left: 100%; top: 30px; }
+            40% { left: -400px; top: 30px; }
+            41% { left: -400px; top: 60px; }
+            60% { left: 100%; top: 60px; }
+            61% { left: 100%; top: 90px; }
+            80% { left: -400px; top: 90px; }
+            81% { left: -400px; top: 0; }
+            100% { left: -400px; top: 0; }
+        }
+
+        .segment {
+            width: 28px;
+            height: 28px;
+            background: radial-gradient(circle at 30% 30%, var(--centipede-green) 0%, var(--centipede-dark-green) 100%);
+            border-radius: 50%;
+            margin: 0 2px;
+            position: relative;
+            box-shadow: 0 0 8px var(--centipede-green);
+            animation: segment-pulse 0.3s ease-in-out infinite alternate;
+        }
+
+        .segment:first-child {
+            background: radial-gradient(circle at 30% 30%, var(--centipede-orange) 0%, #CC6600 100%);
+            box-shadow: 0 0 12px var(--centipede-orange);
+        }
+
+        .segment:first-child::before,
+        .segment:first-child::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 10px;
+            background: var(--spider-yellow);
+            border-radius: 3px;
+            top: -8px;
+        }
+
+        .segment:first-child::before { left: 6px; transform: rotate(-20deg); }
+        .segment:first-child::after { right: 6px; transform: rotate(20deg); }
+
+        .segment .leg {
+            position: absolute;
+            width: 3px;
+            height: 12px;
+            background: var(--centipede-dark-green);
+            bottom: -10px;
+        }
+
+        .segment .leg:first-child { left: 6px; transform: rotate(-15deg); }
+        .segment .leg:last-child { right: 6px; transform: rotate(15deg); }
+
+        @keyframes segment-pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* Main Container */
+        .game-container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 25px 20px;
+            background: linear-gradient(180deg, rgba(0,136,0,0.9) 0%, rgba(0,68,0,0.95) 100%);
+            border-radius: 12px 12px 0 0;
+            margin-bottom: 0;
+            border: 4px solid var(--centipede-green);
+            border-bottom: none;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,255,0,0.3);
+        }
+
+        .title {
+            font-size: 1.6em;
+            color: var(--centipede-green);
+            text-shadow:
+                0 0 10px var(--centipede-green),
+                0 0 20px var(--centipede-green),
+                3px 3px 0 var(--bg-black);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            animation: title-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes title-glow {
+            0%, 100% { text-shadow: 0 0 10px var(--centipede-green), 0 0 20px var(--centipede-green), 3px 3px 0 var(--bg-black); }
+            50% { text-shadow: 0 0 20px var(--centipede-green), 0 0 40px var(--centipede-green), 3px 3px 0 var(--bg-black); }
+        }
+
+        .subtitle {
+            color: var(--stem-cell-gold);
+            font-size: 0.5em;
+            text-shadow: 0 0 5px var(--stem-cell-gold);
+        }
+
+        /* Volume control */
+        .volume-control {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0,255,0,0.2);
+            border: 2px solid var(--centipede-green);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            transition: all 0.3s;
+        }
+
+        .volume-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--centipede-green);
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #333;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: var(--centipede-green);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 5px var(--centipede-green);
+        }
+
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 100;
+            padding: 10px 15px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6em;
+            background: rgba(0,0,0,0.7);
+            border: 2px solid var(--centipede-green);
+            color: var(--centipede-green);
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--centipede-green);
+            color: black;
+            box-shadow: 0 0 15px var(--centipede-green);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0a0a1a 100%);
+            padding: 15px;
+            border: 3px solid var(--centipede-orange);
+            margin-bottom: 15px;
+            box-shadow: 0 0 20px rgba(255,136,0,0.3);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.3em;
+            color: var(--stem-cell-gold);
+            text-shadow: 0 0 8px var(--stem-cell-gold);
+        }
+
+        .stat-label {
+            font-size: 0.4em;
+            color: #888;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .streak-fire {
+            color: var(--centipede-orange) !important;
+            animation: fire-pulse 0.3s ease-in-out infinite;
+        }
+
+        @keyframes fire-pulse {
+            0%, 100% { transform: scale(1); text-shadow: 0 0 8px var(--centipede-orange); }
+            50% { transform: scale(1.1); text-shadow: 0 0 15px var(--centipede-orange); }
+        }
+
+        /* Lives display */
+        .lives-display {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .life-icon {
+            font-size: 1.2em;
+            filter: drop-shadow(0 0 5px var(--gvhd-red));
+        }
+
+        .life-icon.lost {
+            opacity: 0.3;
+            filter: grayscale(1);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 20px;
+            background: #1a1a2e;
+            border: 3px solid var(--centipede-purple);
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--centipede-purple) 0%, var(--flea-pink) 50%, var(--centipede-orange) 100%);
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px var(--centipede-purple);
+        }
+
+        .progress-text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.4em;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: linear-gradient(180deg, rgba(0,68,0,0.9) 0%, rgba(0,34,0,0.95) 100%);
+            border: 4px solid var(--centipede-green);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 30px rgba(0,255,0,0.2);
+            position: relative;
+        }
+
+        /* Question types */
+        .question-type {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.45em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            border: 2px solid;
+        }
+
+        .type-bmt {
+            background: var(--car-t-blue);
+            color: white;
+            border-color: #0088BB;
+        }
+
+        .type-cart {
+            background: var(--centipede-purple);
+            color: white;
+            border-color: #7700CC;
+        }
+
+        .type-gvhd {
+            background: var(--gvhd-red);
+            color: white;
+            border-color: #AA0033;
+        }
+
+        .type-engraft {
+            background: var(--engraft-green);
+            color: white;
+            border-color: #228B22;
+        }
+
+        .type-conditioning {
+            background: var(--centipede-orange);
+            color: white;
+            border-color: #CC6600;
+        }
+
+        /* Difficulty badges */
+        .difficulty-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.4em;
+            text-transform: uppercase;
+            margin-left: 8px;
+            border: 2px solid;
+        }
+
+        .difficulty-badge.lymphodepleting {
+            background: var(--engraft-green);
+            color: white;
+            border-color: #228B22;
+        }
+
+        .difficulty-badge.ric {
+            background: var(--car-t-blue);
+            color: white;
+            border-color: #0088BB;
+        }
+
+        .difficulty-badge.mac {
+            background: var(--centipede-orange);
+            color: white;
+            border-color: #CC6600;
+        }
+
+        .difficulty-badge.tbi {
+            background: var(--gvhd-red);
+            color: white;
+            border-color: #AA0033;
+        }
+
+        .question-number {
+            color: #888;
+            font-size: 0.45em;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 0.75em;
+            line-height: 2;
+            margin-bottom: 18px;
+            color: var(--text-white);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Answer options */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: linear-gradient(180deg, #2a2a4e 0%, #1a1a3e 100%);
+            border: 3px solid #444;
+            border-radius: 6px;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.55em;
+            line-height: 1.8;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover:not(.disabled) {
+            border-color: var(--centipede-green);
+            box-shadow: 0 0 15px rgba(0,255,0,0.3);
+            transform: translateX(5px);
+        }
+
+        .option-letter {
+            width: 28px;
+            height: 28px;
+            background: var(--centipede-green);
+            color: black;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .option.correct {
+            border-color: var(--engraft-green) !important;
+            background: linear-gradient(180deg, rgba(50,205,50,0.3) 0%, rgba(34,139,34,0.3) 100%) !important;
+            box-shadow: 0 0 20px rgba(50,205,50,0.5);
+        }
+
+        .option.correct .option-letter {
+            background: var(--engraft-green);
+        }
+
+        .option.incorrect {
+            border-color: var(--gvhd-red) !important;
+            background: linear-gradient(180deg, rgba(220,20,60,0.3) 0%, rgba(139,0,0,0.3) 100%) !important;
+            box-shadow: 0 0 20px rgba(220,20,60,0.5);
+        }
+
+        .option.incorrect .option-letter {
+            background: var(--gvhd-red);
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Explanation panel */
+        .explanation-panel {
+            display: none;
+            background: linear-gradient(180deg, #1a1a3e 0%, #0a0a2e 100%);
+            border: 3px solid var(--stem-cell-gold);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            animation: slide-in 0.3s ease-out;
+        }
+
+        @keyframes slide-in {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .explanation-panel.show {
+            display: block;
+        }
+
+        .explanation-title {
+            color: var(--stem-cell-gold);
+            font-size: 0.6em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .explanation-text {
+            font-size: 0.5em;
+            line-height: 2;
+            color: #ccc;
+            margin-bottom: 12px;
+        }
+
+        .key-point {
+            background: rgba(255,215,0,0.1);
+            border-left: 4px solid var(--stem-cell-gold);
+            padding: 10px 15px;
+            margin: 12px 0;
+            font-size: 0.5em;
+            line-height: 1.8;
+        }
+
+        .citation {
+            font-size: 0.4em;
+            color: #888;
+            font-style: italic;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #333;
+        }
+
+        /* Reference Links */
+        .ref-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ref-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 4px;
+            color: #4fc3f7;
+            text-decoration: none;
+            font-size: 1em;
+            font-style: normal;
+            transition: all 0.2s;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+
+        .ref-link:hover {
+            background: rgba(79, 195, 247, 0.3);
+            transform: scale(1.05);
+            border-color: #4fc3f7;
+        }
+
+        .next-btn {
+            display: none;
+            margin-top: 15px;
+            padding: 12px 25px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6em;
+            background: linear-gradient(180deg, var(--centipede-green) 0%, var(--centipede-dark-green) 100%);
+            border: 3px solid var(--centipede-green);
+            color: black;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .next-btn:hover {
+            box-shadow: 0 0 20px var(--centipede-green);
+            transform: scale(1.05);
+        }
+
+        .next-btn.show {
+            display: inline-block;
+        }
+
+        /* Start Screen */
+        .start-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .start-title {
+            font-size: 1.8em;
+            color: var(--centipede-green);
+            text-shadow: 0 0 20px var(--centipede-green);
+            margin-bottom: 20px;
+            animation: title-glow 2s ease-in-out infinite;
+        }
+
+        .start-subtitle {
+            font-size: 0.6em;
+            color: var(--stem-cell-gold);
+            margin-bottom: 30px;
+        }
+
+        .difficulty-select {
+            margin-bottom: 30px;
+        }
+
+        .difficulty-select h3 {
+            font-size: 0.7em;
+            color: var(--centipede-orange);
+            margin-bottom: 15px;
+        }
+
+        .difficulty-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .diff-btn {
+            padding: 12px 20px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.5em;
+            border: 3px solid;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 140px;
+        }
+
+        .diff-btn.lymphodepleting {
+            background: linear-gradient(180deg, var(--engraft-green) 0%, #228B22 100%);
+            border-color: var(--engraft-green);
+            color: white;
+        }
+
+        .diff-btn.ric {
+            background: linear-gradient(180deg, var(--car-t-blue) 0%, #0088BB 100%);
+            border-color: var(--car-t-blue);
+            color: white;
+        }
+
+        .diff-btn.mac {
+            background: linear-gradient(180deg, var(--centipede-orange) 0%, #CC6600 100%);
+            border-color: var(--centipede-orange);
+            color: white;
+        }
+
+        .diff-btn.tbi {
+            background: linear-gradient(180deg, var(--gvhd-red) 0%, #AA0033 100%);
+            border-color: var(--gvhd-red);
+            color: white;
+        }
+
+        .diff-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .diff-btn.selected {
+            box-shadow: 0 0 25px currentColor;
+            transform: scale(1.08);
+        }
+
+        .start-btn {
+            padding: 15px 40px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8em;
+            background: linear-gradient(180deg, var(--centipede-green) 0%, var(--centipede-dark-green) 100%);
+            border: 4px solid var(--centipede-green);
+            color: black;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            animation: pulse-glow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 10px var(--centipede-green); }
+            50% { box-shadow: 0 0 30px var(--centipede-green); }
+        }
+
+        .start-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            animation: none;
+        }
+
+        /* Game info */
+        .game-info {
+            margin-top: 30px;
+            font-size: 0.45em;
+            color: #888;
+            line-height: 2;
+        }
+
+        .game-info p {
+            margin-bottom: 8px;
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .results-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .results-title.excellent {
+            color: var(--stem-cell-gold);
+            text-shadow: 0 0 20px var(--stem-cell-gold);
+        }
+
+        .results-title.good {
+            color: var(--engraft-green);
+            text-shadow: 0 0 20px var(--engraft-green);
+        }
+
+        .results-title.fair {
+            color: var(--centipede-orange);
+            text-shadow: 0 0 20px var(--centipede-orange);
+        }
+
+        .results-title.poor {
+            color: var(--gvhd-red);
+            text-shadow: 0 0 20px var(--gvhd-red);
+        }
+
+        .score-display {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 25px;
+            position: relative;
+        }
+
+        .score-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(var(--centipede-green) 0deg, #333 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(0,255,0,0.3);
+        }
+
+        .score-inner {
+            width: 140px;
+            height: 140px;
+            background: var(--bg-dark);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-percent {
+            font-size: 2em;
+            color: var(--stem-cell-gold);
+            text-shadow: 0 0 10px var(--stem-cell-gold);
+        }
+
+        .score-label {
+            font-size: 0.5em;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto 25px;
+        }
+
+        .stat-box {
+            background: linear-gradient(180deg, #1a1a3e 0%, #0a0a2e 100%);
+            border: 2px solid var(--centipede-purple);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .stat-box-value {
+            font-size: 1.2em;
+            color: var(--centipede-green);
+        }
+
+        .stat-box-label {
+            font-size: 0.4em;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .result-btns {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .result-btn {
+            padding: 12px 25px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.55em;
+            border: 3px solid;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .result-btn.play-again {
+            background: linear-gradient(180deg, var(--centipede-green) 0%, var(--centipede-dark-green) 100%);
+            border-color: var(--centipede-green);
+            color: black;
+        }
+
+        .result-btn.back-arcade {
+            background: linear-gradient(180deg, var(--centipede-purple) 0%, #7700CC 100%);
+            border-color: var(--centipede-purple);
+            color: white;
+        }
+
+        .result-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        /* Animations */
+        .shoot-effect {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            width: 8px;
+            height: 30px;
+            background: var(--spider-yellow);
+            border-radius: 4px;
+            transform: translateX(-50%);
+            animation: shoot-up 0.4s ease-out forwards;
+            z-index: 50;
+            box-shadow: 0 0 10px var(--spider-yellow);
+        }
+
+        @keyframes shoot-up {
+            0% { bottom: 100px; opacity: 1; }
+            100% { bottom: 80%; opacity: 0; }
+        }
+
+        .hit-effect {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            animation: hit-burst 0.6s ease-out forwards;
+            z-index: 50;
+        }
+
+        @keyframes hit-burst {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+
+        .bonus-popup {
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5em;
+            color: var(--stem-cell-gold);
+            text-shadow: 0 0 20px var(--stem-cell-gold);
+            animation: bonus-float 1s ease-out forwards;
+            z-index: 50;
+        }
+
+        @keyframes bonus-float {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-50px); }
+        }
+
+        /* Player ship at bottom */
+        .player-ship {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            font-size: 2.5em;
+            filter: drop-shadow(0 0 10px var(--car-t-blue));
+            animation: ship-hover 1s ease-in-out infinite;
+        }
+
+        @keyframes ship-hover {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .game-container { padding: 15px; padding-top: 70px; }
+            .title { font-size: 1.2em; }
+            .question-text { font-size: 0.65em; }
+            .option { font-size: 0.5em; padding: 12px 14px; }
+            .stats-bar { flex-wrap: wrap; gap: 10px; }
+            .stat { min-width: 80px; }
+            .difficulty-options { flex-direction: column; align-items: center; }
+            .diff-btn { width: 100%; max-width: 200px; }
+        }
+
+        @media (max-width: 480px) {
+            .title { font-size: 1em; }
+            .subtitle { font-size: 0.4em; }
+            .question-text { font-size: 0.55em; }
+            .stat-value { font-size: 1em; }
+            .volume-control { top: 10px; right: 10px; }
+            .back-btn { font-size: 0.5em; padding: 8px 12px; }
+        }
+
+        /* Game screen visibility */
+        .game-screen { display: none; }
+        .game-screen.active { display: block; }
+    </style>
+</head>
+<body>
+    <!-- Starfield background -->
+    <div class="starfield" id="starfield"></div>
+
+    <!-- Mushroom field -->
+    <div class="mushroom-field" id="mushroomField"></div>
+
+    <!-- Animated centipede -->
+    <div class="centipede-container" id="centipedeContainer">
+        <div class="centipede" id="centipede"></div>
+    </div>
+
+    <!-- Player ship -->
+    <div class="player-ship" id="playerShip">&#128301;</div>
+
+    <!-- Volume control -->
+    <div class="volume-control">
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+        <button class="volume-btn" id="volumeBtn" onclick="toggleMute()">&#128266;</button>
+    </div>
+
+    <!-- Back button -->
+    <button class="back-btn" onclick="goBack()">&#8592; ARCADE</button>
+
+    <div class="game-container">
+        <!-- Start Screen -->
+        <div class="game-screen active" id="startScreen">
+            <div class="start-screen">
+                <h1 class="start-title">CELLULAR CENTIPEDE</h1>
+                <p class="start-subtitle">Bone Marrow Transplant & CAR-T Challenge</p>
+
+                <div class="difficulty-select">
+                    <h3>SELECT CONDITIONING INTENSITY</h3>
+                    <div class="difficulty-options">
+                        <button class="diff-btn lymphodepleting" onclick="selectDifficulty('lymphodepleting')">
+                            LYMPHODEPLETING<br><span style="font-size:0.6em">Basics</span>
+                        </button>
+                        <button class="diff-btn ric" onclick="selectDifficulty('ric')">
+                            RIC<br><span style="font-size:0.6em">Reduced Intensity</span>
+                        </button>
+                        <button class="diff-btn mac" onclick="selectDifficulty('mac')">
+                            MAC<br><span style="font-size:0.6em">Myeloablative</span>
+                        </button>
+                        <button class="diff-btn tbi" onclick="selectDifficulty('tbi')">
+                            LETHAL TBI<br><span style="font-size:0.6em">Total Body Irradiation</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="start-btn" id="startBtn" onclick="startGame()" disabled>
+                    START GAME
+                </button>
+
+                <div class="game-info">
+                    <p>&#127919; Answer BMT & CAR-T questions to destroy the centipede!</p>
+                    <p>&#128153; 3 Lives - Wrong answers damage your cells</p>
+                    <p>&#128293; Build streaks for bonus points</p>
+                    <p>&#127942; Questions from ASH-SAP & NCCN Guidelines</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="game-screen" id="gameScreen">
+            <header class="header">
+                <h1 class="title">CELLULAR CENTIPEDE</h1>
+                <p class="subtitle">BMT & Cellular Therapy Challenge</p>
+            </header>
+
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-value" id="score">0</div>
+                    <div class="stat-label">SCORE</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="streak">0</div>
+                    <div class="stat-label">STREAK</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="progress">0/0</div>
+                    <div class="stat-label">PROGRESS</div>
+                </div>
+                <div class="stat">
+                    <div class="lives-display" id="livesDisplay">
+                        <span class="life-icon">&#128153;</span>
+                        <span class="life-icon">&#128153;</span>
+                        <span class="life-icon">&#128153;</span>
+                    </div>
+                    <div class="stat-label">CELLS</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+                <span class="progress-text" id="progressText">0%</span>
+            </div>
+
+            <div class="question-card" id="questionCard">
+                <div id="questionTypeContainer"></div>
+                <p class="question-number" id="questionNumber"></p>
+                <p class="question-text" id="questionText"></p>
+                <div class="options-container" id="optionsContainer"></div>
+                <div class="explanation-panel" id="explanationPanel">
+                    <div class="explanation-title">&#128218; EXPLANATION</div>
+                    <p class="explanation-text" id="explanationText"></p>
+                    <div class="key-point" id="keyPoint"></div>
+                    <p class="citation" id="citation"></p>
+                </div>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">NEXT SEGMENT &#8594;</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="game-screen" id="resultsScreen">
+            <div class="results-screen" style="display:block;">
+                <h2 class="results-title" id="resultsTitle">GAME COMPLETE!</h2>
+
+                <div class="score-display">
+                    <div class="score-circle" id="scoreCircle">
+                        <div class="score-inner">
+                            <span class="score-percent" id="finalPercent">0%</span>
+                            <span class="score-label">ACCURACY</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-summary">
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="finalScore">0</div>
+                        <div class="stat-box-label">TOTAL SCORE</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="finalCorrect">0/0</div>
+                        <div class="stat-box-label">CORRECT</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="maxStreak">0</div>
+                        <div class="stat-box-label">MAX STREAK</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="finalLives">0</div>
+                        <div class="stat-box-label">CELLS LEFT</div>
+                    </div>
+                </div>
+
+                <div class="result-btns">
+                    <button class="result-btn play-again" onclick="playAgain()">PLAY AGAIN</button>
+                    <button class="result-btn back-arcade" onclick="goBack()">BACK TO ARCADE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Reference Links Helper
+        function renderReferenceLinks(question) {
+            let links = '';
+            if (question.pmid) {
+                links += `<a href="https://pubmed.ncbi.nlm.nih.gov/${question.pmid}/" target="_blank" rel="noopener" class="ref-link" title="View on PubMed">📄 PubMed</a>`;
+            }
+            if (question.doi) {
+                links += `<a href="https://doi.org/${question.doi}" target="_blank" rel="noopener" class="ref-link" title="View Full Text">🔗 DOI</a>`;
+            }
+            if (question.guideline) {
+                links += `<a href="${question.guideline.url}" target="_blank" rel="noopener" class="ref-link" title="View Guidelines">📋 ${question.guideline.name}</a>`;
+            }
+            return links ? `<div class="ref-links">${links}</div>` : '';
+        }
+
+        // ============ QUESTIONS DATABASE ============
+        const questions = [
+            // INTERN LEVEL - Basic BMT/Cellular Therapy Concepts
+            {
+                type: "bmt",
+                typeLabel: "BMT Basics",
+                difficulty: "lymphodepleting",
+                question: "What is the minimum CD34+ cell dose generally recommended for adequate engraftment in autologous stem cell transplantation?",
+                options: [
+                    "1 x 10^6 CD34+ cells/kg",
+                    "2 x 10^6 CD34+ cells/kg",
+                    "5 x 10^6 CD34+ cells/kg",
+                    "10 x 10^6 CD34+ cells/kg"
+                ],
+                correct: 1,
+                explanation: "A minimum of 2 x 10^6 CD34+ cells/kg is generally recommended for autologous transplantation to ensure adequate and timely engraftment. Higher doses (>5 x 10^6/kg) may result in faster engraftment.",
+                keyPoint: "Target: ≥2 x 10^6 CD34+ cells/kg for autologous HSCT. Optimal: ≥5 x 10^6/kg.",
+                citation: "Giralt S, et al. Optimizing autologous stem cell mobilization strategies to improve patient outcomes. Biol Blood Marrow Transplant. 2014;20(3):295-305.",
+                pmid: "24141007",
+                doi: "10.1016/j.bbmt.2013.10.013",
+                guideline: { name: "ASTCT", url: "https://www.astct.org/practice-resources/guidelines" }
+            },
+            {
+                type: "bmt",
+                typeLabel: "BMT Basics",
+                difficulty: "lymphodepleting",
+                question: "What is the definition of neutrophil engraftment after hematopoietic stem cell transplantation?",
+                options: [
+                    "ANC >100/μL for 1 day",
+                    "ANC >500/μL for 3 consecutive days",
+                    "ANC >1000/μL for 1 day",
+                    "ANC >1500/μL for 3 consecutive days"
+                ],
+                correct: 1,
+                explanation: "Neutrophil engraftment is defined as the first of 3 consecutive days with an absolute neutrophil count (ANC) greater than 500/μL. This typically occurs 10-14 days post-transplant with peripheral blood stem cells.",
+                keyPoint: "Engraftment = ANC >500/μL for 3 consecutive days. PBSC engrafts faster than bone marrow.",
+                citation: "Bensinger W, et al. Transplantation of bone marrow as compared with peripheral-blood cells from HLA-identical relatives. N Engl J Med. 2001;344(3):175-81.",
+                pmid: "11172138",
+                doi: "10.1056/NEJM200101183440303"
+            },
+            {
+                type: "bmt",
+                typeLabel: "Conditioning",
+                difficulty: "lymphodepleting",
+                question: "Which of the following is the most common myeloablative conditioning regimen used for autologous transplantation in multiple myeloma?",
+                options: [
+                    "Cyclophosphamide/TBI",
+                    "Busulfan/Cyclophosphamide",
+                    "High-dose Melphalan (200 mg/m²)",
+                    "BEAM (BCNU, Etoposide, Ara-C, Melphalan)"
+                ],
+                correct: 2,
+                explanation: "High-dose melphalan at 200 mg/m² is the standard conditioning regimen for autologous stem cell transplantation in multiple myeloma. Dose reduction to 140 mg/m² may be considered in patients with renal impairment or advanced age.",
+                keyPoint: "Melphalan 200 mg/m² is standard for myeloma ASCT. Reduce to 140 mg/m² for renal impairment.",
+                citation: "Palumbo A, et al. Autologous transplantation and maintenance therapy in multiple myeloma. N Engl J Med. 2014;371(10):895-905.",
+                pmid: "25184862",
+                doi: "10.1056/NEJMoa1402888"
+            },
+            {
+                type: "cart",
+                typeLabel: "CAR-T Basics",
+                difficulty: "lymphodepleting",
+                question: "What is the target antigen for FDA-approved CAR-T cell therapies in relapsed/refractory large B-cell lymphoma?",
+                options: [
+                    "CD20",
+                    "CD19",
+                    "CD22",
+                    "CD38"
+                ],
+                correct: 1,
+                explanation: "CD19 is the target antigen for all currently FDA-approved CAR-T products for large B-cell lymphoma (axicabtagene ciloleucel, tisagenlecleucel, lisocabtagene maraleucel). CD19 is expressed on B-cells from early development through plasma cell differentiation.",
+                keyPoint: "CD19 is the universal target for approved B-cell lymphoma CAR-T therapies.",
+                citation: "Neelapu SS, et al. Axicabtagene Ciloleucel CAR T-Cell Therapy in Refractory Large B-Cell Lymphoma. N Engl J Med. 2017;377(26):2531-2544.",
+                pmid: "29226797",
+                doi: "10.1056/NEJMoa1707447"
+            },
+            {
+                type: "cart",
+                typeLabel: "CAR-T Basics",
+                difficulty: "lymphodepleting",
+                question: "What is cytokine release syndrome (CRS) grading based on according to ASTCT consensus criteria?",
+                options: [
+                    "Fever severity only",
+                    "Fever and hypotension/hypoxia requirements",
+                    "IL-6 and ferritin levels",
+                    "CRP levels and fever duration"
+                ],
+                correct: 1,
+                explanation: "The ASTCT consensus grading for CRS is based on fever (≥38°C) and the presence/severity of hypotension and hypoxia. Grade 1 is fever alone; Grade 2 adds hypotension responsive to fluids or low-dose vasopressors; Grade 3-4 involve escalating support requirements.",
+                keyPoint: "CRS grading: Fever + hypotension severity + hypoxia requirements (ASTCT criteria).",
+                citation: "Lee DW, et al. ASTCT Consensus Grading for Cytokine Release Syndrome and Neurologic Toxicity Associated with Immune Effector Cells. Biol Blood Marrow Transplant. 2019;25(4):625-638.",
+                pmid: "30592986",
+                doi: "10.1016/j.bbmt.2018.12.758"
+            },
+            {
+                type: "gvhd",
+                typeLabel: "GVHD",
+                difficulty: "lymphodepleting",
+                question: "Which organs are classically involved in acute graft-versus-host disease (aGVHD)?",
+                options: [
+                    "Skin, liver, lungs",
+                    "Skin, liver, gastrointestinal tract",
+                    "Skin, kidneys, gastrointestinal tract",
+                    "Lungs, liver, gastrointestinal tract"
+                ],
+                correct: 1,
+                explanation: "Acute GVHD classically affects three target organs: skin (maculopapular rash), liver (elevated bilirubin), and gastrointestinal tract (diarrhea, nausea, anorexia). The lungs are more commonly affected in chronic GVHD (bronchiolitis obliterans).",
+                keyPoint: "Acute GVHD triad: Skin + Liver + GI tract. Lungs = chronic GVHD feature.",
+                citation: "Przepiorka D, et al. 1994 Consensus Conference on Acute GVHD Grading. Bone Marrow Transplant. 1995;15(6):825-8.",
+                pmid: "7581076"
+            },
+            {
+                type: "engraft",
+                typeLabel: "Engraftment",
+                difficulty: "lymphodepleting",
+                question: "Which growth factor is commonly used to mobilize stem cells to the peripheral blood for collection?",
+                options: [
+                    "Erythropoietin (EPO)",
+                    "Granulocyte colony-stimulating factor (G-CSF)",
+                    "Thrombopoietin (TPO)",
+                    "Interleukin-2 (IL-2)"
+                ],
+                correct: 1,
+                explanation: "G-CSF (filgrastim, pegfilgrastim) is the standard agent for stem cell mobilization. It increases the release of CD34+ cells from bone marrow into peripheral blood. Plerixafor (CXCR4 antagonist) may be added for poor mobilizers.",
+                keyPoint: "G-CSF is standard for mobilization. Add plerixafor for poor mobilizers.",
+                citation: "DiPersio JF, et al. Phase III prospective randomized double-blind placebo-controlled trial of plerixafor plus granulocyte colony-stimulating factor. J Clin Oncol. 2009;27(28):4767-73.",
+                pmid: "19720922",
+                doi: "10.1200/JCO.2008.20.7209"
+            },
+            {
+                type: "bmt",
+                typeLabel: "Donor Selection",
+                difficulty: "lymphodepleting",
+                question: "What is an HLA-haploidentical donor?",
+                options: [
+                    "A donor who shares all 10 HLA alleles with the recipient",
+                    "A donor who shares exactly 5 of 10 HLA alleles with the recipient",
+                    "An unrelated donor with 8/8 HLA match",
+                    "A cord blood unit with 4/6 HLA match"
+                ],
+                correct: 1,
+                explanation: "A haploidentical donor shares one HLA haplotype (approximately 5 of 10 HLA alleles) with the recipient. This is typically a parent, child, or sibling. Modern approaches using post-transplant cyclophosphamide have made haplo-HSCT safer and more accessible.",
+                keyPoint: "Haploidentical = sharing one haplotype (~50% HLA match). Usually a first-degree relative.",
+                citation: "Luznik L, et al. HLA-haploidentical bone marrow transplantation for hematologic malignancies using nonmyeloablative conditioning and high-dose, posttransplantation cyclophosphamide. Biol Blood Marrow Transplant. 2008;14(6):641-50.",
+                pmid: "18489989",
+                doi: "10.1016/j.bbmt.2008.03.005"
+            },
+
+            // RESIDENT LEVEL - Intermediate Complexity
+            {
+                type: "cart",
+                typeLabel: "CAR-T Management",
+                difficulty: "ric",
+                question: "What is the first-line treatment for Grade 2 or higher cytokine release syndrome (CRS) after CAR-T therapy?",
+                options: [
+                    "High-dose corticosteroids",
+                    "Tocilizumab",
+                    "Siltuximab",
+                    "Anakinra"
+                ],
+                correct: 1,
+                explanation: "Tocilizumab (anti-IL-6 receptor antibody) is the first-line treatment for CRS Grade ≥2. It does not appear to diminish CAR-T efficacy. Corticosteroids are reserved for tocilizumab-refractory cases or concurrent ICANS, as they may affect CAR-T cell expansion.",
+                keyPoint: "Tocilizumab first for CRS ≥ Grade 2. Steroids second-line or for ICANS.",
+                citation: "Neelapu SS, et al. Chimeric antigen receptor T-cell therapy - assessment and management of toxicities. Nat Rev Clin Oncol. 2018;15(1):47-62.",
+                pmid: "29205134",
+                doi: "10.1038/nrclinonc.2017.148"
+            },
+            {
+                type: "gvhd",
+                typeLabel: "GVHD Prophylaxis",
+                difficulty: "ric",
+                question: "Which GVHD prophylaxis regimen is standard for matched related donor transplantation?",
+                options: [
+                    "Cyclosporine alone",
+                    "Tacrolimus + methotrexate",
+                    "Post-transplant cyclophosphamide alone",
+                    "Antithymocyte globulin alone"
+                ],
+                correct: 1,
+                explanation: "Tacrolimus (or cyclosporine) combined with short-course methotrexate is the standard GVHD prophylaxis for matched related and unrelated donor transplants. PTCy-based regimens are standard for haploidentical transplants but are increasingly used in matched donor settings.",
+                keyPoint: "CNI (tacrolimus/CSA) + MTX is standard for matched donor HSCT.",
+                citation: "Storb R, et al. Methotrexate and cyclosporine compared with cyclosporine alone for prophylaxis of acute graft versus host disease. N Engl J Med. 1986;314(12):729-35.",
+                pmid: "3513012",
+                doi: "10.1056/NEJM198603203141201"
+            },
+            {
+                type: "conditioning",
+                typeLabel: "Conditioning",
+                difficulty: "ric",
+                question: "What distinguishes reduced-intensity conditioning (RIC) from myeloablative conditioning (MAC)?",
+                options: [
+                    "RIC uses only chemotherapy while MAC uses radiation",
+                    "RIC causes reversible myelosuppression without stem cell support; MAC causes irreversible aplasia",
+                    "RIC always includes ATG while MAC does not",
+                    "RIC is only used for autologous transplants"
+                ],
+                correct: 1,
+                explanation: "The key distinction is that RIC causes myelosuppression that would be reversible without stem cell infusion, while MAC causes irreversible marrow aplasia requiring stem cell rescue. RIC relies more on graft-versus-tumor effect than chemotherapy intensity.",
+                keyPoint: "RIC = reversible aplasia; MAC = irreversible aplasia requiring rescue.",
+                citation: "Bacigalupo A, et al. Defining the intensity of conditioning regimens: working definitions. Biol Blood Marrow Transplant. 2009;15(12):1628-33.",
+                pmid: "19896087",
+                doi: "10.1016/j.bbmt.2009.07.004"
+            },
+            {
+                type: "cart",
+                typeLabel: "CAR-T Toxicity",
+                difficulty: "ric",
+                question: "Which of the following is a characteristic feature of Immune Effector Cell-Associated Neurotoxicity Syndrome (ICANS)?",
+                options: [
+                    "Ascending paralysis",
+                    "Encephalopathy with impaired attention and language",
+                    "Isolated cranial nerve palsies",
+                    "Peripheral sensory neuropathy"
+                ],
+                correct: 1,
+                explanation: "ICANS is characterized by toxic encephalopathy with attention deficits, confusion, language disturbance (word-finding difficulty, reduced verbal output), and in severe cases, seizures, motor weakness, and cerebral edema. The ICE score is used to grade severity.",
+                keyPoint: "ICANS = encephalopathy + language/attention deficits. Use ICE score for grading.",
+                citation: "Lee DW, et al. ASTCT Consensus Grading for CRS and Neurologic Toxicity. Biol Blood Marrow Transplant. 2019;25(4):625-638.",
+                pmid: "30592986",
+                doi: "10.1016/j.bbmt.2018.12.758"
+            },
+            {
+                type: "gvhd",
+                typeLabel: "Chronic GVHD",
+                difficulty: "ric",
+                question: "According to NIH consensus criteria, which of the following is considered a DIAGNOSTIC feature of chronic GVHD?",
+                options: [
+                    "Maculopapular rash",
+                    "Oral ulcers",
+                    "Poikiloderma",
+                    "Elevated bilirubin"
+                ],
+                correct: 2,
+                explanation: "Poikiloderma (combination of atrophy, telangiectasia, and dyspigmentation) is a diagnostic feature of chronic GVHD that establishes the diagnosis without need for biopsy. Other diagnostic features include lichen planus-like changes, morphea, and bronchiolitis obliterans.",
+                keyPoint: "Diagnostic features of cGVHD establish diagnosis without biopsy. Poikiloderma is diagnostic.",
+                citation: "Jagasia MH, et al. National Institutes of Health Consensus Development Project on Criteria for Clinical Trials in Chronic GVHD. Biol Blood Marrow Transplant. 2015;21(3):389-401.",
+                pmid: "25529383",
+                doi: "10.1016/j.bbmt.2014.12.001"
+            },
+            {
+                type: "bmt",
+                typeLabel: "Donor Selection",
+                difficulty: "ric",
+                question: "In the absence of an HLA-matched sibling donor, which alternative donor source typically provides the fastest engraftment?",
+                options: [
+                    "Matched unrelated donor (MUD)",
+                    "Umbilical cord blood",
+                    "Haploidentical family donor",
+                    "Mismatched unrelated donor"
+                ],
+                correct: 2,
+                explanation: "Haploidentical donors are readily available family members (parents, children, siblings), allowing for rapid donor evaluation and collection. MUD searches take weeks-months, and cord blood engraftment is typically slower (median 3-4 weeks for neutrophils).",
+                keyPoint: "Haplo = fastest donor availability. Cord blood = slowest engraftment.",
+                citation: "Ciurea SO, et al. Haploidentical transplant with posttransplant cyclophosphamide vs matched unrelated donor transplant. Blood. 2015;126(8):1033-40.",
+                pmid: "26130705",
+                doi: "10.1182/blood-2015-04-639831"
+            },
+            {
+                type: "cart",
+                typeLabel: "CAR-T Indications",
+                difficulty: "ric",
+                question: "For which of the following indications is CAR-T cell therapy FDA-approved as of 2024?",
+                options: [
+                    "First-line treatment for DLBCL",
+                    "Relapsed/refractory multiple myeloma after 4+ prior lines",
+                    "Chronic lymphocytic leukemia",
+                    "Relapsed/refractory follicular lymphoma after 2+ prior therapies"
+                ],
+                correct: 3,
+                explanation: "Axicabtagene ciloleucel and tisagenlecleucel are FDA-approved for relapsed/refractory follicular lymphoma after 2 or more prior lines of systemic therapy. BCMA-directed CAR-T (ide-cel, cilta-cel) is approved for myeloma after 4+ prior lines, now earlier lines.",
+                keyPoint: "CAR-T approved for R/R FL after 2+ lines. BCMA CAR-T approved for myeloma.",
+                citation: "Fowler NH, et al. Tisagenlecleucel in adult relapsed or refractory follicular lymphoma. Nat Med. 2022;28(2):325-332.",
+                pmid: "34921238",
+                doi: "10.1038/s41591-021-01622-0"
+            },
+            {
+                type: "engraft",
+                typeLabel: "Engraftment",
+                difficulty: "ric",
+                question: "What is the most common cause of primary graft failure after allogeneic HSCT?",
+                options: [
+                    "Inadequate stem cell dose",
+                    "HLA mismatch and host-versus-graft rejection",
+                    "Severe infection during neutropenia",
+                    "Drug toxicity to the graft"
+                ],
+                correct: 1,
+                explanation: "Primary graft failure is most commonly due to immunologic rejection (host-versus-graft), particularly with HLA-mismatched donors, T-cell depleted grafts, or inadequate conditioning. Pre-existing HLA antibodies (DSA) significantly increase this risk.",
+                keyPoint: "Primary graft failure = usually immunologic rejection. Check for donor-specific antibodies.",
+                citation: "Olsson RF, et al. Primary graft failure after myeloablative allogeneic hematopoietic cell transplantation. Leukemia. 2015;29(8):1754-62.",
+                pmid: "25772027",
+                doi: "10.1038/leu.2015.75"
+            },
+
+            // FELLOW LEVEL - Advanced Topics
+            {
+                type: "cart",
+                typeLabel: "CAR-T Biology",
+                difficulty: "mac",
+                question: "Which CAR-T costimulatory domain is associated with faster expansion but shorter persistence compared to 4-1BB?",
+                options: [
+                    "CD28",
+                    "OX40",
+                    "ICOS",
+                    "CD27"
+                ],
+                correct: 0,
+                explanation: "CD28 costimulation leads to more rapid CAR-T expansion and effector function but shorter persistence. 4-1BB (CD137) costimulation promotes central memory phenotype and longer persistence. Axicabtagene uses CD28; tisagenlecleucel uses 4-1BB.",
+                keyPoint: "CD28 = faster expansion, shorter persistence. 4-1BB = slower expansion, longer persistence.",
+                citation: "Maude SL, et al. Tisagenlecleucel in Children and Young Adults with B-Cell Lymphoblastic Leukemia. N Engl J Med. 2018;378(5):439-448.",
+                pmid: "29385370",
+                doi: "10.1056/NEJMoa1709866"
+            },
+            {
+                type: "gvhd",
+                typeLabel: "GVHD Treatment",
+                difficulty: "mac",
+                question: "What is the mechanism of action of ruxolitinib in steroid-refractory acute GVHD?",
+                options: [
+                    "Calcineurin inhibition",
+                    "JAK1/JAK2 inhibition",
+                    "Costimulation blockade",
+                    "B-cell depletion"
+                ],
+                correct: 1,
+                explanation: "Ruxolitinib is a JAK1/JAK2 inhibitor that blocks signaling downstream of multiple inflammatory cytokines (IL-6, IFN-γ, IL-12). It is FDA-approved for steroid-refractory acute and chronic GVHD based on the REACH2 and REACH3 trials.",
+                keyPoint: "Ruxolitinib = JAK1/2 inhibitor for SR-aGVHD and SR-cGVHD. REACH2/3 trials.",
+                citation: "Zeiser R, et al. Ruxolitinib for Glucocorticoid-Refractory Acute Graft-versus-Host Disease. N Engl J Med. 2020;382(19):1800-1810.",
+                pmid: "32320566",
+                doi: "10.1056/NEJMoa1917635"
+            },
+            {
+                type: "bmt",
+                typeLabel: "Complications",
+                difficulty: "mac",
+                question: "What is the most significant risk factor for hepatic sinusoidal obstruction syndrome (SOS/VOD) after HSCT?",
+                options: [
+                    "Prior abdominal radiation",
+                    "Use of busulfan-based conditioning with elevated drug levels",
+                    "Peripheral blood stem cell source",
+                    "Young age at transplant"
+                ],
+                correct: 1,
+                explanation: "Busulfan-based myeloablative conditioning, especially with uncontrolled drug levels (AUC >1500 μM·min), is the strongest risk factor for SOS/VOD. Pharmacokinetic-guided dosing reduces this risk significantly. Other factors include prior liver disease and gemtuzumab exposure.",
+                keyPoint: "Busulfan with elevated AUC is major SOS/VOD risk. Use PK-guided dosing.",
+                citation: "Corbacioglu S, et al. Defibrotide for prophylaxis of hepatic veno-occlusive disease in paediatric HSCT. Lancet. 2012;379(9823):1301-9.",
+                pmid: "22364685",
+                doi: "10.1016/S0140-6736(11)61938-7"
+            },
+            {
+                type: "cart",
+                typeLabel: "CAR-T Resistance",
+                difficulty: "mac",
+                question: "What is the most common mechanism of CD19 CAR-T resistance in B-ALL relapse?",
+                options: [
+                    "CAR-T exhaustion",
+                    "CD19 antigen loss or mutation",
+                    "Upregulation of PD-L1",
+                    "Development of anti-CAR antibodies"
+                ],
+                correct: 1,
+                explanation: "CD19-negative relapse is the most common mechanism of resistance, occurring through antigen loss or mutations affecting CD19 expression. This has led to development of dual-targeting CARs (CD19/CD22) and bispecific approaches.",
+                keyPoint: "CD19 antigen loss = most common resistance mechanism. Consider CD22 or dual-targeting.",
+                citation: "Orlando EJ, et al. Genetic mechanisms of target antigen loss in CAR19 therapy of acute lymphoblastic leukemia. Nat Med. 2018;24(10):1504-1506.",
+                pmid: "30275569",
+                doi: "10.1038/s41591-018-0146-z"
+            },
+            {
+                type: "conditioning",
+                typeLabel: "Conditioning",
+                difficulty: "mac",
+                question: "What is the role of thiotepa in transplant conditioning regimens?",
+                options: [
+                    "Immunosuppression only",
+                    "CNS penetration for diseases with CNS involvement",
+                    "Reduced hepatotoxicity compared to busulfan",
+                    "Enhanced engraftment kinetics"
+                ],
+                correct: 1,
+                explanation: "Thiotepa has excellent CNS penetration and is incorporated into conditioning regimens for malignancies with CNS involvement (CNS lymphoma, ALL with CNS disease). It's also used in TBF regimens for haploidentical transplants and has broad antitumor activity.",
+                keyPoint: "Thiotepa = CNS penetration. Used for CNS-involving malignancies.",
+                citation: "Chabannon C, et al. Hematopoietic stem cell transplantation in its 60s: A platform for cellular therapies. Sci Transl Med. 2018;10(436):eaap9630.",
+                pmid: "29643233",
+                doi: "10.1126/scitranslmed.aap9630"
+            },
+            {
+                type: "gvhd",
+                typeLabel: "GVHD Biology",
+                difficulty: "mac",
+                question: "Which biomarker panel is validated for predicting outcomes in acute GVHD?",
+                options: [
+                    "IL-2 and TNF-α",
+                    "ST2 and REG3α (Mount Sinai Acute GVHD International Consortium - MAGIC)",
+                    "Calprotectin and LDH",
+                    "Ferritin and fibrinogen"
+                ],
+                correct: 1,
+                explanation: "The MAGIC algorithm using ST2 and REG3α measured at day 7 of GVHD treatment predicts 6-month non-relapse mortality. This biomarker-based risk stratification is being incorporated into clinical trials and treatment decisions.",
+                keyPoint: "MAGIC biomarkers (ST2 + REG3α) predict GVHD outcomes. Measured at treatment day 7.",
+                citation: "Levine JE, et al. A prognostic score for acute graft-versus-host disease based on biomarkers. Lancet Haematol. 2015;2(1):e21-e29.",
+                pmid: "26687425",
+                doi: "10.1016/S2352-3026(14)00035-0"
+            },
+            {
+                type: "bmt",
+                typeLabel: "Complications",
+                difficulty: "mac",
+                question: "What is the first-line treatment for transplant-associated thrombotic microangiopathy (TA-TMA)?",
+                options: [
+                    "Therapeutic plasma exchange",
+                    "Withdrawal of calcineurin inhibitors",
+                    "Eculizumab",
+                    "Defibrotide"
+                ],
+                correct: 1,
+                explanation: "First-line management of TA-TMA involves withdrawal or dose reduction of CNI (tacrolimus/cyclosporine) and treatment of contributing factors (infections, GVHD). Eculizumab (complement C5 inhibitor) is used for refractory cases with elevated sC5b-9.",
+                keyPoint: "TA-TMA: First, withdraw CNI. Eculizumab for refractory cases with complement activation.",
+                citation: "Jodele S, et al. Eculizumab therapy in children with severe HSCT-TMA. Blood. 2014;124(8):1312-1317.",
+                pmid: "24370861",
+                doi: "10.1182/blood-2013-10-532739"
+            },
+            {
+                type: "cart",
+                typeLabel: "CAR-T Manufacturing",
+                difficulty: "mac",
+                question: "What is 'bridging therapy' in the context of CAR-T cell therapy?",
+                options: [
+                    "Therapy given after CAR-T infusion to enhance persistence",
+                    "Therapy given during CAR-T manufacturing to control disease",
+                    "Pre-conditioning with fludarabine and cyclophosphamide",
+                    "Consolidation chemotherapy after CAR-T response"
+                ],
+                correct: 1,
+                explanation: "Bridging therapy refers to treatment given during the manufacturing period (typically 3-4 weeks) between leukapheresis and CAR-T infusion to prevent disease progression. The choice depends on disease histology and patient fitness.",
+                keyPoint: "Bridging therapy = disease control during CAR-T manufacturing period.",
+                citation: "Pinnix CC, et al. Bridging therapy prior to axicabtagene ciloleucel for relapsed/refractory large B-cell lymphoma. Blood Adv. 2020;4(13):2871-2883.",
+                pmid: "32589728",
+                doi: "10.1182/bloodadvances.2020001837"
+            },
+
+            // ATTENDING LEVEL - Expert/Complex Topics
+            {
+                type: "cart",
+                typeLabel: "CAR-T Advanced",
+                difficulty: "tbi",
+                question: "What is the mechanism by which post-transplant cyclophosphamide (PTCy) prevents GVHD in haploidentical transplantation?",
+                options: [
+                    "Depletion of all donor T cells",
+                    "Selective elimination of alloreactive T cells with preservation of regulatory T cells",
+                    "Complete B-cell depletion",
+                    "Blocking of antigen presentation"
+                ],
+                correct: 1,
+                explanation: "PTCy selectively eliminates rapidly proliferating alloreactive T cells while sparing quiescent regulatory T cells and memory T cells. This creates a state of tolerance while preserving immune reconstitution and graft-versus-tumor effect.",
+                keyPoint: "PTCy spares Tregs while killing alloreactive T cells = tolerance induction.",
+                citation: "Luznik L, et al. High-dose cyclophosphamide as single-agent, short-course prophylaxis of graft-versus-host disease. Blood. 2010;115(16):3224-30.",
+                pmid: "20124511",
+                doi: "10.1182/blood-2009-11-251595"
+            },
+            {
+                type: "gvhd",
+                typeLabel: "GVHD Advanced",
+                difficulty: "tbi",
+                question: "Which novel agent targeting the ROCK2 pathway is FDA-approved for chronic GVHD?",
+                options: [
+                    "Ibrutinib",
+                    "Belumosudil",
+                    "Axatilimab",
+                    "Abatacept"
+                ],
+                correct: 1,
+                explanation: "Belumosudil is a selective ROCK2 inhibitor FDA-approved for chronic GVHD after 2+ prior lines. It modulates both T-cell responses and fibrotic pathways. Ibrutinib (BTK inhibitor) is also approved for cGVHD. Axatilimab (anti-CSF1R) is in trials.",
+                keyPoint: "Belumosudil = ROCK2 inhibitor for cGVHD. Targets both immune and fibrotic pathways.",
+                citation: "Cutler C, et al. Belumosudil for chronic graft-versus-host disease after 2 or more prior lines of therapy. Blood. 2021;138(22):2278-2289.",
+                pmid: "34482400",
+                doi: "10.1182/blood.2021012021"
+            },
+            {
+                type: "bmt",
+                typeLabel: "Disease-Specific",
+                difficulty: "tbi",
+                question: "In MDS with TP53 mutation, what is the recommended approach regarding transplant timing?",
+                options: [
+                    "Proceed directly to transplant without induction therapy",
+                    "Achieve CR with intensive chemotherapy before transplant",
+                    "Consider transplant with reduced-intensity conditioning after hypomethylating agent therapy",
+                    "Transplant is contraindicated in TP53-mutated MDS"
+                ],
+                correct: 2,
+                explanation: "TP53-mutated MDS has poor outcomes regardless of approach. Current evidence supports RIC transplant after disease stabilization with HMA ± venetoclax, as intensive chemotherapy rarely achieves durable remissions and increases TRM. Novel maintenance strategies are under investigation.",
+                keyPoint: "TP53-mutated MDS: RIC after HMA stabilization. Poor outcomes but transplant still considered.",
+                citation: "Lindsley RC, et al. Prognostic Mutations in Myelodysplastic Syndrome after Stem-Cell Transplantation. N Engl J Med. 2017;376(6):536-547.",
+                pmid: "28177873",
+                doi: "10.1056/NEJMoa1611604"
+            },
+            {
+                type: "cart",
+                typeLabel: "CAR-T Advanced",
+                difficulty: "tbi",
+                question: "What is the significance of tumor burden on CAR-T outcomes and toxicity?",
+                options: [
+                    "Higher tumor burden correlates with better CAR-T expansion and response",
+                    "Higher tumor burden is associated with increased CRS/ICANS severity but no effect on efficacy",
+                    "Higher tumor burden correlates with increased toxicity and decreased durability of response",
+                    "Tumor burden has no significant impact on CAR-T outcomes"
+                ],
+                correct: 2,
+                explanation: "High tumor burden (elevated LDH, bulky disease) is associated with both increased CRS/ICANS severity due to greater CAR-T expansion and higher rates of relapse. Pre-CAR-T debulking with bridging therapy may improve outcomes in these patients.",
+                keyPoint: "High tumor burden = more toxicity + worse outcomes. Consider debulking bridging therapy.",
+                citation: "Vercellino L, et al. Predictive factors of early progression after CAR T-cell therapy in relapsed/refractory diffuse large B-cell lymphoma. Blood Adv. 2020;4(22):5607-5615.",
+                pmid: "33180898",
+                doi: "10.1182/bloodadvances.2020003001"
+            },
+            {
+                type: "conditioning",
+                typeLabel: "Novel Approaches",
+                difficulty: "tbi",
+                question: "What is the rationale for using CD117 (c-Kit) targeted antibody-drug conjugates in transplant conditioning?",
+                options: [
+                    "Enhanced graft-versus-tumor effect",
+                    "Selective depletion of hematopoietic stem cells without chemotherapy toxicity",
+                    "Improved T-cell reconstitution",
+                    "Prevention of GVHD"
+                ],
+                correct: 1,
+                explanation: "Anti-CD117 ADCs (like MGTA-117) target hematopoietic stem cells expressing c-Kit, potentially allowing for 'chemotherapy-free' conditioning. This approach aims to create marrow space for donor cells while avoiding multi-organ toxicity of traditional conditioning.",
+                keyPoint: "CD117-targeted conditioning = selective HSC depletion, chemo-free approach.",
+                citation: "Czechowicz A, et al. Selective hematopoietic stem cell ablation using CD117-antibody-drug-conjugates enables safe and effective transplantation. Nat Commun. 2019;10(1):617.",
+                pmid: "30728354",
+                doi: "10.1038/s41467-018-08201-x"
+            },
+            {
+                type: "engraft",
+                typeLabel: "Immune Reconstitution",
+                difficulty: "tbi",
+                question: "What is the typical order of immune reconstitution after allogeneic HSCT?",
+                options: [
+                    "NK cells → B cells → T cells",
+                    "T cells → B cells → NK cells",
+                    "B cells → T cells → NK cells",
+                    "NK cells → T cells → B cells"
+                ],
+                correct: 0,
+                explanation: "NK cells recover first (1-2 months), followed by B cells (3-6 months), and finally T cells (6-12+ months). CD8+ T cells recover before CD4+ T cells. Full T-cell reconstitution, including naive T cells, may take 1-2 years and requires intact thymic function.",
+                keyPoint: "Immune recovery order: NK → B → T (CD8 before CD4). Full T-cell recovery takes 1-2 years.",
+                citation: "Storek J, et al. Immunity of patients surviving 20 to 30 years after allogeneic or syngeneic bone marrow transplantation. Blood. 2001;98(13):3505-12.",
+                pmid: "11739154",
+                doi: "10.1182/blood.V98.13.3505"
+            },
+            {
+                type: "gvhd",
+                typeLabel: "GVHD Prevention",
+                difficulty: "tbi",
+                question: "What is the mechanism of abatacept in GVHD prevention?",
+                options: [
+                    "IL-6 receptor blockade",
+                    "CTLA4-Ig mediated costimulation blockade of CD80/CD86",
+                    "JAK1/2 inhibition",
+                    "Selective T-cell depletion"
+                ],
+                correct: 1,
+                explanation: "Abatacept (CTLA4-Ig) blocks the CD80/CD86-CD28 costimulatory pathway required for T-cell activation. The ABA2 trial demonstrated reduced severe acute GVHD when added to CNI/MTX prophylaxis in unrelated donor transplants.",
+                keyPoint: "Abatacept = CTLA4-Ig costimulation blockade. ABA2 trial: reduced severe aGVHD.",
+                citation: "Watkins B, et al. Phase II Trial of Costimulation Blockade With Abatacept for Prevention of Acute GVHD. J Clin Oncol. 2021;39(17):1865-1877.",
+                pmid: "33449816",
+                doi: "10.1200/JCO.20.01086"
+            },
+            {
+                type: "cart",
+                typeLabel: "CAR-T Complications",
+                difficulty: "tbi",
+                question: "What is the proposed mechanism of HLH/MAS-like syndrome after CAR-T therapy?",
+                options: [
+                    "Direct CAR-T cytotoxicity to macrophages",
+                    "Excessive macrophage activation driven by IFN-γ and GM-CSF from CAR-T cells",
+                    "Autoimmune destruction of monocytes",
+                    "Complement-mediated hemolysis"
+                ],
+                correct: 1,
+                explanation: "CAR-T derived IFN-γ and GM-CSF drive macrophage activation, leading to the HLH/MAS-like phenotype. This manifests as high ferritin, cytopenias, coagulopathy, and organ dysfunction. Treatment includes tocilizumab, steroids, and in refractory cases, emapalumab (anti-IFN-γ) or ruxolitinib.",
+                keyPoint: "CAR-T HLH/MAS: driven by IFN-γ/GM-CSF → macrophage activation. Consider emapalumab if refractory.",
+                citation: "Hines MR, et al. Hemophagocytic lymphohistiocytosis-like toxicity (carHLH) after CD19-specific CAR T-cell therapy. Br J Haematol. 2021;194(4):701-707.",
+                pmid: "34263927",
+                doi: "10.1111/bjh.17662"
+            },
+
+            // Additional questions for variety
+            {
+                type: "bmt",
+                typeLabel: "Infections",
+                difficulty: "ric",
+                question: "During which post-transplant period is invasive aspergillosis most commonly seen?",
+                options: [
+                    "Pre-engraftment (days 0-30)",
+                    "Early post-engraftment (days 30-100)",
+                    "Late post-transplant (>day 100)",
+                    "Equal risk throughout"
+                ],
+                correct: 1,
+                explanation: "While aspergillosis can occur throughout transplant, the highest incidence is during the early post-engraftment period (days 30-100) when patients are on immunosuppression for GVHD. Risk is increased with steroid use, GVHD, and prolonged neutropenia.",
+                keyPoint: "Aspergillosis peak: days 30-100 post-transplant. Risk increased with steroids/GVHD.",
+                citation: "Marr KA, et al. Epidemiology and outcome of mould infections in hematopoietic stem cell transplant recipients. Clin Infect Dis. 2002;34(7):909-17.",
+                pmid: "11880955",
+                doi: "10.1086/339202"
+            },
+            {
+                type: "engraft",
+                typeLabel: "Chimerism",
+                difficulty: "mac",
+                question: "What level of donor T-cell chimerism is generally concerning for impending graft rejection?",
+                options: [
+                    "<20% donor",
+                    "<50% donor",
+                    "<80% donor",
+                    "<95% donor"
+                ],
+                correct: 0,
+                explanation: "Declining T-cell chimerism to <20% donor is concerning for impending rejection and may warrant intervention with donor lymphocyte infusion (DLI) or withdrawal of immunosuppression. Serial monitoring is important, especially after RIC transplants.",
+                keyPoint: "T-cell chimerism <20% donor = rejection risk. Consider DLI or IST withdrawal.",
+                citation: "Bader P, et al. How and when should we monitor chimerism after allogeneic stem cell transplantation? Bone Marrow Transplant. 2005;35(2):107-119.",
+                pmid: "15502849",
+                doi: "10.1038/sj.bmt.1704715"
+            },
+            {
+                type: "cart",
+                typeLabel: "BCMA CAR-T",
+                difficulty: "mac",
+                question: "What is the target antigen for CAR-T therapies approved for multiple myeloma?",
+                options: [
+                    "CD38",
+                    "CD138 (Syndecan-1)",
+                    "BCMA (B-cell maturation antigen)",
+                    "SLAMF7 (CS1)"
+                ],
+                correct: 2,
+                explanation: "BCMA (B-cell maturation antigen/TNFRSF17) is the target for FDA-approved myeloma CAR-T products (idecabtagene vicleucel/Abecma, ciltacabtagene autoleucel/Carvykti). BCMA is highly expressed on plasma cells and late B-cells.",
+                keyPoint: "BCMA = target for myeloma CAR-T (ide-cel, cilta-cel).",
+                citation: "Munshi NC, et al. Idecabtagene Vicleucel in Relapsed and Refractory Multiple Myeloma. N Engl J Med. 2021;384(8):705-716.",
+                pmid: "33626253",
+                doi: "10.1056/NEJMoa2024850"
+            },
+            {
+                type: "bmt",
+                typeLabel: "Late Effects",
+                difficulty: "tbi",
+                question: "What is the recommended screening for secondary malignancies in long-term transplant survivors?",
+                options: [
+                    "Annual PET-CT",
+                    "Age-appropriate cancer screening plus annual skin exam and consideration of early colonoscopy",
+                    "Biannual bone marrow biopsies",
+                    "No additional screening beyond general population"
+                ],
+                correct: 1,
+                explanation: "Transplant survivors have increased risk of secondary malignancies including skin cancer (especially with TBI), breast cancer, and colon cancer. Recommendations include annual skin exams, colonoscopy starting 10-15 years earlier than population screening, and early breast cancer screening.",
+                keyPoint: "Post-HSCT: enhanced cancer screening including annual skin exam, early colonoscopy, early mammography.",
+                citation: "Majhail NS, et al. Recommended screening and preventive practices for long-term survivors after hematopoietic cell transplantation. Biol Blood Marrow Transplant. 2012;18(3):348-71.",
+                pmid: "22178693",
+                doi: "10.1016/j.bbmt.2011.12.519"
+            },
+            {
+                type: "conditioning",
+                typeLabel: "Conditioning",
+                difficulty: "lymphodepleting",
+                question: "What is BEAM chemotherapy used for in the transplant setting?",
+                options: [
+                    "Conditioning for AML transplants",
+                    "Conditioning for autologous transplant in lymphoma",
+                    "GVHD prophylaxis",
+                    "Post-transplant maintenance"
+                ],
+                correct: 1,
+                explanation: "BEAM (BCNU/carmustine, Etoposide, Ara-C/cytarabine, Melphalan) is the standard conditioning regimen for autologous stem cell transplantation in lymphoma (both Hodgkin and non-Hodgkin). It provides myeloablation with lymphoma-specific activity.",
+                keyPoint: "BEAM = standard autologous transplant conditioning for lymphoma.",
+                citation: "Philip T, et al. Autologous bone marrow transplantation as compared with salvage chemotherapy in relapses of chemotherapy-sensitive non-Hodgkin's lymphoma. N Engl J Med. 1995;333(23):1540-5.",
+                pmid: "7477169",
+                doi: "10.1056/NEJM199512073332305"
+            },
+            {
+                type: "gvhd",
+                typeLabel: "Acute GVHD",
+                difficulty: "ric",
+                question: "What is the first-line treatment for acute GVHD involving skin only (Stage 1-2)?",
+                options: [
+                    "Systemic tacrolimus",
+                    "Systemic corticosteroids (1-2 mg/kg prednisone)",
+                    "Topical corticosteroids and observation",
+                    "Ruxolitinib"
+                ],
+                correct: 2,
+                explanation: "For limited skin-only acute GVHD (Grade I), topical steroids and continued observation is appropriate. Systemic steroids (1-2 mg/kg/day) are initiated for Grade II-IV GVHD or if topical treatment fails. This approach avoids unnecessary steroid exposure.",
+                keyPoint: "Grade I skin GVHD: topical steroids first. Systemic steroids for Grade II-IV.",
+                citation: "Martin PJ, et al. First- and second-line systemic treatment of acute graft-versus-host disease. Blood. 2017;129(10):1261-1270.",
+                pmid: "28096173",
+                doi: "10.1182/blood-2016-08-690867"
+            },
+            {
+                type: "cart",
+                typeLabel: "CAR-T Logistics",
+                difficulty: "lymphodepleting",
+                question: "What is lymphodepleting chemotherapy in CAR-T therapy?",
+                options: [
+                    "Chemotherapy given during CAR-T manufacturing",
+                    "Conditioning given 2-7 days before CAR-T infusion to enhance expansion",
+                    "Treatment for post-CAR-T relapse",
+                    "Immunosuppression to prevent CAR-T rejection"
+                ],
+                correct: 1,
+                explanation: "Lymphodepleting chemotherapy (typically fludarabine + cyclophosphamide) is given 2-7 days before CAR-T infusion. It eliminates regulatory cells, creates cytokine space (IL-7, IL-15), and removes 'cytokine sinks' to enhance CAR-T expansion and persistence.",
+                keyPoint: "Lymphodepletion (Flu/Cy) before CAR-T enables expansion. Creates cytokine space.",
+                citation: "Turtle CJ, et al. CD19 CAR-T cells of defined CD4+:CD8+ composition in adult B cell ALL patients. J Clin Invest. 2016;126(6):2123-38.",
+                pmid: "27111235",
+                doi: "10.1172/JCI85309"
+            },
+            {
+                type: "bmt",
+                typeLabel: "Infections",
+                difficulty: "lymphodepleting",
+                question: "What is the timing and purpose of CMV prophylaxis after allogeneic transplant?",
+                options: [
+                    "Acyclovir for the first 100 days to prevent CMV reactivation",
+                    "Letermovir for the first 100 days in CMV-seropositive patients",
+                    "Ganciclovir for all patients regardless of serostatus",
+                    "CMV prophylaxis is not recommended; monitor and treat preemptively"
+                ],
+                correct: 1,
+                explanation: "Letermovir is approved for CMV prophylaxis through day 100 post-transplant in CMV-seropositive recipients. It has significantly reduced CMV reactivation rates. Alternative is preemptive therapy based on weekly CMV PCR monitoring.",
+                keyPoint: "Letermovir prophylaxis through D+100 for CMV R+ patients. Alternative: preemptive monitoring.",
+                citation: "Marty FM, et al. Letermovir Prophylaxis for Cytomegalovirus in Hematopoietic-Cell Transplantation. N Engl J Med. 2017;377(25):2433-2444.",
+                pmid: "29211658",
+                doi: "10.1056/NEJMoa1706640"
+            },
+            {
+                type: "engraft",
+                typeLabel: "Cord Blood",
+                difficulty: "mac",
+                question: "What is the advantage of using double umbilical cord blood transplantation?",
+                options: [
+                    "Faster engraftment compared to single cord",
+                    "Higher total cell dose leading to engraftment in adults",
+                    "Complete prevention of GVHD",
+                    "Guaranteed dual-lineage chimerism"
+                ],
+                correct: 1,
+                explanation: "Double cord blood transplant provides higher total nucleated cell dose, overcoming the cell dose limitation of single cord units for adult recipients. Interestingly, one cord typically 'wins' and becomes the dominant graft by day 100, though both may contribute early.",
+                keyPoint: "Double cord = higher cell dose for adults. One unit typically dominates long-term.",
+                citation: "Barker JN, et al. Transplantation of 2 partially HLA-matched umbilical cord blood units to enhance engraftment in adults. Blood. 2005;105(3):1343-7.",
+                pmid: "15466923",
+                doi: "10.1182/blood-2004-07-2717"
+            },
+            {
+                type: "gvhd",
+                typeLabel: "Chronic GVHD",
+                difficulty: "tbi",
+                question: "What is the significance of bronchiolitis obliterans syndrome (BOS) in chronic GVHD?",
+                options: [
+                    "It is reversible with systemic steroids",
+                    "It is the only FDA-approved diagnostic criterion for chronic GVHD",
+                    "It represents irreversible small airway fibrosis requiring aggressive early intervention",
+                    "It is prevented by calcineurin inhibitor prophylaxis"
+                ],
+                correct: 2,
+                explanation: "BOS represents irreversible fibrotic obliteration of small airways and is a severe manifestation of chronic GVHD. Early detection through serial PFTs is crucial as established BOS responds poorly to treatment. FAM (fluticasone/azithromycin/montelukast) may slow progression.",
+                keyPoint: "BOS = irreversible airway fibrosis. Monitor PFTs for early detection. FAM may help.",
+                citation: "Williams KM, et al. Bronchiolitis obliterans syndrome after allogeneic hematopoietic stem cell transplantation. JAMA. 2015;313(19):2029-2030.",
+                pmid: "26010640",
+                doi: "10.1001/jama.2015.1707"
+            }
+        ];
+
+        // ============ GAME STATE ============
+        let gameState = {
+            currentQuestion: 0,
+            score: 0,
+            streak: 0,
+            maxStreak: 0,
+            correct: 0,
+            lives: 3,
+            difficulty: null,
+            filteredQuestions: [],
+            answered: false,
+            volume: 50,
+            muted: false
+        };
+
+        // ============ AUDIO SYSTEM ============
+        let audioContext = null;
+
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        function getVolume() {
+            return gameState.muted ? 0 : gameState.volume / 100;
+        }
+
+        // Centipede-style background music
+        const centipedeMelody = [
+            196, 220, 247, 262, 294, 330, 349, 392,
+            440, 392, 349, 330, 294, 262, 247, 220,
+            196, 185, 175, 165, 156, 147, 139, 131,
+            123, 131, 139, 147, 156, 165, 175, 185
+        ];
+
+        const centipedeBass = [
+            98, 98, 110, 110, 123, 123, 131, 131,
+            147, 147, 131, 131, 123, 123, 110, 110,
+            98, 98, 92, 92, 87, 87, 82, 82,
+            78, 78, 82, 82, 87, 87, 92, 92
+        ];
+
+        let musicPlaying = false;
+        let musicInterval = null;
+        let currentBeat = 0;
+
+        function startMusic() {
+            if (musicPlaying || gameState.muted) return;
+            musicPlaying = true;
+
+            musicInterval = setInterval(() => {
+                if (!musicPlaying) return;
+
+                try {
+                    const ctx = initAudio();
+                    const vol = getVolume();
+                    if (vol === 0) return;
+
+                    // Fast arpeggio melody (Centipede characteristic)
+                    const osc1 = ctx.createOscillator();
+                    const gain1 = ctx.createGain();
+                    osc1.type = 'square';
+                    osc1.connect(gain1);
+                    gain1.connect(ctx.destination);
+                    osc1.frequency.value = centipedeMelody[currentBeat % centipedeMelody.length];
+                    gain1.gain.setValueAtTime(0.04 * vol, ctx.currentTime);
+                    gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+                    osc1.start(ctx.currentTime);
+                    osc1.stop(ctx.currentTime + 0.08);
+
+                    // Bass line
+                    if (currentBeat % 2 === 0) {
+                        const osc2 = ctx.createOscillator();
+                        const gain2 = ctx.createGain();
+                        osc2.type = 'triangle';
+                        osc2.connect(gain2);
+                        gain2.connect(ctx.destination);
+                        osc2.frequency.value = centipedeBass[(currentBeat / 2) % centipedeBass.length];
+                        gain2.gain.setValueAtTime(0.06 * vol, ctx.currentTime);
+                        gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+                        osc2.start(ctx.currentTime);
+                        osc2.stop(ctx.currentTime + 0.12);
+                    }
+
+                    // Percussion hit
+                    if (currentBeat % 4 === 0) {
+                        const noise = ctx.createOscillator();
+                        const noiseGain = ctx.createGain();
+                        noise.type = 'sawtooth';
+                        noise.connect(noiseGain);
+                        noiseGain.connect(ctx.destination);
+                        noise.frequency.value = 60;
+                        noiseGain.gain.setValueAtTime(0.03 * vol, ctx.currentTime);
+                        noiseGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                        noise.start(ctx.currentTime);
+                        noise.stop(ctx.currentTime + 0.05);
+                    }
+
+                    currentBeat++;
+                } catch(e) {}
+            }, 80); // Faster tempo for Centipede feel
+        }
+
+        function stopMusic() {
+            musicPlaying = false;
+            if (musicInterval) {
+                clearInterval(musicInterval);
+                musicInterval = null;
+            }
+        }
+
+        // Sound effects
+        function playShootSound() {
+            if (gameState.muted) return;
+            try {
+                const ctx = initAudio();
+                const vol = getVolume();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'square';
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(220, ctx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.15 * vol, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.1);
+            } catch(e) {}
+        }
+
+        function playHitSound() {
+            if (gameState.muted) return;
+            try {
+                const ctx = initAudio();
+                const vol = getVolume();
+                // Explosion sound
+                [400, 300, 200, 100].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1 * vol, ctx.currentTime + i * 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.05 + 0.1);
+                    osc.start(ctx.currentTime + i * 0.05);
+                    osc.stop(ctx.currentTime + i * 0.05 + 0.1);
+                });
+            } catch(e) {}
+        }
+
+        function playWrongSound() {
+            if (gameState.muted) return;
+            try {
+                const ctx = initAudio();
+                const vol = getVolume();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.setValueAtTime(200, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.15 * vol, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.3);
+            } catch(e) {}
+        }
+
+        function playBonusSound() {
+            if (gameState.muted) return;
+            try {
+                const ctx = initAudio();
+                const vol = getVolume();
+                [523, 659, 784, 1047].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.12 * vol, ctx.currentTime + i * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.2);
+                    osc.start(ctx.currentTime + i * 0.1);
+                    osc.stop(ctx.currentTime + i * 0.1 + 0.2);
+                });
+            } catch(e) {}
+        }
+
+        function playGameOverSound() {
+            if (gameState.muted) return;
+            try {
+                const ctx = initAudio();
+                const vol = getVolume();
+                [392, 330, 262, 196, 131].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1 * vol, ctx.currentTime + i * 0.15);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.3);
+                    osc.start(ctx.currentTime + i * 0.15);
+                    osc.stop(ctx.currentTime + i * 0.15 + 0.3);
+                });
+            } catch(e) {}
+        }
+
+        function playVictorySound() {
+            if (gameState.muted) return;
+            try {
+                const ctx = initAudio();
+                const vol = getVolume();
+                const melody = [523, 587, 659, 784, 880, 1047];
+                melody.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1 * vol, ctx.currentTime + i * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.12 + 0.25);
+                    osc.start(ctx.currentTime + i * 0.12);
+                    osc.stop(ctx.currentTime + i * 0.12 + 0.25);
+                });
+            } catch(e) {}
+        }
+
+        // ============ UI FUNCTIONS ============
+        function toggleMute() {
+            gameState.muted = !gameState.muted;
+            const btn = document.getElementById('volumeBtn');
+            btn.innerHTML = gameState.muted ? '&#128263;' : '&#128266;';
+
+            if (gameState.muted) {
+                stopMusic();
+            } else if (document.getElementById('gameScreen').classList.contains('active')) {
+                startMusic();
+            }
+            saveSettings();
+        }
+
+        function updateVolume() {
+            gameState.volume = parseInt(document.getElementById('volumeSlider').value);
+            saveSettings();
+        }
+
+        function saveSettings() {
+            localStorage.setItem('cellularCentipede-volume', gameState.volume);
+            localStorage.setItem('cellularCentipede-muted', gameState.muted);
+        }
+
+        function loadSettings() {
+            const savedVolume = localStorage.getItem('cellularCentipede-volume');
+            const savedMuted = localStorage.getItem('cellularCentipede-muted');
+
+            if (savedVolume !== null) {
+                gameState.volume = parseInt(savedVolume);
+                document.getElementById('volumeSlider').value = gameState.volume;
+            }
+            if (savedMuted !== null) {
+                gameState.muted = savedMuted === 'true';
+                document.getElementById('volumeBtn').innerHTML = gameState.muted ? '&#128263;' : '&#128266;';
+            }
+        }
+
+        // ============ VISUAL EFFECTS ============
+        function createStarfield() {
+            const container = document.getElementById('starfield');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = (Math.random() * 3 + 1) + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(star);
+            }
+        }
+
+        function createMushrooms() {
+            const container = document.getElementById('mushroomField');
+            for (let i = 0; i < 15; i++) {
+                const mushroom = document.createElement('div');
+                mushroom.className = 'mushroom';
+                mushroom.style.left = (i * 7 + Math.random() * 3) + '%';
+                mushroom.innerHTML = `
+                    <div class="mushroom-cap"></div>
+                    <div class="mushroom-stem"></div>
+                `;
+                container.appendChild(mushroom);
+            }
+        }
+
+        function createCentipede() {
+            const centipede = document.getElementById('centipede');
+            centipede.innerHTML = '';
+            for (let i = 0; i < 12; i++) {
+                const segment = document.createElement('div');
+                segment.className = 'segment';
+                segment.innerHTML = '<div class="leg"></div><div class="leg"></div>';
+                segment.style.animationDelay = (i * 0.05) + 's';
+                centipede.appendChild(segment);
+            }
+        }
+
+        function showShootEffect() {
+            const effect = document.createElement('div');
+            effect.className = 'shoot-effect';
+            document.body.appendChild(effect);
+            playShootSound();
+            setTimeout(() => effect.remove(), 400);
+        }
+
+        function showHitEffect(isCorrect) {
+            const effect = document.createElement('div');
+            effect.className = 'hit-effect';
+            effect.textContent = isCorrect ? '💥' : '💔';
+            document.body.appendChild(effect);
+            setTimeout(() => effect.remove(), 600);
+        }
+
+        function showBonusPopup(text) {
+            const popup = document.createElement('div');
+            popup.className = 'bonus-popup';
+            popup.textContent = text;
+            document.body.appendChild(popup);
+            playBonusSound();
+            setTimeout(() => popup.remove(), 1000);
+        }
+
+        // ============ GAME LOGIC ============
+        function selectDifficulty(diff) {
+            gameState.difficulty = diff;
+            document.querySelectorAll('.diff-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelector(`.diff-btn.${diff}`).classList.add('selected');
+            document.getElementById('startBtn').disabled = false;
+        }
+
+        function filterQuestions() {
+            let filtered = questions.filter(q => q.difficulty === gameState.difficulty);
+            // Shuffle questions
+            for (let i = filtered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+            }
+            // Take 15 questions max
+            return filtered.slice(0, 15);
+        }
+
+        function startGame() {
+            gameState.filteredQuestions = filterQuestions();
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.streak = 0;
+            gameState.maxStreak = 0;
+            gameState.correct = 0;
+            gameState.lives = 3;
+            gameState.answered = false;
+
+            showScreen('gameScreen');
+            startMusic();
+            updateStats();
+            showQuestion();
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.game-screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function updateStats() {
+            document.getElementById('score').textContent = gameState.score;
+
+            const streakEl = document.getElementById('streak');
+            streakEl.textContent = gameState.streak;
+            if (gameState.streak >= 3) {
+                streakEl.classList.add('streak-fire');
+            } else {
+                streakEl.classList.remove('streak-fire');
+            }
+
+            document.getElementById('progress').textContent =
+                `${gameState.currentQuestion + 1}/${gameState.filteredQuestions.length}`;
+
+            // Update progress bar
+            const progress = ((gameState.currentQuestion) / gameState.filteredQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+
+            // Update lives
+            const livesContainer = document.getElementById('livesDisplay');
+            livesContainer.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                const life = document.createElement('span');
+                life.className = 'life-icon' + (i >= gameState.lives ? ' lost' : '');
+                life.textContent = '💙';
+                livesContainer.appendChild(life);
+            }
+        }
+
+        function showQuestion() {
+            if (gameState.currentQuestion >= gameState.filteredQuestions.length) {
+                endGame();
+                return;
+            }
+
+            const q = gameState.filteredQuestions[gameState.currentQuestion];
+            gameState.answered = false;
+
+            // Question type badge
+            const typeClass = `type-${q.type}`;
+            const difficultyLabels = {
+                'lymphodepleting': 'LYMPHO',
+                'ric': 'RIC',
+                'mac': 'MAC',
+                'tbi': 'LETHAL TBI'
+            };
+            document.getElementById('questionTypeContainer').innerHTML = `
+                <span class="question-type ${typeClass}">${q.typeLabel}</span>
+                <span class="difficulty-badge ${q.difficulty}">${difficultyLabels[q.difficulty] || q.difficulty}</span>
+            `;
+
+            document.getElementById('questionNumber').textContent =
+                `SEGMENT ${gameState.currentQuestion + 1} OF ${gameState.filteredQuestions.length}`;
+            document.getElementById('questionText').textContent = q.question;
+
+            // Options
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'option';
+                optionEl.innerHTML = `
+                    <span class="option-letter">${letters[index]}</span>
+                    <span class="option-text">${option}</span>
+                `;
+                optionEl.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(optionEl);
+            });
+
+            // Hide explanation
+            document.getElementById('explanationPanel').classList.remove('show');
+            document.getElementById('nextBtn').classList.remove('show');
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (gameState.answered) return;
+            gameState.answered = true;
+
+            showShootEffect();
+
+            const q = gameState.filteredQuestions[gameState.currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const isCorrect = selectedIndex === q.correct;
+
+            setTimeout(() => {
+                options.forEach((opt, i) => {
+                    opt.classList.add('disabled');
+                    if (i === q.correct) {
+                        opt.classList.add('correct');
+                    } else if (i === selectedIndex && !isCorrect) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+
+                showHitEffect(isCorrect);
+
+                if (isCorrect) {
+                    playHitSound();
+                    gameState.correct++;
+                    gameState.streak++;
+                    if (gameState.streak > gameState.maxStreak) {
+                        gameState.maxStreak = gameState.streak;
+                    }
+
+                    // Calculate score with streak bonus
+                    const basePoints = 100;
+                    const streakBonus = (gameState.streak - 1) * 25;
+                    const points = basePoints + streakBonus;
+                    gameState.score += points;
+
+                    if (gameState.streak >= 3) {
+                        showBonusPopup(`🔥 ${gameState.streak}x STREAK! +${points}`);
+                    }
+                } else {
+                    playWrongSound();
+                    gameState.streak = 0;
+                    gameState.lives--;
+
+                    if (gameState.lives <= 0) {
+                        setTimeout(() => {
+                            playGameOverSound();
+                            endGame();
+                        }, 1500);
+                        return;
+                    }
+                }
+
+                updateStats();
+
+                // Show explanation
+                setTimeout(() => {
+                    document.getElementById('explanationText').textContent = q.explanation;
+                    document.getElementById('keyPoint').innerHTML = `<strong>KEY POINT:</strong> ${q.keyPoint}`;
+                    document.getElementById('citation').innerHTML = `📚 ${q.citation}` + renderReferenceLinks(q);
+                    document.getElementById('explanationPanel').classList.add('show');
+                    document.getElementById('nextBtn').classList.add('show');
+                }, 800);
+            }, 400);
+        }
+
+        function nextQuestion() {
+            gameState.currentQuestion++;
+            if (gameState.currentQuestion >= gameState.filteredQuestions.length) {
+                endGame();
+            } else {
+                showQuestion();
+                updateStats();
+            }
+        }
+
+        function endGame() {
+            stopMusic();
+
+            const total = gameState.filteredQuestions.length;
+            const percent = Math.round((gameState.correct / total) * 100);
+
+            // Save high score
+            const currentHigh = localStorage.getItem('cellularCentipedeHighScore') || 0;
+            if (percent > parseInt(currentHigh)) {
+                localStorage.setItem('cellularCentipedeHighScore', percent + '%');
+            }
+
+            // Determine result tier
+            let titleText, titleClass;
+            if (percent >= 90) {
+                titleText = '🏆 TRANSPLANT MASTER!';
+                titleClass = 'excellent';
+                playVictorySound();
+            } else if (percent >= 70) {
+                titleText = '✅ SUCCESSFUL ENGRAFTMENT!';
+                titleClass = 'good';
+                playVictorySound();
+            } else if (percent >= 50) {
+                titleText = '⚠️ PARTIAL RESPONSE';
+                titleClass = 'fair';
+            } else {
+                titleText = '❌ GRAFT FAILURE';
+                titleClass = 'poor';
+            }
+
+            document.getElementById('resultsTitle').textContent = titleText;
+            document.getElementById('resultsTitle').className = 'results-title ' + titleClass;
+
+            // Animate score circle
+            const circle = document.getElementById('scoreCircle');
+            circle.style.background = `conic-gradient(var(--centipede-green) ${percent * 3.6}deg, #333 0deg)`;
+
+            document.getElementById('finalPercent').textContent = percent + '%';
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalCorrect').textContent = `${gameState.correct}/${total}`;
+            document.getElementById('maxStreak').textContent = gameState.maxStreak;
+            document.getElementById('finalLives').textContent = gameState.lives;
+
+            showScreen('resultsScreen');
+        }
+
+        function playAgain() {
+            showScreen('startScreen');
+            document.querySelectorAll('.diff-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('startBtn').disabled = true;
+            gameState.difficulty = null;
+        }
+
+        function goBack() {
+            stopMusic();
+            window.location.href = '../HematologyArcade/index.html';
+        }
+
+        // ============ INITIALIZATION ============
+        document.addEventListener('DOMContentLoaded', () => {
+            createStarfield();
+            createMushrooms();
+            createCentipede();
+            loadSettings();
+
+            document.getElementById('volumeSlider').addEventListener('input', updateVolume);
+
+            // Start music on first interaction
+            document.addEventListener('click', function initMusic() {
+                if (!musicPlaying && !gameState.muted &&
+                    document.getElementById('gameScreen').classList.contains('active')) {
+                    startMusic();
+                }
+            }, { once: true });
+        });
+    </script>
+</body>
+</html>

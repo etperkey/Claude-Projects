@@ -1,0 +1,3734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALL Burger Time - Hematology Arcade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --burger-brown: #8B4513;
+            --burger-orange: #FF8C00;
+            --burger-red: #DC143C;
+            --burger-green: #228B22;
+            --burger-yellow: #FFD700;
+            --burger-cream: #FFFACD;
+            --arcade-dark: #0a0a1a;
+            --arcade-blue: #1a1a3e;
+            --neon-pink: #ff00ff;
+            --neon-cyan: #00ffff;
+            --t-cell-purple: #9932CC;
+            --b-cell-blue: #4169E1;
+            --blast-red: #FF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(135deg, var(--arcade-dark) 0%, var(--arcade-blue) 50%, #2a1a3e 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Burger Time Grid Background */
+        .game-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(139, 69, 19, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 69, 19, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Floating Burger Ingredients */
+        .floating-ingredient {
+            position: fixed;
+            font-size: 24px;
+            opacity: 0.3;
+            animation: floatBurger 20s infinite linear;
+            z-index: 0;
+        }
+
+        @keyframes floatBurger {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        /* Title Screen */
+        .title-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-burger {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: burgerBounce 1s ease-in-out infinite;
+        }
+
+        @keyframes burgerBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .game-title {
+            font-size: 36px;
+            color: var(--burger-orange);
+            text-shadow:
+                4px 4px 0 var(--burger-brown),
+                0 0 20px var(--burger-orange),
+                0 0 40px var(--burger-yellow);
+            margin-bottom: 10px;
+        }
+
+        .game-subtitle {
+            font-size: 14px;
+            color: var(--burger-cream);
+            text-shadow: 0 0 10px var(--burger-cream);
+        }
+
+        .disease-subtitle {
+            font-size: 12px;
+            color: var(--neon-cyan);
+            margin-top: 10px;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* Peter Pepper Character - Classic Burger Time Style */
+        .peter-pepper {
+            position: relative;
+            width: 48px;
+            height: 64px;
+            margin: 20px auto;
+            animation: peterWalk 0.4s steps(2) infinite;
+        }
+
+        @keyframes peterWalk {
+            0%, 100% { transform: translateX(-3px); }
+            50% { transform: translateX(3px); }
+        }
+
+        /* Peter Pepper - Head */
+        .peter-head {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 20px;
+            background: #FFCC99;
+            border-radius: 4px 4px 2px 2px;
+        }
+
+        /* Chef Hat */
+        .peter-hat {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 18px;
+            background: white;
+            border-radius: 4px 4px 0 0;
+            border: 2px solid #DDD;
+        }
+
+        .peter-hat::before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: -2px;
+            width: 32px;
+            height: 6px;
+            background: white;
+            border: 2px solid #DDD;
+            border-top: none;
+        }
+
+        /* Peter Eyes */
+        .peter-eyes {
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .peter-eye {
+            width: 4px;
+            height: 4px;
+            background: #333;
+            border-radius: 50%;
+        }
+
+        /* Peter Body */
+        .peter-body {
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 24px;
+            background: white;
+            border-radius: 2px;
+        }
+
+        /* Peter Apron */
+        .peter-apron {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 18px;
+            height: 20px;
+            background: #4169E1;
+            border-radius: 2px;
+        }
+
+        /* Peter Legs */
+        .peter-legs {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .peter-leg {
+            width: 8px;
+            height: 16px;
+            background: #333;
+            border-radius: 0 0 2px 2px;
+            animation: legMove 0.4s steps(2) infinite;
+        }
+
+        .peter-leg.right {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes legMove {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-2px); }
+        }
+
+        /* Classic Burger Time Enemies */
+        .enemies-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .enemy {
+            position: absolute;
+            animation: enemyFloat 15s linear infinite;
+            opacity: 0.4;
+        }
+
+        @keyframes enemyFloat {
+            0% { transform: translateY(100vh) translateX(0); }
+            25% { transform: translateY(75vh) translateX(20px); }
+            50% { transform: translateY(50vh) translateX(-20px); }
+            75% { transform: translateY(25vh) translateX(10px); }
+            100% { transform: translateY(-100px) translateX(0); }
+        }
+
+        /* Mr. Hot Dog */
+        .mr-hotdog {
+            width: 32px;
+            height: 48px;
+        }
+
+        .hotdog-bun {
+            position: absolute;
+            width: 28px;
+            height: 40px;
+            background: #DEB887;
+            border-radius: 14px;
+            left: 2px;
+            top: 4px;
+        }
+
+        .hotdog-meat {
+            position: absolute;
+            width: 8px;
+            height: 36px;
+            background: #CD5C5C;
+            border-radius: 4px;
+            left: 12px;
+            top: 6px;
+        }
+
+        .hotdog-eyes {
+            position: absolute;
+            top: 12px;
+            left: 6px;
+            width: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .hotdog-eye {
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .hotdog-eye::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: black;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+        }
+
+        .hotdog-feet {
+            position: absolute;
+            bottom: 0;
+            left: 4px;
+            width: 24px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .hotdog-foot {
+            width: 8px;
+            height: 6px;
+            background: #DEB887;
+            border-radius: 0 0 4px 4px;
+        }
+
+        /* Mr. Pickle */
+        .mr-pickle {
+            width: 24px;
+            height: 44px;
+        }
+
+        .pickle-body {
+            position: absolute;
+            width: 20px;
+            height: 36px;
+            background: #228B22;
+            border-radius: 10px;
+            left: 2px;
+            top: 4px;
+        }
+
+        .pickle-bumps {
+            position: absolute;
+            top: 8px;
+            left: 0;
+            width: 24px;
+            height: 24px;
+        }
+
+        .pickle-bump {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #006400;
+            border-radius: 50%;
+        }
+
+        .pickle-eyes {
+            position: absolute;
+            top: 10px;
+            left: 4px;
+            width: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .pickle-eye {
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .pickle-eye::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: black;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+        }
+
+        .pickle-feet {
+            position: absolute;
+            bottom: 0;
+            left: 4px;
+            width: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .pickle-foot {
+            width: 6px;
+            height: 5px;
+            background: #228B22;
+            border-radius: 0 0 3px 3px;
+        }
+
+        /* Mr. Egg */
+        .mr-egg {
+            width: 32px;
+            height: 40px;
+        }
+
+        .egg-white {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            top: 4px;
+            left: 0;
+        }
+
+        .egg-yolk {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #FFD700;
+            border-radius: 50%;
+            top: 12px;
+            left: 8px;
+        }
+
+        .egg-eyes {
+            position: absolute;
+            top: 14px;
+            left: 6px;
+            width: 20px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 1;
+        }
+
+        .egg-eye {
+            width: 5px;
+            height: 5px;
+            background: black;
+            border-radius: 50%;
+        }
+
+        .egg-feet {
+            position: absolute;
+            bottom: 0;
+            left: 8px;
+            width: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .egg-foot {
+            width: 6px;
+            height: 5px;
+            background: #FFD700;
+            border-radius: 0 0 3px 3px;
+        }
+
+        /* Classic Burger Time Platform Background */
+        .game-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-color: #000;
+            background-image:
+                /* Horizontal platforms */
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 80px,
+                    rgba(139, 69, 19, 0.3) 80px,
+                    rgba(139, 69, 19, 0.3) 88px
+                ),
+                /* Vertical ladders */
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 150px,
+                    rgba(0, 191, 255, 0.15) 150px,
+                    rgba(0, 191, 255, 0.15) 158px,
+                    transparent 158px,
+                    transparent 166px,
+                    rgba(0, 191, 255, 0.15) 166px,
+                    rgba(0, 191, 255, 0.15) 174px
+                );
+        }
+
+        /* Menu Container */
+        .menu-container {
+            background: linear-gradient(180deg, rgba(139, 69, 19, 0.3) 0%, rgba(0,0,0,0.5) 100%);
+            border: 4px solid var(--burger-orange);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow:
+                0 0 30px rgba(255, 140, 0, 0.3),
+                inset 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .menu-title {
+            font-size: 16px;
+            color: var(--burger-yellow);
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px var(--burger-yellow);
+        }
+
+        /* Difficulty Selection */
+        .difficulty-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .difficulty-btn {
+            background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%);
+            border: 3px solid;
+            border-radius: 10px;
+            padding: 15px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .difficulty-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .difficulty-btn.intern {
+            border-color: #50C878;
+            color: #50C878;
+        }
+
+        .difficulty-btn.resident {
+            border-color: #4169E1;
+            color: #4169E1;
+        }
+
+        .difficulty-btn.fellow {
+            border-color: #FF8C00;
+            color: #FF8C00;
+        }
+
+        .difficulty-btn.attending {
+            border-color: #DC143C;
+            color: #DC143C;
+        }
+
+        .difficulty-btn.stock {
+            grid-column: span 2;
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+        }
+
+        .difficulty-label {
+            font-size: 12px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .difficulty-desc {
+            font-size: 8px;
+            opacity: 0.7;
+        }
+
+        /* Cell Type Selection */
+        .cell-type-section {
+            margin-bottom: 25px;
+        }
+
+        .cell-type-title {
+            font-size: 10px;
+            color: var(--burger-cream);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .cell-type-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .cell-type-btn {
+            background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%);
+            border: 3px solid;
+            border-radius: 10px;
+            padding: 12px 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .cell-type-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .cell-type-btn.b-cell {
+            border-color: var(--b-cell-blue);
+            color: var(--b-cell-blue);
+        }
+
+        .cell-type-btn.t-cell {
+            border-color: var(--t-cell-purple);
+            color: var(--t-cell-purple);
+        }
+
+        .cell-type-btn.both {
+            border-color: var(--burger-yellow);
+            color: var(--burger-yellow);
+        }
+
+        .cell-type-btn.selected {
+            box-shadow: 0 0 20px currentColor;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .cell-type-icon {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .cell-type-label {
+            font-size: 9px;
+        }
+
+        /* Start Button */
+        .start-btn {
+            width: 100%;
+            background: linear-gradient(180deg, var(--burger-orange) 0%, var(--burger-brown) 100%);
+            border: 4px solid var(--burger-yellow);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 2px 2px 0 var(--burger-brown);
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--burger-orange);
+        }
+
+        /* Volume Control */
+        .volume-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .volume-btn {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid var(--burger-orange);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--burger-orange);
+            transition: all 0.3s ease;
+        }
+
+        .volume-btn:hover {
+            box-shadow: 0 0 15px var(--burger-orange);
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid var(--burger-orange);
+            border-radius: 10px;
+            padding: 10px 15px;
+            color: var(--burger-orange);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            box-shadow: 0 0 15px var(--burger-orange);
+        }
+
+        /* Game Screen */
+        .game-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 80px 20px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-screen.active {
+            display: flex;
+        }
+
+        /* Game HUD */
+        .game-hud {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: linear-gradient(180deg, rgba(139, 69, 19, 0.4) 0%, rgba(0,0,0,0.6) 100%);
+            border: 3px solid var(--burger-orange);
+            border-radius: 10px;
+        }
+
+        .hud-item {
+            text-align: center;
+        }
+
+        .hud-label {
+            font-size: 8px;
+            color: var(--burger-cream);
+            margin-bottom: 5px;
+        }
+
+        .hud-value {
+            font-size: 14px;
+            color: var(--burger-yellow);
+            text-shadow: 0 0 10px var(--burger-yellow);
+        }
+
+        .hud-lives {
+            font-size: 16px;
+        }
+
+        /* Burger Progress */
+        .burger-progress {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .burger-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .burger-layer {
+            font-size: 30px;
+            transition: all 0.3s ease;
+            opacity: 0.3;
+        }
+
+        .burger-layer.active {
+            opacity: 1;
+            animation: layerDrop 0.5s ease;
+        }
+
+        @keyframes layerDrop {
+            0% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Question Card */
+        .question-card {
+            background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(20,20,40,0.9) 100%);
+            border: 4px solid var(--burger-orange);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            width: 95%;
+            box-shadow: 0 0 40px rgba(255, 140, 0, 0.2);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--burger-brown);
+        }
+
+        .question-type {
+            font-size: 10px;
+            padding: 5px 12px;
+            border-radius: 15px;
+            background: rgba(255, 140, 0, 0.2);
+            border: 2px solid var(--burger-orange);
+            color: var(--burger-orange);
+        }
+
+        .cell-badge {
+            font-size: 10px;
+            padding: 5px 12px;
+            border-radius: 15px;
+        }
+
+        .cell-badge.b-cell {
+            background: rgba(65, 105, 225, 0.2);
+            border: 2px solid var(--b-cell-blue);
+            color: var(--b-cell-blue);
+        }
+
+        .cell-badge.t-cell {
+            background: rgba(153, 50, 204, 0.2);
+            border: 2px solid var(--t-cell-purple);
+            color: var(--t-cell-purple);
+        }
+
+        .cell-badge.both {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid var(--burger-yellow);
+            color: var(--burger-yellow);
+        }
+
+        .difficulty-badge {
+            font-size: 8px;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+
+        .difficulty-badge.intern { background: #50C878; color: black; }
+        .difficulty-badge.resident { background: #4169E1; color: white; }
+        .difficulty-badge.fellow { background: #FF8C00; color: black; }
+        .difficulty-badge.attending { background: #DC143C; color: white; }
+
+        .question-text {
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: var(--burger-cream);
+        }
+
+        /* Answer Options */
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: linear-gradient(180deg, rgba(139, 69, 19, 0.2) 0%, rgba(0,0,0,0.4) 100%);
+            border: 3px solid var(--burger-brown);
+            border-radius: 12px;
+            padding: 15px 20px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--burger-cream);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .option-btn:hover {
+            border-color: var(--burger-orange);
+            background: linear-gradient(180deg, rgba(255, 140, 0, 0.2) 0%, rgba(0,0,0,0.4) 100%);
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            border-color: #50C878;
+            background: linear-gradient(180deg, rgba(80, 200, 120, 0.3) 0%, rgba(0,0,0,0.4) 100%);
+            box-shadow: 0 0 20px rgba(80, 200, 120, 0.5);
+        }
+
+        .option-btn.incorrect {
+            border-color: #DC143C;
+            background: linear-gradient(180deg, rgba(220, 20, 60, 0.3) 0%, rgba(0,0,0,0.4) 100%);
+        }
+
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .option-letter {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            background: var(--burger-orange);
+            color: black;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 10px;
+        }
+
+        /* Explanation Section */
+        .explanation-section {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(0,0,0,0.4);
+            border: 2px solid var(--burger-yellow);
+            border-radius: 12px;
+        }
+
+        .explanation-section.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .explanation-title {
+            font-size: 12px;
+            color: var(--burger-yellow);
+            margin-bottom: 15px;
+        }
+
+        .explanation-text {
+            font-size: 10px;
+            line-height: 1.8;
+            color: var(--burger-cream);
+            margin-bottom: 15px;
+        }
+
+        .key-point {
+            font-size: 10px;
+            padding: 12px;
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 4px solid var(--burger-yellow);
+            margin-bottom: 15px;
+            color: var(--burger-yellow);
+        }
+
+        .citation {
+            font-size: 0.5em;
+            color: #888;
+            font-style: italic;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        /* Reference Links - matching other games */
+        .ref-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ref-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            background: rgba(255, 140, 0, 0.15);
+            border-radius: 4px;
+            color: #4fc3f7;
+            text-decoration: none;
+            font-size: 1em;
+            font-style: normal;
+            transition: all 0.2s;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+
+        .ref-link:hover {
+            background: rgba(79, 195, 247, 0.3);
+            transform: scale(1.05);
+            border-color: #4fc3f7;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background: linear-gradient(180deg, var(--burger-orange) 0%, var(--burger-brown) 100%);
+            border: 3px solid var(--burger-yellow);
+            border-radius: 10px;
+            padding: 15px 30px;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--burger-orange);
+        }
+
+        /* End Screen */
+        .end-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .end-screen.active {
+            display: flex;
+        }
+
+        .end-burger {
+            font-size: 100px;
+            margin-bottom: 30px;
+            animation: burgerSpin 2s ease-in-out infinite;
+        }
+
+        @keyframes burgerSpin {
+            0%, 100% { transform: rotate(-5deg) scale(1); }
+            50% { transform: rotate(5deg) scale(1.1); }
+        }
+
+        .end-title {
+            font-size: 28px;
+            color: var(--burger-orange);
+            text-shadow: 0 0 20px var(--burger-orange);
+            margin-bottom: 20px;
+        }
+
+        .end-stats {
+            background: rgba(0,0,0,0.5);
+            border: 3px solid var(--burger-orange);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+
+        .stat-label {
+            color: var(--burger-cream);
+        }
+
+        .stat-value {
+            color: var(--burger-yellow);
+        }
+
+        .new-record {
+            color: var(--neon-pink);
+            animation: pulse 0.5s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .end-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .end-btn {
+            background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%);
+            border: 3px solid var(--burger-orange);
+            border-radius: 10px;
+            padding: 15px 25px;
+            color: var(--burger-orange);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .end-btn:hover {
+            box-shadow: 0 0 20px var(--burger-orange);
+            transform: scale(1.05);
+        }
+
+        .end-btn.primary {
+            background: linear-gradient(180deg, var(--burger-orange) 0%, var(--burger-brown) 100%);
+            color: white;
+        }
+
+        /* Enemy Characters */
+        .enemy-container {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .enemy {
+            font-size: 30px;
+            position: absolute;
+            animation: enemyFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes enemyFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(10deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .game-title {
+                font-size: 24px;
+            }
+
+            .logo-burger {
+                font-size: 60px;
+            }
+
+            .difficulty-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .difficulty-btn.stock {
+                grid-column: span 1;
+            }
+
+            .cell-type-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .question-text {
+                font-size: 11px;
+            }
+
+            .option-btn {
+                font-size: 9px;
+                padding: 12px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-title {
+                font-size: 18px;
+            }
+
+            .game-hud {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .question-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="game-background"></div>
+
+    <!-- Classic Burger Time Enemies -->
+    <div class="enemies-container">
+        <!-- Mr. Hot Dogs -->
+        <div class="enemy mr-hotdog" style="left: 5%; animation-delay: 0s;">
+            <div class="hotdog-bun"></div>
+            <div class="hotdog-meat"></div>
+            <div class="hotdog-eyes"><div class="hotdog-eye"></div><div class="hotdog-eye"></div></div>
+            <div class="hotdog-feet"><div class="hotdog-foot"></div><div class="hotdog-foot"></div></div>
+        </div>
+        <div class="enemy mr-hotdog" style="left: 35%; animation-delay: 5s;">
+            <div class="hotdog-bun"></div>
+            <div class="hotdog-meat"></div>
+            <div class="hotdog-eyes"><div class="hotdog-eye"></div><div class="hotdog-eye"></div></div>
+            <div class="hotdog-feet"><div class="hotdog-foot"></div><div class="hotdog-foot"></div></div>
+        </div>
+        <div class="enemy mr-hotdog" style="left: 70%; animation-delay: 10s;">
+            <div class="hotdog-bun"></div>
+            <div class="hotdog-meat"></div>
+            <div class="hotdog-eyes"><div class="hotdog-eye"></div><div class="hotdog-eye"></div></div>
+            <div class="hotdog-feet"><div class="hotdog-foot"></div><div class="hotdog-foot"></div></div>
+        </div>
+
+        <!-- Mr. Pickles -->
+        <div class="enemy mr-pickle" style="left: 15%; animation-delay: 3s;">
+            <div class="pickle-body"></div>
+            <div class="pickle-eyes"><div class="pickle-eye"></div><div class="pickle-eye"></div></div>
+            <div class="pickle-feet"><div class="pickle-foot"></div><div class="pickle-foot"></div></div>
+        </div>
+        <div class="enemy mr-pickle" style="left: 50%; animation-delay: 8s;">
+            <div class="pickle-body"></div>
+            <div class="pickle-eyes"><div class="pickle-eye"></div><div class="pickle-eye"></div></div>
+            <div class="pickle-feet"><div class="pickle-foot"></div><div class="pickle-foot"></div></div>
+        </div>
+        <div class="enemy mr-pickle" style="left: 85%; animation-delay: 13s;">
+            <div class="pickle-body"></div>
+            <div class="pickle-eyes"><div class="pickle-eye"></div><div class="pickle-eye"></div></div>
+            <div class="pickle-feet"><div class="pickle-foot"></div><div class="pickle-foot"></div></div>
+        </div>
+
+        <!-- Mr. Eggs -->
+        <div class="enemy mr-egg" style="left: 25%; animation-delay: 2s;">
+            <div class="egg-white"></div>
+            <div class="egg-yolk"></div>
+            <div class="egg-eyes"><div class="egg-eye"></div><div class="egg-eye"></div></div>
+            <div class="egg-feet"><div class="egg-foot"></div><div class="egg-foot"></div></div>
+        </div>
+        <div class="enemy mr-egg" style="left: 60%; animation-delay: 7s;">
+            <div class="egg-white"></div>
+            <div class="egg-yolk"></div>
+            <div class="egg-eyes"><div class="egg-eye"></div><div class="egg-eye"></div></div>
+            <div class="egg-feet"><div class="egg-foot"></div><div class="egg-foot"></div></div>
+        </div>
+        <div class="enemy mr-egg" style="left: 90%; animation-delay: 12s;">
+            <div class="egg-white"></div>
+            <div class="egg-yolk"></div>
+            <div class="egg-eyes"><div class="egg-eye"></div><div class="egg-eye"></div></div>
+            <div class="egg-feet"><div class="egg-foot"></div><div class="egg-foot"></div></div>
+        </div>
+    </div>
+
+    <!-- Volume Control -->
+    <button class="volume-btn" id="volumeBtn" onclick="toggleVolume()">&#128266;</button>
+
+    <!-- Back Button -->
+    <a href="../HematologyArcade/index.html" class="back-btn">&#8592; ARCADE</a>
+
+    <!-- Title Screen -->
+    <div class="title-screen" id="titleScreen">
+        <div class="game-logo">
+            <div class="logo-burger">&#127828;</div>
+            <h1 class="game-title">ALL BURGER TIME</h1>
+            <p class="game-subtitle">Build Your Knowledge, One Layer at a Time</p>
+            <p class="disease-subtitle">Adult Acute Lymphoblastic Leukemia (T-ALL & B-ALL)</p>
+        </div>
+
+        <div class="peter-pepper">
+            <div class="peter-head">
+                <div class="peter-hat"></div>
+                <div class="peter-eyes">
+                    <div class="peter-eye"></div>
+                    <div class="peter-eye"></div>
+                </div>
+            </div>
+            <div class="peter-body">
+                <div class="peter-apron"></div>
+            </div>
+            <div class="peter-legs">
+                <div class="peter-leg"></div>
+                <div class="peter-leg right"></div>
+            </div>
+        </div>
+
+        <div class="menu-container">
+            <h2 class="menu-title">SELECT YOUR ORDER</h2>
+
+            <!-- Cell Type Selection -->
+            <div class="cell-type-section">
+                <p class="cell-type-title">CHOOSE CELL LINEAGE</p>
+                <div class="cell-type-grid">
+                    <button class="cell-type-btn b-cell selected" data-type="b-cell" onclick="selectCellType('b-cell')">
+                        <span class="cell-type-icon">&#127309;</span>
+                        <span class="cell-type-label">B-ALL</span>
+                    </button>
+                    <button class="cell-type-btn t-cell" data-type="t-cell" onclick="selectCellType('t-cell')">
+                        <span class="cell-type-icon">&#128156;</span>
+                        <span class="cell-type-label">T-ALL</span>
+                    </button>
+                    <button class="cell-type-btn both" data-type="both" onclick="selectCellType('both')">
+                        <span class="cell-type-icon">&#127828;</span>
+                        <span class="cell-type-label">BOTH</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Difficulty Selection -->
+            <div class="difficulty-grid">
+                <button class="difficulty-btn intern" data-difficulty="intern" onclick="selectDifficulty('intern')">
+                    <span class="difficulty-label">INTERN</span>
+                    <span class="difficulty-desc">Basic Concepts</span>
+                </button>
+                <button class="difficulty-btn resident" data-difficulty="resident" onclick="selectDifficulty('resident')">
+                    <span class="difficulty-label">RESIDENT</span>
+                    <span class="difficulty-desc">Diagnostics</span>
+                </button>
+                <button class="difficulty-btn fellow" data-difficulty="fellow" onclick="selectDifficulty('fellow')">
+                    <span class="difficulty-label">FELLOW</span>
+                    <span class="difficulty-desc">Risk & Therapy</span>
+                </button>
+                <button class="difficulty-btn attending" data-difficulty="attending" onclick="selectDifficulty('attending')">
+                    <span class="difficulty-label">ATTENDING</span>
+                    <span class="difficulty-desc">Expert Cases</span>
+                </button>
+                <button class="difficulty-btn stock" data-difficulty="stock" onclick="selectDifficulty('stock')">
+                    <span class="difficulty-label">&#127922; CHEF'S SPECIAL</span>
+                    <span class="difficulty-desc">Random Mix</span>
+                </button>
+            </div>
+
+            <button class="start-btn" onclick="startGame()">
+                &#127828; START COOKING &#127828;
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div class="game-screen" id="gameScreen">
+        <div class="game-hud">
+            <div class="hud-item">
+                <div class="hud-label">SCORE</div>
+                <div class="hud-value" id="scoreValue">0</div>
+            </div>
+            <div class="hud-item">
+                <div class="hud-label">QUESTION</div>
+                <div class="hud-value"><span id="currentQ">1</span>/<span id="totalQ">10</span></div>
+            </div>
+            <div class="hud-item">
+                <div class="hud-label">LIVES</div>
+                <div class="hud-value hud-lives" id="livesDisplay">&#127828;&#127828;&#127828;</div>
+            </div>
+            <div class="hud-item">
+                <div class="hud-label">STREAK</div>
+                <div class="hud-value" id="streakValue">0&#128293;</div>
+            </div>
+        </div>
+
+        <!-- Burger Progress -->
+        <div class="burger-progress">
+            <div class="burger-stack" id="burgerStack">
+                <div class="burger-layer" data-layer="10">&#127838;</div>
+                <div class="burger-layer" data-layer="9">&#129361;</div>
+                <div class="burger-layer" data-layer="8">&#127813;</div>
+                <div class="burger-layer" data-layer="7">&#129472;</div>
+                <div class="burger-layer" data-layer="6">&#129385;</div>
+                <div class="burger-layer" data-layer="5">&#127830;</div>
+                <div class="burger-layer" data-layer="4">&#129361;</div>
+                <div class="burger-layer" data-layer="3">&#127813;</div>
+                <div class="burger-layer" data-layer="2">&#129385;</div>
+                <div class="burger-layer" data-layer="1">&#127838;</div>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card" id="questionCard">
+            <div class="question-header">
+                <span class="question-type" id="questionType">DIAGNOSIS</span>
+                <span class="cell-badge b-cell" id="cellBadge">B-ALL</span>
+                <span class="difficulty-badge intern" id="difficultyBadge">INTERN</span>
+            </div>
+
+            <p class="question-text" id="questionText">
+                Loading question...
+            </p>
+
+            <div class="options-grid" id="optionsGrid">
+                <!-- Options will be inserted here -->
+            </div>
+
+            <div class="explanation-section" id="explanationSection">
+                <h3 class="explanation-title">&#127828; Chef's Notes</h3>
+                <p class="explanation-text" id="explanationText"></p>
+                <div class="key-point" id="keyPoint"></div>
+                <div class="citation" id="citation"></div>
+                <button class="next-btn" onclick="nextQuestion()">NEXT INGREDIENT &#8594;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Screen -->
+    <div class="end-screen" id="endScreen">
+        <div class="end-burger">&#127828;</div>
+        <h1 class="end-title" id="endTitle">ORDER COMPLETE!</h1>
+
+        <div class="end-stats">
+            <div class="stat-row">
+                <span class="stat-label">FINAL SCORE</span>
+                <span class="stat-value" id="finalScore">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">CORRECT ANSWERS</span>
+                <span class="stat-value" id="correctCount">0/10</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">BEST STREAK</span>
+                <span class="stat-value" id="bestStreak">0&#128293;</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">HIGH SCORE</span>
+                <span class="stat-value" id="highScore">0</span>
+            </div>
+        </div>
+
+        <div class="end-buttons">
+            <button class="end-btn primary" onclick="restartGame()">&#127828; PLAY AGAIN</button>
+            <a href="../HematologyArcade/index.html" class="end-btn">&#8592; ARCADE</a>
+        </div>
+    </div>
+
+    <script>
+        // ====================================
+        // GAME STATE
+        // ====================================
+        let gameState = {
+            difficulty: 'intern',
+            cellType: 'b-cell',
+            currentQuestion: 0,
+            score: 0,
+            lives: 3,
+            streak: 0,
+            bestStreak: 0,
+            correctAnswers: 0,
+            totalQuestions: 10,
+            musicPlaying: false,
+            isMuted: false,
+            questions: []
+        };
+
+        let audioContext = null;
+        let musicInterval = null;
+        let currentBeat = 0;
+
+        // ====================================
+        // QUESTION DATABASE
+        // ====================================
+        const allQuestions = [
+            // B-ALL INTERN QUESTIONS
+            {
+                cellType: 'b-cell',
+                difficulty: 'intern',
+                type: 'DIAGNOSIS',
+                question: 'What is the MINIMUM blast percentage required in bone marrow or peripheral blood to diagnose Acute Lymphoblastic Leukemia (ALL) according to WHO 2022 criteria?',
+                options: [
+                    '10% blasts',
+                    '20% blasts',
+                    '25% blasts',
+                    '30% blasts'
+                ],
+                correct: 1,
+                explanation: 'According to the WHO 2022 classification, ALL is defined by the presence of ≥20% lymphoblasts in the bone marrow or peripheral blood. However, certain genetic abnormalities (like BCR::ABL1) can define ALL regardless of blast count.',
+                keyPoint: '≥20% lymphoblasts defines ALL, but some genetic abnormalities are diagnostic regardless of blast percentage.',
+                citation: 'Alaggio R, et al. The 5th edition of the World Health Organization Classification of Haematolymphoid Tumours: Lymphoid Neoplasms. Leukemia. 2022;36(7):1720-1748.',
+                pmid: '35732829',
+                doi: '10.1038/s41375-022-01620-2'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'intern',
+                type: 'IMMUNOPHENOTYPE',
+                question: 'Which marker is considered the most sensitive and specific for B-lymphoblast identification in B-ALL?',
+                options: [
+                    'CD19',
+                    'CD10 (CALLA)',
+                    'CD22 (cytoplasmic)',
+                    'TdT'
+                ],
+                correct: 2,
+                explanation: 'Cytoplasmic CD22 (cCD22) is the most sensitive and specific marker for B-lineage commitment and is expressed earlier than CD19. CD19 is very sensitive but less specific. TdT is present in most ALL but not lineage-specific.',
+                keyPoint: 'Cytoplasmic CD22 is the earliest and most specific B-lineage marker; CD19 is sensitive but appears later.',
+                citation: 'Arber DA, et al. The 2016 revision to the World Health Organization classification of myeloid neoplasms and acute leukemia. Blood. 2016;127(20):2391-2405.',
+                pmid: '27069254',
+                doi: '10.1182/blood-2016-03-643544'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'intern',
+                type: 'CLASSIFICATION',
+                question: 'Which B-ALL subtype is associated with the BEST prognosis in adults?',
+                options: [
+                    'BCR::ABL1 positive (Philadelphia chromosome)',
+                    'KMT2A (MLL) rearranged',
+                    'ETV6::RUNX1 (TEL-AML1)',
+                    'Hypodiploid (<44 chromosomes)'
+                ],
+                correct: 2,
+                explanation: 'ETV6::RUNX1 (formerly TEL-AML1) translocation t(12;21) is associated with excellent prognosis, with cure rates >90% in pediatric ALL. While less common in adults, it still carries favorable outcomes. BCR::ABL1, KMT2A rearrangements, and hypodiploidy are high-risk features.',
+                keyPoint: 'ETV6::RUNX1 = favorable; BCR::ABL1, KMT2A, hypodiploidy = adverse prognosis.',
+                citation: 'Moorman AV. New and emerging prognostic and predictive genetic biomarkers in B-cell precursor acute lymphoblastic leukemia. Haematologica. 2016;101(4):407-416.',
+                pmid: '27033238',
+                doi: '10.3324/haematol.2015.141101'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'intern',
+                type: 'EPIDEMIOLOGY',
+                question: 'What percentage of adult acute leukemias are classified as ALL?',
+                options: [
+                    '10-15%',
+                    '20-25%',
+                    '40-50%',
+                    '60-70%'
+                ],
+                correct: 1,
+                explanation: 'ALL accounts for approximately 20-25% of adult acute leukemias, with AML comprising the majority (75-80%). This is in contrast to pediatric populations where ALL is the most common leukemia (75-80% of childhood leukemias).',
+                keyPoint: 'ALL = 20-25% of adult acute leukemias vs. 75-80% of childhood leukemias.',
+                citation: 'Terwilliger T, Abdul-Hay M. Acute lymphoblastic leukemia: a comprehensive review and 2017 update. Blood Cancer J. 2017;7(6):e577.',
+                pmid: '28665419',
+                doi: '10.1038/bcj.2017.53'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'intern',
+                type: 'DIAGNOSIS',
+                question: 'Which cytochemical stain is characteristically NEGATIVE in ALL blasts but positive in AML?',
+                options: [
+                    'Periodic acid-Schiff (PAS)',
+                    'Myeloperoxidase (MPO)',
+                    'Oil Red O',
+                    'Acid phosphatase'
+                ],
+                correct: 1,
+                explanation: 'Myeloperoxidase (MPO) is characteristically negative in ALL and positive in myeloid blasts (AML). PAS can show block positivity in ALL. This distinction is important when flow cytometry is not immediately available.',
+                keyPoint: 'MPO negative = ALL; MPO positive (≥3% blasts) = AML by definition.',
+                citation: 'Swerdlow SH, et al. WHO Classification of Tumours of Haematopoietic and Lymphoid Tissues. 4th ed. IARC; 2017.',
+                pmid: '27069254',
+                doi: '10.1182/blood-2016-03-643544'
+            },
+
+            // B-ALL RESIDENT QUESTIONS
+            {
+                cellType: 'b-cell',
+                difficulty: 'resident',
+                type: 'GENETICS',
+                question: 'In adult B-ALL, what is the approximate frequency of Philadelphia chromosome (BCR::ABL1) positivity, and how does it compare to pediatric ALL?',
+                options: [
+                    '5% in adults, 25% in children',
+                    '25% in adults, 3-5% in children',
+                    '50% in adults, 50% in children',
+                    '10% in adults, 15% in children'
+                ],
+                correct: 1,
+                explanation: 'Philadelphia chromosome (Ph+) ALL occurs in approximately 25% of adult B-ALL cases, increasing with age (up to 50% in patients >50 years). In contrast, Ph+ ALL occurs in only 3-5% of pediatric ALL cases. This has major therapeutic implications.',
+                keyPoint: 'Ph+ ALL: ~25% in adults (increasing with age) vs. 3-5% in children.',
+                citation: 'Fielding AK. Current Therapeutic Strategies in Adult Acute Lymphoblastic Leukemia. Hematol Oncol Clin North Am. 2011;25(6):1255-1279.',
+                pmid: '22093577',
+                doi: '10.1016/j.hoc.2011.09.008'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'resident',
+                type: 'TREATMENT',
+                question: 'Which tyrosine kinase inhibitor is FDA-approved for FIRST-LINE treatment of newly diagnosed Philadelphia chromosome-positive (Ph+) ALL in combination with chemotherapy?',
+                options: [
+                    'Imatinib only',
+                    'Dasatinib',
+                    'Ponatinib',
+                    'Bosutinib'
+                ],
+                correct: 1,
+                explanation: 'Dasatinib is FDA-approved for first-line treatment of Ph+ ALL in combination with chemotherapy. It has CNS penetration advantage over imatinib. Ponatinib is approved for resistant/T315I-mutant disease. The ALLIANCE study showed improved outcomes with dasatinib.',
+                keyPoint: 'Dasatinib = 1st line Ph+ ALL (CNS penetration); Ponatinib = T315I mutation or resistance.',
+                citation: 'Ravandi F, et al. First report of phase 2 study of dasatinib with hyper-CVAD for the frontline treatment of patients with Philadelphia chromosome-positive (Ph+) acute lymphoblastic leukemia. Blood. 2010;116(12):2070-2077.',
+                pmid: '20466853',
+                doi: '10.1182/blood-2009-12-261586'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'resident',
+                type: 'RISK STRATIFICATION',
+                question: 'According to NCCN guidelines, which of the following is NOT considered a high-risk feature in adult B-ALL?',
+                options: [
+                    'Age ≥35 years',
+                    'WBC >30,000/μL at diagnosis',
+                    'Presence of ETV6::RUNX1 fusion',
+                    'Time to complete remission >4 weeks'
+                ],
+                correct: 2,
+                explanation: 'ETV6::RUNX1 (t(12;21)) is a FAVORABLE prognostic marker, not high-risk. High-risk features include: age ≥35, WBC >30,000/μL (B-ALL), CNS involvement, adverse cytogenetics (Ph+, KMT2A, hypodiploidy), and delayed remission (>4 weeks to CR).',
+                keyPoint: 'ETV6::RUNX1 = favorable prognosis. High-risk: age ≥35, high WBC, adverse genetics, delayed CR.',
+                citation: 'NCCN Clinical Practice Guidelines in Oncology: Acute Lymphoblastic Leukemia. Version 2.2024.',
+                url: 'https://www.nccn.org/professionals/physician_gls/pdf/all.pdf'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'resident',
+                type: 'MRD',
+                question: 'What is the threshold for measurable residual disease (MRD) positivity that is associated with adverse outcomes in adult B-ALL?',
+                options: [
+                    '≥1% (10⁻²)',
+                    '≥0.1% (10⁻³)',
+                    '≥0.01% (10⁻⁴)',
+                    '≥0.001% (10⁻⁵)'
+                ],
+                correct: 2,
+                explanation: 'MRD ≥0.01% (10⁻⁴) detected by flow cytometry or molecular methods is associated with significantly worse outcomes. MRD negativity (<0.01%) after induction is a strong favorable prognostic factor and may influence transplant decisions.',
+                keyPoint: 'MRD <0.01% (10⁻⁴) = MRD negative; MRD positivity predicts relapse risk.',
+                citation: 'Berry DA, et al. Association of Minimal Residual Disease With Clinical Outcome in Pediatric and Adult Acute Lymphoblastic Leukemia: A Meta-analysis. JAMA Oncol. 2017;3(7):e170580.',
+                pmid: '28494052',
+                doi: '10.1001/jamaoncol.2017.0580'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'resident',
+                type: 'IMMUNOTHERAPY',
+                question: 'What is the mechanism of action of blinatumomab in treating B-ALL?',
+                options: [
+                    'Anti-CD20 monoclonal antibody',
+                    'Anti-CD22 antibody-drug conjugate',
+                    'CD19/CD3 bispecific T-cell engager (BiTE)',
+                    'CAR-T cell therapy targeting CD19'
+                ],
+                correct: 2,
+                explanation: 'Blinatumomab is a CD19/CD3 bispecific T-cell engager (BiTE) antibody that bridges CD19+ B cells to CD3+ T cells, activating T cells to kill leukemic cells. It is FDA-approved for relapsed/refractory B-ALL and MRD-positive disease.',
+                keyPoint: 'Blinatumomab = BiTE antibody connecting CD19 (B-ALL) to CD3 (T cells) for redirected killing.',
+                citation: 'Kantarjian H, et al. Blinatumomab versus Chemotherapy for Advanced Acute Lymphoblastic Leukemia. N Engl J Med. 2017;376(9):836-847.',
+                pmid: '28249141',
+                doi: '10.1056/NEJMoa1609783'
+            },
+
+            // B-ALL FELLOW QUESTIONS
+            {
+                cellType: 'b-cell',
+                difficulty: 'fellow',
+                type: 'MOLECULAR',
+                question: 'Which genetic alteration defines the "Philadelphia-like" (Ph-like) B-ALL subtype, and what is its therapeutic implication?',
+                options: [
+                    'BCR::ABL1 fusion - treat with TKI',
+                    'IKZF1 deletion alone - treat with intensive chemotherapy',
+                    'JAK/STAT pathway or ABL-class kinase fusions - potential TKI targets',
+                    'ETV6::RUNX1 fusion - standard chemotherapy'
+                ],
+                correct: 2,
+                explanation: 'Ph-like ALL has a gene expression profile similar to Ph+ ALL but LACKS BCR::ABL1. It harbors JAK/STAT pathway alterations (JAK2, CRLF2, IL7R) or ABL-class fusions (ABL1, ABL2, PDGFRB, CSF1R). These are potential targets for JAK inhibitors or TKIs (dasatinib for ABL-class).',
+                keyPoint: 'Ph-like ALL: JAK/STAT or ABL-class fusions without BCR::ABL1. May respond to ruxolitinib or dasatinib.',
+                citation: 'Roberts KG, et al. Targetable kinase-activating lesions in Ph-like acute lymphoblastic leukemia. N Engl J Med. 2014;371(11):1005-1015.',
+                pmid: '25207766',
+                doi: '10.1056/NEJMoa1403088'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'fellow',
+                type: 'TREATMENT',
+                question: 'For a 45-year-old patient with relapsed B-ALL after initial chemotherapy, which CD22-directed therapy is FDA-approved?',
+                options: [
+                    'Rituximab (anti-CD20)',
+                    'Inotuzumab ozogamicin (anti-CD22 ADC)',
+                    'Gemtuzumab ozogamicin (anti-CD33 ADC)',
+                    'Daratumumab (anti-CD38)'
+                ],
+                correct: 1,
+                explanation: 'Inotuzumab ozogamicin is an anti-CD22 antibody-drug conjugate (ADC) FDA-approved for relapsed/refractory B-ALL. It delivers calicheamicin directly to CD22+ cells. Major toxicity includes hepatotoxicity and veno-occlusive disease (VOD), especially pre-transplant.',
+                keyPoint: 'Inotuzumab ozogamicin = anti-CD22 ADC for R/R B-ALL. Watch for VOD, especially before transplant.',
+                citation: 'Kantarjian HM, et al. Inotuzumab Ozogamicin versus Standard Therapy for Acute Lymphoblastic Leukemia. N Engl J Med. 2016;375(8):740-753.',
+                pmid: '27292104',
+                doi: '10.1056/NEJMoa1509277'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'fellow',
+                type: 'TRANSPLANT',
+                question: 'In adult B-ALL patients achieving first complete remission (CR1) with MRD negativity, what is the current role of allogeneic stem cell transplantation?',
+                options: [
+                    'Always indicated regardless of MRD status',
+                    'Never indicated if MRD negative',
+                    'May be deferred in standard-risk MRD-negative patients receiving pediatric-inspired regimens',
+                    'Only indicated for patients >60 years old'
+                ],
+                correct: 2,
+                explanation: 'Recent data from pediatric-inspired adult ALL regimens (CALGB 10403, GRAALL) show excellent outcomes in MRD-negative standard-risk patients without transplant. Transplant is still considered for high-risk features (Ph+, KMT2A, adverse genetics) even if MRD negative.',
+                keyPoint: 'MRD-negative standard-risk adults may avoid transplant with pediatric-inspired therapy; high-risk still benefits from allo-HCT.',
+                citation: 'Giebel S, et al. Hematopoietic stem cell transplantation for adults with Philadelphia chromosome-negative acute lymphoblastic leukemia in first complete remission. Blood. 2019;134(16):1293-1305.',
+                pmid: '31320380',
+                doi: '10.1182/blood.2019000095'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'fellow',
+                type: 'CAR-T',
+                question: 'What is the approved indication and target antigen for tisagenlecleucel (Kymriah) in ALL?',
+                options: [
+                    'CD19-directed CAR-T for first-line adult B-ALL',
+                    'CD22-directed CAR-T for relapsed B-ALL',
+                    'CD19-directed CAR-T for relapsed/refractory B-ALL in patients up to age 25',
+                    'CD19-directed CAR-T for all ages with relapsed B-ALL'
+                ],
+                correct: 2,
+                explanation: 'Tisagenlecleucel is a CD19-directed CAR-T cell therapy FDA-approved for patients up to 25 years old with B-cell precursor ALL that is refractory or in second or later relapse. Brexucabtagene autoleucel (TECARTUS) is approved for adult relapsed/refractory B-ALL.',
+                keyPoint: 'Tisagenlecleucel = CD19 CAR-T for patients ≤25 years; Brexucabtagene = CD19 CAR-T for adults.',
+                citation: 'Maude SL, et al. Tisagenlecleucel in Children and Young Adults with B-Cell Lymphoblastic Leukemia. N Engl J Med. 2018;378(5):439-448.',
+                pmid: '29385370',
+                doi: '10.1056/NEJMoa1709866'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'fellow',
+                type: 'GENETICS',
+                question: 'IKZF1 deletions in B-ALL are associated with which clinical features and outcomes?',
+                options: [
+                    'Favorable prognosis and excellent response to standard chemotherapy',
+                    'Adverse prognosis, common in Ph+ and Ph-like ALL, and associated with relapse',
+                    'Only found in T-ALL and indicates thymic origin',
+                    'Associated with CNS involvement but no impact on survival'
+                ],
+                correct: 1,
+                explanation: 'IKZF1 (Ikaros) deletions are found in ~80% of Ph+ ALL and ~70% of Ph-like ALL. They are associated with poor prognosis, increased relapse risk, and define "IKZF1plus" when combined with other deletions (CDKN2A, PAX5). This may influence transplant decisions.',
+                keyPoint: 'IKZF1 deletion = adverse prognosis, common in Ph+ and Ph-like ALL. Consider transplant in CR1.',
+                citation: 'Mullighan CG, et al. Deletion of IKZF1 and prognosis in acute lymphoblastic leukemia. N Engl J Med. 2009;360(5):470-480.',
+                pmid: '19129520',
+                doi: '10.1056/NEJMoa0808253'
+            },
+
+            // B-ALL ATTENDING QUESTIONS
+            {
+                cellType: 'b-cell',
+                difficulty: 'attending',
+                type: 'COMPLEX CASE',
+                question: 'A 55-year-old with Ph+ B-ALL achieves CR1 with dasatinib + hyper-CVAD but has persistent MRD (0.1%) at day 84. CMV-seropositive with 10/10 matched unrelated donor available. What is the optimal next step?',
+                options: [
+                    'Continue chemotherapy and TKI, recheck MRD in 4 weeks',
+                    'Proceed to allogeneic HCT with post-transplant TKI maintenance',
+                    'Switch to ponatinib and defer transplant evaluation',
+                    'Administer blinatumomab to convert to MRD-negative, then proceed to HCT'
+                ],
+                correct: 3,
+                explanation: 'For Ph+ ALL with persistent MRD, blinatumomab can convert patients to MRD-negative status, improving post-transplant outcomes. The BLAST trial showed blinatumomab converted 78% of MRD+ patients to MRD-negative. Achieving MRD negativity before transplant significantly improves survival.',
+                keyPoint: 'MRD+ Ph+ ALL: use blinatumomab to achieve MRD negativity before allo-HCT for best outcomes.',
+                citation: 'Gökbuget N, et al. Blinatumomab for minimal residual disease in adults with B-cell precursor acute lymphoblastic leukemia. Blood. 2018;131(14):1522-1531.',
+                pmid: '29358182',
+                doi: '10.1182/blood-2017-09-807289'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'attending',
+                type: 'RESISTANCE',
+                question: 'A patient with relapsed B-ALL after CD19-directed CAR-T therapy shows CD19-negative relapse. Which mechanisms explain this and what are treatment options?',
+                options: [
+                    'Only lineage switch to AML; treat with AML-directed therapy',
+                    'CD19 antigen loss (mutations, alternative splicing), lineage switch, or selection of CD19-negative clone; consider CD22 CAR-T or blinatumomab',
+                    'Technical failure of CAR-T manufacturing only; repeat same CAR-T',
+                    'Always indicates transformation to lymphoma; treat as DLBCL'
+                ],
+                correct: 1,
+                explanation: 'CD19-negative relapse after CAR-T occurs through: 1) CD19 exon mutations/alternative splicing, 2) selection of pre-existing CD19-negative subclone, 3) lineage switch to myeloid phenotype. Treatment options include CD22-directed CAR-T, inotuzumab, or for lineage switch, AML-directed therapy.',
+                keyPoint: 'CD19-negative relapse: antigen loss, alternative splicing, or lineage switch. Consider CD22 CAR-T or inotuzumab.',
+                citation: 'Orlando EJ, et al. Genetic mechanisms of target antigen loss in CAR19 therapy of acute lymphoblastic leukemia. Nat Med. 2018;24(10):1504-1506.',
+                pmid: '30275569',
+                doi: '10.1038/s41591-018-0146-z'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'attending',
+                type: 'EMERGING THERAPY',
+                question: 'What is the mechanism and clinical significance of the TCF3::HLF fusion in B-ALL?',
+                options: [
+                    'Favorable prognosis subtype with excellent response to standard chemotherapy',
+                    'Ultra-high-risk subtype with near-universal treatment failure; requires novel approaches',
+                    'Defines pre-B ALL with good response to pediatric protocols',
+                    'Associated with Ph-like gene expression and responds to JAK inhibitors'
+                ],
+                correct: 1,
+                explanation: 'TCF3::HLF (t(17;19)) B-ALL is an ultra-high-risk subtype with near-universal treatment failure with conventional therapy. Median survival is <1 year. It upregulates BCL2, making venetoclax a potential therapeutic option. Early allo-HCT and novel agents are being explored.',
+                keyPoint: 'TCF3::HLF = ultra-high-risk ALL. Consider venetoclax (BCL2 overexpression) and early transplant.',
+                citation: 'Fischer U, et al. Genomics and drug profiling of fatal TCF3-HLF-positive acute lymphoblastic leukemia identifies recurrent mutation patterns and therapeutic options. Nat Genet. 2015;47(9):1020-1029.',
+                pmid: '26214592',
+                doi: '10.1038/ng.3362'
+            },
+
+            // T-ALL INTERN QUESTIONS
+            {
+                cellType: 't-cell',
+                difficulty: 'intern',
+                type: 'DIAGNOSIS',
+                question: 'Which marker is considered ESSENTIAL for diagnosing T-cell lineage in acute lymphoblastic leukemia?',
+                options: [
+                    'Surface CD3',
+                    'Cytoplasmic CD3 (cCD3)',
+                    'CD7',
+                    'CD5'
+                ],
+                correct: 1,
+                explanation: 'Cytoplasmic CD3 (cCD3) is THE lineage-defining marker for T-ALL and is present even when surface CD3 is negative (as in early T-cell precursor ALL). CD7 and CD5 are usually positive but are not T-lineage specific.',
+                keyPoint: 'Cytoplasmic CD3 = definitive T-lineage marker. Surface CD3 may be negative in immature forms.',
+                citation: 'Coustan-Smith E, et al. Early T-cell precursor leukaemia: a subtype of very high-risk acute lymphoblastic leukaemia. Lancet Oncol. 2009;10(2):147-156.',
+                pmid: '19147408',
+                doi: '10.1016/S1470-2045(08)70314-0'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'intern',
+                type: 'PRESENTATION',
+                question: 'Which clinical presentation is MOST characteristic of T-ALL compared to B-ALL?',
+                options: [
+                    'Bone pain and pancytopenia only',
+                    'Mediastinal mass and hyperleukocytosis',
+                    'Lymphadenopathy with low WBC count',
+                    'Skin infiltration and gum hypertrophy'
+                ],
+                correct: 1,
+                explanation: 'T-ALL characteristically presents with mediastinal (thymic) mass in 50-60% of cases and frequently with hyperleukocytosis (WBC >100,000/μL). This reflects the thymic origin of T-cell precursors. CNS involvement is also more common in T-ALL.',
+                keyPoint: 'T-ALL: mediastinal mass (50-60%), hyperleukocytosis, CNS involvement common.',
+                citation: 'Raetz EA, Teachey DT. T-cell acute lymphoblastic leukemia. Hematology Am Soc Hematol Educ Program. 2016;2016(1):580-588.',
+                pmid: '27913532',
+                doi: '10.1182/asheducation-2016.1.580'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'intern',
+                type: 'EPIDEMIOLOGY',
+                question: 'What percentage of adult ALL cases are T-cell lineage?',
+                options: [
+                    '5-10%',
+                    '20-25%',
+                    '40-50%',
+                    '60-70%'
+                ],
+                correct: 1,
+                explanation: 'T-ALL accounts for approximately 20-25% of adult ALL cases, while B-ALL comprises 75-80%. T-ALL is more common in adolescents and young adults (AYA) and is more frequent in males than females (2:1 ratio).',
+                keyPoint: 'T-ALL: 20-25% of adult ALL. More common in AYA, male predominance (2:1).',
+                citation: 'Marks DI, et al. T-cell acute lymphoblastic leukemia in adults: clinical features, immunophenotype, cytogenetics, and outcome from the large randomized prospective trial (UKALL XII/ECOG 2993). Blood. 2009;114(25):5136-5145.',
+                pmid: '19797519',
+                doi: '10.1182/blood-2009-08-231217'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'intern',
+                type: 'IMMUNOPHENOTYPE',
+                question: 'In T-ALL immunophenotyping, TdT (terminal deoxynucleotidyl transferase) is typically:',
+                options: [
+                    'Always negative in T-ALL',
+                    'Positive in >90% of T-ALL cases',
+                    'Only positive in mature T-ALL',
+                    'Specific for B-lineage ALL'
+                ],
+                correct: 1,
+                explanation: 'TdT is positive in >90% of both T-ALL and B-ALL cases, reflecting the immature nature of lymphoblasts. It is a marker of lymphoid precursors and is lost upon maturation. TdT negativity may suggest mature T-cell neoplasm or AML.',
+                keyPoint: 'TdT positive in >90% of ALL (both B and T lineage). Indicates immaturity.',
+                citation: 'Pui CH, et al. Acute lymphoblastic leukaemia. Lancet. 2008;371(9617):1030-1043.',
+                pmid: '18358930',
+                doi: '10.1016/S0140-6736(08)60457-2'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'intern',
+                type: 'CLASSIFICATION',
+                question: 'Based on the stage of T-cell differentiation, how is T-ALL subclassified?',
+                options: [
+                    'Common, Pre-B, Pro-B, and Mature',
+                    'Pro-T, Pre-T, Cortical, and Mature',
+                    'Early and Late stages only',
+                    'CD4+ and CD8+ subtypes'
+                ],
+                correct: 1,
+                explanation: 'T-ALL is classified by immunophenotype reflecting stages of thymic T-cell development: Pro-T (CD7+, cCD3+), Pre-T (CD2+, CD5+), Cortical (CD1a+, often CD4+CD8+), and Mature (surface CD3+, CD4 or CD8 single positive). ETP-ALL is a distinct immature subtype.',
+                keyPoint: 'T-ALL stages: Pro-T → Pre-T → Cortical (CD1a+) → Mature (sCD3+). ETP is distinct.',
+                citation: 'Belver L, Ferrando A. The genetics and mechanisms of T cell acute lymphoblastic leukaemia. Nat Rev Cancer. 2016;16(8):494-507.',
+                pmid: '27451956',
+                doi: '10.1038/nrc.2016.63'
+            },
+
+            // T-ALL RESIDENT QUESTIONS
+            {
+                cellType: 't-cell',
+                difficulty: 'resident',
+                type: 'ETP-ALL',
+                question: 'Early T-cell Precursor ALL (ETP-ALL) is defined by which immunophenotypic criteria?',
+                options: [
+                    'CD1a+, CD8+, TdT+',
+                    'CD1a-, CD8-, CD5 weak, plus stem cell/myeloid markers (CD34, CD117, HLA-DR)',
+                    'Surface CD3+, CD4+, CD7-',
+                    'TdT negative with mature T-cell markers'
+                ],
+                correct: 1,
+                explanation: 'ETP-ALL is defined by: CD1a negative, CD8 negative, CD5 weak (<75%), PLUS expression of stem cell and/or myeloid markers (CD34, CD117, HLA-DR, CD13, CD33). This reflects very early T-cell differentiation and historically had poor prognosis.',
+                keyPoint: 'ETP-ALL: CD1a-, CD8-, CD5 weak + stem/myeloid markers. Historically poor prognosis, improved with intensive therapy.',
+                citation: 'Coustan-Smith E, et al. Early T-cell precursor leukaemia: a subtype of very high-risk acute lymphoblastic leukaemia. Lancet Oncol. 2009;10(2):147-156.',
+                pmid: '19147408',
+                doi: '10.1016/S1470-2045(08)70314-0'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'resident',
+                type: 'GENETICS',
+                question: 'Which genetic alteration is most commonly found in T-ALL?',
+                options: [
+                    'BCR::ABL1 fusion',
+                    'NOTCH1 activating mutations',
+                    'ETV6::RUNX1 fusion',
+                    'KMT2A rearrangements'
+                ],
+                correct: 1,
+                explanation: 'NOTCH1 activating mutations are found in approximately 50-60% of T-ALL cases. NOTCH1 is a key regulator of T-cell development, and its constitutive activation drives leukemogenesis. FBXW7 mutations (often co-occurring with NOTCH1) are found in 10-15%.',
+                keyPoint: 'NOTCH1 mutations in 50-60% of T-ALL. NOTCH1/FBXW7 mutations may indicate favorable prognosis.',
+                citation: 'Weng AP, et al. Activating mutations of NOTCH1 in human T cell acute lymphoblastic leukemia. Science. 2004;306(5694):269-271.',
+                pmid: '15472075',
+                doi: '10.1126/science.1102160'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'resident',
+                type: 'TREATMENT',
+                question: 'Which treatment principle differentiates T-ALL therapy from B-ALL therapy?',
+                options: [
+                    'T-ALL requires CD19-directed therapy',
+                    'T-ALL benefits from nelarabine in relapsed/refractory setting',
+                    'T-ALL requires TKI therapy like B-ALL',
+                    'T-ALL does not require CNS prophylaxis'
+                ],
+                correct: 1,
+                explanation: 'Nelarabine is a purine nucleoside analog specifically active in T-cell malignancies. It is FDA-approved for relapsed/refractory T-ALL. CD19-directed therapies (blinatumomab, CAR-T) are not applicable. CNS prophylaxis is still essential in T-ALL.',
+                keyPoint: 'Nelarabine = T-cell specific therapy for R/R T-ALL. CD19 therapies not applicable.',
+                citation: 'DeAngelo DJ, et al. Nelarabine induces complete remissions in adults with relapsed or refractory T-lineage acute lymphoblastic leukemia or lymphoblastic lymphoma. Cancer. 2007;109(12):2399-2405.',
+                pmid: '17503435',
+                doi: '10.1002/cncr.22694'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'resident',
+                type: 'PROGNOSIS',
+                question: 'Historically, T-ALL in adults was associated with worse outcomes than B-ALL, but this has changed due to:',
+                options: [
+                    'Use of targeted therapies like TKIs',
+                    'Intensive pediatric-inspired regimens that eliminate the survival difference',
+                    'Higher rates of allogeneic transplant in first remission',
+                    'Use of CAR-T cell therapy'
+                ],
+                correct: 1,
+                explanation: 'With modern pediatric-inspired intensive chemotherapy regimens (GRAALL, CALGB), the historically worse outcomes of T-ALL have been improved to be comparable to B-ALL. Key elements include intensive L-asparaginase, high-dose methotrexate, and prolonged maintenance.',
+                keyPoint: 'Pediatric-inspired regimens have improved T-ALL outcomes to be similar to B-ALL.',
+                citation: 'Marks DI, et al. T-cell acute lymphoblastic leukemia in adults: clinical features, immunophenotype, cytogenetics, and outcome from the large randomized prospective trial (UKALL XII/ECOG 2993). Blood. 2009;114(25):5136-5145.',
+                pmid: '19797519',
+                doi: '10.1182/blood-2009-08-231217'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'resident',
+                type: 'RISK STRATIFICATION',
+                question: 'In T-ALL, which factor is associated with BETTER prognosis?',
+                options: [
+                    'ETP immunophenotype',
+                    'NOTCH1/FBXW7 mutations without RAS/PTEN alterations',
+                    'Absence of complete remission after induction',
+                    'Complex karyotype'
+                ],
+                correct: 1,
+                explanation: 'NOTCH1 and/or FBXW7 mutations without concurrent RAS/PTEN alterations define a favorable-risk group in T-ALL. The "NOTCH1/FBXW7 mutated, RAS/PTEN wild-type" signature is associated with superior survival outcomes.',
+                keyPoint: 'Favorable T-ALL: NOTCH1/FBXW7 mutated + RAS/PTEN wild-type. ETP was high-risk but improving.',
+                citation: 'Trinquand A, et al. Toward a NOTCH1/FBXW7/RAS/PTEN-based oncogenetic risk classification of adult T-cell acute lymphoblastic leukemia. J Clin Oncol. 2013;31(34):4333-4342.',
+                pmid: '24166518',
+                doi: '10.1200/JCO.2012.48.5292'
+            },
+
+            // T-ALL FELLOW QUESTIONS
+            {
+                cellType: 't-cell',
+                difficulty: 'fellow',
+                type: 'EMERGING THERAPY',
+                question: 'Which novel therapeutic approach is being investigated for T-ALL that addresses the challenge of fratricide in CAR-T development?',
+                options: [
+                    'CD19 CAR-T cells (same as B-ALL)',
+                    'CD7 CAR-T cells with CD7 gene knockout to prevent fratricide',
+                    'CD22 antibody-drug conjugate',
+                    'Blinatumomab (CD19/CD3 BiTE)'
+                ],
+                correct: 1,
+                explanation: 'CD7 is an attractive CAR-T target in T-ALL but is also expressed on normal T cells, causing fratricide (CAR-T cells killing each other). Gene editing to knock out CD7 from CAR-T cells allows CD7-directed therapy. Clinical trials show promising results with this approach.',
+                keyPoint: 'CD7 CAR-T for T-ALL requires CD7 knockout to prevent fratricide. Early trials promising.',
+                citation: 'Cooper ML, et al. An "off-the-shelf" fratricide-resistant CAR-T for the treatment of T cell hematologic malignancies. Leukemia. 2018;32(9):1970-1983.',
+                pmid: '29483738',
+                doi: '10.1038/s41375-018-0065-5'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'fellow',
+                type: 'MOLECULAR',
+                question: 'The presence of which alteration in T-ALL may indicate sensitivity to JAK inhibitors?',
+                options: [
+                    'NOTCH1 mutation',
+                    'IL7R or JAK1/JAK3 mutations',
+                    'CDKN2A deletion',
+                    'BCL11B rearrangement'
+                ],
+                correct: 1,
+                explanation: 'IL7R, JAK1, and JAK3 mutations are found in 20-30% of T-ALL cases and lead to JAK/STAT pathway activation. These may confer sensitivity to JAK inhibitors like ruxolitinib. Clinical trials are investigating JAK inhibitors in combination with chemotherapy.',
+                keyPoint: 'JAK pathway mutations (IL7R, JAK1, JAK3) in 20-30% T-ALL may respond to ruxolitinib.',
+                citation: 'Zenatti PP, et al. Oncogenic IL7R gain-of-function mutations in childhood T-cell acute lymphoblastic leukemia. Nat Genet. 2011;43(10):932-939.',
+                pmid: '21892159',
+                doi: '10.1038/ng.924'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'fellow',
+                type: 'TREATMENT',
+                question: 'For a patient with relapsed T-ALL who previously received nelarabine, which alternative approach is most supported by current data?',
+                options: [
+                    'Repeat nelarabine at higher doses',
+                    'Venetoclax-based combinations',
+                    'Rituximab with chemotherapy',
+                    'Inotuzumab ozogamicin'
+                ],
+                correct: 1,
+                explanation: 'BCL2 is frequently overexpressed in T-ALL, especially ETP-ALL. Venetoclax-based combinations (with chemotherapy or hypomethylating agents) have shown activity in relapsed T-ALL. CD19 and CD22 directed therapies are not applicable to T-ALL.',
+                keyPoint: 'Venetoclax active in T-ALL (BCL2 overexpression, especially ETP). CD19/CD22 therapies not applicable.',
+                citation: 'Bhatnagar B, et al. Venetoclax in combination with chemotherapy for adults with acute lymphoblastic leukemia. Haematologica. 2021;106(6):1748-1751.',
+                pmid: '33764823',
+                doi: '10.3324/haematol.2020.277806'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'fellow',
+                type: 'PATHOPHYSIOLOGY',
+                question: 'How do PTEN deletions/mutations contribute to T-ALL pathogenesis and what are the therapeutic implications?',
+                options: [
+                    'PTEN loss activates PI3K/AKT pathway; potential sensitivity to PI3K/mTOR inhibitors',
+                    'PTEN mutations only affect B-cell development',
+                    'PTEN alterations improve prognosis in T-ALL',
+                    'PTEN loss leads to NOTCH1 inactivation'
+                ],
+                correct: 0,
+                explanation: 'PTEN is a tumor suppressor that negatively regulates the PI3K/AKT/mTOR pathway. PTEN deletions/mutations (found in 10-15% of T-ALL) lead to constitutive PI3K activation, promoting survival and proliferation. This provides rationale for PI3K/mTOR inhibitor trials.',
+                keyPoint: 'PTEN loss → PI3K/AKT activation. Adverse prognosis. Rationale for PI3K/mTOR inhibitors.',
+                citation: 'Gutierrez A, et al. High frequency of PTEN, PI3K, and AKT abnormalities in T-cell acute lymphoblastic leukemia. Blood. 2009;114(3):647-650.',
+                pmid: '19458356',
+                doi: '10.1182/blood-2009-02-206722'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'fellow',
+                type: 'GENETICS',
+                question: 'SET-NUP214 fusion in T-ALL is associated with:',
+                options: [
+                    'Favorable prognosis and low WBC count',
+                    'HOXA gene cluster overexpression and sensitivity to DOT1L inhibitors',
+                    'CD7 negativity and myeloid antigen expression',
+                    'Hyperdiploidy and good prognosis'
+                ],
+                correct: 1,
+                explanation: 'SET-NUP214 fusion (from del(9)(q34)) leads to aberrant HOXA gene expression in T-ALL. This fusion recruits DOT1L histone methyltransferase, making it a potential target for DOT1L inhibitors (pinometostat). Found in approximately 6% of T-ALL cases.',
+                keyPoint: 'SET-NUP214 fusion → HOXA overexpression. Potential DOT1L inhibitor sensitivity.',
+                citation: 'Van Vlierberghe P, et al. The cryptic chromosomal deletion del(11)(p12p13) as a new activation mechanism of LMO2 in pediatric T-cell acute lymphoblastic leukemia. Blood. 2006;108(10):3520-3529.',
+                pmid: '16873676',
+                doi: '10.1182/blood-2006-04-019927'
+            },
+
+            // T-ALL ATTENDING QUESTIONS
+            {
+                cellType: 't-cell',
+                difficulty: 'attending',
+                type: 'COMPLEX CASE',
+                question: 'A 28-year-old with relapsed ETP-ALL after intensive chemotherapy has refractory disease to nelarabine. Bone marrow shows CD7+, cCD3+, CD34+, CD117+, myeloperoxidase-negative blasts. Which treatment strategy is most appropriate?',
+                options: [
+                    'CD19 CAR-T cell therapy',
+                    'Venetoclax + hypomethylating agent or chemotherapy, consider CD7 CAR-T trial',
+                    'Blinatumomab as single agent',
+                    'Inotuzumab ozogamicin'
+                ],
+                correct: 1,
+                explanation: 'ETP-ALL has high BCL2 expression, making venetoclax-based combinations rational. CD19/CD22 therapies are not applicable (T-cell lineage). CD7 CAR-T trials are emerging for T-ALL. The myeloid markers in ETP-ALL may also provide rationale for hypomethylating agents.',
+                keyPoint: 'Relapsed ETP-ALL: venetoclax-based therapy or CD7 CAR-T trials. CD19/22 therapies not applicable.',
+                citation: 'Richard-Carpentier G, Kantarjian H. Venetoclax in acute lymphoblastic leukemia. Cancer. 2020;126(18):4125-4130.',
+                pmid: '32644260',
+                doi: '10.1002/cncr.33034'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'attending',
+                type: 'RESISTANCE',
+                question: 'Resistance to glucocorticoids in T-ALL has been linked to which molecular mechanisms, and what alternative approaches exist?',
+                options: [
+                    'BCR::ABL1 mutations; use TKIs',
+                    'NR3C1 mutations and BIM silencing; consider BH3 mimetics or epigenetic modulators',
+                    'CD7 antigen loss only; switch to CD5 targeting',
+                    'NOTCH1 activation only; use gamma-secretase inhibitors'
+                ],
+                correct: 1,
+                explanation: 'Glucocorticoid resistance in T-ALL involves NR3C1 (glucocorticoid receptor) mutations, BIM (pro-apoptotic) silencing, and enhanced autophagy. BH3 mimetics (venetoclax) can restore apoptosis sensitivity. HDAC inhibitors and other epigenetic agents may restore BIM expression.',
+                keyPoint: 'GC resistance: NR3C1 mutations, BIM silencing. BH3 mimetics and epigenetic therapy may overcome.',
+                citation: 'Paugh SW, et al. NALP3 inflammasome upregulation and CASP1 cleavage of the glucocorticoid receptor cause glucocorticoid resistance in leukemia cells. Nat Genet. 2015;47(6):607-614.',
+                pmid: '25938942',
+                doi: '10.1038/ng.3283'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'attending',
+                type: 'TRANSPLANT',
+                question: 'What role does allogeneic HCT play in adult T-ALL in first complete remission (CR1)?',
+                options: [
+                    'Always indicated for all T-ALL patients',
+                    'Never indicated; chemotherapy alone is sufficient',
+                    'Consider for high-risk features (slow early response, MRD+, adverse genetics) but may be omitted in favorable-risk patients',
+                    'Only indicated for ETP-ALL subtype'
+                ],
+                correct: 2,
+                explanation: 'Transplant in T-ALL CR1 is individualized based on risk factors: slow early response, MRD persistence, adverse genetics (PTEN/RAS mutations). Patients with favorable NOTCH1/FBXW7 mutations and MRD negativity may be spared transplant with intensive chemotherapy.',
+                keyPoint: 'T-ALL HCT in CR1: individualized by risk. Favorable genetics + MRD-negative may avoid transplant.',
+                citation: 'Giebel S, et al. Immunophenotype of adult acute lymphoblastic leukemia, minimal residual disease, and post-remission treatment. Recommendations from the Working Party of the Polish Adult Leukemia Group. Pol Arch Intern Med. 2021;131(4):345-357.',
+                pmid: '33550729',
+                doi: '10.20452/pamw.15777'
+            },
+
+            // BOTH (General ALL) QUESTIONS - INTERN
+            {
+                cellType: 'both',
+                difficulty: 'intern',
+                type: 'DIAGNOSIS',
+                question: 'What is the primary method for distinguishing between B-ALL and T-ALL?',
+                options: [
+                    'Morphology on blood smear',
+                    'Cytochemical staining',
+                    'Flow cytometry immunophenotyping',
+                    'Bone marrow cellularity'
+                ],
+                correct: 2,
+                explanation: 'Flow cytometry immunophenotyping is essential for distinguishing B-ALL (CD19+, CD22+, CD10±) from T-ALL (cCD3+, CD7+, CD5+). Morphology cannot reliably distinguish lineage. Cytochemistry (TdT, PAS) supports but does not define lineage.',
+                keyPoint: 'Flow cytometry defines lineage: B-ALL (CD19, CD22) vs T-ALL (cCD3, CD7).',
+                citation: 'Craig FE, Foon KA. Flow cytometric immunophenotyping for hematologic neoplasms. Blood. 2008;111(8):3941-3967.',
+                pmid: '18198345',
+                doi: '10.1182/blood-2007-11-120535'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'intern',
+                type: 'TREATMENT',
+                question: 'Which phase of ALL treatment typically lasts 2-3 years and is essential for preventing relapse?',
+                options: [
+                    'Induction therapy',
+                    'Consolidation/intensification',
+                    'Maintenance therapy',
+                    'Salvage therapy'
+                ],
+                correct: 2,
+                explanation: 'Maintenance therapy in ALL lasts 2-3 years and typically consists of daily 6-mercaptopurine (6-MP) and weekly methotrexate. This prolonged therapy is unique to ALL (not used in AML) and significantly reduces relapse rates.',
+                keyPoint: 'Maintenance = 2-3 years of 6-MP + MTX. Essential for ALL (not used in AML).',
+                citation: 'Pui CH, Evans WE. Treatment of acute lymphoblastic leukemia. N Engl J Med. 2006;354(2):166-178.',
+                pmid: '16407512',
+                doi: '10.1056/NEJMra052603'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'intern',
+                type: 'CNS',
+                question: 'CNS prophylaxis in ALL typically includes which of the following?',
+                options: [
+                    'Oral methotrexate only',
+                    'Intrathecal chemotherapy (methotrexate ± cytarabine ± hydrocortisone)',
+                    'Whole brain radiation for all patients',
+                    'No intervention unless CNS positive'
+                ],
+                correct: 1,
+                explanation: 'CNS prophylaxis in ALL includes intrathecal chemotherapy (methotrexate, cytarabine, hydrocortisone - "triple IT") and high-dose systemic methotrexate with CNS penetration. Cranial radiation is reserved for CNS-positive disease due to neurotoxicity.',
+                keyPoint: 'CNS prophylaxis: intrathecal therapy + HD systemic MTX. Radiation only if CNS positive.',
+                citation: 'Larson RA. Managing CNS disease in adults with acute lymphoblastic leukemia. Leuk Lymphoma. 2018;59(1):3-13.',
+                pmid: '28743213',
+                doi: '10.1080/10428194.2017.1326597'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'intern',
+                type: 'TOXICITY',
+                question: 'Which chemotherapy agent commonly used in ALL is associated with pancreatitis, thrombosis, and allergic reactions?',
+                options: [
+                    'Methotrexate',
+                    'Vincristine',
+                    'Asparaginase',
+                    'Daunorubicin'
+                ],
+                correct: 2,
+                explanation: 'Asparaginase (native E. coli, Erwinia, or pegylated forms) causes unique toxicities including pancreatitis (5-10%), VTE (5-10%), hypersensitivity/allergy (10-30%), and hepatotoxicity. Despite toxicities, it is essential for ALL treatment efficacy.',
+                keyPoint: 'Asparaginase toxicities: pancreatitis, VTE, allergy, hepatotoxicity. Essential for ALL efficacy.',
+                citation: 'Tong WH, et al. The toxicity of very prolonged courses of PEGasparaginase or Erwinia asparaginase in relation to asparaginase activity, with a special focus on dyslipidemia. Haematologica. 2014;99(11):1716-1721.',
+                pmid: '25107885',
+                doi: '10.3324/haematol.2014.109413'
+            },
+
+            // BOTH RESIDENT QUESTIONS
+            {
+                cellType: 'both',
+                difficulty: 'resident',
+                type: 'MRD',
+                question: 'Which method provides the HIGHEST sensitivity for MRD detection in ALL?',
+                options: [
+                    'Morphology (limit ~5%)',
+                    'Multiparameter flow cytometry (limit ~0.01%)',
+                    'PCR for Ig/TCR gene rearrangements (limit ~0.001%)',
+                    'Conventional cytogenetics (limit ~5%)'
+                ],
+                correct: 2,
+                explanation: 'PCR-based detection of clonal immunoglobulin (Ig) or T-cell receptor (TCR) gene rearrangements achieves sensitivity of 0.001% (10⁻⁵). Flow cytometry typically achieves 0.01% (10⁻⁴). Next-generation sequencing (NGS) approaches are increasingly used with similar or better sensitivity.',
+                keyPoint: 'MRD sensitivity: PCR/NGS (10⁻⁵-10⁻⁶) > Flow (10⁻⁴) > Morphology (10⁻²).',
+                citation: 'Brüggemann M, et al. Standardized MRD quantification in European ALL trials: proceedings of the Second International Symposium on MRD assessment in Kiel, Germany, 18-20 September 2008. Leukemia. 2010;24(3):521-535.',
+                pmid: '20033054',
+                doi: '10.1038/leu.2009.268'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'resident',
+                type: 'TREATMENT',
+                question: 'The "pediatric-inspired" approach to adult ALL treatment is characterized by:',
+                options: [
+                    'Lower doses of chemotherapy with less toxicity',
+                    'Higher cumulative doses of asparaginase, vincristine, and steroids with CNS-directed therapy',
+                    'Avoidance of anthracyclines',
+                    'Shorter treatment duration (1 year vs. 2-3 years)'
+                ],
+                correct: 1,
+                explanation: 'Pediatric-inspired adult ALL regimens (CALGB 10403, GRAALL) use intensified doses of vincristine, asparaginase (PEG-asparaginase), and corticosteroids with aggressive CNS prophylaxis. These regimens improved adult ALL outcomes significantly.',
+                keyPoint: 'Pediatric-inspired: intensive L-asp, vincristine, steroids, CNS therapy. Improved adult outcomes.',
+                citation: 'Stock W, et al. A pediatric regimen for older adolescents and young adults with acute lymphoblastic leukemia: results of CALGB 10403. Blood. 2019;133(14):1548-1559.',
+                pmid: '30658992',
+                doi: '10.1182/blood-2018-10-881961'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'resident',
+                type: 'SUPPORTIVE CARE',
+                question: 'Tumor lysis syndrome (TLS) prophylaxis in ALL should include:',
+                options: [
+                    'Allopurinol or rasburicase for hyperuricemia, IV hydration, and close monitoring',
+                    'Calcium supplementation and vitamin D',
+                    'Prophylactic hemodialysis for all patients',
+                    'No intervention needed if WBC <50,000'
+                ],
+                correct: 0,
+                explanation: 'TLS prophylaxis includes aggressive IV hydration (2-3 L/m²/day), allopurinol (xanthine oxidase inhibitor), or rasburicase (urate oxidase) for high-risk cases. Monitor potassium, phosphorus, calcium, uric acid, creatinine. Rasburicase contraindicated in G6PD deficiency.',
+                keyPoint: 'TLS prophylaxis: hydration + allopurinol/rasburicase. Monitor K, phos, Ca, uric acid, Cr.',
+                citation: 'Cairo MS, et al. Recommendations for the evaluation of risk and prophylaxis of tumour lysis syndrome (TLS) in adults and children with malignant diseases. Br J Haematol. 2010;149(4):578-586.',
+                pmid: '20331465',
+                doi: '10.1111/j.1365-2141.2010.08143.x'
+            },
+
+            // BOTH FELLOW QUESTIONS
+            {
+                cellType: 'both',
+                difficulty: 'fellow',
+                type: 'MPAL',
+                question: 'How is Mixed Phenotype Acute Leukemia (MPAL) distinguished from ALL with aberrant myeloid markers?',
+                options: [
+                    'By blast percentage alone',
+                    'By meeting WHO criteria for more than one lineage based on specific marker combinations (MPO, monocytic, or T markers)',
+                    'By clinical presentation only',
+                    'By response to treatment'
+                ],
+                correct: 1,
+                explanation: 'MPAL requires meeting WHO criteria for TWO lineages: myeloid (MPO positive OR monocytic differentiation) AND lymphoid (B or T lineage markers). Simple co-expression of CD13/CD33 on lymphoblasts is NOT sufficient for MPAL diagnosis.',
+                keyPoint: 'MPAL: must meet criteria for 2 lineages. Aberrant markers alone (CD13/33 on ALL) ≠ MPAL.',
+                citation: 'Weinberg OK, Arber DA. Mixed-phenotype acute leukemia: historical overview and a new definition. Leukemia. 2010;24(11):1844-1851.',
+                pmid: '20844566',
+                doi: '10.1038/leu.2010.202'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'fellow',
+                type: 'THERAPY',
+                question: 'In adult ALL, which patient factors favor a "chemotherapy-only" approach over allogeneic HCT in CR1?',
+                options: [
+                    'All adults with ALL benefit from transplant in CR1',
+                    'Standard-risk genetics, MRD negativity, younger age, and access to pediatric-inspired regimen',
+                    'Only patients >60 years old should avoid transplant',
+                    'Transplant is only for relapsed disease'
+                ],
+                correct: 1,
+                explanation: 'Transplant may be deferred in CR1 for: standard-risk cytogenetics, MRD-negative status, age ≤35-40, treated with pediatric-inspired intensive regimen. High-risk patients (Ph+, KMT2A, hypodiploidy, MRD+) still benefit from allo-HCT.',
+                keyPoint: 'Standard-risk + MRD-negative + pediatric regimen = may defer transplant. High-risk = transplant.',
+                citation: 'Giebel S, et al. Hematopoietic stem cell transplantation for adults with Philadelphia chromosome-negative acute lymphoblastic leukemia in first complete remission. Blood. 2019;134(16):1293-1305.',
+                pmid: '31320380',
+                doi: '10.1182/blood.2019000095'
+            },
+
+            // BOTH ATTENDING QUESTIONS
+            {
+                cellType: 'both',
+                difficulty: 'attending',
+                type: 'RELAPSE',
+                question: 'A 40-year-old with B-ALL in second relapse (first relapse was extramedullary CNS) after chemotherapy and intrathecal therapy. Now has marrow relapse with 60% blasts, CD19+, CD22+. Prior therapies: hyper-CVAD, blinatumomab (transient response). Best approach?',
+                options: [
+                    'Repeat blinatumomab',
+                    'Inotuzumab ozogamicin followed by consideration for allo-HCT or CAR-T',
+                    'Palliative care only',
+                    'Cranial radiation'
+                ],
+                correct: 1,
+                explanation: 'For multiply relapsed B-ALL after blinatumomab, inotuzumab ozogamicin (CD22 ADC) is appropriate if CD22+. If response achieved, bridge to allo-HCT or CAR-T for durable remission. Sequential immunotherapy (BiTE then CAR-T) has been effective in achieving remissions.',
+                keyPoint: 'After blinatumomab failure: inotuzumab → bridge to HCT or CAR-T. Sequential immunotherapy effective.',
+                citation: 'Jabbour E, et al. Outcome of patients with relapsed/refractory acute lymphoblastic leukemia after blinatumomab failure: No change in the level of CD19 expression. Am J Hematol. 2018;93(3):371-374.',
+                pmid: '29194725',
+                doi: '10.1002/ajh.24987'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'attending',
+                type: 'AYA',
+                question: 'An 18-year-old with newly diagnosed B-ALL (WBC 8,000, standard-risk cytogenetics) can be treated at a pediatric center or adult center. Evidence suggests:',
+                options: [
+                    'Outcomes are identical regardless of protocol',
+                    'Pediatric protocols consistently show superior outcomes in AYA patients',
+                    'Adult protocols are superior due to more transplants',
+                    'Only Ph+ AYA patients benefit from pediatric protocols'
+                ],
+                correct: 1,
+                explanation: 'Multiple studies show superior outcomes for AYA (adolescent and young adult) ALL patients treated on pediatric protocols vs adult protocols. This led to development of pediatric-inspired adult regimens. Key differences include more asparaginase, vincristine, and corticosteroids in pediatric regimens.',
+                keyPoint: 'AYA ALL: pediatric protocols superior. Led to pediatric-inspired adult regimens.',
+                citation: 'Stock W, et al. What determines the outcomes for adolescents and young adults with acute lymphoblastic leukemia treated on cooperative group protocols? A comparison of Children\'s Cancer Group and Cancer and Leukemia Group B studies. Blood. 2008;112(5):1646-1654.',
+                pmid: '18502832',
+                doi: '10.1182/blood-2008-01-130237'
+            },
+
+            // ====================================
+            // ADDITIONAL B-ALL INTERN QUESTIONS
+            // ====================================
+            {
+                cellType: 'b-cell',
+                difficulty: 'intern',
+                type: 'PRESENTATION',
+                question: 'A 35-year-old presents with fatigue, bruising, and bone pain. CBC shows WBC 45,000/μL with 80% blasts, Hgb 7.2, platelets 23,000. Which symptom is MOST specific for leukemic bone marrow infiltration?',
+                options: [
+                    'Fatigue',
+                    'Easy bruising',
+                    'Bone pain (especially sternum and long bones)',
+                    'Fever'
+                ],
+                correct: 2,
+                explanation: 'Bone pain, particularly sternal tenderness and long bone pain, is relatively specific for leukemic infiltration of bone marrow. Fatigue and bruising are nonspecific cytopenias symptoms. Bone pain occurs in 25-40% of adult ALL patients at presentation.',
+                keyPoint: 'Bone pain (sternal tenderness, long bones) suggests marrow infiltration. Present in 25-40% of adult ALL.',
+                citation: 'Faderl S, et al. Adult acute lymphoblastic leukemia: concepts and strategies. Cancer. 2010;116(5):1165-1176.',
+                pmid: '20101737',
+                doi: '10.1002/cncr.24862'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'intern',
+                type: 'IMMUNOPHENOTYPE',
+                question: 'CD10 (CALLA - Common ALL Antigen) positivity in B-ALL is associated with:',
+                options: [
+                    'Worse prognosis than CD10-negative cases',
+                    'Better prognosis and defines "common" B-ALL subtype',
+                    'T-cell lineage commitment',
+                    'Presence of BCR::ABL1 fusion'
+                ],
+                correct: 1,
+                explanation: 'CD10 (Common ALL Antigen) positivity defines "common" B-ALL, the most frequent subtype. CD10+ B-ALL generally has better prognosis than CD10-negative (pro-B) ALL. CD10 is a neutral endopeptidase expressed during normal B-cell development.',
+                keyPoint: 'CD10+ = "common" B-ALL with better prognosis. CD10- = pro-B ALL with worse prognosis.',
+                citation: 'Chiaretti S, Zini G, Bassan R. Diagnosis and subclassification of acute lymphoblastic leukemia. Mediterr J Hematol Infect Dis. 2014;6(1):e2014073.',
+                pmid: '25408859',
+                doi: '10.4084/MJHID.2014.073'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'intern',
+                type: 'WORKUP',
+                question: 'Which test is ESSENTIAL in the initial workup of newly diagnosed B-ALL to guide treatment selection?',
+                options: [
+                    'PET-CT scan',
+                    'Cytogenetics/FISH for BCR::ABL1 (Philadelphia chromosome)',
+                    'Bone scan',
+                    'Serum protein electrophoresis'
+                ],
+                correct: 1,
+                explanation: 'Testing for BCR::ABL1 (Philadelphia chromosome) is essential because Ph+ ALL requires addition of tyrosine kinase inhibitors (TKIs) to chemotherapy. This significantly impacts treatment planning and must be performed urgently at diagnosis.',
+                keyPoint: 'BCR::ABL1 testing essential at diagnosis - determines need for TKI therapy.',
+                citation: 'NCCN Clinical Practice Guidelines in Oncology: Acute Lymphoblastic Leukemia. Version 2.2024.',
+                url: 'https://www.nccn.org/professionals/physician_gls/pdf/all.pdf'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'intern',
+                type: 'CLASSIFICATION',
+                question: 'According to WHO 2022, B-ALL is classified primarily by:',
+                options: [
+                    'Morphology alone (L1, L2, L3)',
+                    'Recurring genetic abnormalities',
+                    'Patient age',
+                    'White blood cell count'
+                ],
+                correct: 1,
+                explanation: 'WHO 2022 classifies B-ALL primarily by recurring genetic abnormalities (BCR::ABL1, KMT2A rearranged, ETV6::RUNX1, hyperdiploidy, hypodiploidy, TCF3::PBX1, etc.). The old FAB morphologic classification (L1/L2/L3) is no longer used for classification.',
+                keyPoint: 'WHO 2022: B-ALL classified by genetics, not morphology. FAB L1/L2/L3 classification obsolete.',
+                citation: 'Alaggio R, et al. The 5th edition of the World Health Organization Classification of Haematolymphoid Tumours: Lymphoid Neoplasms. Leukemia. 2022;36(7):1720-1748.',
+                pmid: '35732829',
+                doi: '10.1038/s41375-022-01620-2'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'intern',
+                type: 'PROGNOSIS',
+                question: 'In adult B-ALL, which of the following is associated with WORSE prognosis?',
+                options: [
+                    'Age 25 years',
+                    'WBC 8,000/μL at diagnosis',
+                    'Hyperdiploidy (51-65 chromosomes)',
+                    'WBC >30,000/μL at diagnosis'
+                ],
+                correct: 3,
+                explanation: 'High WBC count (>30,000/μL for B-ALL, >100,000/μL for T-ALL) at diagnosis is an adverse prognostic factor. Younger age and hyperdiploidy are favorable features. High WBC increases risk of CNS involvement and TLS.',
+                keyPoint: 'WBC >30,000/μL in B-ALL = adverse. Also increases CNS and TLS risk.',
+                citation: 'Moorman AV, et al. Outcome heterogeneity in childhood high-hyperdiploid acute lymphoblastic leukemia. Blood. 2003;102(8):2756-2762.',
+                pmid: '12829593',
+                doi: '10.1182/blood-2003-04-1128'
+            },
+
+            // ====================================
+            // ADDITIONAL B-ALL RESIDENT QUESTIONS
+            // ====================================
+            {
+                cellType: 'b-cell',
+                difficulty: 'resident',
+                type: 'GENETICS',
+                question: 'TCF3::PBX1 (E2A-PBX1) fusion from t(1;19) in B-ALL is characterized by:',
+                options: [
+                    'Excellent prognosis requiring reduced intensity therapy',
+                    'Pre-B immunophenotype with cytoplasmic μ heavy chain, intermediate prognosis with intensive therapy',
+                    'Always associated with CNS involvement',
+                    'Sensitivity to TKI therapy'
+                ],
+                correct: 1,
+                explanation: 'TCF3::PBX1 fusion defines pre-B ALL with cytoplasmic immunoglobulin (cIgμ+). Historically poor prognosis, but outcomes improved significantly with intensive chemotherapy. Does not respond to TKIs. May have higher CNS relapse risk requiring enhanced prophylaxis.',
+                keyPoint: 'TCF3::PBX1 = pre-B ALL (cIgμ+). Intermediate prognosis with intensive therapy. Enhanced CNS prophylaxis.',
+                citation: 'Hunger SP, et al. Improved survival for children and adolescents with acute lymphoblastic leukemia between 1990 and 2005. J Clin Oncol. 2012;30(14):1663-1669.',
+                pmid: '22412151',
+                doi: '10.1200/JCO.2011.37.8018'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'resident',
+                type: 'TREATMENT',
+                question: 'In hyper-CVAD regimen for ALL, what does "CVAD" stand for and what are the alternating courses?',
+                options: [
+                    'Cyclophosphamide, Vincristine, Adriamycin, Dexamethasone; alternates with high-dose MTX/Ara-C',
+                    'Cytarabine, Vincristine, Asparaginase, Daunorubicin; alternates with consolidation',
+                    'Clofarabine, Vinblastine, Actinomycin, Decitabine; alternates with maintenance',
+                    'Carmustine, Vindesine, Amsacrine, Doxorubicin; alternates with radiation'
+                ],
+                correct: 0,
+                explanation: 'Hyper-CVAD consists of hyperfractionated Cyclophosphamide, Vincristine, Adriamycin (doxorubicin), and Dexamethasone (odd cycles) alternating with high-dose Methotrexate and Cytarabine (even cycles). Standard adult ALL regimen at many centers.',
+                keyPoint: 'Hyper-CVAD: Cyclophosphamide, Vincristine, Adriamycin, Dexamethasone + HD MTX/Ara-C.',
+                citation: 'Kantarjian HM, et al. Results of treatment with hyper-CVAD, a dose-intensive regimen, in adult acute lymphocytic leukemia. J Clin Oncol. 2000;18(3):547-561.',
+                pmid: '10653870',
+                doi: '10.1200/JCO.2000.18.3.547'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'resident',
+                type: 'IMMUNOTHERAPY',
+                question: 'Cytokine release syndrome (CRS) during blinatumomab therapy is best managed by:',
+                options: [
+                    'Immediate discontinuation and never rechallenge',
+                    'Dexamethasone and/or tocilizumab, with temporary interruption and step-wise dose escalation',
+                    'Increasing the blinatumomab dose',
+                    'Prophylactic plasmapheresis'
+                ],
+                correct: 1,
+                explanation: 'CRS during blinatumomab is managed with corticosteroids (dexamethasone) and/or tocilizumab (IL-6 receptor antagonist). Step-wise dose escalation (9 mcg/day → 28 mcg/day) helps minimize CRS. Temporary interruption with re-escalation is often successful.',
+                keyPoint: 'Blinatumomab CRS: dexamethasone ± tocilizumab. Step-wise dosing (9→28 mcg/day) minimizes risk.',
+                citation: 'Topp MS, et al. Safety and activity of blinatumomab for adult patients with relapsed or refractory B-precursor acute lymphoblastic leukaemia. Lancet Oncol. 2015;16(1):57-66.',
+                pmid: '25524800',
+                doi: '10.1016/S1470-2045(14)71170-2'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'resident',
+                type: 'CNS',
+                question: 'CNS involvement at diagnosis in adult B-ALL occurs in approximately what percentage of patients, and which factors increase risk?',
+                options: [
+                    '1-2%; no specific risk factors identified',
+                    '5-10%; risk increased with high WBC, T-ALL phenotype, and mature B-ALL',
+                    '30-40%; all patients have subclinical CNS disease',
+                    '50%; primarily in elderly patients'
+                ],
+                correct: 1,
+                explanation: 'CNS involvement at diagnosis occurs in 5-10% of adult ALL. Risk factors include high WBC count, T-ALL phenotype, mature B-ALL (Burkitt), and certain cytogenetics. All patients require CNS prophylaxis regardless of initial CNS status.',
+                keyPoint: 'CNS+ at diagnosis: 5-10%. Risk: high WBC, T-ALL, mature B-ALL. All need CNS prophylaxis.',
+                citation: 'Lazarus HM, et al. Central nervous system involvement in adult acute lymphoblastic leukemia at diagnosis. Blood. 2006;108(2):465-472.',
+                pmid: '16609067',
+                doi: '10.1182/blood-2005-12-011973'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'resident',
+                type: 'MRD',
+                question: 'At which time points is MRD assessment MOST predictive of outcomes in adult B-ALL?',
+                options: [
+                    'Only at diagnosis',
+                    'End of induction and end of consolidation',
+                    'Only after transplant',
+                    'Weekly during maintenance'
+                ],
+                correct: 1,
+                explanation: 'MRD assessment at end of induction (day 29-42) and end of consolidation are most predictive of outcomes. MRD negativity at these timepoints is associated with superior survival. Persistent MRD may prompt therapy intensification or transplant.',
+                keyPoint: 'MRD assessment: end of induction + end of consolidation most predictive. Guides therapy decisions.',
+                citation: 'Bassan R, et al. Improved risk classification for risk-specific therapy based on the molecular study of minimal residual disease (MRD) in adult acute lymphoblastic leukemia (ALL). Blood. 2009;113(18):4153-4162.',
+                pmid: '19141862',
+                doi: '10.1182/blood-2008-11-185132'
+            },
+
+            // ====================================
+            // ADDITIONAL B-ALL FELLOW QUESTIONS
+            // ====================================
+            {
+                cellType: 'b-cell',
+                difficulty: 'fellow',
+                type: 'MOLECULAR',
+                question: 'DUX4-rearranged B-ALL is characterized by which features?',
+                options: [
+                    'Poor prognosis requiring immediate transplant',
+                    'ERG deletion, favorable prognosis, common in adolescents/young adults',
+                    'T-cell lineage markers',
+                    'Resistance to all immunotherapies'
+                ],
+                correct: 1,
+                explanation: 'DUX4-rearranged B-ALL (5-10% of B-ALL) is characterized by ERG deletions, CD2 expression (unusual for B-ALL), and favorable prognosis. More common in AYA. The DUX4 transcription factor drives a distinct gene expression program.',
+                keyPoint: 'DUX4-rearranged: ERG deletion, CD2+, favorable prognosis, common in AYA.',
+                citation: 'Yasuda T, et al. Recurrent DUX4 fusions in B cell acute lymphoblastic leukemia of adolescents and young adults. Nat Genet. 2016;48(5):569-574.',
+                pmid: '27019113',
+                doi: '10.1038/ng.3535'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'fellow',
+                type: 'TREATMENT',
+                question: 'Brexucabtagene autoleucel (Tecartus) differs from tisagenlecleucel (Kymriah) in ALL primarily by:',
+                options: [
+                    'Target antigen (CD22 vs CD19)',
+                    'Approved age range (adults vs pediatric/young adults)',
+                    'Manufacturing process only',
+                    'Route of administration'
+                ],
+                correct: 1,
+                explanation: 'Both are CD19-directed CAR-T products, but brexucabtagene autoleucel (Tecartus) is approved for adult (≥18 years) relapsed/refractory B-ALL, while tisagenlecleucel (Kymriah) is approved for patients up to 25 years old. Both use different manufacturing processes and costimulatory domains.',
+                keyPoint: 'Tecartus: adult B-ALL (≥18 years). Kymriah: pediatric/AYA (≤25 years). Both target CD19.',
+                citation: 'Shah BD, et al. KTE-X19 for relapsed or refractory adult B-cell acute lymphoblastic leukaemia. Lancet. 2021;398(10299):491-502.',
+                pmid: '34097852',
+                doi: '10.1016/S0140-6736(21)00989-2'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'fellow',
+                type: 'TOXICITY',
+                question: 'Immune effector cell-associated neurotoxicity syndrome (ICANS) after CAR-T therapy is characterized by:',
+                options: [
+                    'Peripheral neuropathy only',
+                    'Encephalopathy, aphasia, seizures; correlates with CRS severity and IL-6 levels',
+                    'Exclusively motor deficits',
+                    'Only occurs months after infusion'
+                ],
+                correct: 1,
+                explanation: 'ICANS presents with encephalopathy, confusion, word-finding difficulty, aphasia, seizures, and rarely cerebral edema. It often follows CRS and correlates with CRS severity. Management includes corticosteroids; tocilizumab is less effective for ICANS than CRS.',
+                keyPoint: 'ICANS: encephalopathy, aphasia, seizures. Correlates with CRS. Treat with steroids (tocilizumab less effective).',
+                citation: 'Lee DW, et al. ASTCT Consensus Grading for Cytokine Release Syndrome and Neurologic Toxicity Associated with Immune Effector Cells. Biol Blood Marrow Transplant. 2019;25(4):625-638.',
+                pmid: '30592986',
+                doi: '10.1016/j.bbmt.2018.12.758'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'fellow',
+                type: 'GENETICS',
+                question: 'MEF2D-rearranged B-ALL has which distinguishing characteristics?',
+                options: [
+                    'Excellent prognosis with standard therapy',
+                    'Immature immunophenotype (CD10-negative), HDAC inhibitor sensitivity, poor prognosis',
+                    'T-cell marker expression',
+                    'Response to JAK inhibitors'
+                ],
+                correct: 1,
+                explanation: 'MEF2D-rearranged B-ALL (partners include BCL9, HNRNPUL1) has CD10-negative immature immunophenotype, poor prognosis, and shows sensitivity to HDAC inhibitors in preclinical studies. Represents ~4% of B-ALL.',
+                keyPoint: 'MEF2D-rearranged: CD10-, poor prognosis, potential HDAC inhibitor sensitivity.',
+                citation: 'Gu Z, et al. Genomic analyses identify recurrent MEF2D fusions in acute lymphoblastic leukaemia. Nat Commun. 2016;7:13331.',
+                pmid: '27824051',
+                doi: '10.1038/ncomms13331'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'fellow',
+                type: 'TRANSPLANT',
+                question: 'Post-transplant TKI maintenance in Ph+ ALL is associated with:',
+                options: [
+                    'No benefit over observation',
+                    'Improved relapse-free survival and overall survival',
+                    'Increased GVHD without survival benefit',
+                    'Only beneficial in T315I-mutated cases'
+                ],
+                correct: 1,
+                explanation: 'Post-transplant TKI maintenance (dasatinib or ponatinib) in Ph+ ALL significantly reduces relapse and improves overall survival. Typically continued for at least 2 years or until relapse/intolerance. Does not significantly increase GVHD.',
+                keyPoint: 'Post-transplant TKI maintenance in Ph+ ALL: reduces relapse, improves survival. Continue ≥2 years.',
+                citation: 'Giebel S, et al. Use of tyrosine kinase inhibitors to prevent relapse after allogeneic hematopoietic stem cell transplantation for patients with Philadelphia chromosome-positive acute lymphoblastic leukemia. Cancer. 2016;122(19):2941-2951.',
+                pmid: '27351911',
+                doi: '10.1002/cncr.30130'
+            },
+
+            // ====================================
+            // ADDITIONAL B-ALL ATTENDING QUESTIONS
+            // ====================================
+            {
+                cellType: 'b-cell',
+                difficulty: 'attending',
+                type: 'COMPLEX CASE',
+                question: 'A 62-year-old with Ph+ B-ALL in CR1 on dasatinib develops T315I mutation on surveillance testing while MRD-negative. 10/10 MUD available. Best management?',
+                options: [
+                    'Continue dasatinib and monitor',
+                    'Switch to ponatinib and proceed to allogeneic HCT',
+                    'Discontinue all TKI therapy',
+                    'Add blinatumomab without changing TKI'
+                ],
+                correct: 1,
+                explanation: 'T315I mutation confers resistance to all TKIs except ponatinib. Despite MRD negativity, emergence of T315I predicts relapse. Switch to ponatinib (only TKI active against T315I) and expedite allo-HCT for durable disease control.',
+                keyPoint: 'T315I mutation: only ponatinib active. Expedite transplant even if MRD-negative.',
+                citation: 'Cortes JE, et al. Ponatinib in refractory Philadelphia chromosome-positive leukemias. N Engl J Med. 2012;367(22):2075-2088.',
+                pmid: '23190221',
+                doi: '10.1056/NEJMoa1205127'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'attending',
+                type: 'ELDERLY',
+                question: 'For a 72-year-old with newly diagnosed Ph-negative B-ALL (ECOG PS 1), which treatment approach is most appropriate?',
+                options: [
+                    'Hyper-CVAD at full doses',
+                    'Best supportive care only',
+                    'Reduced-intensity chemotherapy with blinatumomab or inotuzumab-based regimens',
+                    'Immediate CAR-T therapy'
+                ],
+                correct: 2,
+                explanation: 'Elderly patients (>65-70) have poor tolerance of intensive regimens like hyper-CVAD. Reduced-intensity approaches incorporating immunotherapy (blinatumomab, inotuzumab) show improved tolerability with reasonable efficacy. Mini-hyper-CVD + inotuzumab has shown promising results.',
+                keyPoint: 'Elderly ALL: reduced-intensity chemo + immunotherapy (blinatumomab/inotuzumab). Mini-hyper-CVD protocols.',
+                citation: 'Kantarjian H, et al. Inotuzumab ozogamicin in combination with low-intensity chemotherapy for older patients with Philadelphia chromosome-negative acute lymphoblastic leukaemia. Lancet Oncol. 2018;19(2):240-248.',
+                pmid: '29352703',
+                doi: '10.1016/S1470-2045(18)30011-1'
+            },
+            {
+                cellType: 'b-cell',
+                difficulty: 'attending',
+                type: 'EMERGING',
+                question: 'What is the significance of PAX5 P80R mutation in B-ALL?',
+                options: [
+                    'Favorable prognosis marker',
+                    'Defines a distinct WHO entity (PAX5 P80R B-ALL) with intermediate prognosis',
+                    'Indicates T-cell lineage',
+                    'Predicts response to venetoclax'
+                ],
+                correct: 1,
+                explanation: 'PAX5 P80R defines a new WHO 2022 entity with distinct gene expression profile. It has intermediate prognosis, is associated with CDKN2A/B deletions, and shows dicentric chromosomes. Represents ~3% of B-ALL cases.',
+                keyPoint: 'PAX5 P80R: distinct WHO 2022 entity, intermediate prognosis, dicentric chromosomes.',
+                citation: 'Bastian L, et al. PAX5 alterations in genetically unclassified childhood and adult precursor B-cell acute lymphoblastic leukemia. Haematologica. 2022;107(8):1765-1776.',
+                pmid: '34854284',
+                doi: '10.3324/haematol.2021.280191'
+            },
+
+            // ====================================
+            // ADDITIONAL T-ALL INTERN QUESTIONS
+            // ====================================
+            {
+                cellType: 't-cell',
+                difficulty: 'intern',
+                type: 'PRESENTATION',
+                question: 'Superior vena cava (SVC) syndrome in T-ALL is caused by:',
+                options: [
+                    'Bone marrow infiltration',
+                    'Compression from mediastinal (thymic) mass',
+                    'CNS involvement',
+                    'Hepatosplenomegaly'
+                ],
+                correct: 1,
+                explanation: 'SVC syndrome in T-ALL results from compression of the superior vena cava by anterior mediastinal (thymic) mass. Presents with facial swelling, dyspnea, and dilated neck veins. Requires urgent treatment initiation, sometimes with steroids prior to tissue diagnosis.',
+                keyPoint: 'SVC syndrome from mediastinal mass in T-ALL. May require urgent steroids before biopsy.',
+                citation: 'Raetz EA, Teachey DT. T-cell acute lymphoblastic leukemia. Hematology Am Soc Hematol Educ Program. 2016;2016(1):580-588.',
+                pmid: '27913532',
+                doi: '10.1182/asheducation-2016.1.580'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'intern',
+                type: 'IMMUNOPHENOTYPE',
+                question: 'CD1a positivity in T-ALL indicates:',
+                options: [
+                    'Pro-T stage (earliest)',
+                    'Cortical T stage (intermediate maturation)',
+                    'Mature T stage',
+                    'B-cell contamination'
+                ],
+                correct: 1,
+                explanation: 'CD1a is expressed during the cortical stage of thymic T-cell development (CD4+CD8+ "double positive" stage). CD1a+ cortical T-ALL has relatively favorable prognosis compared to early or mature subtypes. CD1a is lost in mature T cells.',
+                keyPoint: 'CD1a+ = cortical T-ALL (relatively favorable). CD1a expressed only in thymic cortex.',
+                citation: 'Ferrando AA, et al. Gene expression signatures define novel oncogenic pathways in T cell acute lymphoblastic leukemia. Cancer Cell. 2002;1(1):75-87.',
+                pmid: '12086890',
+                doi: '10.1016/S1535-6108(02)00018-1'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'intern',
+                type: 'DIAGNOSIS',
+                question: 'How is T-lymphoblastic leukemia (T-ALL) distinguished from T-lymphoblastic lymphoma (T-LBL)?',
+                options: [
+                    'Different immunophenotype',
+                    'Extent of bone marrow involvement (≥25% blasts = T-ALL)',
+                    'Different genetics',
+                    'Age of patient'
+                ],
+                correct: 1,
+                explanation: 'T-ALL and T-LBL are the same disease entity. By convention, ≥25% bone marrow blasts defines leukemia (T-ALL), while <25% with mass disease defines lymphoma (T-LBL). Treatment approaches are similar for both.',
+                keyPoint: 'T-ALL vs T-LBL: same disease. ≥25% BM blasts = T-ALL; <25% with mass = T-LBL.',
+                citation: 'Swerdlow SH, et al. WHO Classification of Tumours of Haematopoietic and Lymphoid Tissues. 4th ed. IARC; 2017.',
+                pmid: '27069254',
+                doi: '10.1182/blood-2016-03-643544'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'intern',
+                type: 'PROGNOSIS',
+                question: 'Which feature is characteristic of T-ALL compared to B-ALL?',
+                options: [
+                    'Higher WBC threshold for high-risk (>100,000 vs >30,000)',
+                    'Lower frequency of CNS involvement',
+                    'Female predominance',
+                    'Better response to CD19-directed therapies'
+                ],
+                correct: 0,
+                explanation: 'T-ALL uses higher WBC threshold for risk stratification (>100,000/μL) compared to B-ALL (>30,000/μL). T-ALL has higher rates of CNS involvement, male predominance (2:1), and does not respond to CD19-directed therapies.',
+                keyPoint: 'T-ALL: WBC >100,000 = high risk (vs >30,000 for B-ALL). Male predominant, higher CNS risk.',
+                citation: 'Marks DI, et al. T-cell acute lymphoblastic leukemia in adults. Blood. 2009;114(25):5136-5145.',
+                pmid: '19797519',
+                doi: '10.1182/blood-2009-08-231217'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'intern',
+                type: 'GENETICS',
+                question: 'TAL1/SCL rearrangements in T-ALL typically result from:',
+                options: [
+                    'Reciprocal translocation with BCR',
+                    'Interstitial deletion on chromosome 1 creating SIL-TAL1 fusion',
+                    'Trisomy 8',
+                    'Point mutations only'
+                ],
+                correct: 1,
+                explanation: 'TAL1 (SCL) activation in T-ALL most commonly results from interstitial deletion on chromosome 1p creating the SIL-TAL1 fusion (~25% of T-ALL). TAL1 is a transcription factor normally silenced in T cells. Can also be activated by translocations with TCR loci.',
+                keyPoint: 'TAL1 activation: SIL-TAL1 fusion (1p deletion) in ~25% of T-ALL. Aberrant transcription factor expression.',
+                citation: 'Bash RO, et al. Clinical features and outcome of T-cell acute lymphoblastic leukemia in childhood with respect to alterations at the TAL1 locus. Blood. 1993;81(8):2110-2117.',
+                pmid: '8471770',
+                doi: '10.1182/blood.V81.8.2110.2110'
+            },
+
+            // ====================================
+            // ADDITIONAL T-ALL RESIDENT QUESTIONS
+            // ====================================
+            {
+                cellType: 't-cell',
+                difficulty: 'resident',
+                type: 'GENETICS',
+                question: 'CDKN2A/CDKN2B deletions are found in what percentage of T-ALL, and what is their significance?',
+                options: [
+                    '5%; favorable prognosis',
+                    '70-80%; loss of cell cycle control via p16/p14ARF pathway',
+                    '10%; specific to ETP-ALL only',
+                    '30%; resistance to nelarabine'
+                ],
+                correct: 1,
+                explanation: 'CDKN2A/CDKN2B deletions (9p21) occur in 70-80% of T-ALL. These genes encode p16INK4a and p14ARF tumor suppressors controlling cell cycle and p53 pathway. While common, their prognostic significance is debated and may depend on other concurrent alterations.',
+                keyPoint: 'CDKN2A/B deletions in 70-80% T-ALL. Loss of p16/p14ARF tumor suppressors.',
+                citation: 'Mullighan CG. The molecular genetic makeup of acute lymphoblastic leukemia. Hematology Am Soc Hematol Educ Program. 2012;2012:389-396.',
+                pmid: '23233609',
+                doi: '10.1182/asheducation.V2012.1.389.3798360'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'resident',
+                type: 'TREATMENT',
+                question: 'Nelarabine mechanism of action involves:',
+                options: [
+                    'Tyrosine kinase inhibition',
+                    'T-cell specific accumulation of ara-GTP causing DNA synthesis inhibition',
+                    'Anti-CD7 antibody-mediated killing',
+                    'Proteasome inhibition'
+                ],
+                correct: 1,
+                explanation: 'Nelarabine is a prodrug of ara-G (9-β-D-arabinofuranosylguanine). T cells have high deoxycytidine kinase and low deoxyguanosine kinase activity, causing preferential accumulation of ara-GTP in T cells. This leads to DNA synthesis inhibition and apoptosis.',
+                keyPoint: 'Nelarabine: T-cell specific due to ara-GTP accumulation. Prodrug of ara-G.',
+                citation: 'Gandhi V, Plunkett W. Cellular and clinical pharmacology of fludarabine. Clin Pharmacokinet. 2002;41(2):93-103.',
+                pmid: '11888330',
+                doi: '10.2165/00003088-200241020-00002'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'resident',
+                type: 'TOXICITY',
+                question: 'The dose-limiting toxicity of nelarabine is:',
+                options: [
+                    'Myelosuppression',
+                    'Neurotoxicity (peripheral and central)',
+                    'Cardiotoxicity',
+                    'Hepatotoxicity'
+                ],
+                correct: 1,
+                explanation: 'Neurotoxicity is the dose-limiting toxicity of nelarabine, presenting as peripheral neuropathy (numbness, weakness), and less commonly CNS effects (somnolence, seizures, Guillain-Barré-like syndrome). Onset may be delayed. Can be irreversible.',
+                keyPoint: 'Nelarabine neurotoxicity: peripheral neuropathy, CNS effects. May be delayed and irreversible.',
+                citation: 'DeAngelo DJ, et al. Nelarabine induces complete remissions in adults with relapsed or refractory T-lineage acute lymphoblastic leukemia or lymphoblastic lymphoma. Cancer. 2007;109(12):2399-2405.',
+                pmid: '17503435',
+                doi: '10.1002/cncr.22694'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'resident',
+                type: 'ETP-ALL',
+                question: 'Why was ETP-ALL historically associated with poor prognosis, and how has this changed?',
+                options: [
+                    'Intrinsic chemoresistance that cannot be overcome',
+                    'Early treatment failure on standard pediatric regimens; improved with intensive AML-like induction',
+                    'Universal CNS involvement',
+                    'Lack of targetable mutations'
+                ],
+                correct: 1,
+                explanation: 'ETP-ALL had high induction failure rates on standard ALL regimens. The addition of AML-like induction elements (cytarabine, anthracyclines) and intensive regimens has significantly improved outcomes. Some centers now achieve similar survival to non-ETP T-ALL.',
+                keyPoint: 'ETP-ALL: historically poor outcomes improved with intensive/AML-like regimens.',
+                citation: 'Patrick K, et al. Outcome for children and young people with Early T-cell precursor acute lymphoblastic leukaemia treated on a contemporary protocol. Br J Haematol. 2014;166(3):421-424.',
+                pmid: '24749716',
+                doi: '10.1111/bjh.12882'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'resident',
+                type: 'GENETICS',
+                question: 'PTEN mutations/deletions in T-ALL lead to activation of which pathway?',
+                options: [
+                    'JAK/STAT pathway',
+                    'PI3K/AKT/mTOR pathway',
+                    'RAS/MAPK pathway',
+                    'WNT/β-catenin pathway'
+                ],
+                correct: 1,
+                explanation: 'PTEN is a phosphatase that negatively regulates PI3K signaling. PTEN loss (mutation or deletion in 10-15% of T-ALL) leads to constitutive activation of PI3K/AKT/mTOR pathway, promoting cell survival and proliferation. This is associated with adverse prognosis.',
+                keyPoint: 'PTEN loss → PI3K/AKT/mTOR activation. Found in 10-15% T-ALL with adverse prognosis.',
+                citation: 'Gutierrez A, et al. High frequency of PTEN, PI3K, and AKT abnormalities in T-cell acute lymphoblastic leukemia. Blood. 2009;114(3):647-650.',
+                pmid: '19458356',
+                doi: '10.1182/blood-2009-02-206722'
+            },
+
+            // ====================================
+            // ADDITIONAL T-ALL FELLOW QUESTIONS
+            // ====================================
+            {
+                cellType: 't-cell',
+                difficulty: 'fellow',
+                type: 'EMERGING',
+                question: 'Daratumumab (anti-CD38) in T-ALL is being investigated because:',
+                options: [
+                    'All T-ALL cases are CD38-negative',
+                    'T-ALL blasts frequently express CD38, providing a targetable antigen',
+                    'It specifically targets NOTCH1',
+                    'It is the standard of care for relapsed T-ALL'
+                ],
+                correct: 1,
+                explanation: 'CD38 is highly expressed on T-ALL blasts (>80% of cases), making daratumumab a potential therapeutic option. Early phase trials combining daratumumab with chemotherapy in T-ALL are ongoing. This provides a targeting strategy for T-ALL which lacks CD19/CD22.',
+                keyPoint: 'CD38 expressed in >80% T-ALL. Daratumumab under investigation as targeting strategy.',
+                citation: 'Bride KL, et al. Preclinical efficacy of daratumumab in T-cell acute lymphoblastic leukemia. Blood. 2018;131(9):995-999.',
+                pmid: '29305551',
+                doi: '10.1182/blood-2017-07-794214'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'fellow',
+                type: 'MOLECULAR',
+                question: 'LMO1/LMO2 overexpression in T-ALL results from:',
+                options: [
+                    'Gene amplification',
+                    'Translocation to TCR loci or interstitial deletions activating expression',
+                    'Point mutations in the coding sequence',
+                    'Epigenetic silencing'
+                ],
+                correct: 1,
+                explanation: 'LMO1 and LMO2 (LIM-domain only proteins) are aberrantly expressed in T-ALL through translocations placing them under TCR enhancer control, or interstitial deletions. LMO2 was infamously activated by retroviral insertion in SCID gene therapy trials causing T-ALL.',
+                keyPoint: 'LMO1/2 activation by TCR translocations or deletions. LMO2 also activated in gene therapy-associated T-ALL.',
+                citation: 'Van Vlierberghe P, et al. The cryptic chromosomal deletion del(11)(p12p13) as a new activation mechanism of LMO2 in pediatric T-cell acute lymphoblastic leukemia. Blood. 2006;108(10):3520-3529.',
+                pmid: '16873676',
+                doi: '10.1182/blood-2006-04-019927'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'fellow',
+                type: 'TREATMENT',
+                question: 'Gamma-secretase inhibitors (GSIs) in T-ALL target:',
+                options: [
+                    'BCR::ABL1 fusion protein',
+                    'NOTCH1 receptor cleavage and activation',
+                    'JAK kinases',
+                    'CD7 antigen'
+                ],
+                correct: 1,
+                explanation: 'Gamma-secretase cleaves NOTCH1 receptor, releasing the intracellular domain (NICD) that drives transcription. GSIs block this cleavage, inhibiting NOTCH1 signaling. Clinical development limited by GI toxicity (goblet cell metaplasia) but combinations being explored.',
+                keyPoint: 'GSIs block NOTCH1 cleavage/activation. GI toxicity limits clinical use; combinations being studied.',
+                citation: 'Wei P, et al. Evaluation of selective gamma-secretase inhibitor PF-03084014 for its antitumor efficacy and gastrointestinal safety to guide optimal clinical trial design. Mol Cancer Ther. 2010;9(6):1618-1628.',
+                pmid: '20530712',
+                doi: '10.1158/1535-7163.MCT-10-0034'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'fellow',
+                type: 'GENETICS',
+                question: 'PHF6 mutations in T-ALL are:',
+                options: [
+                    'Found exclusively in females',
+                    'Associated with male predominance, found in 15-20% of T-ALL, linked to adverse outcomes',
+                    'Favorable prognostic marker',
+                    'Diagnostic of ETP-ALL'
+                ],
+                correct: 1,
+                explanation: 'PHF6 is an X-linked gene mutated in 15-20% of T-ALL, almost exclusively in males (explaining male predominance of T-ALL). Associated with TLX1/TLX3 expressing subtype. PHF6 mutations may contribute to adverse prognosis.',
+                keyPoint: 'PHF6: X-linked, mutated in 15-20% T-ALL (males). May confer adverse prognosis.',
+                citation: 'Van Vlierberghe P, et al. PHF6 mutations in T-cell acute lymphoblastic leukemia. Nat Genet. 2010;42(4):338-342.',
+                pmid: '20228800',
+                doi: '10.1038/ng.542'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'fellow',
+                type: 'CAR-T',
+                question: 'What are the main challenges in developing CAR-T therapy for T-ALL?',
+                options: [
+                    'T-ALL cells do not express any targetable antigens',
+                    'Fratricide (CAR-T killing CAR-T), T-cell aplasia, and manufacturing from leukemic cells',
+                    'CAR-T cells cannot be manufactured from patients with T-ALL',
+                    'Regulatory restrictions only'
+                ],
+                correct: 1,
+                explanation: 'T-ALL CAR-T challenges include: 1) Fratricide - target antigens (CD7, CD5) expressed on CAR-T cells themselves; 2) T-cell aplasia (unlike B-cell aplasia, not manageable with IVIG); 3) Risk of manufacturing CAR-T from contaminating leukemic cells. Gene editing to remove target antigen addresses fratricide.',
+                keyPoint: 'T-ALL CAR-T challenges: fratricide, T-cell aplasia, leukemic cell contamination. Gene editing solutions emerging.',
+                citation: 'Gomes-Silva D, et al. CD7-edited T cells expressing a CD7-specific CAR for the therapy of T-cell malignancies. Blood. 2017;130(3):285-296.',
+                pmid: '28432798',
+                doi: '10.1182/blood-2017-01-761320'
+            },
+
+            // ====================================
+            // ADDITIONAL T-ALL ATTENDING QUESTIONS
+            // ====================================
+            {
+                cellType: 't-cell',
+                difficulty: 'attending',
+                type: 'COMPLEX CASE',
+                question: 'A 24-year-old with T-ALL achieves CR1 but is MRD-positive (0.1%) after consolidation. Genetics show NOTCH1 mutation with concurrent PTEN deletion. Matched sibling donor available. Optimal management?',
+                options: [
+                    'Continue chemotherapy alone as NOTCH1 mutation is favorable',
+                    'Proceed to allogeneic HCT given PTEN deletion confers adverse prognosis despite NOTCH1',
+                    'Start nelarabine as first-line maintenance',
+                    'No further therapy needed'
+                ],
+                correct: 1,
+                explanation: 'While NOTCH1 mutation is favorable, concurrent PTEN deletion negates this benefit (NOTCH1/FBXW7 favorable ONLY without RAS/PTEN alterations). MRD positivity adds to risk. Allogeneic HCT offers best chance for cure in this high-risk scenario.',
+                keyPoint: 'NOTCH1 favorable ONLY without RAS/PTEN mutations. MRD+ with PTEN deletion = proceed to HCT.',
+                citation: 'Trinquand A, et al. Toward a NOTCH1/FBXW7/RAS/PTEN-based oncogenetic risk classification of adult T-cell acute lymphoblastic leukemia. J Clin Oncol. 2013;31(34):4333-4342.',
+                pmid: '24166518',
+                doi: '10.1200/JCO.2012.48.5292'
+            },
+            {
+                cellType: 't-cell',
+                difficulty: 'attending',
+                type: 'RELAPSE',
+                question: 'For multiply relapsed T-ALL after nelarabine and conventional chemotherapy, which investigational approaches show promise?',
+                options: [
+                    'Repeat nelarabine indefinitely',
+                    'Venetoclax combinations, CD7 CAR-T trials, daratumumab combinations',
+                    'CD19 CAR-T therapy',
+                    'Inotuzumab ozogamicin'
+                ],
+                correct: 1,
+                explanation: 'For relapsed T-ALL, emerging options include: venetoclax (BCL2 overexpression), CD7 CAR-T (with fratricide-resistant engineering), daratumumab (CD38+), and other investigational agents. CD19/CD22 therapies not applicable. Clinical trials essential.',
+                keyPoint: 'Relapsed T-ALL: venetoclax, CD7 CAR-T, daratumumab. CD19/CD22 therapies not applicable.',
+                citation: 'Richard-Carpentier G, Kantarjian H. Venetoclax in acute lymphoblastic leukemia. Cancer. 2020;126(18):4125-4130.',
+                pmid: '32644260',
+                doi: '10.1002/cncr.33034'
+            },
+
+            // ====================================
+            // ADDITIONAL BOTH (GENERAL) INTERN QUESTIONS
+            // ====================================
+            {
+                cellType: 'both',
+                difficulty: 'intern',
+                type: 'WORKUP',
+                question: 'Lumbar puncture in newly diagnosed ALL should be performed:',
+                options: [
+                    'Never - too risky with thrombocytopenia',
+                    'After peripheral blast clearance, with platelet support if needed, combined with intrathecal chemotherapy',
+                    'Only if neurologic symptoms present',
+                    'Before starting any systemic therapy'
+                ],
+                correct: 1,
+                explanation: 'LP should be performed after peripheral blast clearance to avoid introducing blasts into CSF ("traumatic tap"). Platelet transfusion if <50,000. First LP should include intrathecal chemotherapy. CNS staging affects prognosis and treatment intensity.',
+                keyPoint: 'LP after blast clearance with platelet support. Combine with IT chemotherapy. Avoid traumatic tap.',
+                citation: 'Lazarus HM, et al. Central nervous system involvement in adult acute lymphoblastic leukemia at diagnosis. Blood. 2006;108(2):465-472.',
+                pmid: '16609067',
+                doi: '10.1182/blood-2005-12-011973'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'intern',
+                type: 'TREATMENT',
+                question: 'Vincristine, a key component of ALL therapy, has which dose-limiting toxicity?',
+                options: [
+                    'Myelosuppression',
+                    'Peripheral neuropathy',
+                    'Cardiotoxicity',
+                    'Nephrotoxicity'
+                ],
+                correct: 1,
+                explanation: 'Vincristine causes peripheral neuropathy (sensory > motor) as dose-limiting toxicity. It is typically capped at 2 mg per dose regardless of body surface area. Also causes constipation/ileus (autonomic neuropathy). Minimal myelosuppression.',
+                keyPoint: 'Vincristine: peripheral neuropathy (dose-limiting), constipation. Capped at 2 mg/dose.',
+                citation: 'Mora E, et al. Vincristine-induced peripheral neuropathy in pediatric cancer patients. Am J Cancer Res. 2016;6(11):2416-2430.',
+                pmid: '27904761',
+                url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5126263/'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'intern',
+                type: 'PROGNOSIS',
+                question: 'Complete remission (CR) in ALL is defined as:',
+                options: [
+                    '<10% blasts in bone marrow',
+                    '<5% blasts in bone marrow with count recovery (ANC >1000, platelets >100,000) and no extramedullary disease',
+                    'Any improvement in blast percentage',
+                    'Negative MRD only'
+                ],
+                correct: 1,
+                explanation: 'CR requires: <5% blasts in bone marrow, ANC >1,000/μL, platelets >100,000/μL, no circulating blasts, and no extramedullary disease. CR with incomplete count recovery (CRi) has <5% blasts but incomplete ANC/platelet recovery.',
+                keyPoint: 'CR: <5% BM blasts + ANC >1000 + PLT >100K + no extramedullary disease.',
+                citation: 'Cheson BD, et al. Revised recommendations of the International Working Group for Diagnosis, Standardization of Response Criteria, Treatment Outcomes, and Reporting Standards for Therapeutic Trials in Acute Myeloid Leukemia. J Clin Oncol. 2003;21(24):4642-4649.',
+                pmid: '14673054',
+                doi: '10.1200/JCO.2003.04.036'
+            },
+
+            // ====================================
+            // ADDITIONAL BOTH RESIDENT QUESTIONS
+            // ====================================
+            {
+                cellType: 'both',
+                difficulty: 'resident',
+                type: 'TRANSPLANT',
+                question: 'Which conditioning regimen is most commonly used for allogeneic HCT in adult ALL?',
+                options: [
+                    'Reduced intensity with fludarabine/melphalan',
+                    'Myeloablative with TBI + cyclophosphamide or TBI + etoposide',
+                    'Non-myeloablative with TLI',
+                    'Autologous conditioning'
+                ],
+                correct: 1,
+                explanation: 'Myeloablative conditioning with TBI (total body irradiation) + cyclophosphamide or TBI + etoposide remains standard for ALL. TBI-containing regimens show superior outcomes over chemotherapy-only conditioning in ALL. Reduced intensity may be considered for older/unfit patients.',
+                keyPoint: 'ALL HCT: TBI-based myeloablative conditioning preferred. TBI + Cy or TBI + VP-16.',
+                citation: 'Marks DI, et al. The outcome of full-intensity and reduced-intensity conditioning matched sibling or unrelated donor transplantation in adults with Philadelphia chromosome-negative acute lymphoblastic leukemia in first and second complete remission. Blood. 2010;116(3):366-374.',
+                pmid: '20404137',
+                doi: '10.1182/blood-2010-01-264077'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'resident',
+                type: 'RELAPSE',
+                question: 'The most common site of isolated extramedullary relapse in ALL is:',
+                options: [
+                    'Liver',
+                    'Central nervous system',
+                    'Skin',
+                    'Lungs'
+                ],
+                correct: 1,
+                explanation: 'CNS is the most common site of isolated extramedullary relapse in ALL, occurring in 5-10% of patients. Testicular relapse occurs in males (especially pediatric). Isolated extramedullary relapse still requires systemic therapy as bone marrow involvement follows.',
+                keyPoint: 'CNS = most common extramedullary relapse site. Always treat systemically even if "isolated."',
+                citation: 'Pui CH, Howard SC. Current management and challenges of malignant disease in the CNS in paediatric leukaemia. Lancet Oncol. 2008;9(3):257-268.',
+                pmid: '18308251',
+                doi: '10.1016/S1470-2045(08)70070-6'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'resident',
+                type: 'SUPPORTIVE',
+                question: 'PEG-asparaginase hypersensitivity in ALL can be managed by:',
+                options: [
+                    'Discontinuing asparaginase permanently',
+                    'Switching to Erwinia-derived asparaginase (crisantaspase) or recombinant alternatives',
+                    'Increasing the PEG-asparaginase dose',
+                    'Adding rituximab to prevent reactions'
+                ],
+                correct: 1,
+                explanation: 'Hypersensitivity to E. coli-derived PEG-asparaginase can be managed by switching to Erwinia-derived asparaginase (Erwinaze/Rylaze) or recombinant alternatives. Maintaining asparaginase therapy is important for optimal outcomes. Silent inactivation (antibodies without clinical reaction) should also prompt switching.',
+                keyPoint: 'PEG-asp allergy: switch to Erwinia-derived or recombinant asparaginase. Maintaining therapy is crucial.',
+                citation: 'Burke MJ, et al. A Comparison of Erwinia asparaginase and PEG-asparaginase in Standard Risk Childhood Acute Lymphoblastic Leukemia. Pediatr Blood Cancer. 2016;63(1):77-81.',
+                pmid: '26397382',
+                doi: '10.1002/pbc.25709'
+            },
+
+            // ====================================
+            // ADDITIONAL BOTH FELLOW QUESTIONS
+            // ====================================
+            {
+                cellType: 'both',
+                difficulty: 'fellow',
+                type: 'BIOLOGY',
+                question: 'Hypodiploid ALL (<44 chromosomes) is associated with which germline predisposition?',
+                options: [
+                    'Down syndrome',
+                    'Li-Fraumeni syndrome (TP53 mutations)',
+                    'Fanconi anemia',
+                    'Bloom syndrome'
+                ],
+                correct: 1,
+                explanation: 'Low-hypodiploid ALL (32-39 chromosomes) is strongly associated with germline TP53 mutations (Li-Fraumeni syndrome) in up to 50% of cases. Genetic counseling and germline testing recommended. Near-haploid (24-31 chromosomes) is associated with RAS pathway mutations.',
+                keyPoint: 'Low-hypodiploid ALL: 50% have germline TP53 mutations. Genetic counseling essential.',
+                citation: 'Holmfeldt L, et al. The genomic landscape of hypodiploid acute lymphoblastic leukemia. Nat Genet. 2013;45(3):242-252.',
+                pmid: '23334668',
+                doi: '10.1038/ng.2532'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'fellow',
+                type: 'EMERGING',
+                question: 'What is the role of next-generation sequencing (NGS) for MRD detection in ALL?',
+                options: [
+                    'Not applicable to ALL',
+                    'ClonoSEQ and similar assays detect clonal Ig/TCR rearrangements with sensitivity of 10⁻⁶',
+                    'Only useful for cytogenetic analysis',
+                    'Replaced by flow cytometry completely'
+                ],
+                correct: 1,
+                explanation: 'NGS-based MRD (e.g., clonoSEQ) detects clonal Ig/TCR rearrangements with sensitivity up to 10⁻⁶, exceeding flow cytometry (10⁻⁴). FDA-cleared for MRD assessment in ALL. Particularly useful when flow cytometry is limited or unavailable.',
+                keyPoint: 'NGS MRD (clonoSEQ): sensitivity 10⁻⁶, FDA-cleared for ALL. Complements flow cytometry.',
+                citation: 'Wood B, et al. Measurable residual disease detection by high-throughput sequencing improves risk stratification for pediatric B-ALL. Blood. 2018;131(12):1350-1359.',
+                pmid: '29284596',
+                doi: '10.1182/blood-2017-09-806786'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'fellow',
+                type: 'TREATMENT',
+                question: 'In the TOWER trial, blinatumomab compared to standard chemotherapy for relapsed/refractory B-ALL showed:',
+                options: [
+                    'No survival difference',
+                    'Superior overall survival (7.7 vs 4.0 months) and higher CR rate',
+                    'Worse outcomes due to CRS',
+                    'Only benefit in Ph+ patients'
+                ],
+                correct: 1,
+                explanation: 'The TOWER trial demonstrated superior overall survival with blinatumomab vs chemotherapy (7.7 vs 4.0 months, HR 0.71) in relapsed/refractory B-ALL. CR rate was also higher (44% vs 25%). This established blinatumomab as preferred over salvage chemotherapy.',
+                keyPoint: 'TOWER trial: blinatumomab superior to chemo in R/R B-ALL. OS 7.7 vs 4.0 months.',
+                citation: 'Kantarjian H, et al. Blinatumomab versus Chemotherapy for Advanced Acute Lymphoblastic Leukemia. N Engl J Med. 2017;376(9):836-847.',
+                pmid: '28249141',
+                doi: '10.1056/NEJMoa1609783'
+            },
+
+            // ====================================
+            // ADDITIONAL BOTH ATTENDING QUESTIONS
+            // ====================================
+            {
+                cellType: 'both',
+                difficulty: 'attending',
+                type: 'COMPLEX',
+                question: 'A patient develops isolated CNS relapse 18 months after completing ALL therapy (initially in CR1). Best management approach?',
+                options: [
+                    'Intrathecal chemotherapy alone',
+                    'Systemic reinduction + intensive IT therapy + CNS-directed therapy, consider HCT',
+                    'Cranial radiation only',
+                    'Palliative care'
+                ],
+                correct: 1,
+                explanation: 'Isolated CNS relapse requires systemic reinduction (will usually develop marrow relapse if not treated systemically), intensive intrathecal therapy, and CNS-directed radiation in selected cases. Allogeneic HCT improves long-term survival after achieving CR2.',
+                keyPoint: 'Isolated CNS relapse: treat SYSTEMICALLY + IT + consider HCT. "Isolated" CNS will become systemic.',
+                citation: 'Lazarus HM, et al. Central nervous system involvement in adult acute lymphoblastic leukemia at diagnosis. Blood. 2006;108(2):465-472.',
+                pmid: '16609067',
+                doi: '10.1182/blood-2005-12-011973'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'attending',
+                type: 'SEQUENCING',
+                question: 'For a patient with relapsed B-ALL who has received chemotherapy, blinatumomab, and inotuzumab, which factor most influences CD19 CAR-T success?',
+                options: [
+                    'Number of prior therapies does not matter',
+                    'CD19 expression level and disease burden at lymphodepletion',
+                    'Patient age only',
+                    'Time since inotuzumab (must wait 1 year)'
+                ],
+                correct: 1,
+                explanation: 'CAR-T success depends on CD19 expression (may be diminished post-blinatumomab), disease burden (high burden increases CRS/ICANS risk), and lymphodepletion quality. Prior inotuzumab does not require waiting period but may affect CD22 levels for sequential targeting.',
+                keyPoint: 'CAR-T success factors: CD19 expression, disease burden, lymphodepletion. Check target antigen after prior immunotherapy.',
+                citation: 'Turtle CJ, et al. CD19 CAR-T cells of defined CD4+:CD8+ composition in adult B cell ALL patients. J Clin Invest. 2016;126(6):2123-2138.',
+                pmid: '27111235',
+                doi: '10.1172/JCI85309'
+            },
+            {
+                cellType: 'both',
+                difficulty: 'attending',
+                type: 'EMERGING',
+                question: 'What is the potential role of menin inhibitors in ALL?',
+                options: [
+                    'Effective in all ALL subtypes',
+                    'Targeting KMT2A (MLL)-rearranged ALL where menin-MLL interaction drives leukemogenesis',
+                    'Only useful for T-ALL',
+                    'Replace chemotherapy entirely'
+                ],
+                correct: 1,
+                explanation: 'Menin inhibitors (revumenib, ziftomenib) disrupt the menin-KMT2A interaction essential for KMT2A-rearranged leukemia. Early trials show promising responses in KMT2A-rearranged ALL. May also benefit NPM1-mutated AML. Represents precision medicine approach.',
+                keyPoint: 'Menin inhibitors target KMT2A-rearranged ALL. Disrupt menin-MLL interaction. Promising early results.',
+                citation: 'Issa GC, et al. The menin inhibitor revumenib in KMT2A-rearranged or NPM1-mutant leukaemia. Nature. 2023;615(7954):920-924.',
+                pmid: '36922593',
+                doi: '10.1038/s41586-023-05812-3'
+            }
+        ];
+
+        // ====================================
+        // AUDIO FUNCTIONS
+        // ====================================
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        function playSound(frequencies, type = 'square', duration = 0.15, delay = 0) {
+            if (gameState.isMuted) return;
+
+            try {
+                const ctx = initAudio();
+                const now = ctx.currentTime;
+
+                frequencies.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+
+                    osc.type = type;
+                    osc.frequency.value = freq;
+
+                    gain.gain.setValueAtTime(0.15, now + delay + (i * 0.1));
+                    gain.gain.exponentialDecayTo = 0.01;
+                    gain.gain.setValueAtTime(0.15, now + delay + (i * 0.1));
+                    gain.gain.exponentialDecayTo(0.01, now + delay + (i * 0.1) + duration);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.start(now + delay + (i * 0.1));
+                    osc.stop(now + delay + (i * 0.1) + duration);
+                });
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+
+        function playCorrectSound() {
+            if (gameState.isMuted) return;
+
+            try {
+                const ctx = initAudio();
+                const now = ctx.currentTime;
+
+                // Ascending burger assembly sound
+                const notes = [392, 494, 587, 784]; // G4, B4, D5, G5
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+
+                    osc.type = 'square';
+                    osc.frequency.value = freq;
+
+                    gain.gain.setValueAtTime(0.2, now + (i * 0.08));
+                    gain.gain.exponentialDecayTo = 0.01;
+                    gain.gain.setValueAtTime(0.2, now + (i * 0.08));
+                    gain.gain.setTargetAtTime(0.01, now + (i * 0.08) + 0.1, 0.05);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.start(now + (i * 0.08));
+                    osc.stop(now + (i * 0.08) + 0.15);
+                });
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+
+        function playWrongSound() {
+            if (gameState.isMuted) return;
+
+            try {
+                const ctx = initAudio();
+                const now = ctx.currentTime;
+
+                // Descending "splat" sound
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(80, now + 0.3);
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+
+        function playVictorySound() {
+            if (gameState.isMuted) return;
+
+            try {
+                const ctx = initAudio();
+                const now = ctx.currentTime;
+
+                // Victory fanfare - Burger Time style
+                const melody = [523, 659, 784, 1047, 784, 1047, 1319];
+                melody.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+
+                    osc.type = 'square';
+                    osc.frequency.value = freq;
+
+                    gain.gain.setValueAtTime(0.2, now + (i * 0.12));
+                    gain.gain.setTargetAtTime(0.01, now + (i * 0.12) + 0.15, 0.05);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.start(now + (i * 0.12));
+                    osc.stop(now + (i * 0.12) + 0.2);
+                });
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+
+        function playGameOverSound() {
+            if (gameState.isMuted) return;
+
+            try {
+                const ctx = initAudio();
+                const now = ctx.currentTime;
+
+                // Sad descending sound
+                const melody = [523, 466, 415, 392, 349, 311, 262, 196];
+                melody.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+
+                    osc.type = 'triangle';
+                    osc.frequency.value = freq;
+
+                    gain.gain.setValueAtTime(0.15, now + (i * 0.15));
+                    gain.gain.setTargetAtTime(0.01, now + (i * 0.15) + 0.2, 0.05);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.start(now + (i * 0.15));
+                    osc.stop(now + (i * 0.15) + 0.25);
+                });
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+
+        // Background music - Burger Time inspired
+        const burgerMelody = [
+            392, 440, 494, 523, 587, 659, 698, 784,
+            784, 698, 659, 587, 523, 494, 440, 392,
+            523, 587, 659, 698, 784, 880, 988, 1047,
+            1047, 988, 880, 784, 698, 659, 587, 523
+        ];
+
+        const bassLine = [
+            196, 196, 220, 220, 262, 262, 294, 294,
+            330, 330, 294, 294, 262, 262, 220, 220
+        ];
+
+        function startMusic() {
+            if (gameState.isMuted || musicInterval) return;
+
+            try {
+                const ctx = initAudio();
+                currentBeat = 0;
+
+                musicInterval = setInterval(() => {
+                    if (gameState.isMuted) return;
+
+                    const now = ctx.currentTime;
+
+                    // Melody
+                    const melodyOsc = ctx.createOscillator();
+                    const melodyGain = ctx.createGain();
+                    melodyOsc.type = 'square';
+                    melodyOsc.frequency.value = burgerMelody[currentBeat % burgerMelody.length];
+                    melodyGain.gain.setValueAtTime(0.08, now);
+                    melodyGain.gain.setTargetAtTime(0.01, now + 0.1, 0.02);
+                    melodyOsc.connect(melodyGain);
+                    melodyGain.connect(ctx.destination);
+                    melodyOsc.start(now);
+                    melodyOsc.stop(now + 0.15);
+
+                    // Bass
+                    const bassOsc = ctx.createOscillator();
+                    const bassGain = ctx.createGain();
+                    bassOsc.type = 'triangle';
+                    bassOsc.frequency.value = bassLine[currentBeat % bassLine.length];
+                    bassGain.gain.setValueAtTime(0.1, now);
+                    bassGain.gain.setTargetAtTime(0.01, now + 0.15, 0.03);
+                    bassOsc.connect(bassGain);
+                    bassGain.connect(ctx.destination);
+                    bassOsc.start(now);
+                    bassOsc.stop(now + 0.2);
+
+                    // Percussion on beats
+                    if (currentBeat % 4 === 0) {
+                        const percOsc = ctx.createOscillator();
+                        const percGain = ctx.createGain();
+                        percOsc.type = 'square';
+                        percOsc.frequency.value = 80;
+                        percGain.gain.setValueAtTime(0.1, now);
+                        percGain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                        percOsc.connect(percGain);
+                        percGain.connect(ctx.destination);
+                        percOsc.start(now);
+                        percOsc.stop(now + 0.05);
+                    }
+
+                    currentBeat++;
+                }, 180);
+
+                gameState.musicPlaying = true;
+            } catch (e) {
+                console.log('Music error:', e);
+            }
+        }
+
+        function stopMusic() {
+            if (musicInterval) {
+                clearInterval(musicInterval);
+                musicInterval = null;
+            }
+            gameState.musicPlaying = false;
+        }
+
+        function toggleVolume() {
+            gameState.isMuted = !gameState.isMuted;
+            const btn = document.getElementById('volumeBtn');
+
+            if (gameState.isMuted) {
+                stopMusic();
+                btn.innerHTML = '&#128263;';
+            } else {
+                if (document.getElementById('gameScreen').classList.contains('active')) {
+                    startMusic();
+                }
+                btn.innerHTML = '&#128266;';
+            }
+        }
+
+        // ====================================
+        // GAME FUNCTIONS
+        // ====================================
+        function selectDifficulty(diff) {
+            gameState.difficulty = diff;
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`[data-difficulty="${diff}"]`).classList.add('selected');
+        }
+
+        function selectCellType(type) {
+            gameState.cellType = type;
+            document.querySelectorAll('.cell-type-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`[data-type="${type}"]`).classList.add('selected');
+        }
+
+        function filterQuestions() {
+            let filtered = allQuestions;
+
+            // Filter by cell type
+            if (gameState.cellType !== 'both') {
+                filtered = filtered.filter(q => q.cellType === gameState.cellType || q.cellType === 'both');
+            }
+
+            // Filter by difficulty (unless "stock"/random)
+            if (gameState.difficulty !== 'stock') {
+                filtered = filtered.filter(q => q.difficulty === gameState.difficulty);
+            }
+
+            // Shuffle and take 10 questions
+            filtered = filtered.sort(() => Math.random() - 0.5);
+            return filtered.slice(0, Math.min(10, filtered.length));
+        }
+
+        function startGame() {
+            // Initialize audio on user interaction
+            initAudio();
+
+            // Filter and set questions
+            gameState.questions = filterQuestions();
+            gameState.totalQuestions = gameState.questions.length;
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.streak = 0;
+            gameState.bestStreak = 0;
+            gameState.correctAnswers = 0;
+
+            // Update UI
+            document.getElementById('totalQ').textContent = gameState.totalQuestions;
+            updateHUD();
+            resetBurgerStack();
+
+            // Show game screen
+            document.getElementById('titleScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.add('active');
+            document.getElementById('endScreen').classList.remove('active');
+
+            // Start music
+            startMusic();
+
+            // Load first question
+            displayQuestion();
+        }
+
+        function resetBurgerStack() {
+            document.querySelectorAll('.burger-layer').forEach(layer => {
+                layer.classList.remove('active');
+            });
+        }
+
+        function updateBurgerStack(questionNum) {
+            const layer = document.querySelector(`[data-layer="${questionNum + 1}"]`);
+            if (layer) {
+                layer.classList.add('active');
+            }
+        }
+
+        function updateHUD() {
+            document.getElementById('scoreValue').textContent = gameState.score;
+            document.getElementById('currentQ').textContent = gameState.currentQuestion + 1;
+            document.getElementById('streakValue').textContent = gameState.streak + '&#128293;';
+
+            // Update lives display
+            let livesHTML = '';
+            for (let i = 0; i < gameState.lives; i++) {
+                livesHTML += '&#127828;';
+            }
+            document.getElementById('livesDisplay').innerHTML = livesHTML || '&#128128;';
+        }
+
+        function displayQuestion() {
+            const q = gameState.questions[gameState.currentQuestion];
+
+            // Update badges
+            document.getElementById('questionType').textContent = q.type;
+
+            const cellBadge = document.getElementById('cellBadge');
+            cellBadge.className = 'cell-badge ' + q.cellType;
+            cellBadge.textContent = q.cellType === 'b-cell' ? 'B-ALL' :
+                                    q.cellType === 't-cell' ? 'T-ALL' : 'ALL';
+
+            const diffBadge = document.getElementById('difficultyBadge');
+            diffBadge.className = 'difficulty-badge ' + q.difficulty;
+            diffBadge.textContent = q.difficulty.toUpperCase();
+
+            // Update question text
+            document.getElementById('questionText').textContent = q.question;
+
+            // Generate options
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span class="option-letter">${letters[index]}</span>${option}`;
+                btn.onclick = () => checkAnswer(index);
+                optionsGrid.appendChild(btn);
+            });
+
+            // Hide explanation
+            document.getElementById('explanationSection').classList.remove('show');
+        }
+
+        function checkAnswer(selectedIndex) {
+            const q = gameState.questions[gameState.currentQuestion];
+            const options = document.querySelectorAll('.option-btn');
+
+            // Disable all options
+            options.forEach(opt => opt.classList.add('disabled'));
+
+            // Mark correct and incorrect
+            options[q.correct].classList.add('correct');
+
+            if (selectedIndex === q.correct) {
+                // Correct answer
+                playCorrectSound();
+                gameState.streak++;
+                gameState.correctAnswers++;
+
+                // Calculate score with streak bonus
+                const baseScore = 100;
+                const streakBonus = Math.min(gameState.streak - 1, 5) * 20;
+                const difficultyBonus = {
+                    'intern': 0,
+                    'resident': 25,
+                    'fellow': 50,
+                    'attending': 100
+                }[q.difficulty] || 0;
+
+                gameState.score += baseScore + streakBonus + difficultyBonus;
+
+                if (gameState.streak > gameState.bestStreak) {
+                    gameState.bestStreak = gameState.streak;
+                }
+
+                // Add burger layer
+                updateBurgerStack(gameState.currentQuestion);
+            } else {
+                // Wrong answer
+                playWrongSound();
+                options[selectedIndex].classList.add('incorrect');
+                gameState.lives--;
+                gameState.streak = 0;
+            }
+
+            updateHUD();
+
+            // Show explanation
+            showExplanation(q);
+        }
+
+        function renderReferenceLinks(question) {
+            let links = '';
+            if (question.pmid) {
+                links += `<a href="https://pubmed.ncbi.nlm.nih.gov/${question.pmid}/" target="_blank" rel="noopener" class="ref-link" title="View on PubMed">📄 PubMed</a>`;
+            }
+            if (question.doi) {
+                links += `<a href="https://doi.org/${question.doi}" target="_blank" rel="noopener" class="ref-link" title="View Full Text">🔗 DOI</a>`;
+            }
+            if (question.url) {
+                links += `<a href="${question.url}" target="_blank" rel="noopener" class="ref-link" title="View Source">📋 Link</a>`;
+            }
+            if (question.guideline) {
+                links += `<a href="${question.guideline.url}" target="_blank" rel="noopener" class="ref-link" title="View Guidelines">📋 ${question.guideline.name}</a>`;
+            }
+            return links ? `<div class="ref-links">${links}</div>` : '';
+        }
+
+        function showExplanation(q) {
+            const section = document.getElementById('explanationSection');
+            document.getElementById('explanationText').textContent = q.explanation;
+            document.getElementById('keyPoint').innerHTML = '&#127828; Key Point: ' + q.keyPoint;
+
+            // Build citation with styled reference links
+            document.getElementById('citation').innerHTML = `📚 ${q.citation}${renderReferenceLinks(q)}`;
+
+            section.classList.add('show');
+        }
+
+        function nextQuestion() {
+            gameState.currentQuestion++;
+
+            if (gameState.lives <= 0) {
+                endGame(false);
+            } else if (gameState.currentQuestion >= gameState.totalQuestions) {
+                endGame(true);
+            } else {
+                displayQuestion();
+            }
+        }
+
+        function endGame(completed) {
+            stopMusic();
+
+            if (completed) {
+                playVictorySound();
+                document.getElementById('endTitle').textContent = 'ORDER COMPLETE!';
+            } else {
+                playGameOverSound();
+                document.getElementById('endTitle').textContent = 'ORDER FAILED!';
+            }
+
+            // Update stats
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('correctCount').textContent =
+                `${gameState.correctAnswers}/${gameState.totalQuestions}`;
+            document.getElementById('bestStreak').innerHTML = gameState.bestStreak + '&#128293;';
+
+            // Check high score
+            const highScoreKey = 'allBurgerTimeHighScore';
+            const currentHigh = parseInt(localStorage.getItem(highScoreKey) || '0');
+            const highScoreEl = document.getElementById('highScore');
+
+            if (gameState.score > currentHigh) {
+                localStorage.setItem(highScoreKey, gameState.score);
+                highScoreEl.textContent = gameState.score;
+                highScoreEl.classList.add('new-record');
+            } else {
+                highScoreEl.textContent = currentHigh;
+                highScoreEl.classList.remove('new-record');
+            }
+
+            // Show end screen
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('endScreen').classList.add('active');
+        }
+
+        function restartGame() {
+            document.getElementById('endScreen').classList.remove('active');
+            document.getElementById('titleScreen').classList.remove('hidden');
+        }
+
+        // Initialize with default selections
+        document.addEventListener('DOMContentLoaded', () => {
+            selectCellType('b-cell');
+            selectDifficulty('intern');
+        });
+    </script>
+</body>
+</html>
