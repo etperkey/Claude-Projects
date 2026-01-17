@@ -6,6 +6,7 @@ function Contact() {
     email: '',
     message: ''
   });
+  const [status, setStatus] = useState('idle');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,12 +16,29 @@ function Contact() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission - integrate with your preferred service
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! I will get back to you soon.');
-    setFormData({ name: '', email: '', message: '' });
+    setStatus('sending');
+
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          'form-name': 'contact',
+          ...formData
+        }).toString()
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      setStatus('error');
+    }
   };
 
   return (
@@ -52,45 +70,62 @@ function Contact() {
           <span>or send a message</span>
         </div>
 
-        <form className="contact-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              placeholder="Your name"
-            />
+        {status === 'success' ? (
+          <div className="form-success">
+            <p>Thank you for your message! I'll get back to you soon.</p>
           </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="your.email@example.com"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="message">Message</label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              required
-              placeholder="Your message..."
-              rows="5"
-            ></textarea>
-          </div>
-          <button type="submit" className="btn btn-primary">Send Message</button>
-        </form>
+        ) : (
+          <form className="contact-form" onSubmit={handleSubmit}>
+            <input type="hidden" name="form-name" value="contact" />
+            <p hidden>
+              <label>
+                Don't fill this out: <input name="bot-field" onChange={handleChange} />
+              </label>
+            </p>
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                placeholder="Your name"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                placeholder="your.email@example.com"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+                placeholder="Your message..."
+                rows="5"
+              ></textarea>
+            </div>
+            {status === 'error' && (
+              <p className="form-error">Something went wrong. Please try again.</p>
+            )}
+            <button type="submit" className="btn btn-primary" disabled={status === 'sending'}>
+              {status === 'sending' ? 'Sending...' : 'Send Message'}
+            </button>
+          </form>
+        )}
       </div>
     </section>
   );
