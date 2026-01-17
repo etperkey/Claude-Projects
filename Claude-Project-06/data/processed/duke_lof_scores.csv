@@ -1,0 +1,975 @@
+patientId,IPI_ANNARBOR_STAGE,Stage_Advanced,Has_GNA13_RHOA,Has_GNAI2,Mutation_Category,sampleId,Has_LoF_Retention,Has_GoF_Egress,Has_Any_Retention,Has_Any_Egress,LoF_count,LoF_genes,LoF_category,LoF_numeric
+DLBCL_DUKE_648,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_648,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_683,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_683,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_684,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_684,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_689,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_689,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_690,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_690,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_695,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_695,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_702,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_702,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_704,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_704,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_705,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_705,True,False,True,False,2,1,2,2
+DLBCL_DUKE_707,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_707,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_759,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_759,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_787,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_787,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_790,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_790,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_793,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_793,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_799,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_799,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_800,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_800,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_813,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_813,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_816,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_816,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_823,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_823,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_829,1,True,False,False,Egress (GNAI2/CXCR4),DLBCL_DUKE_829,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_830,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_830,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_831,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_831,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_832,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_832,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_1008,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_1008,True,False,True,False,1,1,1,1
+DLBCL_DUKE_1016,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_1016,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2043,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2043,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2044,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2044,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2045,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2045,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2046,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2046,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2047,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2047,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2048,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2048,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2057,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2057,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2060,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2060,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2072,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2072,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2073,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2073,True,False,True,False,3,1,3+,3
+DLBCL_DUKE_2074,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2074,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2075,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2075,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2076,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2076,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2077,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2077,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2078,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2078,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2079,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2079,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2080,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2080,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2081,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2081,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2083,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2083,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2084,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2084,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2085,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2085,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2087,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2087,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2088,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2088,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2089,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2089,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2091,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2091,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2092,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2092,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2093,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2093,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2095,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2095,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2097,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2097,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2100,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2100,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2101,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2101,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2102,0,False,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2102,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2103,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2103,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2106,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2106,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2107,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2107,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2109,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2109,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2110,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2110,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2111,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2111,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2112,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2112,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2113,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2113,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2114,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2114,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2115,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2115,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2120,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2120,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2121,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2121,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2122,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2122,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2123,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2123,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2124,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2124,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2125,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2125,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2126,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2126,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2127,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2127,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2128,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2128,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2130,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2130,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2133,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2133,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2134,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2134,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2135,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2135,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2136,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2136,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2138,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_2138,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_2140,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2140,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2141,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2141,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2142,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2142,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2143,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2143,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2144,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2144,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2145,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2145,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2146,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2146,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2147,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2147,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2149,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2149,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2150,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2150,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2151,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2151,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2152,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2152,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2153,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2153,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2154,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2154,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2155,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2155,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2156,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2156,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2157,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2157,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2158,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2158,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2159,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2159,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2160,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2160,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2161,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2161,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2162,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2162,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2163,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2163,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2164,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2164,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2165,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2165,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2166,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2166,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2190,1,True,False,False,Egress (GNAI2/CXCR4),DLBCL_DUKE_2190,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_2191,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2191,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2192,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2192,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2193,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2193,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2194,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2194,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2195,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2195,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2196,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2196,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2198,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2198,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2199,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2199,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2201,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2201,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2203,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2203,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2204,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2204,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2205,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2205,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2206,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2206,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2207,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2207,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2208,0,False,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2208,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_2209,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2209,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2210,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2210,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2211,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2211,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2212,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2212,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2213,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2213,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2214,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2214,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2215,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2215,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2216,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2216,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2217,0,False,False,False,Egress (GNAI2/CXCR4),DLBCL_DUKE_2217,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_2219,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2219,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2220,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2220,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2221,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2221,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2222,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2222,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2223,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2223,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2224,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2224,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2225,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2225,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2226,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2226,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2227,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2227,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2228,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2228,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2229,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2229,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2230,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2230,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2231,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2231,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2232,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2232,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2233,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2233,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2234,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2234,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2235,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2235,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2236,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2236,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2237,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2237,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2238,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2238,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2239,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2239,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2240,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2240,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2241,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2241,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2242,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2242,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2243,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2243,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2244,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2244,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2246,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2246,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2247,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2247,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2248,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2248,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2250,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2250,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2251,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2251,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2252,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2252,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2253,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2253,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2254,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2254,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2255,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2255,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2256,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2256,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2257,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2257,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2259,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2259,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2260,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2260,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2261,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2261,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2262,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2262,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2269,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2269,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2270,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2270,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2271,0,False,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2271,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_2272,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2272,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2273,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2273,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2274,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2274,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2278,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2278,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2279,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2279,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2281,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2281,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2286,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2286,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2290,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2290,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2291,0,False,False,False,Egress (GNAI2/CXCR4),DLBCL_DUKE_2291,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_2297,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2297,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2298,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2298,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2303,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2303,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2306,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2306,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2307,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2307,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2448,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2448,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2449,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2449,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2450,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2450,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2451,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2451,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2453,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2453,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2455,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2455,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2459,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2459,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2461,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2461,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2462,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2462,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2463,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2463,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2464,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2464,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2466,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2466,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2467,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2467,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2468,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2468,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2469,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2469,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2470,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2470,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2471,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2471,True,False,True,False,2,1,2,2
+DLBCL_DUKE_2472,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2472,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2473,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2473,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2474,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2474,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2475,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2475,True,False,True,False,4,1,3+,3
+DLBCL_DUKE_2476,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2476,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2477,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2477,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2478,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2478,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2479,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2479,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2480,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2480,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2481,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2481,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2483,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2483,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2485,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2485,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2487,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2487,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2488,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2488,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2522,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2522,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2523,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2523,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2524,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2524,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2525,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2525,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2527,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2527,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2528,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2528,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2529,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2529,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2530,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2530,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2532,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2532,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2533,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2533,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2534,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2534,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2538,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2538,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2539,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2539,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2540,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2540,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2541,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2541,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2542,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2542,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2543,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2543,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2544,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2544,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2545,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2545,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2547,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2547,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2548,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2548,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2549,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2549,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2550,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2550,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2551,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2551,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2552,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2552,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2553,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2553,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2554,1,True,False,False,Egress (GNAI2/CXCR4),DLBCL_DUKE_2554,False,True,False,True,0,0,0 (None),0
+DLBCL_DUKE_2555,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2555,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2556,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2556,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2559,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2559,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2560,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2560,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2561,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2561,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2562,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2562,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2565,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2565,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2566,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2566,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2567,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2567,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2570,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2570,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2571,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2571,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2573,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2573,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2575,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2575,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2576,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2576,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2577,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2577,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2578,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2578,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2580,1,True,False,False,Egress (GNAI2/CXCR4),DLBCL_DUKE_2580,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_2581,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2581,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2582,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2582,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2585,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2585,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2588,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2588,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2591,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2591,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2593,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2593,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2594,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2594,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2596,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2596,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2597,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2597,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2599,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2599,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2600,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2600,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2602,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2602,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2603,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2603,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2604,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2604,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2605,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2605,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2606,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2606,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2608,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2608,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2609,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2609,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2611,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2611,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2612,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2612,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2613,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2613,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2614,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2614,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2616,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2616,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2617,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2617,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2619,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2619,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2620,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2620,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2621,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2621,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2622,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2622,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2624,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2624,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2626,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2626,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2628,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2628,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2629,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2629,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2630,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2630,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2632,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2632,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2634,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2634,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2635,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2635,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2636,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2636,True,False,True,False,2,1,2,2
+DLBCL_DUKE_2637,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2637,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2639,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2639,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2640,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2640,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2642,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2642,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2643,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2643,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2644,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2644,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2646,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2646,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2647,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2647,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2649,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2649,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2650,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2650,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2651,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2651,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2652,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2652,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2654,1,True,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2654,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_2655,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2655,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2656,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2656,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2657,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2657,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2658,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2658,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2659,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2659,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2660,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2660,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2662,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2662,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2663,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2663,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2664,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2664,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2666,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2666,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2667,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2667,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2669,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2669,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2671,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2671,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2673,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2673,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2675,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2675,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2676,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2676,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2677,1,True,False,False,Both,DLBCL_DUKE_2677,False,True,True,True,0,0,0 (None),0
+DLBCL_DUKE_2678,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2678,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2680,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2680,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2681,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2681,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2684,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2684,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2685,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2685,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2687,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2687,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2688,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2688,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2689,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2689,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2690,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2690,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2691,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2691,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2692,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2692,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2696,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2696,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2697,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2697,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2698,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2698,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2699,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2699,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2700,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_2700,False,True,False,True,0,0,0 (None),0
+DLBCL_DUKE_2704,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2704,True,False,True,False,4,1,3+,3
+DLBCL_DUKE_2705,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2705,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2706,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2706,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2707,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2707,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2709,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2709,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2713,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2713,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2714,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2714,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2715,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2715,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2716,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2716,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2718,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_2718,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_2719,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2719,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2720,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2720,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2725,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2725,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2727,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2727,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2728,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2728,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2758,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2758,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2761,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2761,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2762,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2762,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2763,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2763,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2764,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2764,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2765,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2765,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2766,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_2766,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_2767,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2767,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2768,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2768,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2769,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2769,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2770,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2770,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2771,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2771,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2772,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2772,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2773,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2773,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2775,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2775,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2776,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2776,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2777,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2777,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2778,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2778,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2779,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2779,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2781,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2781,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2783,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2783,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2784,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2784,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2785,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2785,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2786,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2786,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2788,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2788,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2789,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2789,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2790,1,True,True,True,Both,DLBCL_DUKE_2790,True,True,True,True,1,1,1,1
+DLBCL_DUKE_2791,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2791,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2792,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2792,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2793,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2793,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2794,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2794,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2805,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2805,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2806,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2806,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2808,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2808,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2809,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2809,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2810,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2810,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2812,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2812,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2813,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2813,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2814,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2814,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2815,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2815,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2816,0,False,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_2816,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_2818,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2818,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2819,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2819,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2820,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2820,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2821,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2821,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2823,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2823,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2824,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2824,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2826,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2826,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2827,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2827,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2828,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2828,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2829,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2829,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2830,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2830,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2831,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2831,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2832,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2832,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2833,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2833,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2834,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2834,True,False,True,False,2,2,2,2
+DLBCL_DUKE_2836,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2836,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2837,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2837,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2838,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2838,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2839,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2839,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2840,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2840,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2841,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2841,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2843,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2843,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2844,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2844,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2865,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2865,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2867,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2867,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2871,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2871,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2872,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2872,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2873,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2873,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2874,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2874,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2877,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2877,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2878,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2878,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2879,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2879,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2881,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2881,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2882,1,True,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2882,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2884,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2884,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2886,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2886,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2887,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2887,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2888,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2888,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2889,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2889,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2891,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2891,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2892,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2892,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2893,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2893,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2894,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2894,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2895,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2895,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2897,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2897,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2898,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2898,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2899,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2899,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2900,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2900,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2901,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2901,True,False,True,False,2,1,2,2
+DLBCL_DUKE_2902,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2902,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2903,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2903,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2904,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2904,True,False,True,False,2,1,2,2
+DLBCL_DUKE_2905,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2905,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2908,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_2908,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_2909,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2909,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2910,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2910,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2912,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2912,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2915,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2915,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2917,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2917,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2918,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2918,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2919,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2919,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2921,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2921,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2922,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2922,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2923,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2923,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2925,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2925,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2928,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2928,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2931,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2931,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2933,1,True,False,False,Both,DLBCL_DUKE_2933,True,False,True,True,1,1,1,1
+DLBCL_DUKE_2934,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2934,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2935,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2935,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2936,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2936,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2939,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2939,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2940,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2940,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2941,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2941,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2944,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2944,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2945,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2945,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2946,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2946,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2947,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2947,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2948,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2948,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2949,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2949,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2950,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2950,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2951,1,True,True,True,Both,DLBCL_DUKE_2951,True,False,True,True,1,1,1,1
+DLBCL_DUKE_2952,0,False,True,False,Both,DLBCL_DUKE_2952,True,False,True,True,1,1,1,1
+DLBCL_DUKE_2953,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2953,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2954,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2954,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2955,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2955,True,False,True,False,1,1,1,1
+DLBCL_DUKE_2956,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2956,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2957,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_2957,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2958,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2958,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_2996,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_2996,True,False,True,False,2,1,2,2
+DLBCL_DUKE_2999,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_2999,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3382,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3382,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3384,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3384,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3385,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3385,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3386,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3386,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3387,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3387,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3388,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3388,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3389,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3389,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3390,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3390,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3394,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3394,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3396,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3396,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3397,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3397,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3398,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3398,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3399,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3399,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3400,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3400,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3401,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3401,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3403,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3403,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3404,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3404,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3405,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3405,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3406,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3406,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3407,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3407,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3408,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3408,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3409,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3409,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3411,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3411,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3412,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3412,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3413,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3413,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3417,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3417,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3418,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3418,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3419,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3419,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3422,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3422,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3423,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3423,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3424,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3424,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3428,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3428,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3429,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3429,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3430,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3430,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3431,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3431,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3432,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3432,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3433,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3433,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3434,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3434,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3435,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3435,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3438,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3438,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3439,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3439,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3440,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3440,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3441,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3441,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3444,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3444,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3446,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3446,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3447,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3447,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3448,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_3448,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_3449,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3449,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3450,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3450,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3451,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3451,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3452,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3452,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3453,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3453,True,False,True,False,2,1,2,2
+DLBCL_DUKE_3454,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3454,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3455,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3455,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3456,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3456,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3457,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3457,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3458,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3458,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3459,1,True,False,False,Egress (GNAI2/CXCR4),DLBCL_DUKE_3459,False,True,False,True,0,0,0 (None),0
+DLBCL_DUKE_3460,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3460,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3461,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3461,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3462,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3462,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3463,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3463,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3464,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3464,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3465,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3465,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3467,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3467,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3468,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3468,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3470,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3470,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3471,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3471,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3472,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3472,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3473,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3473,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3474,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3474,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3475,1,True,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3475,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_3476,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3476,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3477,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3477,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3478,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3478,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3479,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3479,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3480,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3480,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3481,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3481,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3482,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3482,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3483,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3483,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3484,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3484,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3485,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3485,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3486,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3486,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3487,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3487,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3488,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3488,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3489,0,False,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_3489,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_3490,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3490,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3493,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3493,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3495,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3495,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3496,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3496,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3497,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3497,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3498,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3498,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3500,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3500,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3502,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3502,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3503,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3503,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3504,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3504,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3505,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3505,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3506,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3506,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3507,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3507,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3508,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3508,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3510,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3510,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3511,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3511,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3512,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3512,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3513,0,False,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3513,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_3514,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3514,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3515,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3515,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3517,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_3517,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_3519,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3519,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3521,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3521,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3522,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3522,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3523,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3523,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3525,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3525,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3527,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3527,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3528,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3528,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3529,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3529,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3532,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3532,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3535,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3535,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3536,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3536,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3538,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3538,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3540,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3540,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3545,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3545,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3546,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3546,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3547,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3547,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3548,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3548,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3549,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3549,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3551,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3551,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3552,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3552,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3553,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3553,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3555,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3555,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3556,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3556,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3557,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3557,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3558,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3558,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3559,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3559,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3560,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3560,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3562,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3562,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3563,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3563,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3565,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3565,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3566,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3566,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3579,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3579,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3580,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3580,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3582,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3582,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3584,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3584,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3585,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3585,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3586,1,True,True,True,Both,DLBCL_DUKE_3586,True,False,True,True,1,1,1,1
+DLBCL_DUKE_3587,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3587,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3589,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3589,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3590,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3590,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3591,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3591,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3592,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3592,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3593,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3593,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3594,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3594,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3595,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3595,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3596,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3596,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3597,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3597,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3598,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3598,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3600,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3600,True,False,True,False,2,2,2,2
+DLBCL_DUKE_3601,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3601,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3602,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3602,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3603,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3603,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3604,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3604,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3605,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3605,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3606,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3606,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3607,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3607,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3608,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3608,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3609,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3609,True,False,True,False,2,1,2,2
+DLBCL_DUKE_3610,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3610,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3611,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3611,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3612,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3612,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3613,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3613,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3614,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3614,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3615,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3615,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3616,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3616,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3617,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3617,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3618,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3618,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3620,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3620,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3622,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3622,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3623,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3623,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3624,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3624,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3625,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_3625,False,True,False,True,0,0,0 (None),0
+DLBCL_DUKE_3627,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3627,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3628,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3628,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3629,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3629,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3630,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3630,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3631,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3631,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3632,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3632,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3634,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3634,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3635,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3635,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3636,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3636,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3637,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3637,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3638,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3638,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3639,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3639,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3640,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3640,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3642,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3642,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3643,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3643,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3644,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3644,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3645,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3645,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3646,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3646,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3647,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3647,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3648,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3648,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3649,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3649,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3651,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3651,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3652,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3652,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3653,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3653,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3654,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3654,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3655,1,True,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3655,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_3656,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3656,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3657,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3657,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3659,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3659,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3660,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3660,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3661,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3661,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3662,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3662,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3663,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3663,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3664,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3664,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3665,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3665,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3666,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3666,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3667,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3667,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3668,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3668,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3669,1,True,True,False,Both,DLBCL_DUKE_3669,True,False,True,True,1,1,1,1
+DLBCL_DUKE_3671,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3671,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3672,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3672,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3673,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3673,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3674,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3674,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3675,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3675,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3677,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3677,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3679,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3679,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3680,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3680,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3681,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3681,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3682,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3682,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3683,1,True,True,True,Both,DLBCL_DUKE_3683,True,True,True,True,1,1,1,1
+DLBCL_DUKE_3684,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3684,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3685,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3685,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3686,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3686,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3687,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3687,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3688,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3688,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3689,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3689,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3691,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3691,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3692,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3692,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3693,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3693,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3694,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_3694,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_3696,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3696,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3697,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3697,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3698,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3698,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3699,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3699,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3700,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3700,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3701,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3701,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3703,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3703,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3704,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3704,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3705,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3705,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3706,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3706,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3707,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3707,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3708,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3708,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3709,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3709,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3711,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3711,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3712,1,True,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3712,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_3713,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3713,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3715,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3715,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3716,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3716,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3717,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3717,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_3718,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3718,True,False,True,False,3,1,3+,3
+DLBCL_DUKE_3719,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3719,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3721,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3721,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3722,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3722,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3724,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_3724,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_3725,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3725,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3726,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3726,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3727,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3727,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3728,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3728,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3729,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3729,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3730,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3730,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3731,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3731,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3732,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3732,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3733,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3733,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3734,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3734,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3735,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3735,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3736,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3736,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3737,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3737,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3739,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3739,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3740,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3740,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3741,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3741,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3742,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3742,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3743,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3743,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3744,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3744,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3745,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3745,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3746,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3746,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3747,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3747,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3748,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3748,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3749,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3749,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3750,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3750,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3751,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_3751,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_3753,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3753,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3754,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3754,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3755,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3755,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3756,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3756,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3757,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3757,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3758,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3758,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3759,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3759,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3760,1,True,False,False,Both,DLBCL_DUKE_3760,False,True,True,True,0,0,0 (None),0
+DLBCL_DUKE_3761,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3761,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3762,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3762,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3763,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3763,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3764,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3764,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3765,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3765,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3766,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3766,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3767,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3767,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3770,1,True,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3770,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_3771,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3771,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3775,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3775,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3776,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3776,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3777,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3777,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3778,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3778,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3779,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3779,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3780,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3780,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3781,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3781,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3782,0,False,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_3782,False,True,False,True,0,0,0 (None),0
+DLBCL_DUKE_3783,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3783,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3784,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3784,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3785,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3785,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3786,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3786,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3787,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3787,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3810,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3810,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3811,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3811,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3812,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3812,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3813,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3813,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3814,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3814,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3815,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3815,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3817,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3817,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3819,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3819,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3820,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3820,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3821,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3821,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3822,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3822,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3823,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3823,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3825,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3825,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3826,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3826,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3827,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3827,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3828,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3828,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3829,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3829,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3830,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3830,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3831,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3831,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3832,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3832,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3833,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3833,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3834,0,False,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3834,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_3835,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3835,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3836,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3836,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3837,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3837,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3838,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3838,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3839,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3839,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3840,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3840,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3842,0,False,False,False,Egress (GNAI2/CXCR4),DLBCL_DUKE_3842,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_3843,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3843,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3846,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3846,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3847,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3847,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3848,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3848,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3849,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3849,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3852,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3852,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3856,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3856,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3857,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3857,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3859,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3859,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3861,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3861,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3867,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3867,True,False,True,False,2,2,2,2
+DLBCL_DUKE_3872,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3872,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3873,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3873,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3875,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3875,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3879,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3879,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3880,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3880,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3881,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3881,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3882,1,True,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3882,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_3883,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3883,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3885,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3885,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3886,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3886,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3887,0,False,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_3887,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_3888,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3888,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3889,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3889,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3891,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3891,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3892,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3892,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3893,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3893,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3894,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3894,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3895,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3895,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3898,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3898,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3899,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3899,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3900,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3900,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3901,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3901,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3902,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3902,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3903,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3903,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3904,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3904,True,False,True,False,2,1,2,2
+DLBCL_DUKE_3905,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3905,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3906,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3906,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3907,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3907,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3908,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3908,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3909,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3909,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3910,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3910,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3911,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3911,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3912,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3912,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3913,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3913,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3914,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3914,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3915,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3915,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3916,1,True,True,True,Both,DLBCL_DUKE_3916,True,False,True,True,1,1,1,1
+DLBCL_DUKE_3917,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3917,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3918,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3918,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3919,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3919,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3920,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3920,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3921,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3921,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3922,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3922,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3923,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3923,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3924,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3924,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3925,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3925,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3926,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3926,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3927,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3927,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3928,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3928,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3929,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3929,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3930,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3930,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3931,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3931,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3932,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3932,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3933,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3933,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3934,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3934,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3935,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3935,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3936,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3936,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3937,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3937,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3938,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3938,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3939,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3939,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3940,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3940,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3941,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3941,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3942,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_3942,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_3943,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3943,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3944,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3944,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3945,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3945,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3946,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3946,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3948,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3948,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3949,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3949,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3950,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3950,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3951,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3951,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3952,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3952,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3953,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3953,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3954,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3954,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3955,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3955,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3956,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3956,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3957,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3957,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3958,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3958,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3959,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3959,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3960,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3960,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3961,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3961,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3962,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3962,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3963,0,False,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3963,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3964,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3964,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3965,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3965,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3966,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3966,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3967,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3967,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3968,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3968,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3969,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3969,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3971,1,True,False,True,Egress (GNAI2/CXCR4),DLBCL_DUKE_3971,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_3972,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3972,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3973,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3973,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3974,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3974,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3975,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3975,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3976,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3976,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3977,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3977,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3978,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3978,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3979,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3979,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3980,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3980,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3981,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3981,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3982,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3982,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3983,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3983,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3984,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3984,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3985,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3985,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3986,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3986,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3987,1,True,False,False,Egress (GNAI2/CXCR4),DLBCL_DUKE_3987,False,False,False,True,0,0,0 (None),0
+DLBCL_DUKE_3988,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3988,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3989,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3989,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3990,1,True,True,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3990,True,False,True,False,1,1,1,1
+DLBCL_DUKE_3991,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3991,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3992,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3992,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3993,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3993,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3994,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3994,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3995,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3995,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3996,1,True,False,False,Retention (GNA13/RHOA/S1PR2),DLBCL_DUKE_3996,False,False,True,False,0,0,0 (None),0
+DLBCL_DUKE_3997,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3997,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3998,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_3998,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_3999,1,True,False,False,No Pathway Mutation,DLBCL_DUKE_3999,False,False,False,False,0,0,0 (None),0
+DLBCL_DUKE_4000,0,False,False,False,No Pathway Mutation,DLBCL_DUKE_4000,False,False,False,False,0,0,0 (None),0

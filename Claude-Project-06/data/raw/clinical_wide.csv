@@ -1,0 +1,54 @@
+study_id,sampleId,ALLELE_FREQUENCY_CELLULARITY,CANCER_TYPE,CANCER_TYPE_DETAILED,EST_TUMOR_CELLULARITY,MUTATION_COUNT,NORMAL_GENOME_COVERAGE,NORMAL_GENOME_LIBRARY,ONCOTREE_CODE,SAMPLE_CLASS,SOMATIC_STATUS,TMB_NONSYNONYMOUS,TUMOR_GENOME_COVERAGE,TUMOR_GENOME_LIBRARY
+nhl_bcgsc_2013,DB,,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,,407,,,GCB,Cell line,Unmatched,13.6333333333,24.81,A12437
+nhl_bcgsc_2013,DOHH-2,,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,,314,,,GCB,Cell line,Unmatched,10.5,32.45,A12438
+nhl_bcgsc_2013,Karpas422,,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,,457,,,GCB,Cell line,Unmatched,15.3,31.36,A12439
+nhl_bcgsc_2013,MD903,,Mature B-Cell Neoplasms,Activated B-cell Type,,666,,,ABC,Cell line,Unmatched,22.3666666667,28.31,A12440
+nhl_bcgsc_2013,NU-DHL-1,,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,,411,,,GCB,Cell line,Unmatched,13.7666666667,31.71,A12441
+nhl_bcgsc_2013,NU-DUL-1,,Mature B-Cell Neoplasms,Activated B-cell Type,,421,,,ABC,Cell line,Unmatched,14.1,26.33,A12442
+nhl_bcgsc_2013,OCI-Ly1,,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,,524,,,GCB,Cell line,Unmatched,17.4333333333,29.96,A12443
+nhl_bcgsc_2013,OCI-Ly19,,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,,369,,,GCB,Cell line,Unmatched,12.2666666667,27.46,A12445
+nhl_bcgsc_2013,OCI-Ly3,,Mature B-Cell Neoplasms,Activated B-cell Type,,449,,,ABC,Cell line,Unmatched,15.1333333333,27.1,A12449
+nhl_bcgsc_2013,OCI-Ly7,,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,,359,,,GCB,Cell line,Unmatched,12.0,27.85,A12444
+nhl_bcgsc_2013,RG003,71.69648276,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,64,44,28.39,A01437,GCB,Tumor,Matched,1.46666666667,47.6,A01413
+nhl_bcgsc_2013,RG008,46.65962165,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,70,22,28.09,A01458,GCB,Tumor,Matched,0.733333333333,35.13,A01456
+nhl_bcgsc_2013,RG013,87.94059457,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,91,42,34.57,HS2703,GCB,Tumor,Matched,1.4,28,HS2702
+nhl_bcgsc_2013,RG014,77.77565964,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,70,129,27.124435,A01443,GCB,Tumor,Matched,4.33333333333,37.73,A01414
+nhl_bcgsc_2013,RG023,64.34829369,Mature B-Cell Neoplasms,Activated B-cell Type,60,22,30.19,A01453,ABC,Tumor,Matched,0.733333333333,37.27,A01426
+nhl_bcgsc_2013,RG024,65.34663772,Mature B-Cell Neoplasms,"Diffuse Large B-Cell Lymphoma, NOS",58,23,34.64,A01439,DLBCLNOS,Tumor,Matched,0.8,51.33,A01415
+nhl_bcgsc_2013,RG026,59.58422737,Mature B-Cell Neoplasms,Activated B-cell Type,52,65,34.61,A01973,ABC,Tumor,Matched,2.16666666667,32.48,A01972
+nhl_bcgsc_2013,RG027,89.53895363,Mature B-Cell Neoplasms,Activated B-cell Type,82,57,29.16,A01452,ABC,Tumor,Matched,1.9,37.95,A01416
+nhl_bcgsc_2013,RG028,82.79161488,Mature B-Cell Neoplasms,Activated B-cell Type,73,106,35.354656,A02011,ABC,Tumor,Matched,3.56666666667,31.65,A02010
+nhl_bcgsc_2013,RG034,67.89454126,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,58,56,36.69,A01438,GCB,Tumor,Matched,1.86666666667,34.2,A01462
+nhl_bcgsc_2013,RG036,67.42923538,Mature B-Cell Neoplasms,Activated B-cell Type,50,52,23.72,A01459,ABC,Tumor,Matched,1.7,33.91,A01457
+nhl_bcgsc_2013,RG038,68.07082923,Mature B-Cell Neoplasms,Activated B-cell Type,57,61,38.56,A01677,ABC,Tumor,Matched,2.03333333333,42.11,A01676
+nhl_bcgsc_2013,RG040,50.85123497,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,59,35,26.45,A06420,GCB,Tumor,Matched,1.16666666667,36.41,A06417
+nhl_bcgsc_2013,RG043,60.52397505,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,52,314,31.29154,HS2705,GCB,Tumor,Matched,10.5333333333,31.53,HS2704
+nhl_bcgsc_2013,RG049,75,Mature B-Cell Neoplasms,Activated B-cell Type,77,21,26.66,A03586,ABC,Tumor,Matched,0.7,32.2,A03561
+nhl_bcgsc_2013,RG051,84.9076915,Mature B-Cell Neoplasms,"Diffuse Large B-Cell Lymphoma, NOS",79,41,33.65,A01444,DLBCLNOS,Tumor,Matched,1.4,32.88,A01417
+nhl_bcgsc_2013,RG054,51.59469936,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,32,46,30.33,A01447,GCB,Tumor,Matched,1.53333333333,30,A01418
+nhl_bcgsc_2013,RG055,46.12716034,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,52,10,36.06,A06421,GCB,Tumor,Matched,0.333333333333,27.9,A06418
+nhl_bcgsc_2013,RG061,50.44822581,Mature B-Cell Neoplasms,Activated B-cell Type,52,45,33.5,HS2971,ABC,Tumor,Matched,1.5,28.52,HS2970
+nhl_bcgsc_2013,RG064,71.71104304,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,65,44,45.15,HS2707,GCB,Tumor,Matched,1.46666666667,37,HS2706
+nhl_bcgsc_2013,RG065,88.36664578,Mature B-Cell Neoplasms,Activated B-cell Type,91,32,28.45,A01440,ABC,Tumor,Matched,1.06666666667,29.88,A01419
+nhl_bcgsc_2013,RG067,59.29075673,Mature B-Cell Neoplasms,"Diffuse Large B-Cell Lymphoma, NOS",50,52,28.93,HS2973,DLBCLNOS,Tumor,Matched,1.73333333333,32.41,HS2972
+nhl_bcgsc_2013,RG068,68.27685204,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,81,80,29.52,A01441,GCB,Tumor,Matched,2.66666666667,29.72,A01420
+nhl_bcgsc_2013,RG074,83.27260956,Mature B-Cell Neoplasms,Activated B-cell Type,92,29,30.8,A01442,ABC,Tumor,Matched,0.966666666667,36.21,A01421
+nhl_bcgsc_2013,RG075,52.40708119,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,75,42,31.53,A06721,GCB,Tumor,Matched,1.4,30.96,A06720
+nhl_bcgsc_2013,RG077,47.03870648,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,50,40,29.17,A01455,GCB,Tumor,Matched,1.33333333333,48.43,A01422
+nhl_bcgsc_2013,RG081,63.63839379,Mature B-Cell Neoplasms,Activated B-cell Type,48,87,37.45,A01446,ABC,Tumor,Matched,2.93333333333,35.6,A01423
+nhl_bcgsc_2013,RG082,51.15252578,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,50,17,27.56,A01974,GCB,Tumor,Matched,0.566666666667,34.71,A01971
+nhl_bcgsc_2013,RG083,79.24574826,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,50,48,29.76,A01445,GCB,Tumor,Matched,1.6,30.42,A01424
+nhl_bcgsc_2013,RG086,69.98917453,Mature B-Cell Neoplasms,Activated B-cell Type,58,57,28.55,A01450,ABC,Tumor,Matched,1.9,31.48,A01425
+nhl_bcgsc_2013,RG111,82.55438253,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,84,129,32.222507,A01449,GCB,Tumor,Matched,4.33333333333,37.59,A01427
+nhl_bcgsc_2013,RG115,52.54460201,Mature B-Cell Neoplasms,"Diffuse Large B-Cell Lymphoma, NOS",50,55,38.5,HS2975,DLBCLNOS,Tumor,Matched,1.83333333333,37.29,HS2974
+nhl_bcgsc_2013,RG116,100,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,80,124,34.887,A06422,GCB,Tumor,Matched,4.16666666667,32.18,A06419
+nhl_bcgsc_2013,RG130,69.36934643,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,50,102,39.256155,A01454,GCB,Tumor,Matched,3.4,29.16,A01428
+nhl_bcgsc_2013,RG132,81.82082992,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,50,56,27.74,A01432,GCB,Tumor,Matched,1.86666666667,31.91,A01429
+nhl_bcgsc_2013,RG133,,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,40,,30.16,A01433,GCB,Tumor,Matched,0,56.64,A01430
+nhl_bcgsc_2013,RG135,68.48997464,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,50,50,37.29,A01448,GCB,Tumor,Matched,1.66666666667,35.94,A01431
+nhl_bcgsc_2013,RG136,71.35356894,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,50,52,28.9,A01436,GCB,Tumor,Matched,1.73333333333,32,A01434
+nhl_bcgsc_2013,RG138,57.78782899,Mature B-Cell Neoplasms,Activated B-cell Type,45,39,28.55,A01451,ABC,Tumor,Matched,1.3,36.87,A01435
+nhl_bcgsc_2013,RG142,54.29219633,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,48,138,29.137234,A03291,GCB,Tumor,Matched,4.6,30.31,A03290
+nhl_bcgsc_2013,SU-DHL-6,,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,,446,,,GCB,Cell line,Unmatched,15.1,32.3,A12446
+nhl_bcgsc_2013,SU-DHL-9,,Mature B-Cell Neoplasms,Activated B-cell Type,,525,,,ABC,Cell line,Unmatched,17.5333333333,28.89,A12447
+nhl_bcgsc_2013,WSU-DLCL2,,Mature B-Cell Neoplasms,Germinal Center B-Cell Type,,364,,,GCB,Cell line,Unmatched,12.1666666667,27.31,A14217

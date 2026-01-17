@@ -1,0 +1,229 @@
+# GC B-cell Lymphoma Pathway Mutation Analysis Configuration
+# Compares mutation frequencies between confinement vs dissemination pathways
+
+pathways:
+  tumor_suppressor:
+    name: "Tumor Suppressor (Confinement)"
+    description: "S1PR2 signaling pathway - promotes GC B-cell confinement"
+    genes:
+      - symbol: S1PR2
+        role: receptor
+        expected_effect: loss_of_function
+      - symbol: P2RY8
+        role: receptor
+        expected_effect: loss_of_function
+      - symbol: GNA13
+        role: g_protein
+        expected_effect: loss_of_function
+        hotspots: []  # Truncating mutations throughout
+      - symbol: ARHGEF1
+        role: gef
+        expected_effect: loss_of_function
+      - symbol: RHOA
+        role: gtpase
+        expected_effect: loss_of_function
+        hotspots:
+          - G17V  # Dominant negative, functionally LoF
+
+  pro_migratory:
+    name: "Pro-migratory (Dissemination)"
+    description: "CXCR4/S1PR1 signaling - promotes GC B-cell migration"
+    genes:
+      - symbol: S1PR1
+        role: receptor
+        expected_effect: gain_of_function
+      - symbol: CXCR4
+        role: receptor
+        expected_effect: gain_of_function
+        hotspots:
+          - S338X  # C-terminal truncation, gain of function
+          - S339X
+      - symbol: GNAI2
+        role: g_protein
+        expected_effect: gain_of_function
+      - symbol: RAC1
+        role: gtpase
+        expected_effect: gain_of_function
+        hotspots:
+          - P29S
+      - symbol: RAC2
+        role: gtpase
+        expected_effect: gain_of_function
+
+# Mutation classification rules
+mutation_classification:
+  loss_of_function:
+    - nonsense
+    - frameshift_insertion
+    - frameshift_deletion
+    - splice_site
+    - splice_region
+    - start_lost
+    - stop_lost
+    - homozygous_deletion
+
+  potentially_activating:
+    - missense_mutation  # Only if in hotspot
+    - in_frame_insertion
+    - in_frame_deletion
+
+  uncertain:
+    - synonymous
+    - 3_prime_utr
+    - 5_prime_utr
+    - intron
+
+# Clinical staging mapping
+# Primary analysis: Stage I (early/localized) vs Stage III-IV (advanced/disseminated)
+staging:
+  # For primary analysis: early vs late
+  early:
+    stages: ["I", "IE", "1", "Stage I", "STAGE I"]
+    description: "Early stage - localized disease (Stage I only)"
+
+  late:
+    stages: ["III", "IIIE", "IIIS", "IV", "IVE", "3", "4", "Stage III", "Stage IV", "STAGE III", "STAGE IV"]
+    description: "Late stage - advanced/disseminated disease (Stage III-IV)"
+
+  # Secondary grouping (can exclude from primary analysis)
+  intermediate:
+    stages: ["II", "IIE", "2", "Stage II", "STAGE II"]
+    description: "Intermediate stage - regional disease (excluded from primary analysis)"
+    exclude_from_primary: true
+
+  # Detailed breakdown for supplementary analysis
+  detailed:
+    stage_I:
+      stages: ["I", "IE", "1"]
+      description: "Stage I"
+    stage_II:
+      stages: ["II", "IIE", "IIS", "2"]
+      description: "Stage II"
+    stage_III:
+      stages: ["III", "IIIE", "IIIS", "3"]
+      description: "Stage III"
+    stage_IV:
+      stages: ["IV", "IVE", "IVS", "4"]
+      description: "Stage IV"
+
+# Stage clinical attribute names (vary by study)
+stage_attributes:
+  - "STAGE"
+  - "ANN_ARBOR_STAGE"
+  - "CLINICAL_STAGE"
+  - "ajcc_pathologic_stage"
+  - "ann_arbor_clinical_stage"
+  - "tumor_stage"
+
+# Target studies from cBioPortal
+# Primary: BCGSC 2013 - foundational S1PR2/GNA13 pathway study with FL + DLBCL
+# Validation: Schmitz NEJM 2018 via GDC - larger DLBCL cohort with LymphGen subtypes
+
+studies:
+  # PRIMARY DATASET: Morin et al. Blood 2013
+  # - Combined FL and DLBCL cohort (96 cases)
+  # - Specifically characterized S1PR2, GNA13, GNAI2 pathway
+  # - Original discovery that GNA13 mutations are GCB-restricted
+  # - Reference: Morin et al. Blood 2013;122(7):1256-1265
+  primary:
+    - study_id: nhl_bcgsc_2013
+      name: "BCGSC NHL - Morin 2013 (FL + DLBCL)"
+      has_cna: false
+      disease_types: ["FL", "DLBCL"]
+      notes: "Foundational S1PR2/GNA13 pathway study"
+      reference: "PMID:23699601"
+
+  # VALIDATION DATASETS: DLBCL-focused cohorts
+  # Use these to validate findings from primary FL+DLBCL cohort
+  validation:
+    # Schmitz et al. NEJM 2018 - 574 DLBCL cases
+    # - LymphGen genetic subtypes (EZB has 38% S1PR2-GNA13 disruption)
+    # - Clinical staging available
+    # - Access via GDC: NCICCR-DLBCL project
+    # - Reference: Schmitz et al. NEJM 2018;378(15):1396-1407
+    - study_id: nciccr_dlbcl_2018
+      name: "Schmitz NEJM 2018 (NCICCR-DLBCL)"
+      has_cna: true
+      disease_types: ["DLBCL"]
+      source: "GDC"  # Not cBioPortal - use GDC API
+      notes: "574 cases, LymphGen subtypes, 38% EZB have pathway disruption"
+      reference: "PMID:29641966"
+
+    # DFCI/Chapuy 2018 - 304 DLBCL cases
+    # - Genetic clustering (C1-C5)
+    # - Clinical outcomes data
+    - study_id: dlbcl_dfci_2018
+      name: "DFCI DLBCL - Chapuy 2018"
+      has_cna: true
+      disease_types: ["DLBCL"]
+      notes: "304 cases, genetic clusters C1-C5"
+      reference: "PMID:29713087"
+
+  # SUPPLEMENTARY: Additional context
+  supplementary:
+    - study_id: dlbc_tcga
+      name: "TCGA DLBCL"
+      has_cna: true
+      disease_types: ["DLBCL"]
+      notes: "Smaller cohort, good for CNA validation"
+
+# Expected mutation frequencies from literature (for validation)
+# Reference: Muppidi et al. Nature 2014 (PMID:25274307)
+expected_frequencies:
+  tumor_suppressor_pathway:
+    combined: 0.40  # >40% have any pathway gene mutated
+    GNA13: 0.16     # 16% in GCB-DLBCL
+    P2RY8: 0.18     # 18%
+    S1PR2: 0.03     # 3%
+    RHOA: 0.06      # 6%
+    ARHGEF1: 0.06   # 6%
+
+  by_subtype:
+    GCB_DLBCL: 0.26  # GNA13/P2RY8 combined in GCB
+    ABC_DLBCL: 0.06  # Much lower in ABC
+    FL: 0.10         # ~10% GNA13 in FL
+
+# Filtering criteria
+# IMPORTANT: S1PR2/GNA13 pathway mutations are GCB-restricted
+# Analysis must filter to GCB-COO only
+filters:
+  # Cell of origin - GCB only (pathway mutations are GCB-restricted)
+  coo_subtype:
+    include:
+      - GCB
+      - GCB-DLBCL
+      - "Germinal center B-cell"
+      - "germinal_center_b_cell"
+    exclude:
+      - ABC
+      - ABC-DLBCL
+      - Non-GCB
+      - "Activated B-cell"
+      - "activated_b_cell"
+      - Unclassified
+      - Type3
+      - "type_3"
+
+  # Disease types (for multi-disease datasets)
+  disease_types:
+    include:
+      - DLBCL
+      - "Diffuse Large B-Cell Lymphoma"
+      - FL
+      - Follicular
+    exclude: []
+
+  # COO attribute names (vary by study)
+  coo_attributes:
+    - "COO"
+    - "CELL_OF_ORIGIN"
+    - "COO_WRIGHT"
+    - "COO_HANS"
+    - "molecular_subtype"
+    - "coo_class"
+    - "lymph2cx_call"
+
+  # Sample quality filters
+  min_samples_per_stage: 5  # Lowered for Stage I which may have fewer cases
+  min_total_samples: 30
+  require_coo_annotation: true  # Exclude samples without COO classification
