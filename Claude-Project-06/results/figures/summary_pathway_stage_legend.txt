@@ -1,0 +1,50 @@
+FIGURE LEGEND
+
+Figure: S1P Pathway Mutations Associate with Disease Stage in DLBCL
+
+(A) Late-stage disease rates in GCB-DLBCL stratified by EZB genetic subtype
+(Schmitz et al., 2018, n=80). The EZB subtype, characterized by recurrent
+mutations in GNA13, RHOA, and BCL2 translocations, showed significantly higher
+rates of late-stage presentation (91.7%, 22/24) compared to non-EZB GCB cases
+(60.7%, 34/56; OR=7.1, 95% CI: 1.57-32.3, p=0.007, Fisher's exact test).
+
+(B) Late-stage disease rates in pan-DLBCL stratified by S1P pathway mutation
+status (Duke et al., 2017, n=974). Patients were categorized by mutations in
+retention pathway genes (GNA13, RHOA, S1PR2, P2RY8, ARHGEF1) or egress pathway
+genes (GNAI2, CXCR4, S1PR1). Egress pathway mutations associated with
+significantly higher late-stage rates (82.8%, 24/29) compared to patients
+without pathway mutations (62.9%, 489/777; OR=2.83, p=0.03). Retention pathway
+mutations showed no significant difference in this mixed-COO cohort (64.9%,
+109/168; p=0.76), consistent with the GCB-restricted biology of these genes.
+Dashed line indicates baseline (no pathway mutation). Error bars represent 95%
+confidence intervals.
+
+(C) Late-stage disease rates in GCB-DLBCL with sample-level mutation data
+(DFCI 2018, n=21). This analysis includes direct mutation calls rather than
+genetic subtype proxies. No significant difference was observed between
+retention pathway mutants (40.0%, 4/10) and wild-type cases (45.5%, 5/11;
+OR=0.80, p=1.00). Notably, no egress pathway mutations (GNAI2/CXCR4) were
+identified in the GCB subset. The wide confidence intervals reflect severe
+underpowering due to small sample size.
+
+(D) Forest plot comparing odds ratios for late-stage disease across all three
+cohorts. The retention pathway effect was significant only in the GCB-restricted
+Schmitz analysis using EZB as a proxy (OR=7.12, p=0.007). The egress pathway
+effect was detectable in pan-DLBCL (OR=2.83, p=0.03). The DFCI GCB analysis
+was underpowered to detect effects (OR=0.80, 95% CI: 0.13-4.99). Filled circles
+indicate p<0.05; open circles indicate non-significant associations.
+Reference groups: non-EZB (Schmitz) and no pathway mutation (Duke, DFCI).
+
+KEY FINDINGS:
+1. The retention pathway (GNA13/RHOA) effect on late-stage disease is
+   GCB-specific and diluted when analyzed in mixed-COO cohorts.
+2. The egress pathway (GNAI2/CXCR4) shows significant association with
+   late-stage disease even in pan-DLBCL.
+3. Available GCB datasets with sample-level mutations are underpowered;
+   larger cohorts or controlled access datasets (e.g., NCICCR-DLBCL via
+   dbGaP phs001444) are needed for validation.
+
+Abbreviations: DLBCL, diffuse large B-cell lymphoma; COO, cell of origin;
+GCB, germinal center B-cell; EZB, EZH2/BCL2-associated genetic subtype;
+S1P, sphingosine-1-phosphate; OR, odds ratio; CI, confidence interval;
+NS, not significant.

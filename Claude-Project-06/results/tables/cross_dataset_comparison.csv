@@ -1,0 +1,7 @@
+Dataset,Pathway,Overall_Freq,N_Samples,Notes
+cBioPortal Combined (FL/DLBCL),Tumor Suppressor,37.3,236,GCB-DLBCL + FL
+cBioPortal Combined (FL/DLBCL),Pro-migratory,5.5,236,GCB-DLBCL + FL
+Kridel 2024 FL (GM cluster),Tumor Suppressor,51.1,137,GM genetic subtype only
+Kridel 2024 FL (GM cluster),Pro-migratory,NA,137,GM genetic subtype only
+MSK 2024 DLBCL,Tumor Suppressor,19.3,347,DLBCL (all subtypes)
+MSK 2024 DLBCL,Pro-migratory,3.7,347,DLBCL (all subtypes)

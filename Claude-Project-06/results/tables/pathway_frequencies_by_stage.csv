@@ -1,0 +1,7 @@
+stage,pathway,n_samples,n_mutated,frequency
+early_localized,tumor_suppressor,25,8,0.32
+early_localized,pro_migratory,25,1,0.04
+regional,tumor_suppressor,5,1,0.2
+regional,pro_migratory,5,0,0.0
+disseminated,tumor_suppressor,12,3,0.25
+disseminated,pro_migratory,12,2,0.16666666666666666
