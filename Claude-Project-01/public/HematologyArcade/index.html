@@ -311,6 +311,161 @@
 
         .game-card.burger .diff-dot.active { background: #FF8C00; }
 
+        /* Breath of Willebrand card - Zelda Style */
+        .game-card.zelda {
+            border-color: #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(180deg,
+                rgba(26, 71, 42, 0.9) 0%,
+                rgba(13, 40, 24, 0.95) 100%);
+        }
+
+        .game-card.zelda:hover {
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6), 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card.zelda .game-icon {
+            background: transparent;
+        }
+
+        .game-card.zelda .game-title { color: #FFD700; }
+
+        .game-card.zelda .play-btn {
+            background: linear-gradient(180deg, #FFD700, #B8860B);
+            color: #1a472a;
+            box-shadow: 0 5px 0 #8B6914;
+        }
+
+        .game-card.zelda .diff-dot.active { background: #FFD700; }
+
+        /* Link Icon - Pixel Art Style */
+        .link-icon-wrapper {
+            position: relative;
+            width: 60px;
+            height: 70px;
+        }
+
+        .link-hat {
+            width: 35px;
+            height: 20px;
+            background: #228B22;
+            border-radius: 5px 5px 0 0;
+            position: absolute;
+            top: 0;
+            left: 12px;
+        }
+
+        .link-hat::after {
+            content: '';
+            position: absolute;
+            right: -12px;
+            top: 5px;
+            width: 15px;
+            height: 12px;
+            background: #228B22;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .link-face {
+            width: 25px;
+            height: 20px;
+            background: #FFE4C4;
+            border-radius: 4px;
+            position: absolute;
+            top: 17px;
+            left: 17px;
+        }
+
+        .link-body {
+            width: 30px;
+            height: 18px;
+            background: #228B22;
+            position: absolute;
+            top: 34px;
+            left: 15px;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .link-shield {
+            width: 12px;
+            height: 15px;
+            background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
+            position: absolute;
+            top: 35px;
+            left: 5px;
+            border-radius: 2px 2px 6px 6px;
+            border: 2px solid #FFD700;
+        }
+
+        .link-sword {
+            width: 4px;
+            height: 25px;
+            background: linear-gradient(180deg, #C0C0C0 0%, #808080 100%);
+            position: absolute;
+            top: 25px;
+            right: 8px;
+            border-radius: 1px;
+        }
+
+        .link-sword::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -3px;
+            width: 10px;
+            height: 8px;
+            background: #FFD700;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+        }
+
+        /* Triforce animation */
+        .triforce-icon {
+            font-size: 40px;
+            color: #FFD700;
+            text-shadow: 0 0 15px #FFD700;
+            animation: triforce-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes triforce-glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 5px #FFD700); }
+            50% { filter: brightness(1.3) drop-shadow(0 0 15px #FFD700); }
+        }
+
+        /* Heart container display */
+        .heart-display {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+            justify-content: center;
+        }
+
+        .mini-heart {
+            width: 15px;
+            height: 14px;
+            position: relative;
+        }
+
+        .mini-heart::before, .mini-heart::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 12px;
+            background: #FF0000;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .mini-heart::before {
+            left: 0;
+            transform: rotate(-45deg);
+            transform-origin: bottom right;
+        }
+
+        .mini-heart::after {
+            right: 0;
+            transform: rotate(45deg);
+            transform-origin: bottom left;
+        }
+
         /* Burger Icon */
         .burger-icon {
             font-size: 50px;
@@ -1272,6 +1427,37 @@
                     <div class="diff-dot active"></div>
                 </div>
             </div>
+
+            <!-- Breath of Willebrand - Zelda Style -->
+            <div class="game-card zelda" onclick="launchGame('zelda')">
+                <div class="game-icon" style="background: transparent; box-shadow: none;">
+                    <div class="link-icon-wrapper">
+                        <div class="link-hat"></div>
+                        <div class="link-face"></div>
+                        <div class="link-body"></div>
+                        <div class="link-shield"></div>
+                        <div class="link-sword"></div>
+                    </div>
+                </div>
+                <h2 class="game-title">Breath of Willebrand</h2>
+                <p class="game-theme">Zelda Style</p>
+                <p class="game-description">
+                    Quest through benign hematology! Master bleeding disorders, anemias, platelets & coagulation.
+                </p>
+                <button class="play-btn">QUEST</button>
+                <div class="difficulty-levels">
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                    <div class="diff-dot active"></div>
+                </div>
+                <div class="heart-display">
+                    <div class="mini-heart"></div>
+                    <div class="mini-heart"></div>
+                    <div class="mini-heart"></div>
+                </div>
+            </div>
         </div>
 
         <p class="insert-coin">SELECT A GAME TO BEGIN</p>
@@ -1306,6 +1492,10 @@
             <div class="score-row">
                 <span class="score-game">ALL Burger Time</span>
                 <span class="score-value" id="burgerScore">---</span>
+            </div>
+            <div class="score-row">
+                <span class="score-game">Breath of Willebrand</span>
+                <span class="score-value" id="zeldaScore">---</span>
             </div>
         </div>
 
@@ -1562,6 +1752,9 @@
                     case 'burger':
                         window.location.href = '../ALLBurgerTime/all-burger-time.html';
                         break;
+                    case 'zelda':
+                        window.location.href = '../BreathOfWillebrand/breath-of-willebrand.html';
+                        break;
                 }
             }, 400);
         }
@@ -1596,6 +1789,10 @@
             }
             if (burgerScore) {
                 document.getElementById('burgerScore').textContent = burgerScore;
+            }
+            const zeldaScore = localStorage.getItem('breathOfWillebrandHighScore');
+            if (zeldaScore) {
+                document.getElementById('zeldaScore').textContent = zeldaScore;
             }
         }
         loadHighScores();

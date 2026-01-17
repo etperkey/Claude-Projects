@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breath of the Willebrand - Benign Hematology Quest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hyrule-green: #1a472a;
+            --hyrule-dark: #0d2818;
+            --gold: #FFD700;
+            --gold-dark: #B8860B;
+            --triforce-gold: #F4C430;
+            --nayru-blue: #4169E1;
+            --din-red: #DC143C;
+            --farore-green: #228B22;
+            --heart-red: #FF0000;
+            --heart-dark: #8B0000;
+            --rupee-green: #00FF00;
+            --rupee-blue: #0000FF;
+            --rupee-red: #FF0000;
+            --rupee-purple: #800080;
+            --slate: #2F4F4F;
+            --parchment: #F5DEB3;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(180deg, var(--hyrule-dark) 0%, var(--hyrule-green) 50%, var(--hyrule-dark) 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Triforce Background */
+        .triforce-bg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            z-index: 0;
+            font-size: 300px;
+            color: var(--gold);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(180deg, var(--hyrule-dark) 0%, rgba(26,71,42,0.9) 100%);
+            border: 4px solid var(--gold);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .header::before, .header::after {
+            content: '▲';
+            position: absolute;
+            top: 10px;
+            color: var(--gold);
+            font-size: 24px;
+        }
+        .header::before { left: 20px; }
+        .header::after { right: 20px; }
+
+        .title {
+            font-size: 1.5em;
+            color: var(--gold);
+            text-shadow: 3px 3px 0 var(--hyrule-dark), 0 0 20px var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 0.6em;
+            color: var(--farore-green);
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.7);
+            padding: 15px 20px;
+            border: 3px solid var(--gold);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Hearts */
+        .hearts-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .heart {
+            width: 30px;
+            height: 28px;
+            position: relative;
+        }
+
+        .heart::before, .heart::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 24px;
+            background: var(--heart-red);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .heart::before {
+            left: 0;
+            transform: rotate(-45deg);
+            transform-origin: bottom right;
+        }
+
+        .heart::after {
+            right: 0;
+            transform: rotate(45deg);
+            transform-origin: bottom left;
+        }
+
+        .heart.empty::before, .heart.empty::after {
+            background: #333;
+            border: 2px solid #555;
+        }
+
+        .heart.lost {
+            animation: heartLost 0.5s ease-out;
+        }
+
+        @keyframes heartLost {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); filter: brightness(2); }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+
+        /* Rupees */
+        .rupee-counter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rupee-icon {
+            width: 20px;
+            height: 30px;
+            background: linear-gradient(135deg, #00ff00 0%, #008800 50%, #00ff00 100%);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        .rupee-value {
+            font-size: 1.2em;
+            color: var(--gold);
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        /* Dungeon/Category Info */
+        .dungeon-info {
+            text-align: center;
+        }
+
+        .dungeon-name {
+            font-size: 0.6em;
+            color: var(--nayru-blue);
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        .question-count {
+            font-size: 0.5em;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        /* Title Screen */
+        .title-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .game-logo {
+            font-size: 2em;
+            color: var(--gold);
+            text-shadow: 4px 4px 0 var(--hyrule-dark), 0 0 30px var(--gold);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .triforce-display {
+            font-size: 80px;
+            color: var(--triforce-gold);
+            text-shadow: 0 0 30px var(--gold);
+            margin: 20px 0;
+        }
+
+        /* Category Selection */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .category-card {
+            background: linear-gradient(180deg, var(--hyrule-green) 0%, var(--hyrule-dark) 100%);
+            border: 3px solid var(--gold);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255,215,0,0.3);
+            border-color: #fff;
+        }
+
+        .category-icon { font-size: 2em; margin-bottom: 10px; }
+        .category-name { font-size: 0.7em; color: var(--gold); margin-bottom: 5px; }
+        .category-subtitle { font-size: 0.5em; color: #aaa; }
+
+        /* Difficulty Selection */
+        .difficulty-select {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .diff-btn {
+            font-family: 'Press Start 2P', cursive;
+            padding: 15px 25px;
+            border: 3px solid;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.7em;
+            transition: all 0.3s;
+            background: transparent;
+            color: #fff;
+        }
+
+        .diff-btn.intern { border-color: var(--farore-green); }
+        .diff-btn.intern:hover { background: var(--farore-green); }
+        .diff-btn.resident { border-color: var(--nayru-blue); }
+        .diff-btn.resident:hover { background: var(--nayru-blue); }
+        .diff-btn.fellow { border-color: var(--din-red); }
+        .diff-btn.fellow:hover { background: var(--din-red); }
+
+        /* Question Card */
+        .question-card {
+            background: linear-gradient(180deg, rgba(47,79,79,0.9) 0%, rgba(13,40,24,0.95) 100%);
+            border: 4px solid var(--gold);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-category {
+            font-size: 0.5em;
+            color: var(--nayru-blue);
+            padding: 5px 10px;
+            border: 2px solid var(--nayru-blue);
+            border-radius: 4px;
+        }
+
+        .question-difficulty {
+            font-size: 0.5em;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .question-difficulty.intern { background: var(--farore-green); }
+        .question-difficulty.resident { background: var(--nayru-blue); }
+        .question-difficulty.fellow { background: var(--din-red); }
+
+        .question-text {
+            font-size: 0.8em;
+            line-height: 2;
+            color: var(--parchment);
+            margin-bottom: 20px;
+        }
+
+        /* Answer Options */
+        .options-container { display: flex; flex-direction: column; gap: 12px; }
+
+        .option-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6em;
+            padding: 15px 20px;
+            background: linear-gradient(180deg, var(--hyrule-green) 0%, var(--hyrule-dark) 100%);
+            border: 3px solid var(--gold-dark);
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            line-height: 1.8;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--gold);
+            transform: translateX(10px);
+            box-shadow: 0 0 15px rgba(255,215,0,0.3);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(180deg, #228B22 0%, #006400 100%);
+            border-color: #00ff00;
+            animation: correctPulse 0.5s ease;
+        }
+
+        .option-btn.incorrect {
+            background: linear-gradient(180deg, #8B0000 0%, #4a0000 100%);
+            border-color: #ff0000;
+            animation: incorrectShake 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Feedback Panel */
+        .feedback-panel {
+            background: rgba(0,0,0,0.9);
+            border: 3px solid var(--gold);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-panel.show { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-header {
+            font-size: 1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-header.correct { color: #00ff00; }
+        .feedback-header.incorrect { color: #ff6666; }
+
+        .explanation {
+            font-size: 0.55em;
+            line-height: 2;
+            color: #ddd;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+
+        .key-point {
+            font-size: 0.5em;
+            color: var(--gold);
+            padding: 10px;
+            border-left: 3px solid var(--gold);
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .citation-box {
+            font-size: 0.45em;
+            color: #aaa;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 4px;
+            line-height: 1.8;
+        }
+
+        .citation-box a {
+            color: var(--nayru-blue);
+            text-decoration: none;
+        }
+
+        .citation-box a:hover { text-decoration: underline; }
+
+        .next-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+            padding: 15px 30px;
+            background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dark) 100%);
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        /* Streak Bonus */
+        .streak-bonus {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            color: var(--gold);
+            text-shadow: 0 0 30px var(--gold);
+            z-index: 100;
+            animation: streakPop 1.5s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes streakPop {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            80% { opacity: 1; }
+            100% { opacity: 0; transform: translate(-50%, -70%) scale(1); }
+        }
+
+        /* Game Over / Victory Screen */
+        .end-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .end-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .end-title.victory { color: var(--gold); text-shadow: 0 0 30px var(--gold); }
+        .end-title.defeat { color: var(--din-red); text-shadow: 0 0 30px var(--din-red); }
+
+        .final-stats {
+            background: rgba(0,0,0,0.7);
+            border: 3px solid var(--gold);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            font-size: 0.6em;
+        }
+
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { color: #aaa; }
+        .stat-value { color: var(--gold); }
+
+        .play-again-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8em;
+            padding: 20px 40px;
+            background: linear-gradient(180deg, var(--farore-green) 0%, #006400 100%);
+            border: 3px solid var(--gold);
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.2s;
+        }
+
+        .play-again-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--farore-green);
+        }
+
+        .back-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6em;
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid #666;
+            border-radius: 4px;
+            color: #aaa;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .back-btn:hover { border-color: #fff; color: #fff; }
+
+        /* Hidden */
+        .hidden { display: none !important; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title { font-size: 1.2em; }
+            .game-logo { font-size: 1.2em; }
+            .stats-bar { flex-direction: column; text-align: center; }
+            .category-grid { grid-template-columns: 1fr; }
+            .question-text { font-size: 0.7em; }
+            .option-btn { font-size: 0.55em; padding: 12px 15px; }
+        }
+
+        /* Link icon */
+        .link-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .link-hat {
+            width: 40px;
+            height: 25px;
+            background: var(--farore-green);
+            border-radius: 5px 5px 0 0;
+            position: absolute;
+            top: 0;
+            left: 10px;
+        }
+
+        .link-hat::after {
+            content: '';
+            position: absolute;
+            right: -15px;
+            top: 5px;
+            width: 20px;
+            height: 15px;
+            background: var(--farore-green);
+            border-radius: 0 10px 10px 0;
+        }
+
+        .link-face {
+            width: 30px;
+            height: 25px;
+            background: #FFE4C4;
+            border-radius: 5px;
+            position: absolute;
+            top: 20px;
+            left: 15px;
+        }
+
+        .link-body {
+            width: 35px;
+            height: 20px;
+            background: var(--farore-green);
+            position: absolute;
+            top: 40px;
+            left: 12px;
+            border-radius: 0 0 5px 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="triforce-bg">▲</div>
+
+    <div class="game-container">
+        <header class="header">
+            <h1 class="title">BREATH OF THE WILLEBRAND</h1>
+            <p class="subtitle">A Benign Hematology Quest</p>
+        </header>
+
+        <!-- Title Screen -->
+        <div id="titleScreen" class="title-screen">
+            <div class="link-icon">
+                <div class="link-hat"></div>
+                <div class="link-face"></div>
+                <div class="link-body"></div>
+            </div>
+            <div class="triforce-display">▲</div>
+            <p style="font-size: 0.7em; color: var(--gold); margin-bottom: 30px;">Select Your Dungeon</p>
+
+            <div class="category-grid">
+                <div class="category-card" onclick="selectCategory('bleeding')">
+                    <div class="category-icon">🩸</div>
+                    <div class="category-name">The Willebrand Shrine</div>
+                    <div class="category-subtitle">Bleeding Disorders</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('platelet')">
+                    <div class="category-icon">🔴</div>
+                    <div class="category-name">The Plateaulet Temple</div>
+                    <div class="category-subtitle">Platelet Disorders</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('anemia')">
+                    <div class="category-icon">⚔️</div>
+                    <div class="category-name">The Iron Fortress</div>
+                    <div class="category-subtitle">Anemias</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('coag')">
+                    <div class="category-icon">🌊</div>
+                    <div class="category-name">The Cascade Cavern</div>
+                    <div class="category-subtitle">Coagulation & Thrombosis</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('thrombophilia')">
+                    <div class="category-icon">👑</div>
+                    <div class="category-name">The Clot Kingdom</div>
+                    <div class="category-subtitle">Thrombophilia</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('wbc')">
+                    <div class="category-icon">🏛️</div>
+                    <div class="category-name">The Leuko-Labyrinth</div>
+                    <div class="category-subtitle">Benign WBC Disorders</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('lab')">
+                    <div class="category-icon">🔬</div>
+                    <div class="category-name">Hyrule Hospital Lab</div>
+                    <div class="category-subtitle">Clinical Laboratory</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Difficulty Selection -->
+        <div id="difficultyScreen" class="title-screen hidden">
+            <h2 style="color: var(--gold); margin-bottom: 20px;">Choose Your Challenge</h2>
+            <p id="selectedCategory" style="font-size: 0.6em; color: var(--nayru-blue); margin-bottom: 30px;"></p>
+
+            <div class="difficulty-select">
+                <button class="diff-btn intern" onclick="startGame('intern')">
+                    🌱 Kokiri Forest<br><span style="font-size: 0.7em;">Intern Level</span>
+                </button>
+                <button class="diff-btn resident" onclick="startGame('resident')">
+                    🏰 Hyrule Field<br><span style="font-size: 0.7em;">Resident Level</span>
+                </button>
+                <button class="diff-btn fellow" onclick="startGame('fellow')">
+                    🌋 Death Mountain<br><span style="font-size: 0.7em;">Fellow Level</span>
+                </button>
+            </div>
+
+            <button class="back-btn" onclick="showTitleScreen()">← Back to Dungeons</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="hidden">
+            <div class="stats-bar">
+                <div class="hearts-container" id="heartsContainer">
+                    <div class="heart"></div>
+                    <div class="heart"></div>
+                    <div class="heart"></div>
+                </div>
+                <div class="dungeon-info">
+                    <div class="dungeon-name" id="dungeonName">The Willebrand Shrine</div>
+                    <div class="question-count" id="questionCount">Question 1 of 10</div>
+                </div>
+                <div class="rupee-counter">
+                    <div class="rupee-icon"></div>
+                    <span class="rupee-value" id="rupeeCount">0</span>
+                </div>
+            </div>
+
+            <div class="question-card" id="questionCard">
+                <div class="question-header">
+                    <span class="question-category" id="qCategory">Bleeding Disorders</span>
+                    <span class="question-difficulty" id="qDifficulty">Intern</span>
+                </div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options-container" id="optionsContainer"></div>
+            </div>
+
+            <div class="feedback-panel" id="feedbackPanel">
+                <div class="feedback-header" id="feedbackHeader"></div>
+                <div class="explanation" id="explanation"></div>
+                <div class="key-point" id="keyPoint"></div>
+                <div class="citation-box" id="citationBox"></div>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Continue Quest →</button>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="endScreen" class="end-screen hidden">
+            <h2 class="end-title" id="endTitle">Quest Complete!</h2>
+            <div class="triforce-display" id="endTriforce">▲</div>
+            <div class="final-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Rupees Collected</span>
+                    <span class="stat-value" id="finalRupees">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Questions Answered</span>
+                    <span class="stat-value" id="finalAnswered">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Correct Answers</span>
+                    <span class="stat-value" id="finalCorrect">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Accuracy</span>
+                    <span class="stat-value" id="finalAccuracy">0%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Best Streak</span>
+                    <span class="stat-value" id="finalStreak">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">High Score</span>
+                    <span class="stat-value" id="highScore">0</span>
+                </div>
+            </div>
+            <button class="play-again-btn" onclick="showTitleScreen()">New Quest</button>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let currentCategory = '';
+        let currentDifficulty = '';
+        let currentQuestionIndex = 0;
+        let hearts = 3;
+        let rupees = 0;
+        let streak = 0;
+        let bestStreak = 0;
+        let questionsAnswered = 0;
+        let correctAnswers = 0;
+        let gameQuestions = [];
+
+        // Category labels
+        const categoryLabels = {
+            bleeding: 'The Willebrand Shrine',
+            platelet: 'The Plateaulet Temple',
+            anemia: 'The Iron Fortress',
+            coag: 'The Cascade Cavern',
+            thrombophilia: 'The Clot Kingdom',
+            wbc: 'The Leuko-Labyrinth',
+            lab: 'Hyrule Hospital Lab'
+        };
+
+        // Rupee values by difficulty
+        const rupeeValues = {
+            intern: 5,
+            resident: 20,
+            fellow: 50
+        };
+
+        // Question Bank
+        const questions = {
+            bleeding: [
+                {
+                    difficulty: 'intern',
+                    question: 'What is the most common inherited bleeding disorder?',
+                    options: ['Hemophilia A', 'von Willebrand disease', 'Hemophilia B', 'Factor XI deficiency'],
+                    correct: 1,
+                    explanation: 'von Willebrand disease affects approximately 1% of the population and is the most common inherited bleeding disorder. It results from quantitative or qualitative defects in von Willebrand factor.',
+                    keyPoint: 'vWD is the most common inherited bleeding disorder (~1% prevalence). Type 1 (quantitative deficiency) is most common subtype.',
+                    citation: 'Leebeek FWG, Eikenboom JCJ. von Willebrand disease. N Engl J Med. 2016;375:2067-2080',
+                    pmid: '27959741',
+                    doi: '10.1056/NEJMra1601561'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Which factor is deficient in Hemophilia A?',
+                    options: ['Factor VIII', 'Factor IX', 'Factor XI', 'von Willebrand factor'],
+                    correct: 0,
+                    explanation: 'Hemophilia A is caused by deficiency of Factor VIII. It is the most common severe inherited bleeding disorder, with an incidence of approximately 1 in 5,000 male births.',
+                    keyPoint: 'Hemophilia A = Factor VIII deficiency. Hemophilia B = Factor IX deficiency. Both are X-linked recessive.',
+                    citation: 'Srivastava A, et al. WFH Guidelines for the Management of Hemophilia, 3rd edition. Haemophilia. 2020;26 Suppl 6:1-158',
+                    pmid: '32744769',
+                    doi: '10.1111/hae.14046'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'DDAVP (desmopressin) works by which mechanism?',
+                    options: ['Directly replacing Factor VIII', 'Releasing vWF and Factor VIII from endothelial stores', 'Inhibiting fibrinolysis', 'Activating platelets'],
+                    correct: 1,
+                    explanation: 'DDAVP stimulates release of von Willebrand factor and Factor VIII from Weibel-Palade bodies in endothelial cells. It is effective in mild hemophilia A and Type 1 vWD.',
+                    keyPoint: 'DDAVP releases vWF/FVIII from endothelial stores. Useful in mild hemophilia A and Type 1 vWD. Tachyphylaxis occurs with repeated dosing.',
+                    citation: 'Castaman G, et al. How I treat von Willebrand disease. Blood. 2019;134(5):317-324',
+                    pmid: '31151983',
+                    doi: '10.1182/blood.2019000026'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'A patient with Type 2B vWD has thrombocytopenia. What is the mechanism?',
+                    options: ['Bone marrow suppression', 'Increased vWF affinity for platelets causing clearance', 'Splenic sequestration', 'Antibody-mediated destruction'],
+                    correct: 1,
+                    explanation: 'Type 2B vWD is caused by gain-of-function mutations that increase vWF affinity for platelet GPIb. This leads to spontaneous binding and clearance of platelet-vWF complexes.',
+                    keyPoint: 'Type 2B = gain-of-function, increased GPIb binding, causes thrombocytopenia. DDAVP is contraindicated as it worsens thrombocytopenia.',
+                    citation: 'Federici AB. Current and emerging approaches for assessing von Willebrand disease in 2016. Int J Lab Hematol. 2016;38 Suppl 1:41-49',
+                    pmid: '27161430',
+                    doi: '10.1111/ijlh.12501'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Which test distinguishes Type 2N vWD from mild Hemophilia A?',
+                    options: ['vWF:Ag level', 'Factor VIII:C level', 'vWF:FVIII binding assay', 'Ristocetin cofactor activity'],
+                    correct: 2,
+                    explanation: 'Type 2N vWD has defective vWF binding to Factor VIII, leading to rapid FVIII clearance. The vWF:FVIII binding assay directly tests this interaction.',
+                    keyPoint: 'Type 2N = defective vWF-FVIII binding. Low FVIII, normal vWF. Autosomal recessive. vWF:FVIII binding assay is diagnostic.',
+                    citation: 'Goodeve AC. Diagnosing von Willebrand disease: genetic analysis. Hematology Am Soc Hematol Educ Program. 2016;2016(1):678-682',
+                    pmid: '27913545',
+                    doi: '10.1182/asheducation-2016.1.678'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'A patient with acquired von Willebrand syndrome (AVWS) has aortic stenosis. What is the recommended treatment approach?',
+                    options: ['High-dose IVIG', 'Valve replacement', 'vWF concentrate alone', 'Recombinant Factor VIII'],
+                    correct: 1,
+                    explanation: 'AVWS associated with aortic stenosis (Heyde syndrome) is caused by shear stress-induced loss of high molecular weight vWF multimers. Definitive treatment is valve replacement.',
+                    keyPoint: 'Heyde syndrome = AS + AVWS + GI bleeding. High shear cleaves HMW vWF multimers via ADAMTS13. Valve replacement is curative.',
+                    citation: 'Vincentelli A, et al. Acquired von Willebrand syndrome in aortic stenosis. N Engl J Med. 2003;349(4):343-349',
+                    pmid: '12878741',
+                    doi: '10.1056/NEJMoa022831'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'What is the inheritance pattern of Hemophilia A?',
+                    options: ['Autosomal dominant', 'Autosomal recessive', 'X-linked recessive', 'X-linked dominant'],
+                    correct: 2,
+                    explanation: 'Hemophilia A and B are X-linked recessive disorders. Males with the mutation are affected, while females are typically carriers.',
+                    keyPoint: 'Hemophilia A & B are X-linked recessive. Factor VIII and IX genes are on X chromosome. ~30% are de novo mutations.',
+                    citation: 'Mannucci PM, Tuddenham EG. The hemophilias--from royal genes to gene therapy. N Engl J Med. 2001;344(23):1773-1779',
+                    pmid: '11396445',
+                    doi: '10.1056/NEJM200106073442307'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Which bleeding disorder is associated with delayed bleeding after initial hemostasis?',
+                    options: ['Hemophilia A', 'Factor XIII deficiency', 'vWD Type 1', 'Bernard-Soulier syndrome'],
+                    correct: 1,
+                    explanation: 'Factor XIII cross-links fibrin to stabilize the clot. Deficiency causes delayed bleeding (12-36 hours) as the unstabilized clot breaks down.',
+                    keyPoint: 'Factor XIII deficiency = normal PT/PTT but delayed bleeding, poor wound healing, umbilical stump bleeding, miscarriages.',
+                    citation: 'Muszbek L, et al. Factor XIII: a coagulation factor with multiple plasmatic and cellular functions. Physiol Rev. 2011;91(3):931-972',
+                    pmid: '21742792',
+                    doi: '10.1152/physrev.00016.2010'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'Emicizumab works by which mechanism?',
+                    options: ['Replacing Factor VIII', 'Bispecific antibody bridging FIXa and FX', 'Inhibiting TFPI', 'Activating prothrombin directly'],
+                    correct: 1,
+                    explanation: 'Emicizumab is a bispecific antibody that bridges activated Factor IX (FIXa) and Factor X, mimicking the cofactor function of Factor VIII.',
+                    keyPoint: 'Emicizumab bridges FIXa and FX, mimics FVIII cofactor function. Used in Hemophilia A with or without inhibitors. Subcutaneous, long half-life.',
+                    citation: 'Oldenburg J, et al. Emicizumab Prophylaxis in Hemophilia A with Inhibitors. N Engl J Med. 2017;377(9):809-818',
+                    pmid: '28691557',
+                    doi: '10.1056/NEJMoa1703068'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Aminocaproic acid and tranexamic acid work by inhibiting:',
+                    options: ['Thrombin', 'Plasmin/plasminogen', 'Factor Xa', 'Platelet aggregation'],
+                    correct: 1,
+                    explanation: 'Aminocaproic acid and tranexamic acid are lysine analogs that inhibit plasminogen activation and plasmin, thereby preventing fibrinolysis.',
+                    keyPoint: 'Antifibrinolytics block plasmin. Useful adjunct in mucosal bleeding (dental, menorrhagia, epistaxis). Avoid in upper urinary tract bleeding.',
+                    citation: 'Tengborn L, et al. Tranexamic acid--an old drug still going strong and making a revival. Thromb Res. 2015;135(2):231-242',
+                    pmid: '25559460',
+                    doi: '10.1016/j.thromres.2014.11.012'
+                }
+            ],
+            platelet: [
+                {
+                    difficulty: 'intern',
+                    question: 'What is the most common cause of isolated thrombocytopenia in adults?',
+                    options: ['TTP', 'HIT', 'ITP', 'DIC'],
+                    correct: 2,
+                    explanation: 'Immune thrombocytopenia (ITP) is the most common cause of isolated thrombocytopenia in otherwise healthy adults, caused by autoantibodies against platelet glycoproteins.',
+                    keyPoint: 'ITP = isolated thrombocytopenia with normal blood smear. Diagnosis of exclusion. Antiplatelet antibodies target GPIIb/IIIa or GPIb/IX.',
+                    citation: 'Neunert C, et al. American Society of Hematology 2019 guidelines for immune thrombocytopenia. Blood Adv. 2019;3(23):3829-3866',
+                    pmid: '31794604',
+                    doi: '10.1182/bloodadvances.2019000966'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'First-line treatment for newly diagnosed ITP in adults is:',
+                    options: ['Platelet transfusion', 'Splenectomy', 'Corticosteroids', 'Rituximab'],
+                    correct: 2,
+                    explanation: 'Corticosteroids (prednisone 1mg/kg or dexamethasone 40mg x 4 days) are first-line treatment for ITP, with initial response rates of 70-80%.',
+                    keyPoint: 'First-line ITP treatment: Corticosteroids (prednisone or dexamethasone). IVIG if rapid response needed. Treatment threshold: <30K or symptomatic bleeding.',
+                    citation: 'Neunert C, et al. American Society of Hematology 2019 guidelines for immune thrombocytopenia. Blood Adv. 2019;3(23):3829-3866',
+                    pmid: '31794604',
+                    doi: '10.1182/bloodadvances.2019000966'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'A patient on heparin develops a 50% drop in platelets on day 7. The 4Ts score is 6. What is the next best step?',
+                    options: ['Continue heparin and observe', 'Stop heparin and start warfarin', 'Stop heparin and start argatroban', 'Stop heparin only'],
+                    correct: 2,
+                    explanation: 'With intermediate-high probability HIT (4Ts ≥4), heparin must be stopped and a non-heparin anticoagulant (argatroban, bivalirudin, fondaparinux) started immediately due to high thrombosis risk.',
+                    keyPoint: 'HIT management: Stop ALL heparin, start non-heparin anticoagulant. Do not start warfarin until platelets recover (risk of warfarin-induced venous limb gangrene).',
+                    citation: 'Cuker A, et al. American Society of Hematology 2018 guidelines for management of venous thromboembolism: heparin-induced thrombocytopenia. Blood Adv. 2018;2(22):3360-3392',
+                    pmid: '30482768',
+                    doi: '10.1182/bloodadvances.2018024489'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'The pathognomonic finding in TTP that distinguishes it from other TMAs is:',
+                    options: ['Schistocytes on smear', 'Elevated LDH', 'Severe ADAMTS13 deficiency (<10%)', 'Neurological symptoms'],
+                    correct: 2,
+                    explanation: 'Severe ADAMTS13 deficiency (<10% activity) is specific for TTP and distinguishes it from other thrombotic microangiopathies. It can be acquired (autoantibody) or congenital.',
+                    keyPoint: 'TTP = ADAMTS13 <10%. Acquired (antibody) or congenital (Upshaw-Schulman). HUS typically has normal ADAMTS13. Check ADAMTS13 before plasma exchange.',
+                    citation: 'Joly BS, et al. Thrombotic thrombocytopenic purpura. Blood. 2017;129(21):2836-2846',
+                    pmid: '28416507',
+                    doi: '10.1182/blood-2016-10-709857'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'A patient with TTP relapses after initial response to plasma exchange. ADAMTS13 is <10% with detectable inhibitor. Best next therapy?',
+                    options: ['Increase plasma exchange frequency', 'Add rituximab', 'Caplacizumab', 'Splenectomy'],
+                    correct: 1,
+                    explanation: 'Rituximab is recommended for relapsed or refractory acquired TTP to eliminate the autoantibody-producing B cells. It reduces relapse rates and time to remission.',
+                    keyPoint: 'Refractory/relapsed TTP: Add rituximab to PEX. Caplacizumab (anti-vWF) is adjunctive for acute episodes. Consider rituximab maintenance for multiple relapses.',
+                    citation: 'Scully M, et al. Caplacizumab Treatment for Acquired Thrombotic Thrombocytopenic Purpura. N Engl J Med. 2019;380(4):335-346',
+                    pmid: '30625070',
+                    doi: '10.1056/NEJMoa1806311'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Bernard-Soulier syndrome is caused by deficiency of:',
+                    options: ['GPIIb/IIIa', 'GPIb/IX/V', 'Dense granules', 'Alpha granules'],
+                    correct: 1,
+                    explanation: 'Bernard-Soulier syndrome results from deficiency of the GPIb/IX/V complex, which is required for platelet adhesion to vWF. It causes giant platelets and thrombocytopenia.',
+                    keyPoint: 'Bernard-Soulier = GPIb/IX/V deficiency (adhesion defect). Giant platelets, thrombocytopenia, absent ristocetin aggregation. Glanzmann = GPIIb/IIIa deficiency (aggregation defect).',
+                    citation: 'Nurden AT, Nurden P. Inherited thrombocytopenias: history, advances and perspectives. Haematologica. 2020;105(8):2004-2019',
+                    pmid: '32527952',
+                    doi: '10.3324/haematol.2019.233197'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'A patient with Glanzmann thrombasthenia needs surgery. What is the recommended hemostatic agent?',
+                    options: ['DDAVP', 'Platelet transfusion', 'Recombinant Factor VIIa', 'Cryoprecipitate'],
+                    correct: 2,
+                    explanation: 'Platelet transfusion is first-line, but patients often develop HLA antibodies and become refractory. Recombinant Factor VIIa (rFVIIa) is an effective alternative that bypasses the platelet defect.',
+                    keyPoint: 'Glanzmann treatment: Platelet transfusion ± rFVIIa. Antifibrinolytics as adjunct. rFVIIa useful when platelet refractory. Avoid repeat transfusions to prevent alloimmunization.',
+                    citation: 'Poon MC, et al. New insights into the treatment of Glanzmann thrombasthenia. Transfus Med Rev. 2016;30(2):92-99',
+                    pmid: '26856150',
+                    doi: '10.1016/j.tmrv.2016.01.001'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'What antibody target is specific for HIT?',
+                    options: ['Platelet factor 4 (PF4)', 'PF4-heparin complex', 'GPIIb/IIIa', 'Thrombopoietin receptor'],
+                    correct: 1,
+                    explanation: 'HIT antibodies target the neoepitope formed when PF4 binds to heparin. The PF4-heparin complex, not PF4 alone, is the immunogenic target.',
+                    keyPoint: 'HIT antibodies target PF4-heparin complex (neoepitope). IgG antibodies activate platelets via FcγRIIa. SRA is gold standard test, PF4-ELISA is screening test.',
+                    citation: 'Greinacher A. Heparin-Induced Thrombocytopenia. N Engl J Med. 2015;373(3):252-261',
+                    pmid: '26176382',
+                    doi: '10.1056/NEJMcp1411910'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Which medication is a thrombopoietin receptor agonist used in ITP?',
+                    options: ['Rituximab', 'Romiplostim', 'Prednisone', 'Azathioprine'],
+                    correct: 1,
+                    explanation: 'Romiplostim (and eltrombopag, avatrombopag) are TPO receptor agonists that stimulate platelet production. They are used for chronic ITP refractory to first-line therapy.',
+                    keyPoint: 'TPO-RAs (romiplostim, eltrombopag, avatrombopag) increase platelet production. Used for chronic ITP after steroid failure. ~80% response rate.',
+                    citation: 'Kuter DJ. The biology of thrombopoietin and thrombopoietin receptor agonists. Int J Hematol. 2013;98(1):10-23',
+                    pmid: '23821332',
+                    doi: '10.1007/s12185-013-1382-0'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Drug-induced thrombocytopenia from quinine is mediated by:',
+                    options: ['Direct marrow suppression', 'Drug-dependent antibodies', 'Immune complex deposition', 'Decreased TPO production'],
+                    correct: 1,
+                    explanation: 'Quinine-induced thrombocytopenia is caused by drug-dependent antibodies that only bind platelets in the presence of the drug, causing rapid severe thrombocytopenia.',
+                    keyPoint: 'Drug-dependent antibodies cause acute severe thrombocytopenia. Common culprits: quinine, quinidine, sulfonamides, vancomycin. Resolves with drug discontinuation.',
+                    citation: 'Arnold DM, et al. A systematic evaluation of laboratory testing for drug-induced immune thrombocytopenia. J Thromb Haemost. 2013;11(1):169-176',
+                    pmid: '23121994',
+                    doi: '10.1111/jth.12052'
+                }
+            ],
+            anemia: [
+                {
+                    difficulty: 'intern',
+                    question: 'What is the most common cause of anemia worldwide?',
+                    options: ['B12 deficiency', 'Iron deficiency', 'Thalassemia', 'Anemia of chronic disease'],
+                    correct: 1,
+                    explanation: 'Iron deficiency anemia is the most common nutritional deficiency and cause of anemia worldwide, affecting approximately 2 billion people.',
+                    keyPoint: 'Iron deficiency is #1 cause of anemia globally. Causes: blood loss (GI, menstrual), malabsorption (celiac, gastrectomy), increased demand (pregnancy), poor intake.',
+                    citation: 'Camaschella C. Iron-deficiency anemia. N Engl J Med. 2015;372(19):1832-1843',
+                    pmid: '25946282',
+                    doi: '10.1056/NEJMra1401038'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Which finding on peripheral smear is characteristic of iron deficiency anemia?',
+                    options: ['Target cells', 'Hypersegmented neutrophils', 'Pencil cells (elliptocytes)', 'Howell-Jolly bodies'],
+                    correct: 2,
+                    explanation: 'Iron deficiency anemia shows microcytic, hypochromic red cells with increased RDW. Pencil cells (elliptocytes) are characteristic.',
+                    keyPoint: 'Iron deficiency smear: Microcytosis, hypochromia, pencil cells, increased RDW. Target cells more common in thalassemia. Hypersegmented neutrophils = B12/folate deficiency.',
+                    citation: 'Lopez A, et al. Iron deficiency anaemia. Lancet. 2016;387(10021):907-916',
+                    pmid: '26314490',
+                    doi: '10.1016/S0140-6736(15)60865-0'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'A patient has microcytic anemia with ferritin 200 ng/mL and elevated CRP. Most likely diagnosis?',
+                    options: ['Iron deficiency anemia', 'Anemia of chronic disease', 'Thalassemia trait', 'Sideroblastic anemia'],
+                    correct: 1,
+                    explanation: 'Ferritin is an acute phase reactant. In anemia of chronic disease with inflammation (elevated CRP), ferritin is often normal or elevated despite functional iron deficiency.',
+                    keyPoint: 'ACD: Ferritin normal/high, TIBC low, hepcidin elevated (traps iron in stores). Iron deficiency: Ferritin low, TIBC high. Ferritin <30 = iron deficiency regardless of inflammation.',
+                    citation: 'Weiss G, Goodnough LT. Anemia of chronic disease. N Engl J Med. 2005;352(10):1011-1023',
+                    pmid: '15758012',
+                    doi: '10.1056/NEJMra041809'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Pernicious anemia is caused by antibodies against:',
+                    options: ['Red blood cells', 'Intrinsic factor', 'Transferrin receptor', 'Erythropoietin'],
+                    correct: 1,
+                    explanation: 'Pernicious anemia is an autoimmune condition with antibodies against intrinsic factor and/or parietal cells, leading to B12 malabsorption.',
+                    keyPoint: 'Pernicious anemia = autoimmune destruction of parietal cells or anti-IF antibodies. Causes B12 deficiency. Associated with other autoimmune conditions (thyroid, vitiligo).',
+                    citation: 'Stabler SP. Vitamin B12 deficiency. N Engl J Med. 2013;368(2):149-160',
+                    pmid: '23301732',
+                    doi: '10.1056/NEJMcp1113996'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Which finding distinguishes warm autoimmune hemolytic anemia (AIHA) from cold agglutinin disease?',
+                    options: ['Spherocytes on smear', 'Positive direct Coombs test', 'DAT positive for IgG only vs C3 only', 'Elevated LDH'],
+                    correct: 2,
+                    explanation: 'Warm AIHA is mediated by IgG antibodies (DAT positive for IgG ± C3), while cold agglutinin disease is mediated by IgM causing complement activation (DAT positive for C3 only).',
+                    keyPoint: 'Warm AIHA: IgG antibodies, DAT positive IgG ± C3, treat with steroids/rituximab. Cold agglutinin: IgM, DAT positive C3 only, avoid cold, rituximab for treatment.',
+                    citation: 'Hill QA, et al. The diagnosis and management of primary autoimmune haemolytic anaemia. Br J Haematol. 2017;176(3):395-411',
+                    pmid: '28005293',
+                    doi: '10.1111/bjh.14478'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'A patient with chronic hemolysis develops acute aplastic crisis. What is the most likely cause?',
+                    options: ['Folate deficiency', 'Parvovirus B19 infection', 'Splenic sequestration', 'Iron overload'],
+                    correct: 1,
+                    explanation: 'Parvovirus B19 infects erythroid progenitors, causing transient red cell aplasia. In patients with chronic hemolysis and shortened RBC survival, this leads to severe anemia.',
+                    keyPoint: 'Parvovirus B19 targets erythroid progenitors (P antigen receptor). Causes aplastic crisis in chronic hemolysis (sickle cell, HS). Reticulocyte count drops to zero.',
+                    citation: 'Young NS, Brown KE. Parvovirus B19. N Engl J Med. 2004;350(6):586-597',
+                    pmid: '14762186',
+                    doi: '10.1056/NEJMra030840'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'G6PD deficiency causes hemolysis through:',
+                    options: ['Membrane defect', 'Oxidative stress', 'Antibody-mediated destruction', 'Complement activation'],
+                    correct: 1,
+                    explanation: 'G6PD is needed to maintain glutathione in its reduced form, which protects against oxidative damage. Deficiency leads to hemolysis with oxidative stress (infections, drugs, fava beans).',
+                    keyPoint: 'G6PD deficiency: X-linked, episodic hemolysis triggered by oxidative stress. Triggers: Infections, sulfa drugs, primaquine, fava beans. Smear shows bite cells, Heinz bodies.',
+                    citation: 'Cappellini MD, Fiorelli G. Glucose-6-phosphate dehydrogenase deficiency. Lancet. 2008;371(9606):64-74',
+                    pmid: '18177777',
+                    doi: '10.1016/S0140-6736(08)60073-2'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'What distinguishes beta thalassemia major from intermedia clinically?',
+                    options: ['Age at presentation', 'Transfusion dependence', 'Hemoglobin electrophoresis pattern', 'Geographic distribution'],
+                    correct: 1,
+                    explanation: 'Beta thalassemia major presents in early childhood and requires regular transfusions for survival. Intermedia has milder phenotype with transfusion independence or occasional transfusion needs.',
+                    keyPoint: 'Beta thal major: Transfusion dependent, presents at 6-12 months. Intermedia: Variable severity, may not need regular transfusions. Both show elevated HbF and HbA2.',
+                    citation: 'Taher AT, et al. Beta-thalassemia. N Engl J Med. 2021;384(8):727-743',
+                    pmid: '33626255',
+                    doi: '10.1056/NEJMra2021838'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'A patient with sickle cell disease develops stroke. What is the recommended long-term management?',
+                    options: ['Hydroxyurea alone', 'Chronic transfusion therapy', 'Bone marrow transplant only', 'Aspirin prophylaxis'],
+                    correct: 1,
+                    explanation: 'Chronic transfusion to maintain HbS <30% is standard of care for secondary stroke prevention in sickle cell disease. This reduces stroke recurrence from 70% to 10%.',
+                    keyPoint: 'Sickle cell stroke: Acute exchange transfusion, then chronic transfusions (goal HbS <30%). Reduces recurrence from 70% to 10%. Consider BMT in eligible patients.',
+                    citation: 'DeBaun MR, Kirkham FJ. Central nervous system complications and management in sickle cell disease. Blood. 2016;127(7):829-838',
+                    pmid: '26758917',
+                    doi: '10.1182/blood-2015-09-618579'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Hereditary spherocytosis is caused by defects in:',
+                    options: ['Hemoglobin chain synthesis', 'RBC membrane proteins', 'RBC enzymes', 'Iron absorption'],
+                    correct: 1,
+                    explanation: 'Hereditary spherocytosis results from defects in RBC membrane proteins (spectrin, ankyrin, band 3, protein 4.2) that link the cytoskeleton to the lipid bilayer.',
+                    keyPoint: 'HS: Membrane protein defects (spectrin, ankyrin most common). Spherocytes, elevated MCHC, positive osmotic fragility. Splenectomy is curative for severe cases.',
+                    citation: 'Perrotta S, et al. Hereditary spherocytosis. Lancet. 2008;372(9647):1411-1426',
+                    pmid: '18940465',
+                    doi: '10.1016/S0140-6736(08)61588-3'
+                }
+            ],
+            coag: [
+                {
+                    difficulty: 'intern',
+                    question: 'An isolated prolonged aPTT with normal PT most likely indicates deficiency of:',
+                    options: ['Factor VII', 'Factor X', 'Factor VIII', 'Fibrinogen'],
+                    correct: 2,
+                    explanation: 'Isolated prolonged aPTT suggests deficiency in the intrinsic pathway (Factors VIII, IX, XI, XII) or contact factors. Factor VIII deficiency (hemophilia A) is most common.',
+                    keyPoint: 'Isolated prolonged aPTT: Intrinsic pathway (VIII, IX, XI, XII), lupus anticoagulant, heparin. Isolated prolonged PT: Factor VII. Both prolonged: Common pathway (X, V, II, fibrinogen).',
+                    citation: 'Chee YL, Crawford JC. Guidelines on the assessment of bleeding risk prior to surgery or invasive procedures. Br J Haematol. 2008;140(5):496-504',
+                    pmid: '18275427',
+                    doi: '10.1111/j.1365-2141.2007.06968.x'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'What is the INR target range for mechanical mitral valve on warfarin?',
+                    options: ['1.5-2.0', '2.0-3.0', '2.5-3.5', '3.0-4.0'],
+                    correct: 2,
+                    explanation: 'Mechanical mitral valves require higher anticoagulation intensity (INR 2.5-3.5) due to higher thrombotic risk compared to mechanical aortic valves (INR 2.0-3.0).',
+                    keyPoint: 'Mechanical valve INR targets: Mitral 2.5-3.5, Aortic 2.0-3.0. Bileaflet aortic with no risk factors may be 2.0-3.0. Add aspirin 81mg if additional risk factors.',
+                    citation: 'Nishimura RA, et al. 2017 AHA/ACC Focused Update on Prosthetic Valves. Circulation. 2017;135(25):e1159-e1195',
+                    pmid: '28298458',
+                    doi: '10.1161/CIR.0000000000000503'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'A mixing study corrects an isolated prolonged aPTT. This suggests:',
+                    options: ['Factor VIII inhibitor', 'Lupus anticoagulant', 'Factor deficiency', 'Heparin contamination'],
+                    correct: 2,
+                    explanation: 'A mixing study that corrects indicates factor deficiency (providing the missing factor corrects the test). Non-correction suggests an inhibitor (lupus anticoagulant or factor inhibitor).',
+                    keyPoint: 'Mixing study: Correction = factor deficiency. No correction = inhibitor. Lupus anticoagulant is time-independent. Factor inhibitors (esp FVIII) may be time-dependent (incubate at 37°C).',
+                    citation: 'Moore GW. Recent guidelines and recommendations for laboratory detection of lupus anticoagulants. Semin Thromb Hemost. 2014;40(2):163-171',
+                    pmid: '24497115',
+                    doi: '10.1055/s-0033-1364185'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Which finding is NOT part of the DIC diagnostic criteria?',
+                    options: ['Prolonged PT', 'Thrombocytopenia', 'Elevated D-dimer', 'Elevated fibrinogen'],
+                    correct: 3,
+                    explanation: 'DIC causes consumption of clotting factors including fibrinogen. Fibrinogen is typically low in overt DIC. Elevated fibrinogen would argue against DIC.',
+                    keyPoint: 'DIC: Low fibrinogen (<100), prolonged PT/aPTT, thrombocytopenia, elevated D-dimer, schistocytes. ISTH score ≥5 = overt DIC. Treat underlying cause.',
+                    citation: 'Levi M, Toh CH, Thachil J, Watson HG. Guidelines for the diagnosis and management of disseminated intravascular coagulation. Br J Haematol. 2009;145(1):24-33',
+                    pmid: '19222477',
+                    doi: '10.1111/j.1365-2141.2009.07600.x'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'A patient on warfarin with INR 9.0 has no bleeding. What is the recommended management?',
+                    options: ['FFP transfusion', 'Vitamin K 10mg IV', 'Hold warfarin and give vitamin K 2.5-5mg orally', 'Hold warfarin only'],
+                    correct: 2,
+                    explanation: 'For INR >9 without significant bleeding, hold warfarin and give oral vitamin K (2.5-5mg). FFP or IV vitamin K reserved for serious bleeding or need for urgent procedure.',
+                    keyPoint: 'INR >9 no bleeding: Hold warfarin + oral vitamin K 2.5-5mg. INR 4.5-9 no bleeding: Hold warfarin ± low-dose vitamin K. Serious bleeding: 4-factor PCC + IV vitamin K.',
+                    citation: 'Holbrook A, et al. Evidence-based management of anticoagulant therapy: Antithrombotic Therapy and Prevention of Thrombosis, 9th ed. Chest. 2012;141(2 Suppl):e152S-e184S',
+                    pmid: '22315259',
+                    doi: '10.1378/chest.11-2295'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'The reversal agent for dabigatran is:',
+                    options: ['Protamine', 'Vitamin K', 'Idarucizumab', 'Andexanet alfa'],
+                    correct: 2,
+                    explanation: 'Idarucizumab is a humanized monoclonal antibody fragment that specifically binds dabigatran, rapidly reversing its anticoagulant effect.',
+                    keyPoint: 'DOAC reversal: Dabigatran = idarucizumab. Factor Xa inhibitors (rivaroxaban, apixaban, edoxaban) = andexanet alfa or 4-factor PCC.',
+                    citation: 'Pollack CV Jr, et al. Idarucizumab for Dabigatran Reversal - Full Cohort Analysis. N Engl J Med. 2017;377(5):431-441',
+                    pmid: '28693366',
+                    doi: '10.1056/NEJMoa1707278'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Which DOAC requires dose adjustment for both renal and hepatic function?',
+                    options: ['Dabigatran', 'Rivaroxaban', 'Apixaban', 'Edoxaban'],
+                    correct: 2,
+                    explanation: 'Apixaban is metabolized by both hepatic and renal routes and requires dose reduction based on a combination of age, weight, and creatinine (if 2 of 3 criteria met).',
+                    keyPoint: 'Apixaban dose reduction: 2 of 3: Age ≥80, weight ≤60kg, Cr ≥1.5. Dabigatran: Primarily renal, contraindicated if CrCl <30. Rivaroxaban: Avoid if CrCl <15.',
+                    citation: 'January CT, et al. 2019 AHA/ACC/HRS Focused Update on Atrial Fibrillation. Circulation. 2019;140(2):e125-e151',
+                    pmid: '30686041',
+                    doi: '10.1161/CIR.0000000000000665'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'The mechanism of heparin-induced anticoagulation primarily involves:',
+                    options: ['Direct thrombin inhibition', 'Potentiation of antithrombin activity', 'Vitamin K antagonism', 'Platelet inhibition'],
+                    correct: 1,
+                    explanation: 'Unfractionated heparin binds antithrombin and accelerates its inhibition of thrombin (IIa) and Factor Xa by 1000-fold. LMWH primarily inhibits Factor Xa.',
+                    keyPoint: 'UFH: Potentiates antithrombin, inhibits IIa and Xa equally. LMWH: Anti-Xa > anti-IIa. Monitor UFH with aPTT or anti-Xa. LMWH generally does not require monitoring.',
+                    citation: 'Garcia DA, et al. Parenteral anticoagulants: Antithrombotic Therapy and Prevention of Thrombosis, 9th ed. Chest. 2012;141(2 Suppl):e24S-e43S',
+                    pmid: '22315264',
+                    doi: '10.1378/chest.11-2291'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'PT primarily assesses which coagulation pathway?',
+                    options: ['Intrinsic pathway', 'Extrinsic pathway', 'Common pathway only', 'Fibrinolytic pathway'],
+                    correct: 1,
+                    explanation: 'PT (prothrombin time) assesses the extrinsic pathway (Factor VII) and common pathway (X, V, II, fibrinogen). It is the test used to monitor warfarin.',
+                    keyPoint: 'PT: Extrinsic (VII) + common pathway. aPTT: Intrinsic (VIII, IX, XI, XII) + common pathway. Thrombin time: Fibrinogen function and heparin.',
+                    citation: 'Kamal AH, Tefferi A, Pruthi RK. How to interpret and pursue an abnormal prothrombin time, activated partial thromboplastin time, and bleeding time in adults. Mayo Clin Proc. 2007;82(7):864-873',
+                    pmid: '17605969',
+                    doi: '10.4065/82.7.864'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Acquired Factor VIII inhibitors are most commonly associated with:',
+                    options: ['Young healthy males', 'Pregnancy/postpartum', 'Iron deficiency', 'Hyperthyroidism'],
+                    correct: 1,
+                    explanation: 'Acquired hemophilia A (autoantibody against Factor VIII) is most commonly associated with the postpartum period, malignancy, autoimmune disease, and elderly patients.',
+                    keyPoint: 'Acquired hemophilia A: Postpartum, autoimmune, malignancy, drugs, elderly. Presents with soft tissue bleeding (different from congenital). Treat bleeds with bypassing agents, eradicate inhibitor with immunosuppression.',
+                    citation: 'Kruse-Jarres R, et al. Acquired hemophilia A: Updated review of evidence and treatment guidance. Am J Hematol. 2017;92(7):695-705',
+                    pmid: '28470674',
+                    doi: '10.1002/ajh.24777'
+                }
+            ],
+            thrombophilia: [
+                {
+                    difficulty: 'intern',
+                    question: 'What is the most common inherited thrombophilia?',
+                    options: ['Antithrombin deficiency', 'Protein C deficiency', 'Factor V Leiden', 'Prothrombin G20210A'],
+                    correct: 2,
+                    explanation: 'Factor V Leiden is the most common inherited thrombophilia, present in approximately 5% of Caucasians. It causes resistance to activated protein C.',
+                    keyPoint: 'Factor V Leiden: Most common inherited thrombophilia (5% Caucasians). Causes APC resistance. Heterozygotes: 5-7x VTE risk. Homozygotes: 50-80x risk.',
+                    citation: 'Kujovich JL. Factor V Leiden thrombophilia. Genet Med. 2011;13(1):1-16',
+                    pmid: '21116184',
+                    doi: '10.1097/GIM.0b013e3181faa0f2'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Antiphospholipid syndrome requires which laboratory finding?',
+                    options: ['Positive ANA', 'Persistent positive antiphospholipid antibody confirmed at 12 weeks', 'Low complement levels', 'Positive anti-dsDNA'],
+                    correct: 1,
+                    explanation: 'APS diagnosis requires persistent positive antiphospholipid antibodies (lupus anticoagulant, anticardiolipin, or anti-beta2 glycoprotein I) confirmed at least 12 weeks apart.',
+                    keyPoint: 'APS criteria: Clinical (thrombosis or pregnancy morbidity) + Laboratory (LA, aCL, or anti-β2GPI positive on 2 occasions ≥12 weeks apart). Triple positive = highest risk.',
+                    citation: 'Miyakis S, et al. International consensus statement on an update of the classification criteria for definite antiphospholipid syndrome (APS). J Thromb Haemost. 2006;4(2):295-306',
+                    pmid: '16420554',
+                    doi: '10.1111/j.1538-7836.2006.01753.x'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'When is thrombophilia testing most appropriately performed?',
+                    options: ['During acute VTE', 'While on warfarin', 'After completing anticoagulation', 'While on DOAC therapy'],
+                    correct: 2,
+                    explanation: 'Thrombophilia testing is most accurate after completing anticoagulation. Acute thrombosis and anticoagulant therapy affect protein C, S, antithrombin, and lupus anticoagulant testing.',
+                    keyPoint: 'Test after stopping anticoagulation (2-4 weeks for warfarin, 2 days for DOACs). Acute VTE lowers AT, protein C, S. Warfarin lowers protein C, S. Heparin lowers AT.',
+                    citation: 'Baglin T, et al. Clinical guidelines for testing for heritable thrombophilia. Br J Haematol. 2010;149(2):209-220',
+                    pmid: '20128793',
+                    doi: '10.1111/j.1365-2141.2009.08022.x'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'A patient with unprovoked DVT at age 50 asks about thrombophilia testing. What do you advise?',
+                    options: ['Test everyone with unprovoked DVT', 'Testing rarely changes management', 'Test only if family history positive', 'Test only females'],
+                    correct: 1,
+                    explanation: 'Thrombophilia testing rarely changes clinical management. Duration of anticoagulation after unprovoked VTE is based on bleeding risk vs recurrence risk, not thrombophilia status.',
+                    keyPoint: 'Thrombophilia testing seldom changes management. Most unprovoked VTE gets indefinite anticoagulation anyway. Consider testing if it affects family screening or pregnancy planning.',
+                    citation: 'Stevens SM, et al. Antithrombotic Therapy for VTE Disease: Second Update of the CHEST Guideline. Chest. 2021;160(6):e545-e608',
+                    pmid: '34352278',
+                    doi: '10.1016/j.chest.2021.07.055'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'Homozygous protein C deficiency in neonates presents as:',
+                    options: ['Asymptomatic', 'Mild bruising', 'Purpura fulminans', 'Hemarthrosis'],
+                    correct: 2,
+                    explanation: 'Homozygous protein C deficiency causes severe thrombosis presenting as purpura fulminans (skin necrosis with DIC) in neonates within hours to days of birth.',
+                    keyPoint: 'Homozygous protein C or S deficiency: Purpura fulminans at birth, requires immediate protein C concentrate or FFP. Heterozygotes: VTE risk increased 7-10x.',
+                    citation: 'Goldenberg NA, Manco-Johnson MJ. Protein C deficiency. Haemophilia. 2008;14(6):1214-1221',
+                    pmid: '19141162',
+                    doi: '10.1111/j.1365-2516.2008.01838.x'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'The prothrombin G20210A mutation causes thrombosis by:',
+                    options: ['Creating APC resistance', 'Increasing prothrombin levels', 'Decreasing antithrombin', 'Causing hyperhomocysteinemia'],
+                    correct: 1,
+                    explanation: 'The prothrombin G20210A mutation in the 3\' untranslated region increases prothrombin mRNA stability, leading to elevated prothrombin levels and increased thrombin generation.',
+                    keyPoint: 'Prothrombin G20210A: Increases prothrombin levels ~30%. 2-3% of Caucasians. VTE risk 2-3x heterozygotes. Test by PCR, not factor assay.',
+                    citation: 'Poort SR, et al. A common genetic variation in the 3\'-untranslated region of the prothrombin gene is associated with elevated plasma prothrombin levels and an increase in venous thrombosis. Blood. 1996;88(10):3698-3703',
+                    pmid: '8916933',
+                    doi: '10.1182/blood.V88.10.3698.bloodjournal88103698'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Warfarin-induced skin necrosis is associated with deficiency of:',
+                    options: ['Factor V Leiden', 'Protein C or S', 'Antithrombin', 'Factor VIII'],
+                    correct: 1,
+                    explanation: 'Protein C and S have short half-lives and drop rapidly with warfarin initiation, causing transient hypercoagulability and skin necrosis, especially in protein C/S deficient patients.',
+                    keyPoint: 'Warfarin skin necrosis: Protein C (8hr half-life) drops before other factors. Risk highest in protein C/S deficiency. Prevent by bridging with heparin until INR therapeutic.',
+                    citation: 'Chan YC, et al. Warfarin induced skin necrosis. Br J Surg. 2000;87(3):266-272',
+                    pmid: '10718793',
+                    doi: '10.1046/j.1365-2168.2000.01352.x'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'In catastrophic antiphospholipid syndrome (CAPS), first-line treatment includes all EXCEPT:',
+                    options: ['Anticoagulation', 'High-dose steroids', 'Plasma exchange', 'Rituximab'],
+                    correct: 3,
+                    explanation: 'CAPS treatment includes anticoagulation, steroids, and plasma exchange or IVIG. Rituximab is reserved for refractory cases but is not first-line therapy.',
+                    keyPoint: 'CAPS treatment: Anticoagulation + steroids + plasma exchange or IVIG. Treat triggers (infection, surgery). Eculizumab for refractory cases. High mortality (30-50%).',
+                    citation: 'Cervera R, Rodríguez-Pintó I. Catastrophic antiphospholipid syndrome: Task force report summary. Lupus. 2014;23(12):1283-1285',
+                    pmid: '25228730',
+                    doi: '10.1177/0961203314540764'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'What duration of anticoagulation is recommended for provoked DVT (e.g., post-surgery)?',
+                    options: ['Lifelong', '6 months', '3 months', '1 month'],
+                    correct: 2,
+                    explanation: 'Provoked VTE (major transient risk factor like surgery) has low recurrence risk after the provoking factor resolves. Standard treatment is 3 months of anticoagulation.',
+                    keyPoint: 'Provoked VTE (major surgery, trauma): 3 months. Unprovoked VTE: Consider indefinite if low bleeding risk. Cancer-associated: LMWH or DOAC as long as cancer active.',
+                    citation: 'Kearon C, et al. Antithrombotic Therapy for VTE Disease: CHEST Guideline. Chest. 2016;149(2):315-352',
+                    pmid: '26867832',
+                    doi: '10.1016/j.chest.2015.11.026'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Lupus anticoagulant is best screened for using:',
+                    options: ['Anticardiolipin antibody ELISA', 'Dilute Russell viper venom time (dRVVT)', 'Anti-beta2 glycoprotein I ELISA', 'Standard aPTT only'],
+                    correct: 1,
+                    explanation: 'dRVVT is the most sensitive and specific screening test for lupus anticoagulant. It directly activates Factor X, bypassing the contact pathway.',
+                    keyPoint: 'LA testing: Screen with dRVVT and sensitive aPTT. Confirm with mixing study (no correction) and confirmatory test (phospholipid neutralization). Do not test on anticoagulants.',
+                    citation: 'Pengo V, et al. Update of the guidelines for lupus anticoagulant detection. J Thromb Haemost. 2009;7(10):1737-1740',
+                    pmid: '19624461',
+                    doi: '10.1111/j.1538-7836.2009.03555.x'
+                }
+            ],
+            wbc: [
+                {
+                    difficulty: 'intern',
+                    question: 'What is the most common cause of lymphocytosis in adults?',
+                    options: ['CLL', 'Viral infection', 'Pertussis', 'Lymphoma'],
+                    correct: 1,
+                    explanation: 'Reactive lymphocytosis due to viral infections (EBV, CMV, viral hepatitis, HIV) is far more common than malignant causes in adults.',
+                    keyPoint: 'Reactive lymphocytosis: Most common cause is viral infection. CLL is most common cause of persistent lymphocytosis in elderly. Look at smear morphology.',
+                    citation: 'Davids MS, Steensma DP. Making sense of mature lymphocytosis. Curr Hematol Malig Rep. 2014;9(1):9-18',
+                    pmid: '24407376',
+                    doi: '10.1007/s11899-014-0198-1'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Classic peripheral smear finding in infectious mononucleosis is:',
+                    options: ['Hypersegmented neutrophils', 'Atypical lymphocytes (reactive lymphocytes)', 'Blast cells', 'Schistocytes'],
+                    correct: 1,
+                    explanation: 'Infectious mononucleosis (EBV infection) characteristically shows atypical lymphocytes - large lymphocytes with abundant cytoplasm and irregular nuclei, representing activated T cells.',
+                    keyPoint: 'Atypical lymphocytes = activated T cells responding to EBV-infected B cells. >10% atypical lymphocytes suggests EBV/CMV. Also seen in other viral infections and drug reactions.',
+                    citation: 'Ebell MH. Epstein-Barr virus infectious mononucleosis. Am Fam Physician. 2004;70(7):1279-1287',
+                    pmid: '15508538',
+                    doi: null
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Severe chronic neutropenia is defined as ANC less than:',
+                    options: ['1500/μL', '1000/μL', '500/μL', '200/μL'],
+                    correct: 2,
+                    explanation: 'Severe neutropenia is defined as ANC <500/μL. This significantly increases infection risk. Moderate neutropenia is ANC 500-1000/μL.',
+                    keyPoint: 'Neutropenia severity: Mild 1000-1500, Moderate 500-1000, Severe <500. Infection risk increases substantially with ANC <500, especially <200.',
+                    citation: 'Dale DC. How I manage neutropenia. Br J Haematol. 2017;179(1):92-105',
+                    pmid: '28815576',
+                    doi: '10.1111/bjh.14866'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Which medication most commonly causes drug-induced neutropenia?',
+                    options: ['Aspirin', 'Clozapine', 'Metformin', 'Omeprazole'],
+                    correct: 1,
+                    explanation: 'Clozapine carries a significant risk of agranulocytosis (1-2%), requiring mandatory monitoring. Other common causes include antithyroid drugs, sulfasalazine, and chemotherapy.',
+                    keyPoint: 'Clozapine: 1-2% agranulocytosis risk, mandatory WBC monitoring. Other high-risk drugs: methimazole/PTU, sulfasalazine, trimethoprim-sulfamethoxazole.',
+                    citation: 'Andrès E, Maloisel F. Idiosyncratic drug-induced agranulocytosis or acute neutropenia. Curr Opin Hematol. 2008;15(1):15-21',
+                    pmid: '18043241',
+                    doi: '10.1097/MOH.0b013e3282f15fb9'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'Cyclic neutropenia is caused by mutations in:',
+                    options: ['G-CSF receptor', 'ELANE gene', 'HAX1 gene', 'GATA2 gene'],
+                    correct: 1,
+                    explanation: 'Cyclic neutropenia is caused by mutations in ELANE (neutrophil elastase gene), the same gene mutated in severe congenital neutropenia (Kostmann syndrome).',
+                    keyPoint: 'Cyclic neutropenia: ELANE mutations, 21-day cycles, ANC nadir with infection risk. Treat with G-CSF. Severe congenital neutropenia: also ELANE, but constant severe neutropenia.',
+                    citation: 'Horwitz MS, et al. Mutations in ELA2, encoding neutrophil elastase, define a 21-day biological clock in cyclic haematopoiesis. Nat Genet. 1999;23(4):433-436',
+                    pmid: '10581030',
+                    doi: '10.1038/70544'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'The most common cause of eosinophilia in the developed world is:',
+                    options: ['Parasitic infection', 'Allergic disease', 'Drug reaction', 'Eosinophilic GI disease'],
+                    correct: 1,
+                    explanation: 'Allergic diseases (asthma, allergic rhinitis, eczema) are the most common cause of eosinophilia in developed countries. Parasitic infections predominate in endemic areas.',
+                    keyPoint: 'Eosinophilia causes (mnemonic NAACP): Neoplasm, Allergy/Asthma, Adrenal insufficiency, Collagen vascular disease, Parasites. Mild (<1500) often allergic.',
+                    citation: 'Rothenberg ME. Eosinophilia. N Engl J Med. 1998;338(22):1592-1600',
+                    pmid: '9603798',
+                    doi: '10.1056/NEJM199805283382206'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Steroids cause neutrophilia by what mechanism?',
+                    options: ['Increased bone marrow production', 'Demargination of neutrophils', 'Decreased neutrophil apoptosis', 'All of the above'],
+                    correct: 3,
+                    explanation: 'Corticosteroids cause neutrophilia through multiple mechanisms: demargination from vessel walls, release from bone marrow reserves, and decreased apoptosis.',
+                    keyPoint: 'Steroid-induced neutrophilia: Demargination (rapid), marrow release (hours), decreased apoptosis (days). WBC can reach 20-30K. Lymphopenia also occurs.',
+                    citation: 'Shoenfeld Y, et al. Glucocorticoid-induced granulocytosis: relationship to the degree of leukocytosis and duration of therapy. Am J Med. 1981;71(5):773-778',
+                    pmid: '7304649',
+                    doi: '10.1016/0002-9343(81)90363-6'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'Large granular lymphocyte (LGL) leukemia is associated with:',
+                    options: ['Hypergammaglobulinemia', 'Rheumatoid arthritis and neutropenia', 'Eosinophilia', 'Polycythemia'],
+                    correct: 1,
+                    explanation: 'T-LGL leukemia is associated with autoimmune conditions, especially rheumatoid arthritis (25-30% of cases) and pure red cell aplasia. It typically presents with neutropenia.',
+                    keyPoint: 'T-LGL leukemia: Indolent, associated with RA and other autoimmune conditions. Neutropenia is hallmark. CD3+, CD8+, CD57+. Treat with immunosuppression if symptomatic.',
+                    citation: 'Lamy T, Loughran TP Jr. How I treat LGL leukemia. Blood. 2011;117(10):2764-2774',
+                    pmid: '21190991',
+                    doi: '10.1182/blood-2010-07-296962'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Monocytosis (>1000/μL) persisting for >3 months should raise concern for:',
+                    options: ['Viral infection', 'Chronic myelomonocytic leukemia', 'ITP', 'Hemolytic anemia'],
+                    correct: 1,
+                    explanation: 'Persistent monocytosis (>1000/μL for >3 months) is a criterion for CMML. Other causes include chronic infection, autoimmune disease, and recovery from neutropenia.',
+                    keyPoint: 'Persistent monocytosis: Consider CMML (especially if dysplasia, splenomegaly). Rule out reactive causes: chronic infection (TB, endocarditis), autoimmune, malignancy.',
+                    citation: 'Patnaik MM, Tefferi A. Chronic myelomonocytic leukemia: 2020 update on diagnosis, risk stratification and management. Am J Hematol. 2020;95(1):97-115',
+                    pmid: '31736122',
+                    doi: '10.1002/ajh.25684'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Benign ethnic neutropenia is most commonly seen in individuals of which ancestry?',
+                    options: ['Northern European', 'Asian', 'African/Middle Eastern', 'Native American'],
+                    correct: 2,
+                    explanation: 'Benign ethnic neutropenia (BEN) is common in individuals of African, Middle Eastern, and some European (e.g., Yemeni Jewish) descent, with prevalence of 25-50% in some populations.',
+                    keyPoint: 'Benign ethnic neutropenia: Duffy-null phenotype (DARC gene). No increased infection risk. ANC 1000-1500 is normal for these populations. No treatment needed.',
+                    citation: 'Hsieh MM, et al. Prevalence of neutropenia in the U.S. population: age, sex, smoking status, and ethnic differences. Ann Intern Med. 2007;146(7):486-492',
+                    pmid: '17404350',
+                    doi: '10.7326/0003-4819-146-7-200704030-00004'
+                }
+            ],
+            lab: [
+                {
+                    difficulty: 'intern',
+                    question: 'An elevated reticulocyte count indicates:',
+                    options: ['Bone marrow suppression', 'Increased RBC production', 'Hemoglobin variant', 'Iron deficiency'],
+                    correct: 1,
+                    explanation: 'Reticulocytes are immature RBCs. Elevated reticulocyte count indicates increased RBC production, typically seen in hemolysis or blood loss with adequate marrow response.',
+                    keyPoint: 'High reticulocytes: Hemolysis, acute blood loss, treatment response. Low reticulocytes with anemia: Marrow failure, nutritional deficiency, anemia of chronic disease.',
+                    citation: 'Piva E, et al. Automated reticulocyte counting: state of the art and clinical applications in the evaluation of erythropoiesis. Clin Chem Lab Med. 2010;48(10):1369-1380',
+                    pmid: '20491596',
+                    doi: '10.1515/CCLM.2010.292'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Target cells on peripheral smear are seen in all EXCEPT:',
+                    options: ['Thalassemia', 'Liver disease', 'Hereditary spherocytosis', 'Hemoglobin C disease'],
+                    correct: 2,
+                    explanation: 'Target cells form when there is excess membrane relative to cell volume. Hereditary spherocytosis has the opposite - decreased membrane surface area, forming spherocytes.',
+                    keyPoint: 'Target cells: Thalassemia, liver disease, HbC, post-splenectomy, iron deficiency. Spherocytes: HS, AIHA, burns, Clostridium sepsis.',
+                    citation: 'Bain BJ. Diagnosis from the blood smear. N Engl J Med. 2005;353(5):498-507',
+                    pmid: '16079373',
+                    doi: '10.1056/NEJMra043442'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'A patient has low hemoglobin with high MCV. The reticulocyte count is low. Most likely cause?',
+                    options: ['Acute blood loss', 'Hemolysis', 'B12 or folate deficiency', 'Thalassemia'],
+                    correct: 2,
+                    explanation: 'Macrocytic anemia with low reticulocyte count suggests impaired RBC production. B12 or folate deficiency causes megaloblastic anemia with ineffective erythropoiesis.',
+                    keyPoint: 'Macrocytic anemia + low retics: B12/folate deficiency, MDS, hypothyroidism, liver disease, drugs (hydroxyurea, MTX). High retics: Hemolysis with reticulocytosis (retics are large).',
+                    citation: 'Green R, Datta Mitra A. Megaloblastic Anemias: Nutritional and Other Causes. Med Clin North Am. 2017;101(2):297-317',
+                    pmid: '28189172',
+                    doi: '10.1016/j.mcna.2016.09.013'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Which iron study pattern indicates iron deficiency anemia?',
+                    options: ['Low ferritin, low TIBC, low serum iron', 'Low ferritin, high TIBC, low serum iron', 'High ferritin, low TIBC, low serum iron', 'Normal ferritin, normal TIBC, low serum iron'],
+                    correct: 1,
+                    explanation: 'Iron deficiency shows low serum iron, low ferritin (storage depleted), and high TIBC (body trying to capture more iron). Transferrin saturation is low.',
+                    keyPoint: 'Iron deficiency: ↓Iron, ↓Ferritin, ↑TIBC, ↓Sat%. ACD: ↓Iron, ↑Ferritin, ↓TIBC, ↓Sat%. Ferritin <30 = iron deficient even with inflammation.',
+                    citation: 'Camaschella C. Iron-deficiency anemia. N Engl J Med. 2015;372(19):1832-1843',
+                    pmid: '25946282',
+                    doi: '10.1056/NEJMra1401038'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'The direct antiglobulin test (DAT) detects:',
+                    options: ['Antibodies in patient serum', 'Antibodies/complement bound to RBC surface', 'Free hemoglobin in plasma', 'Haptoglobin levels'],
+                    correct: 1,
+                    explanation: 'The DAT (direct Coombs test) detects IgG and/or complement (C3) bound to the patient\'s RBCs. It is positive in autoimmune hemolytic anemia and some drug-induced hemolysis.',
+                    keyPoint: 'DAT: Detects antibodies/complement ON RBCs. Positive in AIHA, HDN, drug-induced hemolysis. IAT (indirect Coombs): Detects antibodies in serum (used for crossmatch, antibody screen).',
+                    citation: 'Parker V, Tormey CA. The Direct Antiglobulin Test: Indications, Interpretation, and Pitfalls. Arch Pathol Lab Med. 2017;141(2):305-310',
+                    pmid: '28134590',
+                    doi: '10.5858/arpa.2015-0444-RS'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Schistocytes on peripheral smear suggest:',
+                    options: ['Iron deficiency', 'Microangiopathic hemolytic anemia', 'Megaloblastic anemia', 'Spherocytosis'],
+                    correct: 1,
+                    explanation: 'Schistocytes (helmet cells, fragmented RBCs) indicate mechanical RBC destruction, seen in microangiopathic hemolytic anemia (TTP, HUS, DIC) and mechanical heart valves.',
+                    keyPoint: 'Schistocytes = MAHA: TTP, HUS, DIC, malignant HTN, HELLP, mechanical valves, aortic stenosis, marching hemoglobinuria. >1% is significant.',
+                    citation: 'Lesesve JF, et al. Schistocytes in disseminated intravascular coagulation. Int J Lab Hematol. 2014;36(4):439-443',
+                    pmid: '24373126',
+                    doi: '10.1111/ijlh.12168'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Hemoglobin electrophoresis in beta thalassemia trait typically shows:',
+                    options: ['Elevated HbA2 and HbF', 'Elevated HbS', 'Normal pattern', 'Elevated HbH'],
+                    correct: 0,
+                    explanation: 'Beta thalassemia trait shows elevated HbA2 (>3.5%) and often mildly elevated HbF. This helps distinguish it from iron deficiency, which has normal electrophoresis.',
+                    keyPoint: 'Beta thal trait: ↑HbA2 (>3.5%), ±↑HbF, microcytosis, normal/high RBC count. Iron deficiency: Normal HbA2, ↓RBC count. Check iron studies before electrophoresis.',
+                    citation: 'Cao A, Galanello R. Beta-thalassemia. Genet Med. 2010;12(2):61-76',
+                    pmid: '20098328',
+                    doi: '10.1097/GIM.0b013e3181cd68ed'
+                },
+                {
+                    difficulty: 'fellow',
+                    question: 'Flow cytometry finding specific for paroxysmal nocturnal hemoglobinuria (PNH) is:',
+                    options: ['Absence of CD55 and CD59', 'Presence of CD5', 'Absence of CD34', 'Presence of CD38'],
+                    correct: 0,
+                    explanation: 'PNH RBCs and WBCs lack GPI-anchored proteins including CD55 and CD59 (complement regulatory proteins). Flow cytometry detecting absence of these markers is diagnostic.',
+                    keyPoint: 'PNH flow cytometry: Absence of GPI-anchored proteins (CD55, CD59) on RBCs and granulocytes. FLAER assay is most sensitive for WBCs. Clone size correlates with hemolysis.',
+                    citation: 'Brodsky RA. Paroxysmal nocturnal hemoglobinuria. Blood. 2014;124(18):2804-2811',
+                    pmid: '25237200',
+                    doi: '10.1182/blood-2014-02-522128'
+                },
+                {
+                    difficulty: 'intern',
+                    question: 'Elevated LDH with low haptoglobin suggests:',
+                    options: ['Liver disease', 'Hemolysis', 'Myocardial infarction', 'Nutritional deficiency'],
+                    correct: 1,
+                    explanation: 'Hemolysis releases LDH from RBCs, elevating serum LDH. Free hemoglobin binds haptoglobin, which is cleared, resulting in low or undetectable haptoglobin.',
+                    keyPoint: 'Hemolysis markers: ↑LDH, ↓Haptoglobin, ↑Indirect bilirubin, ↑Reticulocytes. Intravascular hemolysis also shows hemoglobinuria, hemosiderinuria.',
+                    citation: 'Marchand A, et al. The predictive value of serum haptoglobin in hemolytic disease. JAMA. 1980;243(19):1909-1911',
+                    pmid: '7365974',
+                    doi: '10.1001/jama.1980.03300450023014'
+                },
+                {
+                    difficulty: 'resident',
+                    question: 'Thrombin time is prolonged by all EXCEPT:',
+                    options: ['Heparin', 'Fibrinogen deficiency', 'Warfarin', 'Thrombin inhibitors'],
+                    correct: 2,
+                    explanation: 'Thrombin time measures conversion of fibrinogen to fibrin by thrombin. Warfarin affects vitamin K-dependent factors (II, VII, IX, X) but not this final step.',
+                    keyPoint: 'Thrombin time prolonged: Heparin, hypofibrinogenemia, dysfibrinogenemia, thrombin inhibitors (dabigatran, argatroban), high FDP. Not prolonged by warfarin.',
+                    citation: 'Kamal AH, Tefferi A, Pruthi RK. How to interpret and pursue an abnormal prothrombin time, activated partial thromboplastin time, and bleeding time in adults. Mayo Clin Proc. 2007;82(7):864-873',
+                    pmid: '17605969',
+                    doi: '10.4065/82.7.864'
+                }
+            ]
+        };
+
+        // Sound effects
+        function playSound(type) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'correct') {
+                    osc.frequency.setValueAtTime(523, ctx.currentTime);
+                    osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+                    osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.4);
+                } else if (type === 'wrong') {
+                    osc.frequency.setValueAtTime(200, ctx.currentTime);
+                    osc.frequency.setValueAtTime(150, ctx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.3);
+                } else if (type === 'streak') {
+                    [523, 659, 784, 1047].forEach((freq, i) => {
+                        const o = ctx.createOscillator();
+                        const g = ctx.createGain();
+                        o.connect(g);
+                        g.connect(ctx.destination);
+                        o.frequency.value = freq;
+                        g.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.1);
+                        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.1 + 0.2);
+                        o.start(ctx.currentTime + i * 0.1);
+                        o.stop(ctx.currentTime + i * 0.1 + 0.2);
+                    });
+                }
+            } catch(e) {}
+        }
+
+        // Select category
+        function selectCategory(category) {
+            currentCategory = category;
+            document.getElementById('selectedCategory').textContent = categoryLabels[category];
+            document.getElementById('titleScreen').classList.add('hidden');
+            document.getElementById('difficultyScreen').classList.remove('hidden');
+        }
+
+        // Start game
+        function startGame(difficulty) {
+            currentDifficulty = difficulty;
+
+            // Filter questions by category and difficulty
+            let categoryQuestions = questions[currentCategory].filter(q => q.difficulty === difficulty);
+
+            // Shuffle and take 10 questions
+            gameQuestions = categoryQuestions.sort(() => Math.random() - 0.5).slice(0, 10);
+
+            // If not enough questions of exact difficulty, add from other difficulties
+            if (gameQuestions.length < 10) {
+                let otherQuestions = questions[currentCategory]
+                    .filter(q => q.difficulty !== difficulty)
+                    .sort(() => Math.random() - 0.5);
+                gameQuestions = [...gameQuestions, ...otherQuestions].slice(0, 10);
+            }
+
+            // Reset game state
+            currentQuestionIndex = 0;
+            hearts = 3;
+            rupees = 0;
+            streak = 0;
+            bestStreak = 0;
+            questionsAnswered = 0;
+            correctAnswers = 0;
+
+            // Update UI
+            document.getElementById('dungeonName').textContent = categoryLabels[currentCategory];
+            updateHearts();
+            updateRupees();
+
+            // Show game screen
+            document.getElementById('difficultyScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+
+            showQuestion();
+        }
+
+        // Show question
+        function showQuestion() {
+            if (currentQuestionIndex >= gameQuestions.length || hearts <= 0) {
+                endGame();
+                return;
+            }
+
+            const q = gameQuestions[currentQuestionIndex];
+
+            document.getElementById('questionCount').textContent = `Question ${currentQuestionIndex + 1} of ${gameQuestions.length}`;
+            document.getElementById('qCategory').textContent = categoryLabels[currentCategory].replace('The ', '').replace(' Shrine', '').replace(' Temple', '').replace(' Fortress', '').replace(' Cavern', '').replace(' Kingdom', '').replace(' Labyrinth', '').replace(' Hospital Lab', '');
+
+            const diffBadge = document.getElementById('qDifficulty');
+            diffBadge.textContent = q.difficulty.charAt(0).toUpperCase() + q.difficulty.slice(1);
+            diffBadge.className = 'question-difficulty ' + q.difficulty;
+
+            document.getElementById('questionText').textContent = q.question;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = `${String.fromCharCode(65 + i)}. ${opt}`;
+                btn.onclick = () => selectAnswer(i);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('feedbackPanel').classList.remove('show');
+        }
+
+        // Select answer
+        function selectAnswer(index) {
+            const q = gameQuestions[currentQuestionIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+
+            buttons.forEach(btn => btn.disabled = true);
+
+            questionsAnswered++;
+
+            if (index === q.correct) {
+                // Correct answer
+                buttons[index].classList.add('correct');
+                playSound('correct');
+
+                correctAnswers++;
+                streak++;
+                if (streak > bestStreak) bestStreak = streak;
+
+                // Add rupees
+                rupees += rupeeValues[q.difficulty];
+                updateRupees();
+
+                // Check for streak bonus
+                if (streak % 5 === 0) {
+                    playSound('streak');
+                    rupees += 100;
+                    updateRupees();
+                    showStreakBonus();
+                }
+
+                showFeedback(true, q);
+            } else {
+                // Wrong answer
+                buttons[index].classList.add('incorrect');
+                buttons[q.correct].classList.add('correct');
+                playSound('wrong');
+
+                streak = 0;
+                hearts--;
+                updateHearts();
+
+                showFeedback(false, q);
+            }
+        }
+
+        // Show feedback
+        function showFeedback(correct, q) {
+            const panel = document.getElementById('feedbackPanel');
+            const header = document.getElementById('feedbackHeader');
+
+            header.className = 'feedback-header ' + (correct ? 'correct' : 'incorrect');
+            header.innerHTML = correct ? '✓ CORRECT! +' + rupeeValues[q.difficulty] + ' Rupees' : '✗ INCORRECT - Lost a heart';
+
+            document.getElementById('explanation').textContent = q.explanation;
+            document.getElementById('keyPoint').innerHTML = '⚔️ Key Point: ' + q.keyPoint;
+
+            let citationHTML = `<strong>Citation:</strong> ${q.citation}<br>`;
+            if (q.pmid) {
+                citationHTML += `<a href="https://pubmed.ncbi.nlm.nih.gov/${q.pmid}/" target="_blank">PMID: ${q.pmid}</a>`;
+            }
+            if (q.doi) {
+                citationHTML += ` | <a href="https://doi.org/${q.doi}" target="_blank">DOI</a>`;
+            }
+            document.getElementById('citationBox').innerHTML = citationHTML;
+
+            panel.classList.add('show');
+
+            // Change button text if game will end
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentQuestionIndex >= gameQuestions.length - 1 || hearts <= 0) {
+                nextBtn.textContent = 'See Results →';
+            } else {
+                nextBtn.textContent = 'Continue Quest →';
+            }
+        }
+
+        // Next question
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        // Update hearts display
+        function updateHearts() {
+            const container = document.getElementById('heartsContainer');
+            container.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart' + (i >= hearts ? ' empty' : '');
+                if (i === hearts) heart.classList.add('lost');
+                container.appendChild(heart);
+            }
+        }
+
+        // Update rupees display
+        function updateRupees() {
+            document.getElementById('rupeeCount').textContent = rupees;
+        }
+
+        // Show streak bonus
+        function showStreakBonus() {
+            const bonus = document.createElement('div');
+            bonus.className = 'streak-bonus';
+            bonus.innerHTML = '⚔️ MASTER SWORD BONUS! +100 Rupees';
+            document.body.appendChild(bonus);
+            setTimeout(() => bonus.remove(), 1500);
+        }
+
+        // End game
+        function endGame() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('endScreen').classList.remove('hidden');
+
+            const endTitle = document.getElementById('endTitle');
+            const endTriforce = document.getElementById('endTriforce');
+
+            if (hearts > 0) {
+                endTitle.textContent = 'Quest Complete!';
+                endTitle.className = 'end-title victory';
+                endTriforce.style.color = 'var(--triforce-gold)';
+            } else {
+                endTitle.textContent = 'Game Over';
+                endTitle.className = 'end-title defeat';
+                endTriforce.style.color = 'var(--din-red)';
+            }
+
+            document.getElementById('finalRupees').textContent = rupees;
+            document.getElementById('finalAnswered').textContent = questionsAnswered;
+            document.getElementById('finalCorrect').textContent = correctAnswers;
+            document.getElementById('finalAccuracy').textContent = questionsAnswered > 0 ? Math.round((correctAnswers / questionsAnswered) * 100) + '%' : '0%';
+            document.getElementById('finalStreak').textContent = bestStreak;
+
+            // High score
+            const highScoreKey = 'breathOfWillebrandHighScore';
+            const currentHigh = parseInt(localStorage.getItem(highScoreKey) || '0');
+            if (rupees > currentHigh) {
+                localStorage.setItem(highScoreKey, rupees);
+            }
+            document.getElementById('highScore').textContent = Math.max(rupees, currentHigh);
+        }
+
+        // Show title screen
+        function showTitleScreen() {
+            document.getElementById('titleScreen').classList.remove('hidden');
+            document.getElementById('difficultyScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('endScreen').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
