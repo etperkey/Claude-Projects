@@ -1,93 +1,124 @@
-# GC B-cell Lymphoma Pathway Mutation Analysis
+# GC B-cell Positioning Pathway Analysis in DLBCL
 
-Bioinformatics pipeline comparing mutation frequencies between competing signaling pathways in Follicular Lymphoma (FL) and GCB-DLBCL across disease stages.
+Analysis of germinal center B-cell positioning pathway mutations in diffuse large B-cell lymphoma (DLBCL) using the Chapuy et al. 2018 cohort.
 
-## Biological Background
+## Key Findings
 
-GC B-cell lymphomas arise from germinal center B cells. Two competing signaling pathways regulate GC B-cell migration:
+- **Egress Score ≥2 in C3-EZB**: Median OS 13.2 months vs 89.5 months (p = 0.004)
+- **100% mortality** in Score 2+ group (4/4 patients)
+- TMB is NOT different between score groups (p = 0.80) - effect is pathway-specific
 
-**Tumor Suppressor (Confinement) Pathway:**
-- S1PR2 → GNA13 → ARHGEF1 → RHOA
-- Promotes GC B-cell confinement within the germinal center
-- Loss-of-function mutations allow escape/dissemination
+## Pathway Genes
 
-**Pro-migratory (Dissemination) Pathway:**
-- S1PR1/CXCR4 → GNAI2 → RAC1/RAC2
-- Promotes GC B-cell migration
-- Gain-of-function mutations enhance dissemination
+### Retention (Loss-of-Function)
+- S1PR2, GNA13, ARHGEF1, P2RY8, RHOA
 
-## Pipeline Overview
+### Egress (Gain-of-Function)
+- CXCR4, GNAI2, RAC2, ARHGAP25 (GAP-LoF)
+- S1PR1 → GNAI2 signaling
 
-```
-Data Acquisition (Python) → Processing (Python) → Analysis (R) → Visualization (R)
-```
+## Data Source
 
-## Installation
+- **Cohort**: Chapuy et al. Nature Medicine 2018
+- **Source**: cBioPortal (dlbcl_dfci_2018)
+- **Patients**: n = 135 DLBCL with clinical data
+- **C3-EZB cluster**: n = 28 patients
 
-### Python Dependencies
+## Requirements
 
-```bash
-cd Claude-Project-06
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
+- R >= 4.0
+- R packages: `survival`, `png`, `grid`
 
-### R Dependencies
-
+Install packages:
 ```r
-install.packages(c("tidyverse", "yaml", "here", "broom", "scales", "RColorBrewer", "nnet"))
+install.packages(c("survival", "png", "grid"))
 ```
 
 ## Usage
 
-### 1. Data Acquisition
+### Run Complete Pipeline
 
 ```bash
-cd src/python
-python fetch_cbioportal.py
+cd Claude-Project-06
+Rscript Chapuy/scripts/run_analysis.R
 ```
 
-### 2. Data Processing
-
-```bash
-python process_mutations.py
-```
-
-### 3. Statistical Analysis
+### Run Individual Components
 
 ```r
-source("src/R/statistical_analysis.R")
-run_analysis()
+# Set working directory to Chapuy folder first
+setwd("Chapuy")
+
+# Generate pathway figures
+source("scripts/methodology_figure.R")
+
+# Run full analysis (frequencies, survival)
+source("scripts/full_analysis_code.R")
+
+# TMB analysis
+source("scripts/tmb_analysis.R")
+
+# Generate mutation details table
+source("scripts/mutation_details.R")
+
+# Create presentation PDF
+source("scripts/create_presentation_v2.R")
 ```
 
-### 4. Visualization
+## Project Structure
 
-```r
-source("src/R/visualizations.R")
-create_visualizations()
+```
+Claude-Project-06/
+├── README.md
+├── GC_Bcell_Positioning_Pathway_DLBCL_Presentation.pdf  # Final output
+└── Chapuy/                              # All Chapuy cohort analysis
+    ├── data/
+    │   ├── raw/                         # Raw cBioPortal data
+    │   │   ├── data_mutations.txt
+    │   │   ├── data_clinical_patient.txt
+    │   │   └── data_clinical_sample.txt
+    │   └── processed/                   # Analysis outputs
+    │       ├── chapuy_s1p_clinical.csv
+    │       ├── chapuy_tmb_analysis.csv
+    │       ├── pathway_mutations_by_patient.csv
+    │       └── patient_mutation_summary.csv
+    ├── figures/
+    │   ├── S1P_pathway_diagram.png
+    │   ├── methodology_S1P_analysis.png
+    │   └── TMB_by_EgressScore.png
+    └── scripts/
+        ├── run_analysis.R               # Master pipeline script
+        ├── full_analysis_code.R         # Main analysis
+        ├── methodology_figure.R         # Pathway diagrams
+        ├── tmb_analysis.R               # TMB comparison
+        ├── mutation_details.R           # Per-patient mutations
+        └── create_presentation_v2.R     # PDF generation
+```
+
+## Egress Score Calculation
+
+```
+Egress Score = (# Retention LoF genes mutated) + (# Egress GoF genes mutated)
+
+Categories:
+- Score 0: No pathway mutations
+- Score 1: Single gene affected
+- Score 2+: Multiple pathway hits
 ```
 
 ## Output Files
 
-**Statistical Results** (`results/tables/`):
-- Gene and pathway mutation frequencies by stage
-- Fisher's exact tests and trend tests
-- Pairwise stage comparisons with odds ratios
-- Logistic regression results
+| File | Description |
+|------|-------------|
+| `GC_Bcell_Positioning_Pathway_DLBCL_Presentation.pdf` | 13-slide presentation |
+| `Chapuy/data/processed/chapuy_s1p_clinical.csv` | Patient-level pathway scores + clinical data |
+| `Chapuy/data/processed/chapuy_tmb_analysis.csv` | TMB (mutations/Mb) by patient |
+| `Chapuy/data/processed/pathway_mutations_by_patient.csv` | Specific mutations per patient |
 
-**Figures** (`results/figures/`):
-- `gene_frequency_heatmap.png` - Mutation frequencies by gene/stage
-- `pathway_comparison.png` - Pathway frequency bar chart
-- `frequency_trends.png` - Trend lines across stages
-- `forest_plot_odds_ratios.png` - Odds ratios for comparisons
-- `mutation_landscape.png` - Oncoplot-style visualization
+## Citation
 
-## Configuration
+Chapuy B, et al. Molecular subtypes of diffuse large B cell lymphoma are associated with distinct pathogenic mechanisms and outcomes. *Nature Medicine* 2018;24(5):679-690.
 
-Edit `config/genes.yaml` to modify pathway genes, studies, staging rules, and filtering criteria.
+## Author
 
-## Key References
-
-1. Muppidi JR, et al. *Nature*. 2014;516(7530):254-258.
-2. Schmitz R, et al. *N Engl J Med*. 2018;378(15):1396-1407.
+Eric Perkey

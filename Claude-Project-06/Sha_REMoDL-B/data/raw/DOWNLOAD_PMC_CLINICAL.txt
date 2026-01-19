@@ -1,0 +1,57 @@
+================================================================================
+MANUAL DOWNLOAD REQUIRED: PMC Clinical Data
+================================================================================
+
+The Blood 2020 supplementary clinical data requires browser-based download
+due to PMC/ASH access restrictions (automated download returns 403 Forbidden).
+
+STEPS TO DOWNLOAD:
+------------------
+
+1. Open this URL in your browser:
+   https://ashpublications.org/blood/article/135/20/1759/452715/Targeted-sequencing-in-DLBCL-molecular-subtypes
+
+   OR try PMC: https://pmc.ncbi.nlm.nih.gov/articles/PMC7259825/
+
+2. Scroll down to "Supplementary Material" section
+
+3. Download the Excel file:
+   - bloodBLD2019003535-suppl2.xlsx (contains DATA TABLES)
+
+4. Save the Excel file to THIS folder as:
+   blood_2020_supplement.xlsx
+
+5. The Excel file contains these critical tables:
+   - Table S1: 293-gene panel list
+   - Table S2: Single nucleotide variants
+   - Table S3: Copy number variants
+   - Table S4: Patient clinical data (OS, PFS, IPI, Stage)
+   - Table S5: Cluster assignments
+   - Table S6: Outcome data
+   - Table S7: Cross-cohort comparisons
+
+AFTER DOWNLOADING:
+------------------
+
+Run these R scripts in order:
+
+  1. Parse the Excel file:
+     source("scripts/parse_pmc_clinical.R")
+
+  2. Run survival analysis on BCL2 (EZB-equivalent) subset:
+     source("scripts/survival_bcl2_subset.R")
+
+This will extract and analyze:
+  - Patient survival data (OS, PFS)
+  - IPI scores
+  - Ann Arbor staging
+  - Molecular subtype assignments
+  - Cluster classifications
+  - Pathway score vs survival in BCL2 cluster
+
+================================================================================
+CITATION:
+Lacy SE, Barrans SL, Beer PA, et al. Targeted sequencing in DLBCL, molecular
+subtypes, and outcomes: a Haematological Malignancy Research Network report.
+Blood. 2020;135(20):1759-1771. doi:10.1182/blood.2019003535
+================================================================================

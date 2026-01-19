@@ -1,0 +1,42 @@
+# Large GEO data files
+*_series_matrix.txt.gz
+*_RawData.txt.gz
+*_non-normalized.csv.gz
+GSE*.txt.gz
+GSE*.csv.gz
+
+# Raw data directories (too large for git)
+**/data/raw/*.gz
+**/data/raw/*.xlsx
+
+# Large processed data files (>5MB typically)
+**/data/processed/*.csv
+**/data/processed/*.rds
+*.rds
+
+# Large result files (differential expression full results)
+**/results/de_*.csv
+**/results/mortality_signature_*.csv
+**/results/*_expression_*.csv
+**/results/*_annotated.csv
+
+# Supplementary data files
+blood_2020_supplement.xlsx
+*_supp_*.xlsx
+*_supplement*.xlsx
+
+# GPL annotation files (can be re-downloaded)
+GPL*.txt
+
+# Python cache
+__pycache__/
+*.pyc
+
+# R artifacts
+Rplots.pdf
+.Rhistory
+.RData
+
+# OS files
+.DS_Store
+Thumbs.db
