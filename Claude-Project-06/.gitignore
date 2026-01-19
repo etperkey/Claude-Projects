@@ -7,12 +7,11 @@ GSE*.csv.gz
 
 # Raw data directories (too large for git)
 **/data/raw/*.gz
-**/data/raw/*.xlsx
+# Note: *.xlsx tracked by Git LFS
 
 # Large processed data files (>5MB typically)
 **/data/processed/*.csv
-**/data/processed/*.rds
-*.rds
+# Note: *.rds tracked by Git LFS
 
 # Large result files (differential expression full results)
 **/results/de_*.csv
@@ -20,10 +19,10 @@ GSE*.csv.gz
 **/results/*_expression_*.csv
 **/results/*_annotated.csv
 
-# Supplementary data files
-blood_2020_supplement.xlsx
-*_supp_*.xlsx
-*_supplement*.xlsx
+# Supplementary data files (tracked by Git LFS)
+# blood_2020_supplement.xlsx
+# *_supp_*.xlsx
+# *_supplement*.xlsx
 
 # GPL annotation files (can be re-downloaded)
 GPL*.txt
