@@ -1,13 +1,12 @@
-# Large GEO data files
-*_series_matrix.txt.gz
-*_RawData.txt.gz
-*_non-normalized.csv.gz
-GSE*.txt.gz
-GSE*.csv.gz
+# Large GEO data files (now tracked by Git LFS)
+# *_series_matrix.txt.gz
+# *_RawData.txt.gz
+# *_non-normalized.csv.gz
+# GSE*.txt.gz
+# GSE*.csv.gz
 
-# Raw data directories (too large for git)
-**/data/raw/*.gz
-# Note: *.xlsx tracked by Git LFS
+# Raw data directories
+# Note: *.gz and *.xlsx tracked by Git LFS
 
 # Large processed data files (>5MB typically)
 **/data/processed/*.csv
