@@ -1,0 +1,543 @@
+---
+title: "GNA13/S1P Pathway in DLBCL"
+subtitle: "Integrating Mutations and Expression with Clinical Outcome"
+author: "DLBCL Bioinformatics Analysis"
+date: "`r Sys.Date()`"
+output:
+  beamer_presentation:
+    theme: "Madrid"
+    colortheme: "seahorse"
+    fonttheme: "structurebold"
+    slide_level: 2
+    keep_tex: false
+header-includes:
+  - \usepackage{tikz}
+  - \usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+  - \usepackage{booktabs}
+  - \usepackage{array}
+  - \definecolor{retention}{RGB}{46,204,113}
+  - \definecolor{egress}{RGB}{231,76,60}
+  - \definecolor{neutral}{RGB}{149,165,166}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE,
+                      fig.align = 'center', out.width = '85%')
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+
+base_dir <- "C:/Users/ericp/OneDrive/Desktop/Claude-Projects/Claude-Project-06"
+fig_dir <- file.path(base_dir, "global_scripts/figures")
+```
+
+# Background
+
+## The S1P/GNA13 Signaling Axis
+
+\begin{center}
+\begin{tikzpicture}[
+    node distance=1.2cm,
+    receptor/.style={rectangle, rounded corners, draw=black, fill=blue!20,
+                     minimum width=1.8cm, minimum height=0.8cm, font=\small},
+    gprotein/.style={circle, draw=black, fill=orange!30,
+                     minimum size=1cm, font=\small},
+    effector/.style={rectangle, rounded corners, draw=black, fill=green!20,
+                     minimum width=1.5cm, minimum height=0.7cm, font=\small},
+    outcome/.style={rectangle, draw=black, fill=gray!20,
+                    minimum width=2cm, minimum height=0.8cm, font=\small\bfseries},
+    arrow/.style={->, thick, >=stealth}
+]
+
+% Title
+\node[font=\bfseries] at (0, 3.5) {RETENTION PATHWAY};
+
+% Receptors
+\node[receptor] (s1pr2) at (-2, 2) {S1PR2};
+\node[receptor] (p2ry8) at (2, 2) {P2RY8};
+
+% G-protein
+\node[gprotein] (gna13) at (0, 0.5) {GNA13};
+
+% Effectors
+\node[effector] (arhgef1) at (0, -0.8) {ARHGEF1};
+\node[effector] (rhoa) at (0, -2) {RHOA};
+
+% Outcome
+\node[outcome, fill=retention] (retain) at (0, -3.5) {GC RETENTION};
+
+% Arrows
+\draw[arrow] (s1pr2) -- (gna13);
+\draw[arrow] (p2ry8) -- (gna13);
+\draw[arrow] (gna13) -- (arhgef1);
+\draw[arrow] (arhgef1) -- (rhoa);
+\draw[arrow] (rhoa) -- (retain);
+
+% Mutations annotation
+\node[font=\tiny, text=red] at (-2, 1.3) {LoF mut: 2-4\%};
+\node[font=\tiny, text=red] at (2, 1.3) {LoF mut: 3-9\%};
+\node[font=\tiny, text=red] at (1.3, 0.5) {LoF mut: 8-9\%};
+\node[font=\tiny, text=red] at (1.3, -2) {LoF mut: 3-4\%};
+
+\end{tikzpicture}
+\end{center}
+
+\small
+**Loss-of-function mutations** in this pathway allow tumor cells to escape the germinal center $\rightarrow$ dissemination
+
+## Egress Pathway
+
+\begin{center}
+\begin{tikzpicture}[
+    node distance=1.2cm,
+    receptor/.style={rectangle, rounded corners, draw=black, fill=red!20,
+                     minimum width=1.8cm, minimum height=0.8cm, font=\small},
+    gprotein/.style={circle, draw=black, fill=orange!30,
+                     minimum size=1cm, font=\small},
+    effector/.style={rectangle, rounded corners, draw=black, fill=yellow!30,
+                     minimum width=1.5cm, minimum height=0.7cm, font=\small},
+    outcome/.style={rectangle, draw=black, fill=gray!20,
+                    minimum width=2cm, minimum height=0.8cm, font=\small\bfseries},
+    arrow/.style={->, thick, >=stealth}
+]
+
+% Title
+\node[font=\bfseries] at (0, 3.5) {EGRESS PATHWAY};
+
+% Receptors
+\node[receptor] (s1pr1) at (-2, 2) {S1PR1};
+\node[receptor] (cxcr4) at (2, 2) {CXCR4};
+
+% G-protein
+\node[gprotein] (gnai2) at (-2, 0.5) {GNAI2};
+
+% Effectors
+\node[effector] (rac2) at (-2, -1) {RAC2};
+
+% Outcome
+\node[outcome, fill=egress] (egress) at (0, -2.5) {GC EGRESS};
+
+% Arrows
+\draw[arrow] (s1pr1) -- (gnai2);
+\draw[arrow] (gnai2) -- (rac2);
+\draw[arrow] (rac2) -- (egress);
+\draw[arrow] (cxcr4) -- (egress) node[midway, right, font=\tiny] {chemotaxis};
+
+% Mutations annotation
+\node[font=\tiny, text=blue] at (2, 1.3) {GoF (trunc): 1-2\%};
+\node[font=\tiny, text=blue] at (-0.5, 0.5) {GoF: 2-3\%};
+
+\end{tikzpicture}
+\end{center}
+
+\small
+**Gain-of-function mutations** (e.g., CXCR4 truncating) enhance chemotaxis and promote egress from germinal center
+
+## Biological Context
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{Germinal Center (GC) Biology:}
+\begin{itemize}
+\item B cells normally retained in GC for affinity maturation
+\item S1P gradient controls trafficking
+\item S1PR2/GNA13 = "stay" signal
+\item S1PR1 = "go" signal
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\textbf{DLBCL Relevance:}
+\begin{itemize}
+\item GCB-DLBCL arises from GC B cells
+\item Loss of retention $\rightarrow$ dissemination
+\item GNA13 mutations define EZB subtype
+\item Therapeutic vulnerability?
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.5cm}
+\begin{center}
+\textit{Question: Do mutation patterns and expression levels predict clinical outcome?}
+\end{center}
+
+# Mutation Analysis
+
+## Pathway Gene Mutations in DLBCL
+
+```{r mutation-freq}
+# Load pathway comparison data
+pathway_comparison <- read.csv(file.path(base_dir, "pathway_gene_comparison.csv"),
+                               stringsAsFactors = FALSE)
+
+# Filter to key genes and reshape
+key_genes <- c("GNA13", "S1PR2", "P2RY8", "RHOA", "CXCR4", "GNAI2")
+mutation_data <- pathway_comparison %>%
+  filter(Gene %in% key_genes) %>%
+  select(Gene, Pathway, Chapuy_Pct, Duke_Pct) %>%
+  filter(!is.na(Chapuy_Pct) | !is.na(Duke_Pct))
+
+kable(mutation_data,
+      col.names = c("Gene", "Pathway", "Chapuy (%)", "Duke (%)"),
+      caption = "Mutation frequencies across cohorts",
+      booktabs = TRUE) %>%
+  kable_styling(font_size = 9)
+```
+
+\small
+- **GNA13** most frequently mutated retention gene (8-9%)
+- **P2RY8** (orphan GPCR) mutated in 3-9%
+- Egress pathway mutations less common
+
+## Cross-Cohort Mutation Comparison
+
+```{r mutation-plot, fig.height=4}
+mutation_long <- pathway_comparison %>%
+  filter(Gene %in% key_genes) %>%
+  select(Gene, Pathway, Chapuy_Pct, Duke_Pct) %>%
+  filter(!is.na(Chapuy_Pct) & !is.na(Duke_Pct)) %>%
+  pivot_longer(cols = c(Chapuy_Pct, Duke_Pct),
+               names_to = "Cohort", values_to = "Pct") %>%
+  mutate(Cohort = gsub("_Pct", "", Cohort),
+         Gene = factor(Gene, levels = c("GNA13", "S1PR2", "P2RY8", "RHOA", "CXCR4", "GNAI2")))
+
+ggplot(mutation_long, aes(x = Gene, y = Pct, fill = Cohort)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  scale_fill_manual(values = c("Chapuy" = "#3498db", "Duke" = "#e74c3c")) +
+  labs(y = "Mutation Frequency (%)", x = "") +
+  theme_minimal(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "top")
+```
+
+## GNA13 Mutation Co-occurrence
+
+```{r cooccur}
+gna13_cooccur <- read.csv(file.path(base_dir, "global_scripts/gna13_cooccurrence.csv"),
+                          stringsAsFactors = FALSE)
+
+sig_cooccur <- gna13_cooccur %>%
+  filter(p_value < 0.05) %>%
+  select(gene, freq_gna13_pos, freq_gna13_neg, odds_ratio, p_value) %>%
+  arrange(desc(odds_ratio)) %>%
+  head(10) %>%
+  mutate(
+    freq_gna13_pos = round(freq_gna13_pos, 1),
+    freq_gna13_neg = round(freq_gna13_neg, 1),
+    odds_ratio = round(odds_ratio, 2),
+    p_value = formatC(p_value, format = "e", digits = 1)
+  )
+
+kable(sig_cooccur,
+      col.names = c("Gene", "GNA13+ (%)", "GNA13- (%)", "OR", "P-value"),
+      caption = "Top GNA13 co-occurring mutations",
+      booktabs = TRUE) %>%
+  kable_styling(font_size = 8)
+```
+
+## GNA13 Co-occurrence Forest Plot
+
+```{r forest, fig.height=4.5}
+cooccur_plot <- gna13_cooccur %>%
+  filter(p_value < 0.05) %>%
+  arrange(odds_ratio) %>%
+  head(15) %>%
+  mutate(gene = factor(gene, levels = gene))
+
+ggplot(cooccur_plot, aes(x = odds_ratio, y = gene)) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "gray50") +
+  geom_point(aes(color = odds_ratio > 1), size = 3) +
+  geom_segment(aes(x = 1, xend = odds_ratio, y = gene, yend = gene,
+                   color = odds_ratio > 1), linewidth = 1) +
+  scale_color_manual(values = c("TRUE" = "#e74c3c", "FALSE" = "#3498db"),
+                     labels = c("Exclusive", "Co-occurring"),
+                     name = "") +
+  scale_x_log10() +
+  labs(x = "Odds Ratio (log scale)", y = "") +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "top")
+```
+
+## GNA13 Defines the EZB Subtype
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{Strong Co-occurrence:}
+\begin{itemize}
+\item EZH2 mutations (OR = 3.67)
+\item TNFRSF14 deletions (OR = 3.16)
+\item BCL2 translocations
+\item GCB cell-of-origin
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\textbf{Mutual Exclusivity:}
+\begin{itemize}
+\item MYD88 L265P (OR = 0.06)
+\item CD79B mutations
+\item ABC-associated alterations
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.5cm}
+\begin{center}
+\fbox{\parbox{0.8\textwidth}{
+\centering
+GNA13 mutations are a hallmark of the \textbf{EZB/GCB molecular subtype}, characterized by epigenetic dysregulation and germinal center phenotype
+}}
+\end{center}
+
+# Expression-Survival Analysis
+
+## Expression Predicts Survival
+
+```{r expr-survival}
+expr_survival <- read.csv(file.path(base_dir, "Lacy_HMRN/results/pathway_genes_mortality.csv"),
+                          stringsAsFactors = FALSE)
+
+global_results <- expr_survival %>%
+  filter(Cohort == "Global") %>%
+  select(Gene, Pathway, Log2FC, P_value, Direction) %>%
+  mutate(
+    Log2FC = round(Log2FC, 3),
+    P_value = formatC(P_value, format = "e", digits = 1),
+    Sig = case_when(
+      as.numeric(P_value) < 0.001 ~ "***",
+      as.numeric(P_value) < 0.01 ~ "**",
+      as.numeric(P_value) < 0.05 ~ "*",
+      TRUE ~ ""
+    )
+  ) %>%
+  arrange(as.numeric(P_value))
+
+kable(global_results,
+      col.names = c("Gene", "Pathway", "Log2FC", "P-value", "Direction", ""),
+      caption = "Expression-survival associations (Global cohort)",
+      booktabs = TRUE) %>%
+  kable_styling(font_size = 9)
+```
+
+## Expression Effects by COO Subtype
+
+```{r expr-heatmap, fig.height=4.5}
+expr_heatmap <- expr_survival %>%
+  mutate(
+    signed_effect = ifelse(Direction == "GOOD", -Log2FC, Log2FC),
+    sig_label = case_when(
+      P_value < 0.001 ~ "***",
+      P_value < 0.01 ~ "**",
+      P_value < 0.05 ~ "*",
+      TRUE ~ ""
+    ),
+    Gene = factor(Gene, levels = c("S1PR2", "P2RY8", "RHOA", "GNA13", "ARHGEF1",
+                                   "CXCR4", "GNAI2", "RAC2"))
+  )
+
+ggplot(expr_heatmap, aes(x = Cohort, y = Gene, fill = signed_effect)) +
+  geom_tile(color = "white", linewidth = 0.5) +
+  geom_text(aes(label = sig_label), color = "black", size = 3) +
+  scale_fill_gradient2(low = "#2ecc71", mid = "white", high = "#e74c3c",
+                       midpoint = 0, name = "Effect") +
+  facet_wrap(~Pathway, scales = "free_y", ncol = 1) +
+  labs(x = "", y = "") +
+  theme_minimal(base_size = 11) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text = element_text(face = "bold"))
+```
+
+\small
+Green = protective (high expr $\rightarrow$ better survival); Red = adverse
+
+## Key Expression Findings
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{Retention Genes:}
+\begin{itemize}
+\item \textcolor{retention}{S1PR2}: Protective (p = 1.7e-6)
+\item \textcolor{retention}{P2RY8}: Protective (p = 1.5e-6)
+\item \textcolor{retention}{RHOA}: Protective (p = 0.005)
+\item GNA13: Not significant (p = 0.99)
+\item ARHGEF1: Not significant
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\textbf{Egress Genes:}
+\begin{itemize}
+\item \textcolor{egress}{CXCR4}: Adverse (p = 0.03)
+\item GNAI2: Not significant
+\item \textcolor{retention}{RAC2}: Paradoxically protective (p = 0.004)
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.5cm}
+\begin{alertblock}{The GNA13 Paradox}
+GNA13 is the most frequently mutated gene in this pathway (8-9\%), yet its \textbf{expression is not prognostic}. Possible explanations: transcriptional compensation, post-translational regulation, or pathway redundancy.
+\end{alertblock}
+
+# Integrated Analysis
+
+## Mutations vs Expression: Integrated View
+
+\begin{center}
+\begin{tikzpicture}[
+    scale=0.85,
+    gene/.style={rectangle, rounded corners, minimum width=2cm, minimum height=0.8cm,
+                 draw=black, font=\small},
+    arrow/.style={->, thick, >=stealth}
+]
+
+% Retention pathway
+\node[font=\bfseries] at (-3, 4) {RETENTION};
+
+\node[gene, fill=green!40] (s1pr2) at (-3, 3) {S1PR2};
+\node[gene, fill=green!40] (p2ry8) at (-3, 2) {P2RY8};
+\node[gene, fill=gray!30] (gna13) at (-3, 1) {GNA13};
+\node[gene, fill=green!30] (rhoa) at (-3, 0) {RHOA};
+
+% Mutation annotations
+\node[font=\tiny, right] at (-1.8, 3) {Mut: 2-4\% | Expr: \textcolor{green!70!black}{Protective}};
+\node[font=\tiny, right] at (-1.8, 2) {Mut: 3-9\% | Expr: \textcolor{green!70!black}{Protective}};
+\node[font=\tiny, right] at (-1.8, 1) {Mut: 8-9\% | Expr: NS};
+\node[font=\tiny, right] at (-1.8, 0) {Mut: 3-4\% | Expr: \textcolor{green!70!black}{Protective}};
+
+% Egress pathway
+\node[font=\bfseries] at (-3, -1.5) {EGRESS};
+
+\node[gene, fill=red!30] (cxcr4) at (-3, -2.5) {CXCR4};
+\node[gene, fill=gray!30] (gnai2) at (-3, -3.5) {GNAI2};
+\node[gene, fill=green!30] (rac2) at (-3, -4.5) {RAC2};
+
+\node[font=\tiny, right] at (-1.8, -2.5) {Mut: 1-2\% | Expr: \textcolor{red!70!black}{Adverse}};
+\node[font=\tiny, right] at (-1.8, -3.5) {Mut: 2-3\% | Expr: NS};
+\node[font=\tiny, right] at (-1.8, -4.5) {Mut: ~3\% | Expr: \textcolor{green!70!black}{Protective*}};
+
+% Legend
+\draw[fill=green!40] (4, 3.5) rectangle (4.5, 4);
+\node[font=\tiny, right] at (4.6, 3.75) {Protective expression};
+\draw[fill=red!40] (4, 2.8) rectangle (4.5, 3.3);
+\node[font=\tiny, right] at (4.6, 3.05) {Adverse expression};
+\draw[fill=gray!30] (4, 2.1) rectangle (4.5, 2.6);
+\node[font=\tiny, right] at (4.6, 2.35) {Not significant};
+
+\node[font=\tiny] at (4.5, 1.3) {*Paradoxical};
+
+\end{tikzpicture}
+\end{center}
+
+## Biological Model
+
+\begin{center}
+\begin{tikzpicture}[
+    box/.style={rectangle, rounded corners, draw=black, minimum width=4cm,
+                minimum height=1.5cm, text width=3.8cm, align=center, font=\small},
+    arrow/.style={->, very thick, >=stealth}
+]
+
+% Normal state
+\node[box, fill=blue!20] (normal) at (0, 2) {
+    \textbf{Normal GC B Cell}\\
+    High S1PR2/P2RY8/GNA13\\
+    $\rightarrow$ Retained in GC
+};
+
+% Mutated state
+\node[box, fill=orange!30] (mutated) at (0, -0.5) {
+    \textbf{GNA13-mutant DLBCL}\\
+    Loss of retention signaling\\
+    $\rightarrow$ Escapes GC
+};
+
+% High expression
+\node[box, fill=green!30] (highexpr) at (5, 2) {
+    \textbf{High Retention Expr}\\
+    Strong retention signals\\
+    $\rightarrow$ Better prognosis
+};
+
+% Low expression / CXCR4
+\node[box, fill=red!30] (lowexpr) at (5, -0.5) {
+    \textbf{High CXCR4 / Low Retention}\\
+    Enhanced chemotaxis\\
+    $\rightarrow$ Worse prognosis
+};
+
+% Arrows
+\draw[arrow, color=red!70] (normal) -- (mutated) node[midway, left, font=\tiny] {Mutation};
+\draw[arrow, color=green!70!black] (normal) -- (highexpr);
+\draw[arrow, color=red!70] (mutated) -- (lowexpr);
+
+\end{tikzpicture}
+\end{center}
+
+## Summary of Key Findings
+
+\begin{enumerate}
+\item \textbf{Retention pathway mutations} (GNA13, P2RY8, RHOA) are recurrent in DLBCL, especially GCB subtype
+
+\item \textbf{Expression of retention genes} (S1PR2, P2RY8, RHOA) is protective -- high expression correlates with better survival
+
+\item \textbf{GNA13 paradox}: Most frequently mutated but expression not prognostic
+
+\item \textbf{CXCR4} is the key egress gene -- high expression predicts worse outcome
+
+\item \textbf{GNA13 mutations co-occur} with EZH2 and TNFRSF14, defining the EZB molecular subtype
+
+\item \textbf{Mutual exclusivity} with MYD88 L265P confirms pathway specificity to GCB-DLBCL
+\end{enumerate}
+
+## Clinical Implications
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{Prognostic Value:}
+\begin{itemize}
+\item S1PR2/P2RY8 expression as biomarkers
+\item CXCR4 expression identifies high-risk patients
+\item Potential for retention/egress gene signature
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\textbf{Therapeutic Opportunities:}
+\begin{itemize}
+\item CXCR4 antagonists (plerixafor)
+\item S1PR modulators (fingolimod)
+\item EZH2 inhibitors for GNA13-mutant tumors
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.5cm}
+\begin{block}{Future Directions}
+\begin{itemize}
+\item Validate retention/egress signature in independent cohorts
+\item Explore combination of mutation + expression features
+\item Investigate mechanism of GNA13 expression paradox
+\end{itemize}
+\end{block}
+
+## Acknowledgments
+
+\begin{center}
+\textbf{Data Sources:}
+\begin{itemize}
+\item Lacy/HMRN cohort (n=928) -- Expression and survival
+\item Chapuy et al. (2018) -- Mutation frequencies
+\item Duke cohort -- Cross-validation
+\end{itemize}
+
+\vspace{1cm}
+\textbf{Analysis Pipeline:}\\
+R/Bioconductor, survival analysis, ggplot2 visualization
+
+\vspace{1cm}
+\textit{Generated: `r Sys.Date()`}
+\end{center}

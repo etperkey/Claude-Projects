@@ -1,0 +1,10 @@
+name: dlbcl-genomics-explorer
+title:
+username: ericperkey
+account: ericperkey
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16457648
+bundleId: 11466124
+url: https://ericperkey.shinyapps.io/dlbcl-genomics-explorer/
+version: 1

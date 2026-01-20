@@ -1,0 +1,575 @@
+---
+title: "Lymphocyte Trafficking and DLBCL Prognosis"
+subtitle: "Machine Learning Analysis of Retention vs Egress Pathways"
+author: "Bioinformatics Analysis"
+date: "`r Sys.Date()`"
+output:
+  beamer_presentation:
+    theme: "Madrid"
+    colortheme: "whale"
+    fonttheme: "structurebold"
+    slide_level: 2
+    toc: false
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{graphicx}
+  - \usepackage{tikz}
+  - \usetikzlibrary{shapes,arrows,positioning,calc,decorations.pathmorphing,shadows,backgrounds,fit}
+  - \definecolor{retention}{RGB}{231,76,60}
+  - \definecolor{egress}{RGB}{52,152,219}
+  - \definecolor{protective}{RGB}{46,204,113}
+  - \definecolor{adverse}{RGB}{192,57,43}
+  - \definecolor{lymphnode}{RGB}{155,89,182}
+  - \definecolor{blood}{RGB}{241,196,15}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE,
+                      fig.align = "center", out.width = "85%")
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+
+base_dir <- "C:/Users/ericp/OneDrive/Desktop/Claude-Projects/Claude-Project-06"
+fig_dir <- file.path(base_dir, "global_scripts/figures")
+```
+
+# Introduction
+
+## Biological Rationale
+
+**Lymphocyte Trafficking in DLBCL**
+
+- DLBCL cells arise from germinal center B-cells
+- Normal B-cells cycle between **retention** in lymphoid tissues and **egress** to circulation
+- Dysregulation of trafficking may influence:
+  - Tumor dissemination patterns
+  - Microenvironment interactions
+  - Treatment accessibility
+  - Immune evasion
+
+\vspace{0.5cm}
+
+\begin{center}
+\textbf{Hypothesis:} Retention/egress gene expression patterns predict clinical outcome
+\end{center}
+
+## Lymphocyte Trafficking: Pathway Overview
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8, transform shape,
+    cell/.style={circle, draw, fill=lymphnode!30, minimum size=1.2cm, font=\small},
+    signal/.style={->, >=latex, thick},
+    receptor/.style={rectangle, rounded corners, draw, fill=white, font=\tiny, minimum height=0.5cm},
+    chemokine/.style={circle, draw, fill=yellow!50, minimum size=0.4cm, font=\tiny}]
+
+    % Lymph Node (left side)
+    \node[draw, rounded corners, fill=lymphnode!20, minimum width=4.5cm, minimum height=5cm, label=above:\textbf{Lymph Node}] (LN) at (-3,0) {};
+
+    % Blood/Circulation (right side)
+    \node[draw, rounded corners, fill=blood!30, minimum width=3cm, minimum height=5cm, label=above:\textbf{Circulation}] (Blood) at (3,0) {};
+
+    % B-cell in lymph node
+    \node[cell] (Bcell) at (-3,0) {B-cell};
+
+    % Retention signals (red, left)
+    \node[receptor, fill=retention!30] (CXCR4) at (-5,1.5) {CXCR4};
+    \node[receptor, fill=retention!30] (CXCR5) at (-5,0.5) {CXCR5};
+    \node[receptor, fill=retention!30] (VLA4) at (-5,-0.5) {VLA-4};
+    \node[receptor, fill=retention!30] (S1PR2) at (-5,-1.5) {S1PR2};
+
+    % Chemokines
+    \node[chemokine] (CXCL12) at (-1.5,1.5) {12};
+    \node[chemokine] (CXCL13) at (-1.5,0.5) {13};
+
+    % Egress signals (blue, right side of cell)
+    \node[receptor, fill=egress!30] (S1PR1) at (-1,-1) {S1PR1};
+    \node[receptor, fill=egress!30] (KLF2) at (-1,-2) {KLF2};
+
+    % S1P gradient
+    \node[font=\tiny] at (0.5,0) {S1P};
+    \draw[->, thick, egress] (0.2,-0.5) -- (1.5,-0.5);
+    \node[font=\tiny] at (1,0.3) {gradient};
+
+    % Arrows for retention
+    \draw[signal, retention] (CXCR4) -- (Bcell);
+    \draw[signal, retention] (CXCR5) -- (Bcell);
+    \draw[signal, retention] (VLA4) -- (Bcell);
+    \draw[signal, retention] (S1PR2) -- (Bcell);
+
+    % Chemokine to receptor
+    \draw[signal, dashed, retention] (CXCL12) -- (CXCR4);
+    \draw[signal, dashed, retention] (CXCL13) -- (CXCR5);
+
+    % Egress arrow
+    \draw[signal, egress, very thick] (Bcell) -- (Blood) node[midway, above, font=\small] {Egress};
+    \draw[signal, egress] (S1PR1) -- (Bcell);
+
+    % Legend
+    \node[retention, font=\small\bfseries] at (-5,-3) {RETENTION};
+    \node[egress, font=\small\bfseries] at (0,-3) {EGRESS};
+
+\end{tikzpicture}
+\end{center}
+
+## Key Molecular Players
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textcolor{retention}{\textbf{RETENTION Signals}}
+\begin{itemize}
+\item \textbf{CXCR4/CXCL12}: Major retention axis
+\item \textbf{CXCR5/CXCL13}: Follicular homing
+\item \textbf{CCR7/CCL19/21}: T-zone positioning
+\item \textbf{Integrins}: VLA-4, LFA-1
+\item \textbf{S1PR2}: Antagonizes egress
+\item \textbf{BAFF/APRIL}: Survival niche
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\textcolor{egress}{\textbf{EGRESS Signals}}
+\begin{itemize}
+\item \textbf{S1PR1}: Primary egress receptor
+\item \textbf{KLF2}: Master regulator
+\item \textbf{S1P gradient}: Blood > tissue
+\item \textbf{MMPs}: Matrix remodeling
+\item \textbf{Arrestins}: Receptor turnover
+\item \textbf{GRK2}: Desensitization
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.5cm}
+
+\begin{center}
+\fbox{\parbox{0.8\textwidth}{\centering
+\textbf{Balance determines:} Tumor localization, dissemination, microenvironment access
+}}
+\end{center}
+
+# Methods
+
+## Analysis Pipeline
+
+\begin{center}
+\begin{tikzpicture}[node distance=0.8cm, auto,
+    block/.style={rectangle, draw, fill=blue!20, text width=7em, text centered, rounded corners, minimum height=2.5em, font=\small},
+    data/.style={rectangle, draw, fill=green!20, text width=7em, text centered, rounded corners, minimum height=2.5em, font=\small},
+    result/.style={rectangle, draw, fill=orange!30, text width=7em, text centered, rounded corners, minimum height=2.5em, font=\small},
+    line/.style={draw, -latex', thick}]
+
+    % Left branch - Gene Sets
+    \node [data] (genes) {Literature Curation\\60 genes};
+    \node [block, below=of genes] (map) {Probe Mapping\\95 probes};
+
+    % Right branch - Expression Data
+    \node [data, right=2cm of genes] (expr) {Expression Data\\1,303 samples};
+    \node [block, below=of expr] (extract) {Extract\\Trafficking Genes};
+
+    % Merge
+    \node [block, below=1.2cm of map, xshift=1.5cm] (univar) {Univariate Cox\\Per-gene analysis};
+
+    % ML
+    \node [block, below=of univar] (ml) {Elastic Net Cox\\Feature Selection};
+
+    % Outputs
+    \node [result, below left=0.8cm and -0.5cm of ml] (sig) {52-Gene\\Signature};
+    \node [result, below right=0.8cm and -0.5cm of ml] (balance) {Balance\\Score};
+
+    % Final
+    \node [result, below=1.2cm of ml] (strat) {Risk\\Stratification};
+
+    \path [line] (genes) -- (map);
+    \path [line] (expr) -- (extract);
+    \path [line] (map) -- (univar);
+    \path [line] (extract) -- (univar);
+    \path [line] (univar) -- (ml);
+    \path [line] (ml) -- (sig);
+    \path [line] (ml) -- (balance);
+    \path [line] (sig) -- (strat);
+    \path [line] (balance) -- (strat);
+
+\end{tikzpicture}
+\end{center}
+
+## Gene Set Definition
+
+```{r gene-table}
+gene_df <- data.frame(
+  Category = c("Retention", "", "", "", "", "Egress", "", "", "", ""),
+  Type = c("Chemokine Receptors", "Chemokine Ligands", "Integrins/Adhesion",
+           "Survival Niche", "Signaling",
+           "S1P Receptors", "S1P Metabolism", "Transcription", "Matrix Remodeling", "Desensitization"),
+  Genes = c("CXCR4, CXCR5, CCR7, CXCR3, CCR6",
+            "CXCL12, CXCL13, CCL19, CCL21",
+            "ITGA4, ITGB1, ITGAL, ITGB2, CD44, SELL",
+            "TNFRSF13B/C, TNFRSF17, IL7R, IL21R",
+            "DOCK2, RAC1, RAC2, GNAI2, PIK3CG",
+            "S1PR1, S1PR2, S1PR3, S1PR4, S1PR5",
+            "SPHK1, SPHK2, SGPL1, SGPP1",
+            "KLF2, FOXO1",
+            "MMP2, MMP9, MMP14",
+            "GRK2, ARRB1, ARRB2")
+)
+kable(gene_df, format = "latex", booktabs = TRUE,
+      col.names = c("Category", "Type", "Key Genes")) %>%
+  kable_styling(font_size = 7, latex_options = "hold_position") %>%
+  row_spec(0, bold = TRUE)
+```
+
+\vspace{0.2cm}
+\small
+**Total: 33 retention genes + 27 egress genes = 60 unique genes (95 probes)**
+
+## Cohort and Methods
+
+**HMRN/Lacy Cohort (GSE181063)**
+
+| Metric | Value |
+|--------|-------|
+| Total Samples | 1,303 |
+| Platform | Illumina HumanHT-12 V4 |
+| Events (Deaths) | 676 (51.9%) |
+| COO Distribution | GCB: 517, ABC: 345, MHG: 164, UNC: 277 |
+
+\vspace{0.3cm}
+
+**Statistical Methods:**
+
+1. **Univariate Cox regression** for each trafficking gene
+2. **FDR correction** (Benjamini-Hochberg)
+3. **Elastic Net Cox** ($\alpha=0.5$) for signature building
+4. **Balance Score** = Mean(Retention genes) - Mean(Egress genes)
+5. **Risk stratification** by tertiles
+
+# Results
+
+## Univariate Analysis: Trafficking Gene Significance
+
+```{r load-results}
+trafficking_results <- read.csv(file.path(base_dir, "global_scripts/trafficking_survival_results.csv"))
+```
+
+```{r univar-summary}
+summary_df <- data.frame(
+  Category = c("Retention", "Retention", "Egress", "Egress"),
+  Direction = c("Protective", "Adverse", "Protective", "Adverse"),
+  `N Probes` = c(41, 14, 24, 16),
+  `Sig p<0.05` = c(25, 3, 14, 2),
+  `Sig FDR<0.1` = c(25, 3, 12, 2)
+)
+kable(summary_df, format = "latex", booktabs = TRUE,
+      col.names = c("Category", "Direction", "N Probes", "Sig (p<0.05)", "Sig (FDR<0.1)")) %>%
+  kable_styling(font_size = 9, latex_options = "hold_position") %>%
+  row_spec(0, bold = TRUE)
+```
+
+\vspace{0.3cm}
+
+**Key Finding:**
+
+- **44/95 probes (46%)** significantly associated with survival
+- Both retention AND egress genes predominantly **protective**
+- Suggests active trafficking machinery = better outcome
+
+## Top Prognostic Trafficking Genes
+
+```{r top-genes}
+top_genes <- data.frame(
+  Gene = c("MMP9", "S1PR2", "ARRB1", "IL7R", "CCL21", "ITGA4"),
+  Category = c("Egress", "Egress*", "Egress", "Retention", "Retention", "Retention"),
+  HR = c(0.79, 0.80, 0.82, 0.83, 0.83, 1.16),
+  P_value = c("3.6e-16", "1.1e-08", "2.2e-08", "1.1e-07", "6.8e-07", "6.2e-06"),
+  Direction = c("Protective", "Protective", "Protective", "Protective", "Protective", "Adverse")
+)
+kable(top_genes, format = "latex", booktabs = TRUE,
+      col.names = c("Gene", "Category", "HR", "P-value", "Direction")) %>%
+  kable_styling(font_size = 9, latex_options = "hold_position") %>%
+  row_spec(0, bold = TRUE) %>%
+  row_spec(6, color = "red")
+```
+
+\small
+*S1PR2 functionally promotes retention by antagonizing S1PR1
+
+\vspace{0.2cm}
+
+\textcolor{protective}{\textbf{MMP9}}: Matrix remodeling enables immune access
+
+\textcolor{adverse}{\textbf{ITGA4}}: VLA-4 adhesion may promote niche-mediated resistance
+
+## Volcano Plot: Retention vs Egress
+
+```{r volcano, out.width="85%"}
+if (file.exists(file.path(fig_dir, "trafficking_volcano.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "trafficking_volcano.png"))
+}
+```
+
+## ML Signature: Selected Features
+
+```{r signature-plot, out.width="85%"}
+if (file.exists(file.path(fig_dir, "trafficking_signature_coefficients.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "trafficking_signature_coefficients.png"))
+}
+```
+
+## ML Signature Performance
+
+```{r sig-summary}
+sig_perf <- data.frame(
+  Metric = c("Features Selected", "C-index", "Log-rank p-value",
+             "Retention genes", "Egress genes"),
+  Value = c("52 / 95", "0.679", "< 0.001", "32", "20")
+)
+kable(sig_perf, format = "latex", booktabs = TRUE,
+      col.names = c("Metric", "Value")) %>%
+  kable_styling(font_size = 10, latex_options = "hold_position")
+```
+
+\vspace{0.3cm}
+
+**Top Signature Genes:**
+
+| Gene | Category | Coefficient | Direction |
+|------|----------|-------------|-----------|
+| S1PR2 | Egress | -0.163 | Protective |
+| MMP9 | Egress | -0.149 | Protective |
+| CCL21 | Retention | -0.113 | Protective |
+| CCL19 | Retention | +0.107 | **Adverse** |
+| CXCR5 | Retention | +0.097 | **Adverse** |
+
+## Kaplan-Meier: Trafficking Signature
+
+```{r km-trafficking, out.width="80%"}
+if (file.exists(file.path(fig_dir, "ml_trafficking_km.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_trafficking_km.png"))
+}
+```
+
+## Retention-Egress Balance Score
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+    % Balance beam
+    \draw[thick] (-3,0) -- (3,0);
+    \draw[thick] (0,-0.5) -- (0,0);
+    \fill[black] (0,-0.5) -- (-0.3,-1) -- (0.3,-1) -- cycle;
+
+    % Retention side
+    \node[draw, fill=retention!30, rounded corners, minimum width=2cm, minimum height=1cm] at (-2,0.7) {Retention};
+    \node[font=\small] at (-2,1.5) {CXCR4, CXCR5};
+    \node[font=\small] at (-2,1.9) {Integrins, CCL19};
+
+    % Egress side
+    \node[draw, fill=egress!30, rounded corners, minimum width=2cm, minimum height=1cm] at (2,0.7) {Egress};
+    \node[font=\small] at (2,1.5) {S1PR1, MMPs};
+    \node[font=\small] at (2,1.9) {KLF2, Arrestins};
+
+    % Formula
+    \node[font=\small] at (0,-1.8) {Balance = Mean(Retention) - Mean(Egress)};
+
+    % Result box
+    \node[draw, fill=green!20, rounded corners, text width=6cm, align=center, font=\small] at (0,-2.8) {
+      \textbf{HR = 0.738} (95\% CI: 0.54-1.01)\\
+      p = 0.055
+    };
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{Interpretation:} Higher retention relative to egress shows trend toward better survival
+
+## Kaplan-Meier: Balance Score
+
+```{r km-balance, out.width="80%"}
+if (file.exists(file.path(fig_dir, "ml_retention_egress_balance_km.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_retention_egress_balance_km.png"))
+}
+```
+
+## Retention vs Egress Score Distribution
+
+```{r scatter, out.width="80%"}
+if (file.exists(file.path(fig_dir, "retention_vs_egress_scatter.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "retention_vs_egress_scatter.png"))
+}
+```
+
+## COO-Specific Analysis
+
+```{r coo-table}
+coo_df <- data.frame(
+  COO = c("GCB", "ABC", "MHG", "UNC"),
+  N = c(517, 345, 164, 277),
+  Events = c(222, 229, 100, 125),
+  ML_HR = c(4.71, 2.60, 3.19, 3.39),
+  ML_p = c("7.8e-18", "1.5e-11", "4.0e-10", "7.1e-10"),
+  Balance_HR = c(0.74, 1.17, 0.94, 0.49),
+  Balance_p = c("0.40", "0.65", "0.81", "0.05")
+)
+kable(coo_df, format = "latex", booktabs = TRUE,
+      col.names = c("COO", "N", "Events", "ML HR", "ML p", "Balance HR", "Balance p")) %>%
+  kable_styling(font_size = 8, latex_options = "hold_position") %>%
+  row_spec(0, bold = TRUE) %>%
+  row_spec(4, background = "yellow!30")
+```
+
+\vspace{0.3cm}
+
+**Key Observations:**
+
+- ML signature significant in **all COO subtypes**
+- **UNC subtype**: Balance score most significant (HR=0.49, p=0.05)
+  - Egress-dominant UNC tumors have worse outcomes
+- **ABC**: Balance favors neither (HR~1)
+
+# Biological Interpretation
+
+## Model of Trafficking and Prognosis
+
+\begin{center}
+\begin{tikzpicture}[scale=0.75, transform shape,
+    good/.style={draw, fill=protective!30, rounded corners, text width=3.5cm, align=center, minimum height=1.5cm},
+    bad/.style={draw, fill=adverse!30, rounded corners, text width=3.5cm, align=center, minimum height=1.5cm},
+    arrow/.style={->, >=latex, thick}]
+
+    % Good outcome path
+    \node[good] (high_traffic) at (-4,2) {\textbf{High Trafficking\\Machinery}\\MMP9, S1PR2, ARRB1};
+    \node[good] (immune) at (-4,-1) {Enhanced Immune\\Access};
+    \node[good] (response) at (-4,-4) {\textbf{Better\\Survival}};
+
+    % Bad outcome path
+    \node[bad] (low_traffic) at (4,2) {\textbf{Low Trafficking\\Machinery}};
+    \node[bad] (niche) at (4,-1) {Niche-Mediated\\Resistance};
+    \node[bad] (poor) at (4,-4) {\textbf{Worse\\Survival}};
+
+    % Arrows
+    \draw[arrow, protective] (high_traffic) -- (immune);
+    \draw[arrow, protective] (immune) -- (response);
+    \draw[arrow, adverse] (low_traffic) -- (niche);
+    \draw[arrow, adverse] (niche) -- (poor);
+
+    % Center annotation
+    \node[font=\small, text width=3cm, align=center] at (0,0) {ITGA4 (VLA-4)\\promotes\\adhesion};
+    \draw[arrow, adverse, dashed] (0,-0.5) -- (4,-1);
+
+\end{tikzpicture}
+\end{center}
+
+## Key Biological Insights
+
+\begin{block}{1. MMP9 is Strongly Protective (HR=0.79, p=3.6e-16)}
+Matrix metalloproteinase 9 enables:
+\begin{itemize}
+\item Tumor matrix remodeling
+\item Immune cell infiltration
+\item Treatment accessibility
+\end{itemize}
+\end{block}
+
+\begin{block}{2. S1PR2 Paradox}
+S1PR2 (egress category) is protective because it:
+\begin{itemize}
+\item Antagonizes S1PR1-mediated egress
+\item Promotes germinal center retention (GCB biology)
+\item May indicate less aggressive, GC-derived tumors
+\end{itemize}
+\end{block}
+
+\begin{block}{3. ITGA4 is Adverse (HR=1.16)}
+VLA-4 integrin adhesion may:
+\begin{itemize}
+\item Promote bone marrow niche attachment
+\item Enable CAM-DR (adhesion-mediated drug resistance)
+\end{itemize}
+\end{block}
+
+## Clinical Implications
+
+**Potential Therapeutic Targets:**
+
+| Target | Rationale | Agents |
+|--------|-----------|--------|
+| **CXCR4** | Disrupt retention | Plerixafor, BL-8040 |
+| **VLA-4** | Block CAM-DR | Natalizumab |
+| **S1PR1** | Modulate egress | Fingolimod |
+| **MMPs** | Enhance (not inhibit) | --- |
+
+\vspace{0.5cm}
+
+**Biomarker Potential:**
+
+- 52-gene trafficking signature for risk stratification
+- Balance score as simple prognostic metric
+- COO-specific trafficking patterns
+
+# Summary
+
+## Key Findings
+
+\begin{enumerate}
+\item \textbf{Active trafficking machinery is protective}
+\begin{itemize}
+\item 46\% of trafficking genes significantly associated with survival
+\item Both retention AND egress genes predominantly protective
+\end{itemize}
+
+\item \textbf{MMP9 is the strongest predictor} (HR=0.79, p=3.6e-16)
+\begin{itemize}
+\item Matrix remodeling enables immune access
+\end{itemize}
+
+\item \textbf{ML signature achieves C-index 0.68}
+\begin{itemize}
+\item 52 selected features from 95 probes
+\item Significant in all COO subtypes
+\end{itemize}
+
+\item \textbf{Balance score trends protective for retention}
+\begin{itemize}
+\item HR=0.74 (p=0.055) overall
+\item Strongest in UNC subtype (HR=0.49, p=0.05)
+\end{itemize}
+\end{enumerate}
+
+## Conclusions
+
+\begin{center}
+\begin{tikzpicture}
+\node[draw, fill=blue!10, rounded corners, text width=10cm, align=center, minimum height=3cm] {
+\Large\textbf{Trafficking Gene Expression}\\[0.3cm]
+\large Predicts DLBCL Outcome\\[0.5cm]
+\normalsize
+High expression of trafficking machinery\\
+(especially MMP9, S1PR2) = Better survival\\[0.3cm]
+Suggests tumor-immune interaction and\\
+microenvironment accessibility are key determinants
+};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5cm}
+
+**Future Directions:**
+
+1. External validation in independent cohorts
+2. Integration with spatial transcriptomics
+3. Functional validation of key genes
+4. Clinical trial biomarker development
+
+---
+
+\begin{center}
+\Huge Questions?
+\end{center}
+
+\vspace{1cm}
+
+\begin{center}
+\large
+Trafficking Gene Signature: 52 features\\
+C-index: 0.68 | All COO subtypes significant
+\end{center}

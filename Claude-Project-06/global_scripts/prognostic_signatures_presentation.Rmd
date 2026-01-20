@@ -1,0 +1,883 @@
+---
+title: "DLBCL Prognostic Gene Signatures"
+subtitle: "Genome-Wide Survival Analysis by Cell of Origin"
+author: "HMRN/Lacy Cohort Analysis"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    fig_caption: true
+    fig_width: 7
+    fig_height: 5
+    latex_engine: pdflatex
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  out.width = "90%"
+)
+
+library(dplyr)
+library(survival)
+library(survminer)
+library(knitr)
+library(kableExtra)
+
+select <- dplyr::select
+
+# Set base directory (parent of global_scripts)
+base_dir <- "C:/Users/ericp/OneDrive/Desktop/Claude-Projects/Claude-Project-06"
+```
+
+\newpage
+
+# Executive Summary
+
+This analysis identifies **prognostic gene signatures** in Diffuse Large B-Cell Lymphoma (DLBCL) through unbiased genome-wide survival analysis across Cell of Origin (COO) subtypes.
+
+## Key Findings
+
+- **Global Analysis (n=1,303)**: 6,748 probes significantly associated with survival (FDR < 0.05)
+- **COO-Specific Signatures**: Largely non-overlapping, indicating distinct biology
+- **IPI Independence**: 2,839 genes remain significant after adjusting for International Prognostic Index
+- **Protective Pathways**: T-cell receptor signaling, immune activation
+- **Adverse Pathways**: Cell cycle, DNA repair, E2F targets
+
+\newpage
+
+# Methodology
+
+## Study Cohort
+
+```{r cohort-summary}
+tegress_scores <- read.csv(file.path(base_dir, "Lacy_HMRN/results/tegress_scores.csv"), stringsAsFactors = FALSE)
+
+clinical <- tegress_scores %>%
+  filter(!is.na(OS_status) & !is.na(OS_time) & OS_time > 0)
+
+coo_counts <- as.data.frame(table(clinical$COO))
+names(coo_counts) <- c("COO Subtype", "N")
+coo_counts$Percentage <- round(100 * coo_counts$N / sum(coo_counts$N), 1)
+
+kable(coo_counts, caption = "COO Distribution in HMRN/Lacy Cohort",
+      booktabs = TRUE, align = "lcc") %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+**Data Source**: HMRN/Lacy Cohort (GSE181063)
+
+- **Platform**: Illumina HumanHT-12 V4 BeadChip (GPL14951)
+- **Probes**: 29,372 expression probes
+- **Samples**: `r nrow(clinical)` with survival data
+- **Endpoint**: Overall Survival (OS)
+
+## Statistical Analysis
+
+### Univariate Survival Analysis
+
+For each probe $i$ and sample $j$:
+
+$$h(t|x_{ij}) = h_0(t) \cdot \exp(\beta_i \cdot x_{ij})$$
+
+Where:
+
+- $h(t)$ = hazard at time $t$
+- $h_0(t)$ = baseline hazard
+- $x_{ij}$ = standardized expression (z-score)
+- $\beta_i$ = log hazard ratio
+
+**Multiple Testing Correction**: Benjamini-Hochberg FDR
+
+### IPI-Adjusted Analysis (Multivariate)
+
+$$h(t|x, IPI) = h_0(t) \cdot \exp(\beta_{gene} \cdot x + \beta_{IPI} \cdot IPI)$$
+
+Genes with $p_{adjusted} < 0.05$ are considered **IPI-independent**.
+
+\newpage
+
+# Results by COO Subset
+
+## Global Analysis (All COO)
+
+```{r global-results}
+global_surv <- read.csv(file.path(base_dir, "global_scripts/survival_global_annotated.csv"), stringsAsFactors = FALSE)
+
+global_summary <- data.frame(
+  Metric = c("Total probes tested", "Significant (p < 0.05)", "Significant (FDR < 0.05)",
+             "Protective (HR < 1, FDR < 0.05)", "Adverse (HR > 1, FDR < 0.05)"),
+  Value = c(
+    nrow(global_surv),
+    sum(global_surv$p_value < 0.05),
+    sum(global_surv$FDR < 0.05),
+    sum(global_surv$HR < 1 & global_surv$FDR < 0.05),
+    sum(global_surv$HR > 1 & global_surv$FDR < 0.05)
+  )
+)
+
+kable(global_summary, caption = "Global Survival Analysis Summary (n=1,303)",
+      booktabs = TRUE, format.args = list(big.mark = ",")) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+### Kaplan-Meier: Global Signature Score
+
+```{r km-global, fig.cap="Survival by Global Prognostic Signature Score"}
+# Load expression data for signature calculation
+series_file <- file.path(base_dir, "Lacy_HMRN/GSE181063_series_matrix.txt.gz")
+
+con <- gzfile(series_file, "r")
+line_num <- 0
+while (TRUE) {
+  line <- readLines(con, n = 1)
+  line_num <- line_num + 1
+  if (length(line) == 0) break
+  if (grepl("^!series_matrix_table_begin", line)) break
+}
+close(con)
+
+expr_data <- read.delim(gzfile(series_file), skip = line_num, header = TRUE,
+                        stringsAsFactors = FALSE, check.names = FALSE)
+expr_data <- expr_data[!grepl("series_matrix_table_end", expr_data[,1]), ]
+rownames(expr_data) <- expr_data[,1]
+expr_data <- expr_data[, -1]
+
+# Get top signature genes (FDR < 0.01)
+top_protective <- global_surv %>%
+  filter(HR < 1, FDR < 0.01, !is.na(gene)) %>%
+  arrange(p_value) %>%
+  head(50) %>%
+  pull(probe)
+
+top_adverse <- global_surv %>%
+  filter(HR > 1, FDR < 0.01, !is.na(gene)) %>%
+  arrange(p_value) %>%
+  head(50) %>%
+  pull(probe)
+
+# Calculate signature score
+common_samples <- intersect(colnames(expr_data), clinical$sample_id)
+expr_sub <- expr_data[, common_samples]
+expr_mat <- as.matrix(expr_sub)
+expr_mat <- apply(expr_mat, 2, as.numeric)
+rownames(expr_mat) <- rownames(expr_sub)
+
+# Z-score normalize
+expr_z <- t(scale(t(expr_mat)))
+
+# Signature: adverse - protective
+prot_probes <- intersect(top_protective, rownames(expr_z))
+adv_probes <- intersect(top_adverse, rownames(expr_z))
+
+prot_score <- colMeans(expr_z[prot_probes, , drop=FALSE], na.rm=TRUE)
+adv_score <- colMeans(expr_z[adv_probes, , drop=FALSE], na.rm=TRUE)
+sig_score <- adv_score - prot_score
+
+# Create survival data
+surv_df <- data.frame(
+  sample_id = names(sig_score),
+  sig_score = sig_score
+) %>%
+  left_join(clinical, by = "sample_id") %>%
+  filter(!is.na(OS_status), !is.na(OS_time), OS_time > 0)
+
+# Tertiles
+surv_df$risk_group <- cut(surv_df$sig_score,
+                          breaks = quantile(surv_df$sig_score, c(0, 0.33, 0.67, 1)),
+                          labels = c("Low Risk", "Intermediate", "High Risk"),
+                          include.lowest = TRUE)
+
+fit <- survfit(Surv(OS_time, OS_status) ~ risk_group, data = surv_df)
+
+ggsurvplot(fit, data = surv_df,
+           palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
+           risk.table = TRUE,
+           pval = TRUE,
+           conf.int = FALSE,
+           xlab = "Time (years)",
+           ylab = "Overall Survival",
+           title = "Global Prognostic Signature",
+           legend.title = "Risk Group",
+           risk.table.height = 0.25,
+           ggtheme = theme_bw())
+```
+
+\newpage
+
+### Top Protective Genes (Global)
+
+```{r top-protective-global}
+protective_genes <- global_surv %>%
+  filter(HR < 1, FDR < 0.05, !is.na(gene)) %>%
+  arrange(p_value) %>%
+  head(20) %>%
+  mutate(
+    HR = round(HR, 3),
+    `95% CI` = paste0("(", round(HR_lower, 3), "-", round(HR_upper, 3), ")"),
+    `P-value` = formatC(p_value, format = "e", digits = 2),
+    FDR = formatC(FDR, format = "e", digits = 2)
+  ) %>%
+  select(Gene = gene, Probe = probe, HR, `95% CI`, `P-value`, FDR)
+
+kable(protective_genes, caption = "Top 20 Protective Genes (HR < 1) - Global Analysis",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"))
+```
+
+### Top Adverse Genes (Global)
+
+```{r top-adverse-global}
+adverse_genes <- global_surv %>%
+  filter(HR > 1, FDR < 0.05, !is.na(gene)) %>%
+  arrange(p_value) %>%
+  head(20) %>%
+  mutate(
+    HR = round(HR, 3),
+    `95% CI` = paste0("(", round(HR_lower, 3), "-", round(HR_upper, 3), ")"),
+    `P-value` = formatC(p_value, format = "e", digits = 2),
+    FDR = formatC(FDR, format = "e", digits = 2)
+  ) %>%
+  select(Gene = gene, Probe = probe, HR, `95% CI`, `P-value`, FDR)
+
+kable(adverse_genes, caption = "Top 20 Adverse Genes (HR > 1) - Global Analysis",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"))
+```
+
+\newpage
+
+## GCB Subset Analysis (n=517)
+
+```{r gcb-results}
+gcb_surv <- read.csv(file.path(base_dir, "global_scripts/survival_gcb_annotated.csv"), stringsAsFactors = FALSE)
+
+gcb_summary <- data.frame(
+  Metric = c("Total probes tested", "Significant (FDR < 0.05)",
+             "Protective", "Adverse"),
+  Value = c(
+    nrow(gcb_surv),
+    sum(gcb_surv$FDR < 0.05),
+    sum(gcb_surv$HR < 1 & gcb_surv$FDR < 0.05),
+    sum(gcb_surv$HR > 1 & gcb_surv$FDR < 0.05)
+  )
+)
+
+kable(gcb_summary, caption = "GCB Subset Survival Analysis Summary",
+      booktabs = TRUE, format.args = list(big.mark = ",")) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+### Kaplan-Meier: GCB Signature
+
+```{r km-gcb, fig.cap="Survival by GCB-Specific Prognostic Signature"}
+gcb_clinical <- clinical %>% filter(COO == "GCB")
+
+top_gcb_prot <- gcb_surv %>%
+  filter(HR < 1, FDR < 0.1, !is.na(gene)) %>%
+  arrange(p_value) %>%
+  head(30) %>%
+  pull(probe)
+
+top_gcb_adv <- gcb_surv %>%
+  filter(HR > 1, FDR < 0.1, !is.na(gene)) %>%
+  arrange(p_value) %>%
+  head(30) %>%
+  pull(probe)
+
+common_gcb <- intersect(colnames(expr_data), gcb_clinical$sample_id)
+expr_gcb <- expr_data[, common_gcb]
+expr_gcb_mat <- as.matrix(expr_gcb)
+expr_gcb_mat <- apply(expr_gcb_mat, 2, as.numeric)
+rownames(expr_gcb_mat) <- rownames(expr_gcb)
+expr_gcb_z <- t(scale(t(expr_gcb_mat)))
+
+prot_gcb <- intersect(top_gcb_prot, rownames(expr_gcb_z))
+adv_gcb <- intersect(top_gcb_adv, rownames(expr_gcb_z))
+
+if(length(prot_gcb) > 0 & length(adv_gcb) > 0) {
+  prot_score_gcb <- colMeans(expr_gcb_z[prot_gcb, , drop=FALSE], na.rm=TRUE)
+  adv_score_gcb <- colMeans(expr_gcb_z[adv_gcb, , drop=FALSE], na.rm=TRUE)
+  sig_score_gcb <- adv_score_gcb - prot_score_gcb
+
+  surv_gcb <- data.frame(
+    sample_id = names(sig_score_gcb),
+    sig_score = sig_score_gcb
+  ) %>%
+    left_join(gcb_clinical, by = "sample_id") %>%
+    filter(!is.na(OS_status), !is.na(OS_time), OS_time > 0)
+
+  surv_gcb$risk_group <- cut(surv_gcb$sig_score,
+                            breaks = quantile(surv_gcb$sig_score, c(0, 0.33, 0.67, 1)),
+                            labels = c("Low Risk", "Intermediate", "High Risk"),
+                            include.lowest = TRUE)
+
+  fit_gcb <- survfit(Surv(OS_time, OS_status) ~ risk_group, data = surv_gcb)
+
+  ggsurvplot(fit_gcb, data = surv_gcb,
+             palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
+             risk.table = TRUE,
+             pval = TRUE,
+             conf.int = FALSE,
+             xlab = "Time (years)",
+             ylab = "Overall Survival",
+             title = "GCB-Specific Prognostic Signature (n=517)",
+             legend.title = "Risk Group",
+             risk.table.height = 0.25,
+             ggtheme = theme_bw())
+}
+```
+
+\newpage
+
+### Top GCB-Specific Genes
+
+```{r gcb-genes}
+gcb_top <- gcb_surv %>%
+  filter(FDR < 0.1, !is.na(gene)) %>%
+  arrange(p_value) %>%
+  head(15) %>%
+  mutate(
+    HR = round(HR, 3),
+    Direction = ifelse(HR < 1, "Protective", "Adverse"),
+    `P-value` = formatC(p_value, format = "e", digits = 2)
+  ) %>%
+  select(Gene = gene, HR, Direction, `P-value`)
+
+kable(gcb_top, caption = "Top 15 GCB-Specific Prognostic Genes",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+\newpage
+
+## ABC Subset Analysis (n=345)
+
+```{r abc-results}
+abc_surv <- read.csv(file.path(base_dir, "global_scripts/survival_abc_annotated.csv"), stringsAsFactors = FALSE)
+
+abc_summary <- data.frame(
+  Metric = c("Total probes tested", "Significant (FDR < 0.05)",
+             "Protective", "Adverse"),
+  Value = c(
+    nrow(abc_surv),
+    sum(abc_surv$FDR < 0.05),
+    sum(abc_surv$HR < 1 & abc_surv$FDR < 0.05),
+    sum(abc_surv$HR > 1 & abc_surv$FDR < 0.05)
+  )
+)
+
+kable(abc_summary, caption = "ABC Subset Survival Analysis Summary",
+      booktabs = TRUE, format.args = list(big.mark = ",")) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+### Kaplan-Meier: ABC Signature
+
+```{r km-abc, fig.cap="Survival by ABC-Specific Prognostic Signature"}
+abc_clinical <- clinical %>% filter(COO == "ABC")
+
+top_abc_prot <- abc_surv %>%
+  filter(HR < 1, FDR < 0.1, !is.na(gene)) %>%
+  arrange(p_value) %>%
+  head(30) %>%
+  pull(probe)
+
+top_abc_adv <- abc_surv %>%
+  filter(HR > 1, FDR < 0.1, !is.na(gene)) %>%
+  arrange(p_value) %>%
+  head(30) %>%
+  pull(probe)
+
+common_abc <- intersect(colnames(expr_data), abc_clinical$sample_id)
+expr_abc <- expr_data[, common_abc]
+expr_abc_mat <- as.matrix(expr_abc)
+expr_abc_mat <- apply(expr_abc_mat, 2, as.numeric)
+rownames(expr_abc_mat) <- rownames(expr_abc)
+expr_abc_z <- t(scale(t(expr_abc_mat)))
+
+prot_abc <- intersect(top_abc_prot, rownames(expr_abc_z))
+adv_abc <- intersect(top_abc_adv, rownames(expr_abc_z))
+
+if(length(prot_abc) > 0 & length(adv_abc) > 0) {
+  prot_score_abc <- colMeans(expr_abc_z[prot_abc, , drop=FALSE], na.rm=TRUE)
+  adv_score_abc <- colMeans(expr_abc_z[adv_abc, , drop=FALSE], na.rm=TRUE)
+  sig_score_abc <- adv_score_abc - prot_score_abc
+
+  surv_abc <- data.frame(
+    sample_id = names(sig_score_abc),
+    sig_score = sig_score_abc
+  ) %>%
+    left_join(abc_clinical, by = "sample_id") %>%
+    filter(!is.na(OS_status), !is.na(OS_time), OS_time > 0)
+
+  surv_abc$risk_group <- cut(surv_abc$sig_score,
+                            breaks = quantile(surv_abc$sig_score, c(0, 0.33, 0.67, 1)),
+                            labels = c("Low Risk", "Intermediate", "High Risk"),
+                            include.lowest = TRUE)
+
+  fit_abc <- survfit(Surv(OS_time, OS_status) ~ risk_group, data = surv_abc)
+
+  ggsurvplot(fit_abc, data = surv_abc,
+             palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
+             risk.table = TRUE,
+             pval = TRUE,
+             conf.int = FALSE,
+             xlab = "Time (years)",
+             ylab = "Overall Survival",
+             title = "ABC-Specific Prognostic Signature (n=345)",
+             legend.title = "Risk Group",
+             risk.table.height = 0.25,
+             ggtheme = theme_bw())
+}
+```
+
+\newpage
+
+## MHG Subset Analysis (n=164)
+
+```{r mhg-results}
+mhg_surv <- read.csv(file.path(base_dir, "global_scripts/survival_mhg_annotated.csv"), stringsAsFactors = FALSE)
+
+mhg_summary <- data.frame(
+  Metric = c("Total probes tested", "Significant (FDR < 0.05)",
+             "Significant (p < 0.05)"),
+  Value = c(
+    nrow(mhg_surv),
+    sum(mhg_surv$FDR < 0.05),
+    sum(mhg_surv$p_value < 0.05)
+  )
+)
+
+kable(mhg_summary, caption = "MHG Subset Survival Analysis Summary",
+      booktabs = TRUE, format.args = list(big.mark = ",")) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+*Note: MHG subset shows limited significant genes due to smaller sample size and inherently poor prognosis.*
+
+\newpage
+
+## UNC Subset Analysis (n=277)
+
+```{r unc-results}
+unc_surv <- read.csv(file.path(base_dir, "global_scripts/survival_unc_annotated.csv"), stringsAsFactors = FALSE)
+
+unc_summary <- data.frame(
+  Metric = c("Total probes tested", "Significant (FDR < 0.05)",
+             "Protective", "Adverse"),
+  Value = c(
+    nrow(unc_surv),
+    sum(unc_surv$FDR < 0.05),
+    sum(unc_surv$HR < 1 & unc_surv$FDR < 0.05),
+    sum(unc_surv$HR > 1 & unc_surv$FDR < 0.05)
+  )
+)
+
+kable(unc_summary, caption = "UNC Subset Survival Analysis Summary",
+      booktabs = TRUE, format.args = list(big.mark = ",")) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+\newpage
+
+# Pathway Enrichment Analysis (GSEA)
+
+## Methods
+
+Gene Set Enrichment Analysis was performed using **enrichR** with the following databases:
+
+- KEGG 2021 Human
+- GO Biological Process 2023
+- Reactome 2022
+- MSigDB Hallmark 2020
+- BioPlanet 2019
+
+## Global Protective Pathways
+
+```{r protective-pathways}
+prot_hallmark <- read.csv(file.path(base_dir, "global_scripts/enrichment_global_protective_MSigDB_Hallmark_2020.csv"),
+                          stringsAsFactors = FALSE)
+prot_kegg <- read.csv(file.path(base_dir, "global_scripts/enrichment_global_protective_KEGG_2021_Human.csv"),
+                      stringsAsFactors = FALSE)
+
+prot_combined <- bind_rows(
+  prot_hallmark %>% mutate(Database = "MSigDB Hallmark"),
+  prot_kegg %>% mutate(Database = "KEGG")
+) %>%
+  filter(Adjusted.P.value < 0.1) %>%
+  arrange(Adjusted.P.value) %>%
+  head(15) %>%
+  mutate(
+    `Adj. P-value` = formatC(Adjusted.P.value, format = "e", digits = 2)
+  ) %>%
+  select(Database, Pathway = Term, Overlap, `Adj. P-value`)
+
+kable(prot_combined, caption = "Top Protective Pathways (Good Prognosis)",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"))
+```
+
+**Key Protective Pathways:**
+
+- **Allograft Rejection** (p = 2.4e-11): T-cell mediated immunity
+- **IL-2/STAT5 Signaling** (p = 4.9e-06): T-cell activation
+- **T-cell Receptor Signaling**: Immune surveillance
+
+\newpage
+
+## Global Adverse Pathways
+
+```{r adverse-pathways}
+harm_hallmark <- read.csv(file.path(base_dir, "global_scripts/enrichment_global_harmful_MSigDB_Hallmark_2020.csv"),
+                          stringsAsFactors = FALSE)
+harm_kegg <- read.csv(file.path(base_dir, "global_scripts/enrichment_global_harmful_KEGG_2021_Human.csv"),
+                      stringsAsFactors = FALSE)
+
+harm_combined <- bind_rows(
+  harm_hallmark %>% mutate(Database = "MSigDB Hallmark"),
+  harm_kegg %>% mutate(Database = "KEGG")
+) %>%
+  filter(Adjusted.P.value < 0.1) %>%
+  arrange(Adjusted.P.value) %>%
+  head(15) %>%
+  mutate(
+    `Adj. P-value` = formatC(Adjusted.P.value, format = "e", digits = 2)
+  ) %>%
+  select(Database, Pathway = Term, Overlap, `Adj. P-value`)
+
+kable(harm_combined, caption = "Top Adverse Pathways (Poor Prognosis)",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"))
+```
+
+**Key Adverse Pathways:**
+
+- **E2F Targets**: Cell cycle progression
+- **G2M Checkpoint**: Proliferation
+- **DNA Repair / Homologous Recombination**: Genomic instability
+- **MYC Targets**: Oncogenic signaling
+
+\newpage
+
+## Pathway Summary by COO Subset
+
+```{r pathway-summary}
+pathway_summary <- data.frame(
+  Subset = c("Global", "GCB", "ABC", "MHG", "UNC"),
+  `Top Protective` = c(
+    "Allograft Rejection, IL-2/STAT5",
+    "T helper molecules, Apoptosis",
+    "RNA metabolism",
+    "Limited enrichment",
+    "TCR signaling, CD8+ T cells"
+  ),
+  `Top Adverse` = c(
+    "E2F Targets, Cell Cycle",
+    "E2F/MYC Targets",
+    "E2F/MYC Targets, DNA Repair",
+    "Cell cycle (nominal)",
+    "E2F Targets"
+  ),
+  check.names = FALSE
+)
+
+kable(pathway_summary, caption = "Pathway Enrichment Summary by COO Subset",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+\newpage
+
+# IPI-Independent Analysis (GCB Subset)
+
+## Rationale
+
+The **International Prognostic Index (IPI)** is the standard clinical risk score for DLBCL. We tested whether gene expression signatures provide prognostic information **independent of IPI**.
+
+## Methodology
+
+```{r ipi-methodology, results='asis'}
+cat("
+**Analysis Design:**
+
+1. **Cohort**: 317 GCB samples with complete IPI data
+2. **Model Comparison**:
+   - **Univariate**: Gene expression only
+   - **Multivariate**: Gene expression + IPI score
+3. **Significance**: Genes with adjusted p < 0.05 in multivariate model
+")
+```
+
+## IPI-Independence Results
+
+```{r ipi-results}
+ipi_results <- read.csv(file.path(base_dir, "global_scripts/ipi_independent_global.csv"), stringsAsFactors = FALSE)
+
+# Get gene annotation from the already annotated GCB survival results
+gcb_annot <- read.csv(file.path(base_dir, "global_scripts/survival_gcb_annotated.csv"), stringsAsFactors = FALSE)
+probe_gene_map <- gcb_annot %>% select(probe, gene) %>% distinct()
+
+ipi_results <- ipi_results %>%
+  left_join(probe_gene_map, by = "probe")
+
+ipi_summary <- data.frame(
+  Metric = c(
+    "Samples with IPI data",
+    "Univariate significant (p < 0.05)",
+    "IPI-adjusted significant (p < 0.05)",
+    "Remain significant after IPI adjustment",
+    "Lose significance after IPI adjustment",
+    "Gain significance after IPI adjustment"
+  ),
+  Value = c(
+    ipi_results$n_samples[1],
+    sum(ipi_results$uni_p < 0.05),
+    sum(ipi_results$adj_p < 0.05),
+    sum(ipi_results$uni_p < 0.05 & ipi_results$adj_p < 0.05),
+    sum(ipi_results$uni_p < 0.05 & ipi_results$adj_p >= 0.05),
+    sum(ipi_results$uni_p >= 0.05 & ipi_results$adj_p < 0.05)
+  )
+)
+
+kable(ipi_summary, caption = "IPI Independence Analysis Summary",
+      booktabs = TRUE, format.args = list(big.mark = ",")) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+## Kaplan-Meier: IPI-Independent Signature
+
+```{r km-ipi, fig.cap="IPI-Independent Signature in GCB Samples with IPI Data"}
+# Load GCB data with IPI
+gcb_ipi <- read.csv(file.path(base_dir, "Lacy_HMRN/results/gcb_staged_tegress.csv"), stringsAsFactors = FALSE)
+
+# Get IPI-independent genes
+ipi_indep_prot <- ipi_results %>%
+  filter(adj_HR < 1, adj_p < 0.01, !is.na(gene)) %>%
+  arrange(adj_p) %>%
+  head(30) %>%
+  pull(probe)
+
+ipi_indep_adv <- ipi_results %>%
+  filter(adj_HR > 1, adj_p < 0.01, !is.na(gene)) %>%
+  arrange(adj_p) %>%
+  head(30) %>%
+  pull(probe)
+
+common_ipi <- intersect(colnames(expr_data), gcb_ipi$sample_id)
+expr_ipi <- expr_data[, common_ipi]
+expr_ipi_mat <- as.matrix(expr_ipi)
+expr_ipi_mat <- apply(expr_ipi_mat, 2, as.numeric)
+rownames(expr_ipi_mat) <- rownames(expr_ipi)
+expr_ipi_z <- t(scale(t(expr_ipi_mat)))
+
+prot_ipi <- intersect(ipi_indep_prot, rownames(expr_ipi_z))
+adv_ipi <- intersect(ipi_indep_adv, rownames(expr_ipi_z))
+
+if(length(prot_ipi) > 0 & length(adv_ipi) > 0) {
+  prot_score_ipi <- colMeans(expr_ipi_z[prot_ipi, , drop=FALSE], na.rm=TRUE)
+  adv_score_ipi <- colMeans(expr_ipi_z[adv_ipi, , drop=FALSE], na.rm=TRUE)
+  sig_score_ipi <- adv_score_ipi - prot_score_ipi
+
+  surv_ipi <- data.frame(
+    sample_id = names(sig_score_ipi),
+    sig_score = sig_score_ipi
+  ) %>%
+    left_join(gcb_ipi, by = "sample_id") %>%
+    filter(!is.na(OS_status), !is.na(OS_years), OS_years > 0)
+
+  surv_ipi$risk_group <- cut(surv_ipi$sig_score,
+                            breaks = quantile(surv_ipi$sig_score, c(0, 0.33, 0.67, 1)),
+                            labels = c("Low Risk", "Intermediate", "High Risk"),
+                            include.lowest = TRUE)
+
+  fit_ipi <- survfit(Surv(OS_years, OS_status) ~ risk_group, data = surv_ipi)
+
+  ggsurvplot(fit_ipi, data = surv_ipi,
+             palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
+             risk.table = TRUE,
+             pval = TRUE,
+             conf.int = FALSE,
+             xlab = "Time (years)",
+             ylab = "Overall Survival",
+             title = "IPI-Independent Prognostic Signature (GCB, n=317)",
+             legend.title = "Risk Group",
+             risk.table.height = 0.25,
+             ggtheme = theme_bw())
+}
+```
+
+\newpage
+
+## Top IPI-Independent Genes
+
+### Protective (IPI-Independent)
+
+```{r ipi-protective}
+ipi_protective <- ipi_results %>%
+  filter(adj_HR < 1, adj_p < 0.001, !is.na(gene)) %>%
+  arrange(adj_p) %>%
+  head(15) %>%
+  mutate(
+    `Univariate HR` = round(uni_HR, 3),
+    `Adjusted HR` = round(adj_HR, 3),
+    `Uni P` = formatC(uni_p, format = "e", digits = 2),
+    `Adj P` = formatC(adj_p, format = "e", digits = 2),
+    `IPI P` = formatC(ipi_p, format = "e", digits = 2)
+  ) %>%
+  select(Gene = gene, `Univariate HR`, `Adjusted HR`, `Uni P`, `Adj P`, `IPI P`)
+
+kable(ipi_protective, caption = "Top IPI-Independent Protective Genes",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"))
+```
+
+### Adverse (IPI-Independent)
+
+```{r ipi-adverse}
+ipi_adverse <- ipi_results %>%
+  filter(adj_HR > 1, adj_p < 0.001, !is.na(gene)) %>%
+  arrange(adj_p) %>%
+  head(15) %>%
+  mutate(
+    `Univariate HR` = round(uni_HR, 3),
+    `Adjusted HR` = round(adj_HR, 3),
+    `Uni P` = formatC(uni_p, format = "e", digits = 2),
+    `Adj P` = formatC(adj_p, format = "e", digits = 2),
+    `IPI P` = formatC(ipi_p, format = "e", digits = 2)
+  ) %>%
+  select(Gene = gene, `Univariate HR`, `Adjusted HR`, `Uni P`, `Adj P`, `IPI P`)
+
+kable(ipi_adverse, caption = "Top IPI-Independent Adverse Genes",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"))
+```
+
+\newpage
+
+## IPI-Independent Pathway Analysis
+
+```{r ipi-pathways, fig.cap="Comparison of Univariate vs IPI-Adjusted Significance"}
+# Scatter plot of univariate vs adjusted p-values
+ipi_plot_data <- ipi_results %>%
+  filter(!is.na(gene)) %>%
+  mutate(
+    log_uni = -log10(uni_p),
+    log_adj = -log10(adj_p),
+    category = case_when(
+      uni_p < 0.05 & adj_p < 0.05 ~ "Remain Significant",
+      uni_p < 0.05 & adj_p >= 0.05 ~ "Lose Significance",
+      uni_p >= 0.05 & adj_p < 0.05 ~ "Gain Significance",
+      TRUE ~ "Not Significant"
+    )
+  )
+
+library(ggplot2)
+ggplot(ipi_plot_data, aes(x = log_uni, y = log_adj, color = category)) +
+  geom_point(alpha = 0.5, size = 1) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray50") +
+  geom_hline(yintercept = -log10(0.05), linetype = "dotted", color = "red") +
+  geom_vline(xintercept = -log10(0.05), linetype = "dotted", color = "red") +
+  scale_color_manual(values = c(
+    "Remain Significant" = "#2E9FDF",
+    "Lose Significance" = "#FC4E07",
+    "Gain Significance" = "#00BA38",
+    "Not Significant" = "gray80"
+  )) +
+  labs(
+    x = "-log10(Univariate P-value)",
+    y = "-log10(IPI-Adjusted P-value)",
+    title = "Univariate vs IPI-Adjusted Significance",
+    color = "Category"
+  ) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+\newpage
+
+# Summary and Conclusions
+
+## Key Findings
+
+1. **Strong Prognostic Signatures Exist**
+   - Global: 6,748 significant probes (FDR < 0.05)
+   - Most genes show IPI-independent prognostic value
+
+2. **COO-Specific Biology**
+   - Minimal overlap between GCB, ABC, MHG signatures
+   - Each subset has distinct prognostic determinants
+
+3. **Protective Pathways (Good Prognosis)**
+   - T-cell receptor signaling
+   - Immune activation (IL-2/STAT5)
+   - Allograft rejection pathways
+
+4. **Adverse Pathways (Poor Prognosis)**
+   - Cell cycle / proliferation
+   - E2F and MYC targets
+   - DNA repair mechanisms
+
+5. **IPI Independence**
+   - 93% of significant genes remain significant after IPI adjustment
+   - Gene expression provides additional prognostic information beyond clinical factors
+
+## Clinical Implications
+
+- Gene expression signatures could **refine risk stratification** beyond IPI
+- **T-cell infiltration/function** appears protective across subtypes
+- **Proliferation signatures** consistently predict poor outcome
+- COO-specific signatures may enable **tailored prognostication**
+
+\newpage
+
+# Appendix: Subset Comparison
+
+```{r subset-comparison}
+subset_comparison <- data.frame(
+  Subset = c("Global", "GCB", "ABC", "MHG", "UNC"),
+  N = c(1303, 517, 345, 164, 277),
+  `FDR < 0.05` = c(
+    sum(global_surv$FDR < 0.05),
+    sum(gcb_surv$FDR < 0.05),
+    sum(abc_surv$FDR < 0.05),
+    sum(mhg_surv$FDR < 0.05),
+    sum(unc_surv$FDR < 0.05)
+  ),
+  `Top Protective Gene` = c(
+    global_surv %>% filter(HR < 1, !is.na(gene)) %>% arrange(p_value) %>% head(1) %>% pull(gene),
+    gcb_surv %>% filter(HR < 1, !is.na(gene)) %>% arrange(p_value) %>% head(1) %>% pull(gene),
+    abc_surv %>% filter(HR < 1, !is.na(gene)) %>% arrange(p_value) %>% head(1) %>% pull(gene),
+    mhg_surv %>% filter(HR < 1, !is.na(gene)) %>% arrange(p_value) %>% head(1) %>% pull(gene),
+    unc_surv %>% filter(HR < 1, !is.na(gene)) %>% arrange(p_value) %>% head(1) %>% pull(gene)
+  ),
+  `Top Adverse Gene` = c(
+    global_surv %>% filter(HR > 1, !is.na(gene)) %>% arrange(p_value) %>% head(1) %>% pull(gene),
+    gcb_surv %>% filter(HR > 1, !is.na(gene)) %>% arrange(p_value) %>% head(1) %>% pull(gene),
+    abc_surv %>% filter(HR > 1, !is.na(gene)) %>% arrange(p_value) %>% head(1) %>% pull(gene),
+    mhg_surv %>% filter(HR > 1, !is.na(gene)) %>% arrange(p_value) %>% head(1) %>% pull(gene),
+    unc_surv %>% filter(HR > 1, !is.na(gene)) %>% arrange(p_value) %>% head(1) %>% pull(gene)
+  ),
+  check.names = FALSE
+)
+
+kable(subset_comparison, caption = "Summary Comparison Across COO Subsets",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"))
+```
+
+---
+
+*Analysis performed using R with survival, survminer, dplyr, and enrichR packages.*
+
+*Data source: HMRN/Lacy Cohort (GSE181063)*

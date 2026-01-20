@@ -1,0 +1,385 @@
+---
+title: "DLBCL Prognostic Gene Signatures"
+subtitle: "Genome-Wide Survival Analysis by Cell of Origin"
+author: "HMRN/Lacy Cohort Analysis"
+date: "`r Sys.Date()`"
+output:
+  beamer_presentation:
+    theme: "Madrid"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
+    slide_level: 2
+    fig_caption: false
+    keep_tex: false
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{graphicx}
+  - \setbeamertemplate{navigation symbols}{}
+  - \setbeamertemplate{footline}[frame number]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  out.width = "85%"
+)
+
+base_dir <- "C:/Users/ericp/OneDrive/Desktop/Claude-Projects/Claude-Project-06"
+fig_dir <- file.path(base_dir, "global_scripts/figures")
+```
+
+# Introduction
+
+## Study Overview
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{Objective:}
+\begin{itemize}
+\item Identify prognostic gene signatures in DLBCL
+\item Compare across Cell of Origin (COO) subtypes
+\item Test independence from IPI
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\textbf{Key Questions:}
+\begin{itemize}
+\item Which genes predict survival?
+\item Are signatures COO-specific?
+\item Do they add value beyond IPI?
+\end{itemize}
+\end{column}
+\end{columns}
+
+## Study Cohort
+
+```{r cohort, out.width="80%"}
+knitr::include_graphics(file.path(fig_dir, "cohort_overview.png"))
+```
+
+- **HMRN/Lacy Cohort** (GSE181063): 1,303 samples with survival data
+- **Platform**: Illumina HumanHT-12 V4 BeadChip (29,372 probes)
+
+# Methodology
+
+## Analysis Pipeline
+
+```{r methodology, out.width="95%"}
+knitr::include_graphics(file.path(fig_dir, "methodology_diagram.png"))
+```
+
+## Statistical Methods
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{Univariate Analysis:}
+$$h(t|x) = h_0(t) \cdot e^{\beta x}$$
+\begin{itemize}
+\item Cox proportional hazards
+\item Per-probe regression
+\item Z-score normalized expression
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\textbf{Multiple Testing:}
+\begin{itemize}
+\item Benjamini-Hochberg FDR
+\item Significance: FDR < 0.05
+\end{itemize}
+\vspace{0.5cm}
+\textbf{IPI Adjustment:}
+$$h(t|x,IPI) = h_0(t) \cdot e^{\beta_1 x + \beta_2 IPI}$$
+\end{column}
+\end{columns}
+
+# Results: Global Analysis
+
+## Volcano Plot - Global Survival Analysis
+
+```{r volcano, out.width="85%"}
+knitr::include_graphics(file.path(fig_dir, "volcano_global.png"))
+```
+
+## Key Findings - Global
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{Significant Probes:}
+\begin{itemize}
+\item \textbf{6,748} FDR < 0.05
+\item \textbf{3,243} Protective (HR < 1)
+\item \textbf{3,505} Adverse (HR > 1)
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\textbf{Top Genes:}
+
+\footnotesize
+\begin{tabular}{ll}
+\toprule
+\textbf{Protective} & \textbf{Adverse} \\
+\midrule
+SIRPG & POLR3G \\
+CD3D, CD3E & EXO1 \\
+MMP9 & C19orf48 \\
+BCL11B & UBE2Q2P2 \\
+LCK, CD2 & SHCBP1 \\
+\bottomrule
+\end{tabular}
+\end{column}
+\end{columns}
+
+## Prognostic Signature Heatmap
+
+```{r heatmap-global, out.width="95%"}
+knitr::include_graphics(file.path(fig_dir, "heatmap_global_signature.png"))
+```
+
+## Kaplan-Meier: Global Signature
+
+```{r km-global, out.width="80%"}
+knitr::include_graphics(file.path(fig_dir, "km_global_signature.png"))
+```
+
+# Pathway Enrichment (GSEA)
+
+## Protective Pathways
+
+```{r gsea-prot, out.width="90%"}
+knitr::include_graphics(file.path(fig_dir, "gsea_protective_barplot.png"))
+```
+
+## Adverse Pathways
+
+```{r gsea-harm, out.width="90%"}
+knitr::include_graphics(file.path(fig_dir, "gsea_adverse_barplot.png"))
+```
+
+## Combined Pathway Analysis
+
+```{r gsea-combined, out.width="90%"}
+knitr::include_graphics(file.path(fig_dir, "gsea_combined_dotplot.png"))
+```
+
+## Pathway Summary
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{Protective Pathways:}
+\begin{itemize}
+\item \textcolor{green!70!black}{Allograft Rejection}
+\item \textcolor{green!70!black}{IL-2/STAT5 Signaling}
+\item \textcolor{green!70!black}{T-cell Activation}
+\item \textcolor{green!70!black}{Immune Surveillance}
+\end{itemize}
+\vspace{0.3cm}
+$\Rightarrow$ \textbf{T-cell infiltration = Good prognosis}
+\end{column}
+\begin{column}{0.5\textwidth}
+\textbf{Adverse Pathways:}
+\begin{itemize}
+\item \textcolor{red}{E2F Targets}
+\item \textcolor{red}{G2M Checkpoint}
+\item \textcolor{red}{DNA Repair/HDR}
+\item \textcolor{red}{MYC Targets}
+\end{itemize}
+\vspace{0.3cm}
+$\Rightarrow$ \textbf{Proliferation = Poor prognosis}
+\end{column}
+\end{columns}
+
+# COO-Specific Signatures
+
+## Significant Genes by COO Subset
+
+```{r coo-comparison, out.width="85%"}
+knitr::include_graphics(file.path(fig_dir, "coo_comparison.png"))
+```
+
+## GCB-Specific Signature
+
+```{r heatmap-gcb, out.width="85%"}
+knitr::include_graphics(file.path(fig_dir, "heatmap_gcb_signature.png"))
+```
+
+## ABC-Specific Signature
+
+```{r heatmap-abc, out.width="85%"}
+knitr::include_graphics(file.path(fig_dir, "heatmap_abc_signature.png"))
+```
+
+## COO Pathway Comparison
+
+```{r gsea-coo, out.width="95%"}
+knitr::include_graphics(file.path(fig_dir, "gsea_coo_comparison.png"))
+```
+
+## COO Signature Overlap
+
+\begin{center}
+\textbf{Minimal overlap between COO-specific signatures}
+\end{center}
+
+\begin{columns}
+\begin{column}{0.33\textwidth}
+\centering
+\textbf{GCB $\cap$ ABC}\\
+\Large 4 genes
+\end{column}
+\begin{column}{0.33\textwidth}
+\centering
+\textbf{GCB $\cap$ MHG}\\
+\Large 0 genes
+\end{column}
+\begin{column}{0.33\textwidth}
+\centering
+\textbf{ABC $\cap$ MHG}\\
+\Large 0 genes
+\end{column}
+\end{columns}
+
+\vspace{0.5cm}
+\begin{center}
+$\Rightarrow$ \textbf{Each COO subtype has distinct prognostic biology}
+\end{center}
+
+# IPI Independence Analysis
+
+## IPI Independence - Methodology
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{Analysis Design:}
+\begin{itemize}
+\item 317 GCB samples with IPI data
+\item Compare univariate vs multivariate
+\item Test if genes remain significant after IPI adjustment
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\textbf{Multivariate Model:}
+$$h(t) = h_0(t) \cdot e^{\beta_1 \cdot Gene + \beta_2 \cdot IPI}$$
+
+\vspace{0.3cm}
+\textbf{IPI-independent if:}\\
+$p_{adjusted} < 0.05$
+\end{column}
+\end{columns}
+
+## IPI Independence Results
+
+```{r ipi-scatter, out.width="80%"}
+knitr::include_graphics(file.path(fig_dir, "ipi_independence_scatter.png"))
+```
+
+## IPI Independence Summary
+
+\begin{center}
+\Large
+\textbf{The prognostic genes are largely IPI-INDEPENDENT}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\item \textbf{3,037} univariate significant
+\item \textbf{2,839} remain after IPI adjustment
+\item Only \textbf{701} lose significance
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\item \textbf{93\%} of genes retain significance
+\item Gene expression adds prognostic value beyond IPI
+\end{itemize}
+\end{column}
+\end{columns}
+
+# Conclusions
+
+## Key Findings
+
+\begin{enumerate}
+\item \textbf{Strong Prognostic Signatures}
+    \begin{itemize}
+    \item 6,748 significant probes (FDR < 0.05)
+    \item Clear separation by risk score
+    \end{itemize}
+
+\item \textbf{COO-Specific Biology}
+    \begin{itemize}
+    \item Minimal overlap between subsets
+    \item Each has distinct prognostic determinants
+    \end{itemize}
+
+\item \textbf{Biological Themes}
+    \begin{itemize}
+    \item Protective: T-cell infiltration/immune activation
+    \item Adverse: Proliferation/cell cycle
+    \end{itemize}
+
+\item \textbf{IPI Independence}
+    \begin{itemize}
+    \item 93\% genes remain significant after IPI adjustment
+    \item Signatures provide additional prognostic information
+    \end{itemize}
+\end{enumerate}
+
+## Clinical Implications
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{Risk Stratification:}
+\begin{itemize}
+\item Refine beyond IPI
+\item Identify high-risk patients within IPI groups
+\item COO-specific prognostication
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\textbf{Therapeutic Targets:}
+\begin{itemize}
+\item T-cell function enhancement
+\item Cell cycle inhibition
+\item Immunotherapy selection
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.5cm}
+\begin{center}
+\textbf{Gene expression signatures could complement clinical staging for personalized treatment decisions}
+\end{center}
+
+## Acknowledgments
+
+\begin{center}
+\textbf{Data Source}\\
+HMRN/Lacy Cohort (GSE181063)
+
+\vspace{0.5cm}
+\textbf{Methods}\\
+R packages: survival, survminer, enrichR, pheatmap
+
+\vspace{0.5cm}
+\textbf{Analysis Pipeline}\\
+Cox regression $\rightarrow$ FDR correction $\rightarrow$ Pathway enrichment $\rightarrow$ IPI adjustment
+\end{center}
+
+## Thank You
+
+\begin{center}
+\Huge Questions?
+\end{center}
+
+\vspace{1cm}
+
+\begin{center}
+\footnotesize
+Analysis code and data available upon request
+\end{center}

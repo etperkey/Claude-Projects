@@ -1,0 +1,998 @@
+Article
+
+Axes of biological variation in diffuse large B cell lymphoma
+
+Graphical abstract
+
+Authors
+Boya Wang, George Wright, Julius C. Enssle, ..., Thomas Oellerich, Giorgio Inghirami, Louis M. Staudt
+
+Correspondence
+lstaudt@mail.nih.gov
+
+In brief
+Wang et al. apply single-cell RNA and ATAC sequencing to diffuse large B cell lymphoma (DLBCL), revealing phenotypic and gene regulatory distinctions between DLBCL genetic subtypes and between genetic subclones within the same tumor, highlighting the molecular heterogeneity of this aggressive cancer. These findings illuminate DLBCL biology and provide gene signatures that correlate with response to chemotherapy and targeted agents.
+
+Highlights
+· DLBCL genetic subtypes have distinct gene expression
+phenotypes
+· Most DLBCL tumors have genetic subclones that are
+phenotypically distinct
+· Recurrent REL amplification in GCB DLBCL blocks memory
+B cell differentiation
+· Distinct regulatory networks define normal B cell states and
+DLBCL genetic subtypes
+
+Wang et al., 2026, Cancer Cell 44, 1­19
+
+March 9, 2026 Published by Elsevier Inc. https://doi.org/10.1016/j.ccell.2025.12.015
+
+ll
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+
+Article
+Axes of biological variation in diffuse large B cell lymphoma
+Boya Wang,1,11 George Wright,2,11 Julius C. Enssle,1,3,4,5,6,7,11 Xin Yu,1 James D. Phelan,1 Yandan Yang,1 Arthur Shaffer III,1 Arvin E. Ruiz,8 Da Wei Huang,1 Zana Coulibaly,1 Michael Kelly,9 Bao Tran,9 Stefania Pittaluga,10 Mark Roschewski,1 Wyndham H. Wilson,1 Thomas Oellerich,3,4,5,6,7 Giorgio Inghirami,8,12 and Louis M. Staudt1,12,13,* 1Lymphoid Malignancies Branch, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA 2Biometrics Research Program, National Cancer Institute, NIH, Bethesda, MD, USA 3Department of Medicine II, Hematology and Oncology, University Hospital, Goethe University Frankfurt, Frankfurt am Main, Germany 4German Cancer Consortium (DKTK), Partner Site Frankfurt/Mainz, a Partnership between DKFZ and UCT Frankfurt-Marburg, Frankfurt am Main, Germany 5German Cancer Research Center (DKFZ), Heidelberg, Germany 6University Cancer Center (UCT) Frankfurt, Frankfurt am Main, Germany 7Frankfurt Cancer Institute, Frankfurt am Main, Germany 8Department of Pathology and Laboratory Medicine, Weill Cornell Medicine, 1300 York Avenue, New York, NY 10065, USA 9Frederick National Laboratory for Cancer Research, NIH, Frederick, MD, USA 10Laboratory of Pathology, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA 11These authors contributed equally 12Senior author 13Lead contact *Correspondence: lstaudt@mail.nih.gov https://doi.org/10.1016/j.ccell.2025.12.015
+
+SUMMARY
+Genetic and gene expression subtypes of diffuse large B cell lymphoma (DLBCL) have been defined using bulk tumor analysis. To explore their biology, we derived single-cell RNA and ATAC sequencing data from 103 DLBCL biopsies and identified malignant B cells by their non-diploid DNA copy number profiles. Using malignant B cell gene expression, we developed and validated signatures of each DLBCL genetic subtype, revealing their distinctive characters. Most biopsies had genetic subclones, defined by distinct patterns of aneuploidy, that were distinguished by expression of biological themes reflecting B cell differentiation state, cell proliferation, and cell growth. This analysis revealed REL amplification as a mechanism to block terminal memory B cell differentiation. The genetic subtype signatures and biological themes varied independently, had distinctive transcription factor networks, and were associated with survival following chemotherapy. This single-cell resource illuminates intra- and inter-tumoral biological variation, facilitating studies of DLBCL pathogenesis and therapeutic response.
+
+INTRODUCTION
+The variable response of diffuse large B cell lymphoma (DLBCL) to chemotherapy and targeted therapy has been tied to heterogeneity in DLBCL genotypes and phenotypes. An initial dichotomy--the cell-of-origin (COO) distinction--identified a GCB subtype with a gene expression phenotype resembling normal germinal center (GC) B cells and an ABC subtype that resembled blood B cells activated by B cell receptor (BCR) engagement.1 Building on this framework, genetic profiling resolved seven DLBCL genetic subtypes to which an individual DLBCL tumor can be assigned using the LymphGen algorithm.2­5 LymphGen assigns 62% of DLBCLs to the MCD, BN2, N1, A53, EZB, or ST2 subtypes, with EZB subdivided into an EZB double-hit (EZB-DH) subtype, defined by coincident BCL2 and MYC translocations, and an EZB-nonDH subtype. The genetic subtype tax-
+
+onomy is intimately related to the COO distinction, with EZB having the most GCB-like COO scores, and MCD tumors, the most ABC-like scores. Additionally, N1 and A53 are most often ABC phenotypically and ST2 is typically GCB. BN2 is phenotypically plastic and often ``Unclassified'' by COO analysis.
+The genetic subtype distinction stratifies DLBCL patients into distinct risk groups with R-CHOP chemotherapy and identifies DLBCL tumors sensitive to agents targeting particular oncogenic pathways.5 MCD tumors respond preferentially to the BTK inhibitor ibrutinib,6 as do primary central nervous system lymphomas with an MCD genotype.7,8 The addition of ibrutinib to R-CHOP chemotherapy dramatically improved survival compared with R-CHOP alone in MCD and N1 DLBCL but provided less benefit for patients with other ABC DLBCLs.9 Most recently, the Venetoclax, Ibrutinib, Prednisone, Obinutuzumab, Revlimid (ViPOR) regimen, which combines five targeted drugs, induced a
+
+Cancer Cell 44, 1­19, March 9, 2026 Published by Elsevier Inc. 1
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+significantly greater response in MCD and EZB-DH than in other DLBCLs.10
+To advance our understanding of DLBCL pathobiology, we generated a single-cell atlas from genetically profiled DLBCL tumors, focusing on three unresolved issues. (1) Are the DLBCL genetic subtypes distinct biological entities with characteristic gene signatures in their malignant cells and distinctive tumor microenvironments (TME)? (2) Are DLBCL tumors monoclonal or do they contain genetically and phenotypically distinct subclones? (3) How do the characteristic transcription factor (TF) networks in malignant cells of each subtype relate to those regulating normal B cell differentiation?
+RESULTS
+Single-cell multimodal profiling of DLBCL tumor We analyzed 103 biopsy specimens from DLBCL patients by single-cell RNA sequencing (scRNA-seq, n = 103) and single-cell ATAC sequencing (scATAC-seq, n = 102), as well as by bulk tumor whole-exome sequencing (WES) and RNA sequencing (RNA-seq) (Figure 1A; Table S1). Among cases with clinical data (n = 77), 65% were newly diagnosed DLBCL, while 35% were previously treated. Most (87%) were de novo DLBCL, while the remainder were transformed from or composite with lowgrade B cell lymphomas. Each COO gene expression subtype and LymphGen genetic subtype was represented (Figure 1B; Table S2).
+DLBCL cells (n = 504,444) were clustered by their scRNA-seq profiles and visualized by Uniform Manifold Approximation and Projection (UMAP) for dimensionality reduction to identify cell types (Figure 1C). Tumor subpopulations expressing canonical cell type-specific markers matched their quantitation by flow cytometry (Figure S1B). The COO scores obtained by pseudobulk analysis of isolated malignant B cells were correlated with those obtained by bulk RNA-seq (Figure S1C).
+We used scRNA-seq to infer DNA copy number variants (CNVs),13 allowing us to distinguish malignant and normal B cells. Inferred CNVs in malignant B cells were concordant with those detected by WES of the matching bulk tumors (Figures S1D and S1E). The clonal immunoglobulin variable sequences assembled using bulk RNA-seq were present in the malignant but not normal B cells (Figure S1F).
+To identify normal B cell subpopulations in the DLBCL TME, we used established marker genes14 to annotate graph-based clusters15 of normal tonsillar B cells (n = 6; Figure S1G) and used this framework to quantify 6 subpopulations across tumors (Figure 1D). Using an atlas of T cells in lymphoid tumors,16,18 we identified 12 T cell subpopulations (Figure 1D; Figure S1H) and further identified 6 types of innate immune and stromal cells (Figure 1D).
+EZB-DH biopsies had the least abundant TME including the fewest T cells, whereas EZB-nonDH had the most T cell-rich TME, highlighting their divergent pathobiology (Figure 1D). To evaluate these associations statistically, we used a k-nearest neighbor graph to identify cellular neighborhoods in which most cells (>85%) belonged to a particular immune subpopulation. For each TME cell type, we calculated the proportion of assigned neighborhoods that were enriched for each genetic subtype using a negative binomial regression (false discovery rate
+
+[FDR] <0.1; Figure 1E). EZB-nonDH was enriched for T follicular helper cells (TFH) and regulatory T cell (Treg) central memory-2 (CM2) cells, which are epigenetically related.17 MCD was depleted for T cells, and its CD8+ naive T cells had the highest T cell exhaustion signature18 (Figure S1I), consistent with genetic evidence of immune editing in MCD.5 On the other hand, MCD was enriched for macrophages, as was N1, which was also enriched for stromal cells. However, MCD and N1 macrophages occupied distinct regions within the main macrophage cluster (Figure S1J). Using markers of macrophage subpopulations,12 we identified enrichment of MCD for an angiogenic subpopulation (Angio-Mac) expressing angiogenic genes (VEGF, SPP1, and VCAN), previously associated with tumor hypoxia (Figure 1F).12 Conversely, N1 was enriched for an interferon-activated macrophage subpopulation (IFN-Mac) expressing CD274 (PD-L1), CD86, and CD40, as well as for a lipid-associated subpopulation (LA-Mac) expressing mediators of lipid uptake and catabolism (APOC1, APOE, and ACP5).12
+Phenotype of DLBCL genetic subtypes We hypothesized that malignant B cells in each DLBCL genetic subtype might have a characteristic gene expression signature, given their distinct oncogenic alterations, putative COOs, and sensitivity to therapy.3,5,9 To create and validate subtype signatures (Figure 2A), we analyzed the present collection of DLBCLs as Discovery cohort #1, as well as bulk tumor genetic and transcriptomic data from a Discovery cohort #2 (n = 376)19 and a Validation cohort (n = 574).3 For each LymphGen subtype, we selected subtype signature genes that were differentially expressed between subtype and non-subtype cases (p < 0.05) in Discovery cohorts #1 and #2 (Table S3). We calculated subtype signature scores for each case as a weighted linear average of the expression levels of subtype signature genes, with subtype distinction T statistics derived from Discovery cohort #2 serving as model coefficients (Tables S3 and S4). We applied these subtype signature models to the Validation cohort (Table S4).
+We used receiver operating characteristic (ROC) curves to visualize the sensitivity and specificity of each subtype signature model relative to the true positive LymphGen subtype predictions on the Validation cohort (Figure 2B) and, via cross-validation, on Discovery cohort #2 (Figure S2A), yielding concordant results. In the Validation cohort, each subtype model was associated with the genetic subtype assignment (p < 1 × 10- 4), with area under the curve (AUC) values ranging from 0.93 (N1) to 0.68 (A53). Pairwise correlation values between the subtype signature scores revealed significant but incomplete independence from one another. We observed an especially close relationship between the MCD and A53 models, befitting their shared biology, including an ABC COO phenotype and enrichment for IgM BCRs bearing autoreactive immunoglobulin variable regions5 (Figure 2C).
+Clustering malignant B cells in Discovery cohort #1 according to their subtype signature scores segregated cells from each subtype into distinct but partially overlapping domains (Figure 2D). Likewise, malignant B cells assigned to the ABC, GCB, and Unclassified COO subtypes were well separated, indicating that the subtype signature models incorporate COO information (Figure 2E).
+
+2 Cancer Cell 44, 1­19, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+
+Figure 1. Single-cell sequencing of DLBCL (A) Schematic study workflow. (B) Single-cell cohort composition. (C) UMAP of 504,444 transcriptomes from 103 DLBCL biopsies (left). Barplots with cell type frequency (right). (D) UMAP of non-malignant cells, subset from (C). Top barplot shows the mean and SE across samples. Nl. B, normal B cells. (E) Differential abundance of cell type neighborhoods. (F) Phenotype based on AUCell11 of macrophage signatures.12 Boxplots show the median, first/third quartiles, and 1.5 × interquartile range (IQR) in MCD-enriched or N1-enriched macrophage neighborhoods. ****p < 0.0001, Wilcoxon test. See Figure S1; Tables S1 and S2.
+
+Next, we used subtype signature scores to cluster the Validation cohort tumors, which grouped cases by genetic subtype (Figure 2F) and by COO (Figure 2G). Interestingly, many ``Other'' cases that could not be assigned to a subtype by LymphGen, nevertheless, occupied UMAP space overlapping one of the genetic subtypes, suggesting shared biology (Figure 2F). Genetically composite DLBCLs with high probability (>0.9) of belonging to more than one genetic subtype3,5
+
+generally colocalized with other cases that matched their genetically dominant subtype, i.e., the subtype with highest probability.
+Biology of DLBCL genetic subtypes revealed by their gene expression signatures The genes constituting the subtype signatures shed light on subtype phenotypes. Among subtype signature genes identified in
+
+Cancer Cell 44, 1­19, March 9, 2026 3
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+
+Figure 2. Phenotypic subtype signatures distinguish LymphGen subtypes (A) Development and validation of subtype signatures. (B) AUC of the subtype signature score. p value based on Wilcoxon test. (C) Pearson correlation of the subtype signature scores in the validation cohort. (D and E) UMAP of malignant B cell scRNA-seq based on subtype signature genes. Each dot is one cell. (F and G) UMAP of the validation cohort bulk RNA-seq based on subtype signature genes. Each dot is one case (n = 574). For composite samples, the greatest subtype signature score is displayed. (H) Relative expression of subtype signature genes in indicated subtype versus other. Genes of interest are magnified. (I) Pearson correlation of gene expression signature averages (rows) to subtype signature scores (columns). See Figure S2, Tables S3, S4, and S5.
+
+the Discovery cohorts, 89% (719/808) were also associated
+(p < 0.05) with the same subtype in the Validation cohort, indicating strong signature reproducibility (Table S3). As expected,3 the MCD signature was enriched for genes associated with the
+ABC extreme of the COO signature, including genes encoding the mutator AID (AICDA)20 and the immunosuppressive cytokine
+
+interleukin (IL)-10 (Figure 2H).21 MCD had low CDKN2A expres-
+sion due to frequent homozygous deletion of this tumor suppressor locus.5 The MCD signature included genes encoding several TFs that mold its transcriptome, including IRF4,22 SPIB,22 and TCF4.23 Accordingly, this signature featured
+genes transactivated by the IRF4/SPIB heterodimer (CYB5R2,
+
+4 Cancer Cell 44, 1­19, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+EPHB1, AICDA, IL-10, TCF4, IRF4, and SPIB) and/or by TCF4 (CYB5R2, EPHB1, TMRSS6, AICDA, CRB3, CNTNAP1, IRF4, and SPIB). The A53 signature was lacking in genes expressed exclusively in this subtype but instead included genes characteristic of MCD (HISTH1C, PIM2, TGIF, CYB5R2, and ZNF385C), potentially due to the higher expression of IRF4, SPIB, and TCF4 in A53 than in other subtypes. Unlike MCD, though, A53 was not associated with low CDKN2A expression.
+The distinctive phenotype of BN2 is characterized by high NOTCH2 mRNA expression and frequent NOTCH2 mutations that stabilize NOTCH2 protein,3,5 driving expression of NOTCH target genes (EBI3, BHLHE41, MET, FAM49A, and NOTCH2)24,25 (Figure 2H). In N1, NOTCH1 mutations stabilize protein expression, thereby driving expression of NOTCH1 target genes (PLAC8, C12orf42, ABHD6, and COQ2).24,25 N1 also expressed genes characteristic of memory B cells (PLAC8, SIGLEC6, and SLC12A6) but has lower expression of the GC TFs BCL626,27 and EBF1.28,29
+The genes in the EZB signature encode markers of normal GC B cells, including CD10 (MME), LMO2, MYBL1, and GCET1 (SERPINA9). EZB expressed low levels of PTPN6, encoding the BCR negative regulator SHP-1, thereby fostering constitutive BCR signaling in this subtype.30 Although ST2 is most often GCB phenotypically, ST2 lacks TF expression of many GC markers, including CD10, but does express FAS, a death receptor that eliminates GC B cells that do not bind antigen strongly.31 In keeping with its GC origin,32 ST2 had low BCL2 expression, potentially explaining its sensitivity to chemotherapy.5,32
+We next investigated the correlation between the genetic subtype signatures and signatures of biological processes in normal and malignant B cells within the SignatureDB.33 Since the COO signature is a major axis of phenotype variation among the DLBCL genetic subtypes,3 we also determined how each genetic subtype signature added to COO in linear models. We considered a biological signature to be correlated with a genetic subtype signature if it was either directly correlated or added significantly to COO in linear models. Analysis of each DLBCL cohort yielded concordant signature correlations, suggesting conserved biological phenotypes (Figures 2I and S2B; Table S5).
+A BCR activation signature (BCRactUp-1) was correlated with the MCD, BN2, and A53 signatures (Figures 2I and S2B), suggesting that these subtypes utilize chronic active BCR signaling.34 Overall, the correlation structures of the MCD and A53 signatures were highly similar and reflected B cell activation phenotypes, including MYC activity (MYCUp-435), PI3 kinasemTOR signaling (PI3KUp-2,36 RapaDn-3,37 and StarveDn-138), glycolysis (Glycol-139), mitochondrial biogenesis (PGC1aUp140), ribosomal biogenesis (Ribo-139), and lipid synthesis (SREBPUp-341). The MCD and A53 signature correlations and anticorrelations suggested activity of IRF4 (IRF4Up-722 and IRF4Dn-122), consistent with their high IRF4 expression (Figure 2H). Since IRF4 triggers plasmacytic differentiation,42 it was notable that the MCD and A53 signatures were correlated with a signature of antibody-secreting plasmablasts (Basc-843).
+The N1 subtype signature correlated with four independent memory B cell signatures (Bmem-6,44 Bmem-15,45 Bmem16,46 and Bmem-1814), whereas the MCD and A53 signatures were anticorrelated, reflecting their plasmacytic trajectory. Consistent with NOTCH1 activity, the N1 signature correlated
+
+with NOTCH1 target genes (NOTCH1Up-1125). This signature also correlated with genes repressed by BCL6 (BCL6Dn-1), consistent with BCL6 downregulation in N1 (Figure 2H). Conversely, the N1 signature was anticorrelated with genes repressed by BACH2 (BACH2Dn-147), suggesting activity of this TF, which promotes memory B cell differentiation.47 TBL1XR1, which blocks GC B cell differentiation into memory cells,48 is often genetically inactivated in N1,9 and accordingly, the N1 signature correlated with genes upregulated by TBL1XR1 inactivation (TBL1XR1MutUp-2 and TBL1XR1KOUp148). Last, the N1 signature correlated with TCF4 target genes (TCF4Up-623), likely a consequence of recurrent inactivation of ID3, a negative regulator of TCF4, in N1.3,5
+The EZB and ST2 signatures differed, despite their shared GC origin. The ST2 signature correlated with nuclear factor (NF)-B target genes (NFKB-1049), while the EZB signature was anticorrelated, consistent with genetic inactivation of IB in ST2.5 The ST2 signature also correlated with genes activated by JAKSTAT3 signaling (JAKUp-2,33 STAT3Up-3,21 and IL6Up-321), consistent with inactivation in ST2 of SOCS1, a JAK kinase signaling inhibitor.5 A signature of genes repressed by BCL6 (BCL6Dn-133) was anticorrelated with the EZB, but not N1, signature, consistent with BCL6 upregulation in EZB and downregulation in N1 (Figure 2H). The EZB signature was strongly anticorrelated with genes activated by IRF4 (IRF4Up722), unlike the ST2 signature, suggesting low IRF4 activity and inhibition of plasmacytic differentiation in EZB.
+We next investigated the relationship between the genetic subtype signatures and a set of five B cell ``states'' identified by the Ecotyper algorithm50 (Table S5). While some subtype signatures were correlated with a single Ecotyper state, others were correlated with multiple states (Figures S2C and S2D). Moreover, each Ecotyper state was correlated with more than one subtype signature, demonstrating that the subtype signatures offer a new perspective on phenotypic variation in malignant DLBCL cells.
+Next, we explored the relationship between the genetic subtype signatures and genetic abnormalities that define each genetic subtype (Figure 3A; Table S6). Within the Validation cohort, we calculated the difference in the subtype signature expression between tumors with and without a particular genetic aberration. We separately analyzed cases with a LymphGen assignment (``classified cases,'' 63%) and those not assigned (``unassigned cases,'' 37%). As expected, classified cases with a subtypedefining genetic feature expressed the corresponding subtype signature more highly than cases without that feature. Remarkably, the unassigned cases behaved similarly for most subtype features, suggesting that the subtype signatures can identify unassigned cases that are phenotypically and genetically related to a particular subtype.
+Finally, we investigated whether the genetic subtype signatures captured known relationships between the subtypes and survival following chemotherapy.3,5 As expected, signatures of ABC-associated subtypes (MCD, BN2, N1, A53) were associated with adverse survival, whereas signatures of the GCB-associated subtypes (EZB, ST2) were associated with favorable survival, reflecting COO correlations (Figures 3B and S2E). Among ABC cases, those with high MCD signature expression had adverse survival and those with high BN2 signature expression
+
+Cancer Cell 44, 1­19, March 9, 2026 5
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+
+Figure 3. Association between subtype signatures and genetic features (A) Association between subtype signature scores and genetic features characteristic of a genetic subtype as defined by the LymphGen algorithm.5 Cases are divided into those that are classified (left bars) into a LymphGen subtype or are unclassified (right bars). The x axis is the subtype signature score (mean and SE) of cases with the genetic feature relative to those without. p value is based on t test. (B) Kaplan-Meier curve of the validation cohort separating cases based on a cutoff of their subtype signature score. p value based on log rank test. See Figure S2; Table S6.
+
+had favorable survival, in accordance with previous survival associations of these subtypes (Figure 3B).3,5
+Phenotypically distinct genetic subclones in DLBCL tumors We next investigated phenotypic heterogeneity among the malignant cells in each DLBCL biopsy, which could arise by either genetic or epigenetic mechanisms. We used inferred CNVs to define intratumoral genetic subclones since CNVs are frequent drivers in DLBCL.51,52 Unexpectedly, in most biopsies, we detected multiple CNV patterns, suggesting the presence of genetic subclones. The CNV profiles of larger subclones were evident in the bulk tumor, lending credence to the inferred CNVs (Figures 4A and S1D). To identify CNVs that might alter the malignant phenotype, we merged clusters with similar gene
+
+expression profiles, resulting in 242 subclones across this DLBCL cohort, with most tumors (79%) having multiple subclones (2­5), irrespective of the DLBCL subtype or prior treatment (Figures 4B, S3A, and S3B; Table S1).
+To identify biological differences among subclones, we calculated a subclone ``deviance'' score as the average signature expression in that subclone normalized to the average signature expression across all malignant cells from the same tumor. We clustered the signatures in SignatureDB by these deviance scores, yielding six meta-signatures that we term gene expression themes (Figure S3C; Table S7). Four themes were related to B cell differentiation (GC B cell, memory B cell, plasma cell, and pan-B cell), while two were related to malignant cell proliferation (cell cycle) and metabolism (cell growth). The B cell differentiation themes were not highly correlated, whereas the cell
+
+6 Cancer Cell 44, 1­19, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+Figure 4. Identification of intra-tumoral genetic and phenotypic heterogeneity (A) Representative cases with 1­5 genetic subclones. Heatmaps show average non-diploid DNA copy number profiles inferred from scRNA-seq (black outline) or paired bulk WES (gray outline). (B) Percent of samples with 1­5 genetic subclones. (C) Pearson correlation of the theme scores across malignant B cells. (D) Normalized scRNA-seq theme scores in tonsils. (E) Top heatmap shows the expression of 100 genes most highly correlated with each theme across genetic subclones. Bottom heatmap summarizes the average expression of these genes. Genetic subclones are ordered into phenotypic groups A­H. (F) Circos plot of the bottom heatmap from (E). Circos lines connect subclones based on phenotype groups A­H from (E). Subclone label color indicates cases that contain multiple phenotype groups (black) or not (colored). See Figures S1 and S3; Tables S1 and S7.
+Cancer Cell 44, 1­19, March 9, 2026 7
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+growth and cell cycle themes were correlated (R = 0.80) but were nevertheless distinguishable by their expression patterns (Figure 4C).
+The B cell differentiation themes appropriately distinguished normal tonsillar B cell subpopulations, while the cell cycle and cell growth themes were expressed highest in cycling GC dark zone cells (Figure 4D). By contrast, the Ecotyper B cell states were more broadly expressed across these normal B cell subpopulations (Figure S3D) and did not correlate well with the gene expression themes (Figure S3E).
+The GC B cell theme is composed of genes upregulated in normal GC B cells--including MME (CD10), LRMP,53 MYBL1,54 and NR3C155,56--as well as DLBCL tumor suppressors, TOX and ITPKB.3,5 (Figure 4E; Table S7). Genes upregulated in normal memory and pre-memory B cells44 constituted the memory B cell theme, encoding chemokine receptors mediating memory B cell migration (CCR6 and S1PR1),57,58 a regulator of cellular quiescence (KLF2) needed for memory B cell generation,59,60 and an inhibitory receptor that attenuates BCR signaling in memory B cells (SIGLEC6).61 The plasma cell theme includes PRDM114,62 along with targets of IRF422 (P4HB, HSP90B1, SEC11C, and FKBP11) and XBP163 (SSR3, PDIA4, SEC61A1, and PRDX4). The pan-B cell theme includes genes expressed throughout B cell differentiation (PAX5, MS4A1, and CD22).64,65
+The cell cycle theme includes genes expressed in proliferating cells and silent in quiescent cells.66­68 The related but distinct cell growth theme includes genes regulating glycolysis (ENO1, PGAM1, LDHA, LDHB, TPI1, and GAPDH), aerobic metabolism (NDUFAB1, COX5A, CYC1, and UQCRQ), protein turnover (PSMA2 and PPIA), and other genes that support the increase in cell size characteristic of DLBCL (NME1, NPM1, and TXN2). Tellingly, the cell growth theme is enriched for genes induced by MYC (24%),39 including a number of direct MYC targets (ENO1, PGAM1, LDHA, NME1, and NPM1).35
+To visualize differential expression of the six themes among the subclones, we first clustered the subclones by expression of the B cell differentiation themes and then by the cell cycle and cell growth themes (Figure 4E; Table S7). The phenotypic relationship of subclones within the same tumor revealed a variety of clonal trajectories (Figure 4F). A recurrent trajectory involved subclones that maintained the same B cell differentiation theme but varied in expression of the cell cycle and/or cell growth themes. Some tumors harbored subclones that differentially expressed the plasma cell or memory B cell themes, while others differentially expressed the GC B cell and memory B cell themes.
+To visualize differential expression of the gene expression themes in single cells, we first constructed a UMAP representation among 93,121 malignant cells from 98 samples based on expression of all genes, resulting in 8 nearest neighbor clusters (Figure 5A). Expression of each theme coincided with particular clusters, demonstrating that the themes captured major aspects of phenotypic variation in DLBCL malignant cells. By contrast, the genetic subtype distribution among the malignant cells was more evenly spread (Figures 5A and S3F), implying that the subtype signatures and the gene expression themes capture distinct layers of phenotypic heterogeneity among malignant DLBCL cells.
+We also used this UMAP projection to highlight cells from subclones within individual DLBCL tumors (Figure 5B). Cells from
+
+subclone-1 of the GCB tumor sc-54 expressed the GC B cell, cell cycle, and cell growth themes highly and were enriched in UMAP cluster-0 and cluster-3, whereas cells from subclone-2 expressed the plasma cell theme and were enriched in UMAP cluster-5. For the GCB tumor sc-74, subclone-1 cells expressed the memory B cell theme and were enriched in UMAP cluster-6, whereas subclone-2 cells expressed the GC B cell theme and were enriched in UMAP cluster-0.
+The above suggested that the subclonal structure of DLBCL tumors might account for a significant fraction of theme variance. We compared theme variance in tumors with subclones (n = 82) with theme variance in monoclonal tumors (n = 21) and observed greater variance of each theme in the polyclonal tumors (Figure 5C, p < 0.005). Nonetheless, theme expression did vary in monoclonal tumors, albeit to a lesser degree than in polyclonal tumors, with the cell cycle and memory B cell themes displaying the greatest variance.
+We identified predicted tumor subclones in situ by multi-color immunofluorescence imaging of tumor biopsies using antibodies against the protein products of theme genes (Figure 5D). In tumors with one subclone expressing the plasma cell theme highly and another expressing the cell cycle theme (sc-51, sc-71, and sc-54), imaging revealed a subpopulation that expressed the plasma cell marker Blimp-1 highly, with low expression of the B cell marker CD19 and eccentric nuclei, consistent with plasma cell differentiation.62 Blimp-1 intensity varied in the plasmacytic subclones, suggesting a range of differentiation from plasmablastic to more plasmacytic.69 The plasmacytic subpopulations were distinct from subpopulations expressing the cell cycle marker Ki-67, consistent with Blimp1-mediated suppression of proliferation.62 Another tumor (sc40) had a dominant subclone expressing the memory B cell theme and a minor subclone expressing the cell cycle theme. Imaging confirmed the presence of one subpopulation expressing memory B cell markers (CD21 and CD23) and another expressing Ki-67. Tumor sc-74 had a dominant subclone expressing the memory B cell theme and a minor one expressing the GC B cell theme, which was mirrored in situ by detection of memory B cell (CD21 and CD23) and GC B cell (TOX) markers in separate subpopulations.
+Association of gene expression themes with lymphoma pathogenesis and survival To explore the biological and clinical implications of the gene expression themes, we adapted the themes for bulk RNA-seq (Figure S4). In the Validation cohort, the plasma cell theme was upregulated in the BN2 and ST2 subtypes, the memory B cell theme was prominent in N1, and the GC B cell theme was higher in both EZB-DH and EZB-nonDH (Figure 6A). The cell cycle and cell growth themes were upregulated in MCD and EZB-DH but were downregulated in N1 and EZB-nonDH.
+We used ANOVA models to determine the contribution of each of the themes to the variance of each of the subtype signatures, a method that also estimates the residual variance of each subtype signature that is not explained by the themes (Figure 6B). ANOVA models of each subtype signature had residual variance that could not be explained by the themes, ranging from 17% in EZB to 79% in BN2, meaning that the subtype signatures captured biological attributes not accounted for by the themes.
+
+8 Cancer Cell 44, 1­19, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+Figure 5. Visualization of intra-tumor heterogeneity (A) UMAP of malignant B cells. (B) Two representative cases from (A). (C) Sample variance in scRNA-seq theme score expression. Bars show mean and SE. p value based on two-sided t test. ***p < 0.001, ****p < 0.0001. (D) Multiplex immunofluorescence of selected markers of gene expression themes. See Figure S3.
+Cancer Cell 44, 1­19, March 9, 2026 9
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+Figure 6. Functional consequence of genetic alterations associated with gene expression themes (A) Theme score of the validation cohort bulk RNA-seq. Bar plots show mean and SE. (B) ANOVA of the variance of the subtype signatures and gene expression themes. Positive proportions depict positive association, and negative values depict negative associations. (C) Kaplan-Meier plots for overall survival, grouped by the quartiles of theme expression. p values are based on log rank test. (D) Comparison of cell cycle theme scores in cases with to cases without a genetic feature in the Validation cohort. Each dot is one genetic feature. (E) Cell cycle theme score in subclones with or without CDKN2A deletion. (F) Same as (D). (G) Memory B cell theme score in subclones with or without a REL amplification. (H) Two representative samples from (G). UMAPs are subset from Figure 5A. (I) TF motif enrichment of subclones from (G) with a REL amplification to those without. p value based on hypergeometric test. (J) Toxicity of IB super-repressor in DLBCL cell lines (at least 2 replicates) 7 days after transduction.
+(legend continued on next page) 10 Cancer Cell 44, 1­19, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+As expected, the GC B cell theme was associated with favorable overall survival in the Validation cohort.1,51,70 Interestingly, the cell growth theme was significantly associated with adverse survival (p = 1.55 × 10- 2), yet the cell cycle theme was not (p = 0.15), highlighting the biological differences between these two themes despite their moderately correlated expression (Figure 6C).
+Genetic alterations driving expression of biological themes To discover recurrent genetic features of DLBCL tumors that drive theme expression, we determined the expression of each theme in Validation cohort cases with and without a somatic genetic alteration (mutation and/or copy number alteration, Table S8) and confirmed these findings in the scRNAseq subclones. Deletion of the CDKN2A tumor suppressor locus was associated with high expression of the cell cycle theme (p < 1 × 10- 9; Figure 6D; Table S8), which is understandable since this locus encodes the cell cycle inhibitor p16. CDKN2A deletion was a feature in 8 of 13 subclones from 4 cases, and these subclones expressed the cell cycle theme more highly than those without this alteration (Figure 6E). We further identified an association between truncating NOTCH1 mutations and memory B cell theme expression (p < 10- 9, Figure 6F; Table S8), which is understandable given that NOTCH1 mutations define the N1 subtype (Figures 2I and 3A).
+Unexpectedly, low memory B cell theme expression was associated with amplification of REL, encoding the NF-B subunit c-Rel (p < 10- 5; Figure 6F). CNV analysis revealed REL amplification in 10 of 17 subclones from 5 cases, and these subclones had lower expression of the memory B cell theme than subclones without this amplification (p = 0.02; Figures 6G and 6H). scATAC-seq analysis demonstrated that open chromatin in REL-amplified subclones was enriched for NF-B motifs (Figure 6I; Table S8).
+REL amplification occurs frequently in GCB tumors (20%­ 25%),5,51 suggesting that this amplicon may promote lymphomagenesis by blocking terminal differentiation of GC B cells into memory B cells. To explore this functionally, we identified four GCB lines with REL amplification and high REL mRNA expression. As negative controls, we studied three GCB lines without REL amplification, and as positive controls, we studied two ABC lines with nuclear REL-containing NF-B71 that die upon REL inactivation.30 To determine the essentiality of REL in these lines, we ectopically expressed an IB isoform, dubbed superrepressor, that cannot be phosphorylated by IB kinase, thereby blocking NF-B nuclear translocation.71 The IB superrepressor was highly toxic to REL-amplified GCB lines and ABC lines but not to GCB lines with wild-type REL (p = 4.9 × 10- 5; Figure 6J). The IB super-repressor induced expression of a previously defined memory B cell signature (Bmem-2)64 and the memory B cell theme in REL-amplified GCB lines and ABC lines but not in GCB lines with wild-type REL (Figure 6K). These observations support the finding that REL amplification in GCB and REL activity in ABC blocks memory B cell differentiation.
+
+Gene regulatory networks during normal B cell differentiation We integrated scRNA-seq and scATAC-seq to infer TF networks in normal and malignant lymphocytes using the SCENIC+ algorithm.72 SCENIC+ identifies enhancer-driven regulons (eRegulons) that link a TF to its direct target genes, separating those that are induced by the TF (+/+ eRegulon) from those that are repressed (- /+ eRegulon). For each TF eRegulon and each sample, SCENIC+ generates an RNA enrichment score (RNA AUC) measuring eRegulon target gene expression and an ATAC enrichment score (ATAC AUC) measuring chromatin accessibility of TF-binding motifs in eRegulon promoters and enhancers.
+Application of SCENIC+ to tonsillar samples identified 173 TF eRegulons, each comprising 10­296 target genes (median 39) and 9­585 open chromatin regions (median 48) near these target genes (Figure 7A; Table S9). A subset of eRegulons was specifically active in GC light zone (LZ) and dark zone (DZ) cells (Figure 7B). The TCF3 eRegulon had higher enrichment scores in GC DZ than in GC LZ cells, consistent with its role of expanding GC DZ B cells.73 Low expression of a BACH2- /+ eRegulon in GC B cells was consistent with its function as a transcriptional repressor that promotes GC B cell function (Figure 7B).74,75 The IRF4+/+ and XBP1+/+ eRegulons were enriched in plasma cells, consistent with their roles in plasmacytic differentiation and the secretory phenotype, respectively (Figure 7B).42,63,76,77 Plasma cells were also enriched for a PRDM1+/+ eRegulon, consistent with its ability to both activate and repress target genes.78 Memory B cells were enriched for KLF2+/+ and STAT1+/+ eRegulons, consistent with their roles in maintaining quiescence of B cells79 and hematopoietic stem cells,80 respectively.
+To investigate how these eRegulons change during B cell differentiation, we applied the Slingshot algorithm to infer lineage trajectories based on transcriptional gradients.81 In differentiation path #1, resting B cells (naive or memory) differentiate into centrocytes and then to centroblasts, with accompanying changes in the TCF3+/+ and MYBL1+/+ eRegulons (Figures 7C and 7D). In differentiation path #2, resting B cells differentiate into centrocytes and then plasma cells, correlating with a gradient of XBP1+/+ and PRDM1+/+ eRegulon enrichment. In differentiation path #3, naive B cells differentiate into centrocytes and then terminally differentiate into memory B cells. In this path, the KLF2+/+ and ETV6+/+ eRegulons are high in naive cells, decrease in centrocytes, and then rise again in memory B cells. Together, these observations demonstrate that eRegulons recapitulate the known regulatory biology of B cell differentiation.
+Epigenetic landscape associated with DLBCL biological themes and genetic subtypes We next identified transcriptional networks responsible for the DLBCL genetic subtype signatures and biological themes, using two independent approaches. First, we used ArchR82 to calculate, for each malignant cell, enrichment scores for TF DNA-binding motifs (n = 812) within ATAC-accessible genomic regions. We computed the average enrichment score for each TF motif
+
+(K) Fold change of signature expression in cell lines transduced with super-repressor relative to empty vector. Bmem-2 signature from Newman et al.64 Bars in (J and K) show the mean and SE. p values in (A and K) are based on a two-sided t test, in (D, F, and K) on a one-sided t test, and in (E, G, and H) on a Wilcoxon test. See Figure S4, Table S8.
+Cancer Cell 44, 1­19, March 9, 2026 11
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+
+Figure 7. Gene regulatory networks of normal B cell populations (A) UMAP of scRNA-seq from 6 tonsils. (B) eRegulon enrichment scores. Shown are eRegulons with significantly higher RNA or ATAC AUC scores (p < 0.05). (C) UMAP of tonsillar B cell scRNA-seq (n = 3) colored by pseudotime metric. Cells colored gray were not part of the inferred pseudotime path. (D) LOESS correlation of RNA and ATAC AUC scores with the inferred pseudotime metrics. See Table S9.
+
+across the subclones and identified correlations between these scores and expression of genetic subtype signatures, gene expression themes, and COO. Clustering revealed groups of TFs that were correlated with one or more of these signatures and might contribute to the observed phenotype (Figure 8A). One cluster (Figure 8A, blue) that was correlated with the MCD, BN2, and A53 signatures and with the plasma cell, cell cycle, and cell growth themes included motifs for TFs that regulate plasma cell differentiation (IRF4, POU2F2, and TCF4).42,83,84 Another cluster (Figure 8A, orange) that correlated with the EZB signature and the GC B cell theme included motifs of TFs active in GC B cells (FOXO1, MYBL1, STAT6, and PAX5).54,85­ 87 The remaining two clusters (Figure 8A, green) were correlated with the N1 and memory B cell signatures. BCL6 motif accessibility was anticorrelated with the N1 and memory B cell signatures, consistent with loss of BCL6 function during memory B cell differentiation.45
+In a second analysis, we inferred SCENIC+ eRegulons from each DLBCL subclone and normal B cell subpopulation to identify TF eRegulons associated with each genetic subtype and to compare eRegulon usage by normal and malignant B cells.
+
+This procedure yielded 289 TF eRegulons encompassing 10­ 253 target genes (median 32) and 9­719 open chromatin regions (median 43) (Table S10).
+To assess TF Regulon usage across malignant B cell subclones, we integrated the RNA AUC and ATAC AUC metrics into a single ``latent factor'' representation for each eRegulon using multiomics factor analysis (MOFA+),88 which was visualized in a UMAP (Figure 8B). One major axis of variation (UMAP1) highlighted the ABC and GCB dichotomy, while the other axis (UMAP2) distinguished the tonsillar subpopulations from malignant B cell subclones. This UMAP representation separated the ABC subtypes (MCD, A53, BN2, and N1) and the GCB subtypes (EZB and ST2) from one another. Indeed, a substantial set of eRegulons had higher AUC enrichment scores (p < 0.05) in subclones of a particular genetic subtype (Figure 8C). For many TFs, both +/+ and - /+ eRegulons were associated with the same subtype, with, respectively, higher and lower gene expression and chromatin accessibility in that subtype. The subtype associated TF eRegulons were differentially active in normal B cell subpopulations and were correlated with the B cell differentiation themes (Figures S5A and S5B). Many of the TFs whose
+
+12 Cancer Cell 44, 1­19, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+Figure 8. Chromatin landscape of DLBCL (A) Pearson correlation of gene expression signatures (columns) and TF motif enrichment scores in open chromatin (rows). (B) (Upper) Schematic integration of RNA and ATAC AUC scores to generate latent factor representation. (Lower) UMAP of resulting latent space. (C) Comparison of RNA AUC and ATAC AUC scores for eRegulons with significant differences in both metrics (p < 0.05, Wilcoxon test) in the single-cell cohort. TF mRNA expression is from the validation cohort.
+(legend continued on next page) Cancer Cell 44, 1­19, March 9, 2026 13
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+eRegulons were more active in a particular genetic subtype were themselves expressed at higher mRNA levels in that subtype (Figure 8C). Fittingly, the REL+/+ eRegulon was significantly more active in GCB subclones with REL amplification than in subclones with wild-type REL (Figure 8D).
+These analyses suggest a mechanistic model of gene regulation in DLBCL genetic subtypes in which transcriptional states vary along three principal differentiation axes--GC B cell, memory B cell, and plasma cell--under the influence of TFs that regulate normal B cell differentiation (Figure 8E). In this model, EZB and ST2 utilize GC B cell regulatory networks; MCD, A53, and BN2 utilize plasma cell regulatory networks; and N1 utilizes memory B cell regulatory networks.
+Specifically, the EZB and ST2 subtypes were associated with MEF2B+/+ and MEF2C+/+ eRegulons, in keeping with their required role in GC B cell differentiation,89­91 and IRF8 eRegulons, consistent with its role in activating BCL6 in GC B cells92 (Figure 8C). Association of these subtypes with a FOXO1+/+ eRegulon fits with gain-of-function FOXO1 mutations in EZBDH that promote a GC-DZ phenotype.5,85,93,94 A glucocorticoid receptor, NR3C1- /+ eRegulon, had low values in EZB and ST2 (Figure 8C) and in normal GC B cells (Figure S5A), consistent with nuclear localization of the glucocorticoid receptor in GC B cells and its control of constitutive BCR signaling and apoptosis in GC-derived lymphomas.55,56,95 ST2 was distinguished from EZB by a STAT6+/+ eRegulon, suggesting that IL-4 may activate STAT6 in ST2 as in GC B cells, thereby diminishing BCL6 function.96 ST2 acquires inactivating SOCS1 mutations,5 which potentiate IL-4 receptor signaling.
+MCD, A53, and BN2 were enriched for an IRF4+/+ eRegulon (Figure 8C). IRF4 expression was upregulated in these subtypes (p < 0.001, Figure S5C), presumptively due to chronic active BCR signaling.22,34 IRF4 pairs with BATF to bind a composite IRF-AP1 (AICE) motif.97,98 Accordingly, open chromatin bearing this motif was correlated with the MCD signature (Figure 8A) and a BATF+/+ eRegulon was enriched in MCD (p < 0.001, Figure 8C). IRF4 also pairs with SPIB to bind composite IRFETS (EICE) motifs,22 and accordingly, SPIB eRegulons were associated with MCD and A53 in ABC tumors. PRDM1 eRegulons were also associated with MCD. TCF4 promotes plasmacytic differentiation84 and MCD cell viability,23 which fits with lower activity of a TCF4- /+ eRegulon in MCD and A53 subclones. Lastly, an XBP1- /+ eRegulon was downregulated in MCD subclones.
+The regulatory biology of memory B cells was reflected in TF motif enrichment for known regulators of this differentiation state, including BACH2, which promotes memory B cell formation by silencing PRDM1 and blocking plasmacytic differentiation.47,74 Accordingly, BACH2-binding motif accessibility was negatively correlated with the GC and memory B cell themes and positively correlated with the plasma cell theme (Figure 8A). The BACH2- /+ eRegulon was suppressed in EZB subclones (Figure 8C). Conversely, a STAT1+/+ eRegulon was more active in normal memory B cells and in N1 subclones, possibly due to IL-21-mediated activation of STAT1 in the GC.99 KLF2-binding
+
+motif accessibility was correlated with the memory B cell theme and the N1 signature (Figure 8A), consistent with the observation that humans deficient in KLF2 have few memory B cells.59
+Our eRegulon analysis provided insights into two tumor suppressors, TBL1XR1 and ETV6, which are each targeted by mutations and deletions in more than a third of N1 and MCD tumors.5 Both TFs associate with the NCOR/SMRT co-repressor complex,100,101 and accordingly, TBL1XR1- /+ and ETV6- /+ eRegulon levels were lower in N1 and MCD subclones than in other subclones (Figure 8C). Thus, both transcriptional repressors are active in N1 and MCD, suggesting that their frequent inactivation in these subtypes promotes their malignant phenotypes.
+DISCUSSION
+Our multi-modal single-cell analysis of DLBCL tumors sheds light on the pathogenesis of this aggressive cancer, illuminating axes of phenotypic variation that we link to defined biological concepts. An important open question from a therapeutic standpoint is whether the genetic subtypes should be considered phenotypically distinct forms of DLBCL or simply divergent genetic routes to achieve similar epigenetic endpoints. For example, given that chronic active BCR signaling stimulates the NF-B pathway in ABC tumors,34,102 one might expect the ABC genetic subtypes--MCD, A53, BN2, and N1--to have similar gene expression phenotypes, dominated by NF-B target genes. Although NF-B target genes are upregulated in these subtypes, each had a distinctive gene expression signature across three independent DLBCL cohorts. ROC analysis demonstrated that these subtype signatures can readily distinguish the genetic subtypes within ABC and within GCB DLBCL.
+On one hand, the genetic subtype signatures could arise due to the action of the distinctive genetic lesions in each subtype. An alternate, non-mutually exclusive hypothesis is that the DLBCL genetic subtypes adopt the phenotype of B cells at different stages of differentiation, either due to direct descent from that B cell subpopulation or because their acquired genetic alterations push malignant B cells along a particular differentiation trajectory. Our joint analysis of scATAC-seq and scRNAseq data revealed regulatory networks highly reminiscent of those that specify distinct B cell differentiation stages. Patterns of chromatin accessibility among several genetic subtypes-- MCD, A53, and BN2--reflected plasmacytic differentiation, likely due to their utilization of autoreactive BCRs that initiate chronic active BCR signaling, thereby upregulating IRF4, the master regulator of plasmacytic differentiation.5,22,42,103,104 These tumors are prevented from terminal plasmacytic differentiation by PRDM1 inactivation, either by mutations, focal homozygous deletions, or deletion of chromosome arm 6q harboring PRDM1. Thus, MCD, A53, and BN2 experience strong selective pressure to inactivate PRDM1 and block full plasmacytic differentiation.5 On the other hand, another ABC subtype, N1, does not utilize autoreactive BCRs5 and epigenetically resembles memory B cells.5,9 More specifically, N1 tumors express
+
+(D) ATAC AUC scores for the REL+/+ eRegulon in subclones with REL amplification or wild-type REL from Figure 6G. Boxplots show the median, first/third quartiles, and 1.5 × IQR. p value is based on a Wilcoxon test. (E) Model of the regulatory network underpinning the DLBCL genetic subtypes. See Figure S5; Table S10.
+14 Cancer Cell 44, 1­19, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+canonical makers (CD11C, CXCR4, and T-Bet) of a self-renewing memory B cell subpopulation termed atypical, age-associated, or autoimmune.9 Among GCB tumors, the EZB and ST2 subtypes were distinguished by association of a FOXO1 eRegulon in EZB and a STAT6 eRegulon in ST2. These observations suggest that the regulatory biology of normal B cell differentiation plays an outsized role in the phenotypes of the DLBCL genetic subtypes.
+The potential clinical utility of the subtype signatures relates to their ability to classify tumors that have insufficient genetic evidence to be assigned by LymphGen to a subtype. Among such tumors, those with genetic lesions characteristic of a particular genetic subtype had elevated expression of the corresponding subtype signature. Since the subtype signatures recapitulated known relationships between the genetic subtypes and outcome following R-CHOP chemotherapy,3,5 they could enable a rapid molecular diagnosis to stratify patients for different treatment options. For example, this approach could inform decisions to add a BTK inhibitor to chemotherapy for patients with newly diagnosed MCD and N1 DLBCL6 or for patients with primary and secondary central nervous system lymphomas with an MCD phenotype7,8 and to guide the use of the ViPOR combination regimen for patients with MCD and EZB-DH tumors.10
+Our study of intratumoral variation in DLBCL revealed subclones with distinct CNV profiles that drive expression of gene expression signatures of B cell differentiation, cell cycle, and cell growth. While the responsible driver genes affected by many of these copy number alterations are unknown, we were able to convincingly relate CDKN2A deletion to high expression of the cell cycle theme and REL amplification to low expression of the memory B cell theme. Notably, REL-amplified DLBCL models were highly sensitive to REL inactivation, potentially due to the ability of REL to sustain metabolism and cell division, as in normal GC B cells.105 Normal memory B cells are smaller and more quiescent than most GC B cells, presumably due to suboptimal T cell help, resulting in low mTORC1 activation and MYC expression.106 Therefore, our working hypothesis is that REL amplification in GCB tumors promotes a metabolic state that antagonizes memory B cell differentiation.
+Analysis of DLBCL subclones revealed an important distinction between a cell cycle phenotype and a cell growth phenotype, with adverse survival following R-CHOP therapy associated with high expression of the cell growth but not the cell cycle theme. This observation harkens back to a previous gene expression signature, confusingly termed the Proliferation signature,70 which included MYC and its direct target genes (NPM3 and E2IG3), and was also associated with adverse survival.35 The cell growth theme is dominated by genes that are directly bound and transactivated by MYC,35 suggesting that adverse survival in DLBCL following chemotherapy is associated with a MYC-driven metabolic state, as noted in other cancer types.107
+In sum, our multiplatform single-cell profiling of DLBCL has proven to be a rich resource for biological discovery and will be a valuable resource for the research community to probe questions of lymphoma pathogenesis that can only be addressed by single-cell analysis. We anticipate that future incorporation of single-cell profiling into prospective clinical trials will allow us to gauge whether therapy selects for phenotypic dif-
+
+ferences in malignant and non-malignant tumor cells, as seems likely.
+RESOURCE AVAILABILITY
+Lead contact Requests for further information should be directed to the lead contact, Louis M. Staudt (lstaudt@mail.nih.gov).
+Materials availability This study did not generate new unique reagents.
+Data and code availability The Discovery cohort 1 scRNA-seq, scATAC-seq, bulk RNA-seq, and WES are deposited in EGAS50000001227. Publicly available data include Discovery cohort 2,19,108 Validation cohort,3 and tonsil scRNA-seq.46 Additional information and code is available from the lead contact upon request.
+ACKNOWLEDGMENTS
+This work was supported by Intramural Research Program of the Center for Cancer Research, National Cancer Institute, National Institutes of Health, and Supplemental Technology Award Review System. The study used NIH Biowulf Linux cluster, CCR Single Cell Analysis Facility, CCR Genomics Technology Laboratory, and CCR Sequencing Facility. B.W is supported by NIHOxford-Cambridge Scholars Program and University of North Carolina T32 MSTP grant. J.C.E is supported by Deutsche Krebshilfe (70116591) and Deutsche Forschungsgemeinschaft 455784452 (SFB1530), an SFB1530 Clinician Scientist Grant, and EN 1338/1-1.
+AUTHOR CONTRIBUTIONS
+Conceptualization, L.M.S., G.I., A.S.III, T.O., B.W., G.W., and J.C.E.; experiments and analysis, B.W., G.W., J.C.E., X.Y., J.D.P., Y.Y., A.S.III, A.E.R., D.W.H., Z.C., M.K., and B.T.; provision of clinical samples, S.P., M.K., W.H.W., and G.I.; writing and editing, L.M.S., B.W., G.W., J.C.E., and G.I.
+DECLARATION OF INTERESTS
+T.O. received funding from Gilead and Merck KGaA, Beigene, Roche, Janssen, Kronos Bio, and Abbvie (all not related to this work). A.S III is a current employee at AstraZeneca and has stock options.
+STARMETHODS
+Detailed methods are provided in the online version of this paper and include the following:
+· KEY RESOURCES TABLE · EXPERIMENTAL MODEL AND STUDY PARTICIPANT DETAILS
+ Human participants  Cell lines
+· METHOD DETAILS
+ Analysis of bulk tumor sequencing  Surface and intracellular staining for FACS  Sample preparation and single cell RNA and ATAC-seq  Multiplex immunofluorescence tissue staining and image acqui-
+sition  Virus production  IB super-repressor
+· QUANTIFICATION AND STATISTICAL ANALYSIS
+ Processing of scRNA-seq data  B cell clonotype  Gene expression analysis of bulk and single cell RNA  Adjustment for suspension batch effects  Copy number analysis of scRNA-seq  Refinement of inferCNV clusters into subclones  Identification of single cell CNV
+
+Cancer Cell 44, 1­19, March 9, 2026 15
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+ Development of LymphGen subtype signature scores  ROC analysis  Survival analysis for LymphGen subtype signature scores  Evaluation of the association between subtype signature score and
+other signatures  Tumor microenvironment analysis  DLBCL UMAP visualizations  Analysis of tonsil B cells  Determination of ecotype B cell states  Analysis of scATAC-seq  Inference of enhancer-driven gene-regulatory networks by SCENIC+  Development of gene expression themes of subclonal variation  ANOVA analysis of the relationship between theme and subtype
+signature  Association of themes and LymphGen scores with genomic alter-
+ations
+SUPPLEMENTAL INFORMATION
+Supplemental information can be found online at https://doi.org/10.1016/j. ccell.2025.12.015.
+Received: January 6, 2025 Revised: June 16, 2025 Accepted: December 15, 2025
+REFERENCES
+1. Alizadeh, A.A., Eisen, M.B., Davis, R.E., Ma, C., Lossos, I.S., Rosenwald, A., Boldrick, J.C., Sabet, H., Tran, T., Yu, X., et al. (2000). Distinct types of diffuse large B-cell lymphoma identified by gene expression profiling. Nature 403, 503­511.
+2. Chapuy, B., Stewart, C., Dunford, A.J., Kim, J., Kamburov, A., Redd, R.A., Lawrence, M.S., Roemer, M.G.M., Li, A.J., Ziepert, M., et al. (2018). Molecular subtypes of diffuse large B cell lymphoma are associated with distinct pathogenic mechanisms and outcomes. Nat. Med. 24, 679­690.
+3. Schmitz, R., Wright, G.W., Huang, D.W., Johnson, C.A., Phelan, J.D., Wang, J.Q., Roulland, S., Kasbekar, M., Young, R.M., Shaffer, A.L., et al. (2018). Genetics and Pathogenesis of Diffuse Large B-Cell Lymphoma. N. Engl. J. Med. 378, 1396­1407.
+4. Lacy, S.E., Barrans, S.L., Beer, P.A., Painter, D., Smith, A.G., Roman, E., Cooke, S.L., Ruiz, C., Glover, P., Van Hoppe, S.J.L., et al. (2020). Targeted sequencing in DLBCL, molecular subtypes, and outcomes: a Haematological Malignancy Research Network report. Blood 135, 1759­1771.
+5. Wright, G.W., Huang, D.W., Phelan, J.D., Coulibaly, Z.A., Roulland, S., Young, R.M., Wang, J.Q., Schmitz, R., Morin, R.D., Tang, J., et al. (2020). A Probabilistic Classification Tool for Genetic Subtypes of Diffuse Large B Cell Lymphoma with Therapeutic Implications. Cancer Cell 37, 551­568.e14.
+6. Wilson, W.H., Young, R.M., Schmitz, R., Yang, Y., Pittaluga, S., Wright, G., Lih, C.J., Williams, P.M., Shaffer, A.L., Gerecitano, J., et al. (2015). Targeting B cell receptor signaling with ibrutinib in diffuse large B cell lymphoma. Nat. Med. 21, 922­926.
+7. Lionakis, M.S., Dunleavy, K., Roschewski, M., Widemann, B.C., Butman, J.A., Schmitz, R., Yang, Y., Cole, D.E., Melani, C., Higham, C.S., et al. (2017). Inhibition of B Cell Receptor Signaling by Ibrutinib in Primary CNS Lymphoma. Cancer Cell 31, 833­843.e5.
+8. Grommes, C., Pastore, A., Palaskas, N., Tang, S.S., Campos, C., Schartz, D., Codega, P., Nichol, D., Clark, O., Hsieh, W.Y., et al. (2017). Ibrutinib Unmasks Critical Role of Bruton Tyrosine Kinase in Primary CNS Lymphoma. Cancer Discov. 7, 1018­1029.
+9. Wilson, W.H., Wright, G.W., Huang, D.W., Hodkinson, B., Balasubramanian, S., Fan, Y., Vermeulen, J., Shreeve, M., and Staudt,
+16 Cancer Cell 44, 1­19, March 9, 2026
+
+L.M. (2021). Effect of ibrutinib with R-CHOP chemotherapy in genetic subtypes of DLBCL. Cancer Cell 39, 1643­1653.e3.
+10. Melani, C., Lakhotia, R., Pittaluga, S., Phelan, J.D., Huang, D.W., Wright, G., Simard, J., Muppidi, J., Thomas, C.J., Ceribelli, M., et al. (2024). Combination Targeted Therapy in Relapsed Diffuse Large B-Cell Lymphoma. N. Engl. J. Med. 390, 2143­2155.
+11. Aibar, S., Gonza´ lez-Blas, C.B., Moerman, T., Huynh-Thu, V.A., Imrichova, H., Hulselmans, G., Rambow, F., Marine, J.C., Geurts, P., Aerts, J., et al. (2017). SCENIC: single-cell regulatory network inference and clustering. Nat. Methods 14, 1083­1086.
+12. Ma, R.Y., Black, A., and Qian, B.Z. (2022). Macrophage diversity in cancer revisited in the era of single-cell omics. Trends Immunol. 43, 546­563.
+13. Patel, A.P., Tirosh, I., Trombetta, J.J., Shalek, A.K., Gillespie, S.M., Wakimoto, H., Cahill, D.P., Nahed, B.V., Curry, W.T., Martuza, R.L., et al. (2014). Single-cell RNA-seq highlights intratumoral heterogeneity in primary glioblastoma. Science 344, 1396­1401.
+14. Holmes, A.B., Corinaldesi, C., Shen, Q., Kumar, R., Compagno, N., Wang, Z., Nitzan, M., Grunstein, E., Pasqualucci, L., Dalla-Favera, R., and Basso, K. (2020). Single-cell analysis of germinal-center B cells informs on lymphoma cell of origin and outcome. J. Exp. Med. 217, e20200483.
+15. Hao, Y., Hao, S., Andersen-Nissen, E., Mauck, W.M., 3rd, Zheng, S., Butler, A., Lee, M.J., Wilk, A.J., Darby, C., Zager, M., et al. (2021). Integrated analysis of multimodal single-cell data. Cell 184, 3573­ 3587.e29.
+16. Roider, T., Seufert, J., Uvarovskii, A., Frauhammer, F., Bordas, M., Abedpour, N., Stolarczyk, M., Mallm, J.P., Herbst, S.A., Bruch, P.M., et al. (2020). Dissecting intratumour heterogeneity of nodal B-cell lymphomas at the transcriptional, genetic and drug-response levels. Nat. Cell Biol. 22, 896­906.
+17. Garnica, J., Sole´ , P., Yamanouchi, J., Moro, J., Mondal, D., Fa´ ndos, C., Serra, P., and Santamaria, P. (2024). T-follicular helper cells are epigenetically poised to transdifferentiate into T-regulatory type-1 cells. eLife 13, RP97665. https://doi.org/10.7554/eLife.97665.
+18. Roider, T., Baertsch, M.A., Fitzgerald, D., Vo¨ hringer, H., Brinkmann, B.J., Czernilofsky, F., Knoll, M., Llao´ -Cid, L., Mathioudaki, A., Faßbender, B., et al. (2024). Multimodal and spatially resolved profiling identifies distinct patterns of T cell infiltration in nodal B cell lymphoma entities. Nat. Cell Biol. 26, 478­489.
+19. Ennishi, D., Jiang, A., Boyle, M., Collinge, B., Grande, B.M., Ben-Neriah, S., Rushton, C., Tang, J., Thomas, N., Slack, G.W., et al. (2019). DoubleHit Gene Expression Signature Defines a Distinct Subgroup of Germinal Center B-Cell-Like Diffuse Large B-Cell Lymphoma. J. Clin. Oncol. 37, 190­201.
+20. Pasqualucci, L., Guglielmino, R., Houldsworth, J., Mohr, J., Aoufouchi, S., Polakiewicz, R., Chaganti, R.S.K., and Dalla-Favera, R. (2004). Expression of the AID protein in normal and neoplastic B cells. Blood 104, 3318­3325.
+21. Lam, L.T., Wright, G., Davis, R.E., Lenz, G., Farinha, P., Dang, L., Chan, J.W., Rosenwald, A., Gascoyne, R.D., and Staudt, L.M. (2008). Cooperative signaling through the signal transducer and activator of transcription 3 and nuclear factor-{kappa}B pathways in subtypes of diffuse large B-cell lymphoma. Blood 111, 3701­3713.
+22. Yang, Y., Shaffer, A.L., 3rd, Emre, N.C.T., Ceribelli, M., Zhang, M., Wright, G., Xiao, W., Powell, J., Platig, J., Kohlhammer, H., et al. (2012). Exploiting synthetic lethality for the therapy of ABC diffuse large B cell lymphoma. Cancer Cell 21, 723­737.
+23. Jain, N., Hartert, K., Tadros, S., Fiskus, W., Havranek, O., Ma, M.C.J., Bouska, A., Heavican, T., Kumar, D., Deng, Q., et al. (2019). Targetable genetic alterations of TCF4 (E2-2) drive immunoglobulin expression in diffuse large B cell lymphoma. Sci. Transl. Med. 11, eaav5599.
+24. Fabbri, G., Holmes, A.B., Viganotti, M., Scuoppo, C., Belver, L., Herranz, D., Yan, X.J., Kieso, Y., Rossi, D., Gaidano, G., et al. (2017). Common nonmutational NOTCH1 activation in chronic lymphocytic leukemia. Proc. Natl. Acad. Sci. USA 114, E2911­E2919.
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+25. Ryan, R.J.H., Petrovic, J., Rausch, D.M., Zhou, Y., Lareau, C.A., Kluk, M.J., Christie, A.L., Lee, W.Y., Tarjan, D.R., Guo, B., et al. (2017). A B Cell Regulome Links Notch to Downstream Oncogenic Pathways in Small B Cell Lymphomas. Cell Rep. 21, 784­797.
+26. Dent, A.L., Shaffer, A.L., Yu, X., Allman, D., and Staudt, L.M. (1997). Control of inflammation, cytokine expression, and germinal center formation by BCL-6. Science 276, 589­592.
+27. Ye, B.H., Cattoretti, G., Shen, Q., Zhang, J., Hawe, N., de Waard, R., Leung, C., Nouri-Shirazi, M., Orazi, A., Chaganti, R.S., et al. (1997). The BCL-6 proto-oncogene controls germinal-centre formation and Th2type inflammation. Nat. Genet. 16, 161­170.
+28. Vilagos, B., Hoffmann, M., Souabni, A., Sun, Q., Werner, B., Medvedovic, J., Bilic, I., Minnich, M., Axelsson, E., Jaritz, M., and Busslinger, M. (2012). Essential role of EBF1 in the generation and function of distinct mature B cell types. J. Exp. Med. 209, 775­792.
+29. Gyory, I., Boller, S., Nechanitzky, R., Mandel, E., Pott, S., Liu, E., and Grosschedl, R. (2012). Transcription factor Ebf1 regulates differentiation stage-specific signaling, proliferation, and survival of B cells. Genes Dev. 26, 668­682.
+30. Phelan, J.D., Young, R.M., Webster, D.E., Roulland, S., Wright, G.W., Kasbekar, M., Shaffer, A.L., 3rd, Ceribelli, M., Wang, J.Q., Schmitz, R., et al. (2018). A multiprotein supercomplex controlling oncogenic signalling in lymphoma. Nature 560, 387­391.
+31. Razzaghi, R., Agarwal, S., Kotlov, N., Plotnikova, O., Nomie, K., Huang, D.W., Wright, G.W., Smith, G.A., Li, M., Takata, K., et al. (2021). Compromised counterselection by FAS creates an aggressive subtype of germinal center lymphoma. J. Exp. Med. 218, e20201173.
+32. Pezzella, F., Tse, A.G., Cordell, J.L., Pulford, K.A., Gatter, K.C., and Mason, D.Y. (1990). Expression of the bcl-2 oncogene protein is not specific for the 14;18 chromosomal translocation. Am. J. Pathol. 137, 225­232.
+33. Shaffer, A.L., Wright, G., Yang, L., Powell, J., Ngo, V., Lamy, L., Lam, L.T., Davis, R.E., and Staudt, L.M. (2006). A library of gene expression signatures to illuminate normal and pathological lymphoid biology. Immunol. Rev. 210, 67­85.
+34. Davis, R.E., Ngo, V.N., Lenz, G., Tolar, P., Young, R.M., Romesser, P.B., Kohlhammer, H., Lamy, L., Zhao, H., Yang, Y., et al. (2010). Chronic active B-cell-receptor signalling in diffuse large B-cell lymphoma. Nature 463, 88­92.
+35. Zeller, K.I., Zhao, X., Lee, C.W.H., Chiu, K.P., Yao, F., Yustein, J.T., Ooi, H.S., Orlov, Y.L., Shahab, A., Yong, H.C., et al. (2006). Global mapping of c-Myc binding sites and target gene networks in human B cells. Proc. Natl. Acad. Sci. USA 103, 17834­17839.
+36. Gustafson, A.M., Soldi, R., Anderlind, C., Scholand, M.B., Qian, J., Zhang, X., Cooper, K., Walker, D., McWilliams, A., Liu, G., et al. (2010). Airway PI3K pathway activation is an early and reversible event in lung cancer development. Sci. Transl. Med. 2, 26ra25.
+37. Schmitz, R., Young, R.M., Ceribelli, M., Jhavar, S., Xiao, W., Zhang, M., Wright, G., Shaffer, A.L., Hodson, D.J., Buras, E., et al. (2012). Burkitt lymphoma pathogenesis and therapeutic targets from structural and functional genomics. Nature 490, 116­120.
+38. Peng, T., Golub, T.R., and Sabatini, D.M. (2002). The immunosuppressant rapamycin mimics a starvation-like signal distinct from amino acid and glucose deprivation. Mol. Cell Biol. 22, 5575­5584.
+39. Shaffer, A.L., Rosenwald, A., Hurt, E.M., Giltnane, J.M., Lam, L.T., Pickeral, O.K., and Staudt, L.M. (2001). Signatures of the immune response. Immunity 15, 375­385.
+40. Mootha, V.K., Lindgren, C.M., Eriksson, K.F., Subramanian, A., Sihag, S., Lehar, J., Puigserver, P., Carlsson, E., Ridderstra° le, M., Laurila, E., et al. (2003). PGC-1alpha-responsive genes involved in oxidative phosphorylation are coordinately downregulated in human diabetes. Nat. Genet. 34, 267­273.
+41. Horton, J.D., Shah, N.A., Warrington, J.A., Anderson, N.N., Park, S.W., Brown, M.S., and Goldstein, J.L. (2003). Combined analysis of oligonu-
+
+cleotide microarray data from transgenic and knockout mice identifies direct SREBP target genes. Proc. Natl. Acad. Sci. USA 100, 12027­12032.
+42. Sciammas, R., Shaffer, A.L., Schatz, J.H., Zhao, H., Staudt, L.M., and Singh, H. (2006). Graded expression of interferon regulatory factor-4 coordinates isotype switching with plasma cell differentiation. Immunity 25, 225­236.
+43. Ellebedy, A.H., Jackson, K.J.L., Kissick, H.T., Nakaya, H.I., Davis, C.W., Roskin, K.M., McElroy, A.K., Oshansky, C.M., Elbein, R., Thomas, S., et al. (2016). Defining antigen-specific plasmablast and memory B cell subsets in human blood after viral infection or vaccination. Nat. Immunol. 17, 1226­1234.
+44. Suan, D., Krautler, N.J., Maag, J.L.V., Butt, D., Bourne, K., Hermes, J.R., Avery, D.T., Young, C., Statham, A., Elliott, M., et al. (2017). CCR6 Defines Memory B Cell Precursors in Mouse and Human Germinal Centers, Revealing Light-Zone Location and Predominant Low Antigen Affinity. Immunity 47, 1142­1153.e4.
+45. Laidlaw, B.J., Schmidt, T.H., Green, J.A., Allen, C.D.C., Okada, T., and Cyster, J.G. (2017). The Eph-related tyrosine kinase ligand Ephrin-B1 marks germinal center and memory precursor B cells. J. Exp. Med. 214, 639­649.
+46. King, H.W., Wells, K.L., Shipony, Z., Kathiria, A.S., Wagar, L.E., Lareau, C., Orban, N., Capasso, R., Davis, M.M., Steinmetz, L.M., et al. (2021). Integrated single-cell transcriptomics and epigenomics reveals strong germinal center-associated etiology of autoimmune risk loci. Sci. Immunol. 6, eabh3768.
+47. Shinnakasu, R., Inoue, T., Kometani, K., Moriyama, S., Adachi, Y., Nakayama, M., Takahashi, Y., Fukuyama, H., Okada, T., and Kurosaki, T. (2016). Regulated selection of germinal-center cells into the memory B cell compartment. Nat. Immunol. 17, 861­869.
+48. Venturutti, L., Teater, M., Zhai, A., Chadburn, A., Babiker, L., Kim, D., Be´ guelin, W., Lee, T.C., Kim, Y., Chin, C.R., et al. (2020). TBL1XR1 Mutations Drive Extranodal Lymphoma by Inducing a Pro-tumorigenic Memory Fate. Cell 182, 297­316.e27.
+49. Ngo, V.N., Young, R.M., Schmitz, R., Jhavar, S., Xiao, W., Lim, K.H., Kohlhammer, H., Xu, W., Yang, Y., Zhao, H., et al. (2011). Oncogenically active MYD88 mutations in human lymphoma. Nature 470, 115­119.
+50. Steen, C.B., Luca, B.A., Esfahani, M.S., Azizi, A., Sworder, B.J., Nabet, B.Y., Kurtz, D.M., Liu, C.L., Khameneh, F., Advani, R.H., et al. (2021). The landscape of tumor cell states and ecosystems in diffuse large B cell lymphoma. Cancer Cell 39, 1422­1437.e10.
+51. Lenz, G., Wright, G.W., Emre, N.C.T., Kohlhammer, H., Dave, S.S., Davis, R.E., Carty, S., Lam, L.T., Shaffer, A.L., Xiao, W., et al. (2008). Molecular subtypes of diffuse large B-cell lymphoma arise by distinct genetic pathways. Proc. Natl. Acad. Sci. USA 105, 13520­13525.
+52. Haas, T.T., Tirosh, I., Georgescu, C., and Brown, M. (2019). inferCNV of the Trinity CTAT Project. https://github.com/broadinstitute/inferCNV.
+53. Behrens, T.W., Jagadeesh, J., Scherle, P., Kearns, G., Yewdell, J., and Staudt, L.M. (1994). Jaw1, A lymphoid-restricted membrane protein localized to the endoplasmic reticulum. J. Immunol. 153, 682­690.
+54. Golay, J., Broccoli, V., Lamorte, G., Bifulco, C., Parravicini, C., Pizzey, A., Thomas, N.S., Delia, D., Ferrauti, P., Vitolo, D., and Introna, M. (1998). The A-Myb transcription factor is a marker of centroblasts in vivo. J. Immunol. 160, 2786­2793.
+55. Okazaki, S.I., Yamakawa, M., Maeda, K., Ohta, N., and Aoyagi, M. (2006). Expression of glucocorticoid receptors in non-neoplastic lymphoid follicles and B cell type malignant lymphomas. J. Clin. Pathol. 59, 410­416.
+56. Choi, J., Ceribelli, M., Phelan, J.D., Ha¨ upl, B., Huang, D.W., Wright, G.W., Hsiao, T., Morris, V., Ciccarese, F., Wang, B., et al. (2024). Molecular targets of glucocorticoids that elucidate their therapeutic efficacy in aggressive lymphomas. Cancer Cell 42, 833­849.e12.
+57. Krzysiek, R., Lefevre, E.A., Bernard, J., Foussat, A., Galanaud, P., Louache, F., and Richard, Y. (2000). Regulation of CCR6 chemokine
+Cancer Cell 44, 1­19, March 9, 2026 17
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+receptor expression and responsiveness to macrophage inflammatory protein-3alpha/CCL20 in human B cells. Blood 96, 2338­2345.
+58. Zhang, Y., Garcia-Ibanez, L., Ulbricht, C., Lok, L.S.C., Pike, J.A., MuellerWinkler, J., Dennison, T.W., Ferdinand, J.R., Burnett, C.J.M., Yam-Puc, J.C., et al. (2022). Recycling of memory B cells between germinal center and lymph node subcapsular sinus supports affinity maturation to antigenic drift. Nat. Commun. 13, 2460.
+59. Pernaa, N., Keskitalo, S., Chowdhury, I., Nissinen, A., Glumoff, V., KeskiFilppula, R., Junttila, J., Eklund, K.K., Santaniemi, W., Siitonen, S., et al. (2022). Heterozygous premature termination in zinc-finger domain of Kruppel-like factor 2 gene associates with dysregulated immunity. Front. Immunol. 13, 819929.
+60. Buckley, A.F., Kuo, C.T., and Leiden, J.M. (2001). Transcription factor LKLF is sufficient to program T cell quiescence via a c-Myc-dependent pathway. Nat. Immunol. 2, 698­704.
+61. Kardava, L., Moir, S., Wang, W., Ho, J., Buckner, C.M., Posada, J.G., O'Shea, M.A., Roby, G., Chen, J., Sohn, H.W., et al. (2011). Attenuation of HIV-associated human B cell exhaustion by siRNA downregulation of inhibitory receptors. J. Clin. Investig. 121, 2614­2624.
+62. Shaffer, A.L., Lin, K.I., Kuo, T.C., Yu, X., Hurt, E.M., Rosenwald, A., Giltnane, J.M., Yang, L., Zhao, H., Calame, K., and Staudt, L.M. (2002). Blimp-1 orchestrates plasma cell differentiation by extinguishing the mature B cell gene expression program. Immunity 17, 51­62.
+63. Shaffer, A.L., Shapiro-Shelef, M., Iwakoshi, N.N., Lee, A.H., Qian, S.B., Zhao, H., Yu, X., Yang, L., Tan, B.K., Rosenwald, A., et al. (2004). XBP1, downstream of Blimp-1, expands the secretory apparatus and other organelles, and increases protein synthesis in plasma cell differentiation. Immunity 21, 81­93.
+64. Newman, A.M., Liu, C.L., Green, M.R., Gentles, A.J., Feng, W., Xu, Y., Hoang, C.D., Diehn, M., and Alizadeh, A.A. (2015). Robust enumeration of cell subsets from tissue expression profiles. Nat. Methods 12, 453­457.
+65. Su, A.I., Wiltshire, T., Batalov, S., Lapp, H., Ching, K.A., Block, D., Zhang, J., Soden, R., Hayakawa, M., Kreiman, G., et al. (2004). A gene atlas of the mouse and human protein-encoding transcriptomes. Proc. Natl. Acad. Sci. USA 101, 6062­6067.
+66. Liu, D., Umbach, D.M., Peddada, S.D., Li, L., Crockett, P.W., and Weinberg, C.R. (2004). A random-periods model for expression of cellcycle genes. Proc. Natl. Acad. Sci. USA 101, 7240­7245.
+67. Cho, R.J., Huang, M., Campbell, M.J., Dong, H., Steinmetz, L., Sapinoso, L., Hampton, G., Elledge, S.J., Davis, R.W., and Lockhart, D.J. (2001). Transcriptional regulation and function during the human cell cycle. Nat. Genet. 27, 48­54.
+68. Whitfield, M.L., Sherlock, G., Saldanha, A.J., Murray, J.I., Ball, C.A., Alexander, K.E., Matese, J.C., Perou, C.M., Hurt, M.M., Brown, P.O., and Botstein, D. (2002). Identification of genes periodically expressed in the human cell cycle and their expression in tumors. Mol. Biol. Cell 13, 1977­2000.
+69. Kallies, A., Hasbold, J., Tarlinton, D.M., Dietrich, W., Corcoran, L.M., Hodgkin, P.D., and Nutt, S.L. (2004). Plasma cell ontogeny defined by quantitative changes in blimp-1 expression. J. Exp. Med. 200, 967­977.
+70. Rosenwald, A., Wright, G., Chan, W.C., Connors, J.M., Campo, E., Fisher, R.I., Gascoyne, R.D., Muller-Hermelink, H.K., Smeland, E.B., Giltnane, J.M., et al. (2002). The use of molecular profiling to predict survival after chemotherapy for diffuse large-B-cell lymphoma. N. Engl. J. Med. 346, 1937­1947.
+71. Brown, K., Gerstberger, S., Carlson, L., Franzoso, G., and Siebenlist, U. (1995). Control of I kappa B-alpha proteolysis by site-specific, signalinduced phosphorylation. Science 267, 1485­1488.
+72. Bravo Gonzalez-Blas, C., De Winter, S., Hulselmans, G., Hecker, N., Matetovici, I., Christiaens, V., Poovathingal, S., Wouters, J., Aibar, S., and Aerts, S. (2023). SCENIC+: single-cell multiomic inference of enhancers and gene regulatory networks. Nat. Methods 20, 1355­1367.
+18 Cancer Cell 44, 1­19, March 9, 2026
+
+73. Schmitz, R., Ceribelli, M., Pittaluga, S., Wright, G., and Staudt, L.M. (2014). Oncogenic mechanisms in Burkitt lymphoma. Cold Spring Harb. Perspect. Med. 4, a014282.
+74. Muto, A., Ochiai, K., Kimura, Y., Itoh-Nakadai, A., Calame, K.L., Ikebe, D., Tashiro, S., and Igarashi, K. (2010). Bach2 represses plasma cell gene regulatory network in B cells to promote antibody class switch. EMBO J. 29, 4048­4061.
+75. Ochiai, K., Katoh, Y., Ikura, T., Hoshikawa, Y., Noda, T., Karasuyama, H., Tashiro, S., Muto, A., and Igarashi, K. (2006). Plasmacytic transcription factor Blimp-1 is repressed by Bach2 in B cells. J. Biol. Chem. 281, 38226­38234.
+76. Klein, U., Casola, S., Cattoretti, G., Shen, Q., Lia, M., Mo, T., Ludwig, T., Rajewsky, K., and Dalla-Favera, R. (2006). Transcription factor IRF4 controls plasma cell differentiation and class-switch recombination. Nat. Immunol. 7, 773­782.
+77. Shaffer, A.L., Emre, N.C.T., Lamy, L., Ngo, V.N., Wright, G., Xiao, W., Powell, J., Dave, S., Yu, X., Zhao, H., et al. (2008). IRF4 addiction in multiple myeloma. Nature 454, 226­231.
+78. Minnich, M., Tagoh, H., Bo¨ nelt, P., Axelsson, E., Fischer, M., Cebolla, B., Tarakhovsky, A., Nutt, S.L., Jaritz, M., and Busslinger, M. (2016). Multifunctional role of the transcription factor Blimp-1 in coordinating plasma cell differentiation. Nat. Immunol. 17, 331­343.
+79. Wittner, J., and Schuh, W. (2023). Kruppel-like factor 2: a central regulator of B cell differentiation and plasma cell homing. Front. Immunol. 14, 1172641.
+80. Li, J., Williams, M.J., Park, H.J., Bastos, H.P., Wang, X., Prins, D., Wilson, N.K., Johnson, C., Sham, K., Wantoch, M., et al. (2022). STAT1 is essential for HSC function and maintains MHCIIhi stem cells that resist myeloablation and neoplastic expansion. Blood 140, 1592­1606.
+81. Street, K., Risso, D., Fletcher, R.B., Das, D., Ngai, J., Yosef, N., Purdom, E., and Dudoit, S. (2018). Slingshot: cell lineage and pseudotime inference for single-cell transcriptomics. BMC Genom. 19, 477.
+82. Granja, J.M., Corces, M.R., Pierce, S.E., Bagdatli, S.T., Choudhry, H., Chang, H.Y., and Greenleaf, W.J. (2021). ArchR is a scalable software package for integrative single-cell chromatin accessibility analysis. Nat. Genet. 53, 403­411.
+83. Hodson, D.J., Shaffer, A.L., Xiao, W., Wright, G.W., Schmitz, R., Phelan, J.D., Yang, Y., Webster, D.E., Rui, L., Kohlhammer, H., et al. (2016). Regulation of normal B-cell differentiation and malignant B-cell survival by OCT2. Proc. Natl. Acad. Sci. USA 113, E2039­E2046.
+84. Wohner, M., Tagoh, H., Bilic, I., Jaritz, M., Poliakova, D.K., Fischer, M., and Busslinger, M. (2016). Molecular functions of the transcription factors E2A and E2-2 in controlling germinal center B cell and plasma cell development. J. Exp. Med. 213, 1201­1221.
+85. Dominguez-Sola, D., Kung, J., Holmes, A.B., Wells, V.A., Mo, T., Basso, K., and Dalla-Favera, R. (2015). The FOXO1 Transcription Factor Instructs the Germinal Center Dark Zone Program. Immunity 43, 1064­1074.
+86. Turqueti-Neves, A., Otte, M., Prazeres da Costa, O., Ho¨ pken, U.E., Lipp, M., Buch, T., and Voehringer, D. (2014). B-cell-intrinsic STAT6 signaling controls germinal center formation. Eur. J. Immunol. 44, 2130­2138.
+87. Calderon, L., Schindler, K., Malin, S.G., Schebesta, A., Sun, Q., Schwickert, T., Alberti, C., Fischer, M., Jaritz, M., Tagoh, H., et al. (2021). Pax5 regulates B cell immunity by promoting PI3K signaling via PTEN down-regulation. Sci. Immunol. 6, eabg5003.
+88. Argelaguet, R., Arnol, D., Bredikhin, D., Deloro, Y., Velten, B., Marioni, J.C., and Stegle, O. (2020). MOFA+: a statistical framework for comprehensive integration of multi-modal single-cell data. Genome Biol. 21, 111.
+89. Ying, C.Y., Dominguez-Sola, D., Fabi, M., Lorenz, I.C., Hussein, S., Bansal, M., Califano, A., Pasqualucci, L., Basso, K., and Dalla-Favera, R. (2013). MEF2B mutations lead to deregulated expression of the oncogene BCL6 in diffuse large B cell lymphoma. Nat. Immunol. 14, 1084­1092.
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+90. Brescia, P., Schneider, C., Holmes, A.B., Shen, Q., Hussein, S., Pasqualucci, L., Basso, K., and Dalla-Favera, R. (2018). MEF2B Instructs Germinal Center Development and Acts as an Oncogene in B Cell Lymphomagenesis. Cancer Cell 34, 453­465.e9.
+91. Khiem, D., Cyster, J.G., Schwarz, J.J., and Black, B.L. (2008). A p38 MAPK-MEF2C pathway regulates B-cell proliferation. Proc. Natl. Acad. Sci. USA 105, 17067­17072.
+92. Wang, H., Jain, S., Li, P., Lin, J.X., Oh, J., Qi, C., Gao, Y., Sun, J., Sakai, T., Naghashfar, Z., et al. (2019). Transcription factors IRF8 and PU.1 are required for follicular B cell development and BCL6-driven germinal center responses. Proc. Natl. Acad. Sci. USA 116, 9511­9520.
+93. Sander, S., Chu, V.T., Yasuda, T., Franklin, A., Graf, R., Calado, D.P., Li, S., Imami, K., Selbach, M., Di Virgilio, M., et al. (2015). PI3 Kinase and FOXO1 Transcription Factor Activity Differentially Control B Cells in the Germinal Center Light and Dark Zones. Immunity 43, 1075­1086.
+94. Kabrani, E., Chu, V.T., Tasouri, E., Sommermann, T., Baßler, K., Ulas, T., Zenz, T., Bullinger, L., Schultze, J.L., Rajewsky, K., and Sander, S. (2018). Nuclear FOXO1 promotes lymphomagenesis in germinal center B cells. Blood 132, 2670­2683.
+95. Bal, E., Kumar, R., Hadigol, M., Holmes, A.B., Hilton, L.K., Loh, J.W., Dreval, K., Wong, J.C.H., Vlasevska, S., Corinaldesi, C., et al. (2022). Super-enhancer hypermutation alters oncogene expression in B cell lymphoma. Nature 607, 808­815.
+96. Shehata, L., Thouvenel, C.D., Hondowicz, B.D., Pew, L.A., Pritchard, G.H., Rawlings, D.J., Choi, J., and Pepper, M. (2024). Interleukin-4 downregulates transcription factor BCL6 to promote memory B cell selection in germinal centers. Immunity 57, 843­858.e5.
+97. Glasmacher, E., Agrawal, S., Chang, A.B., Murphy, T.L., Zeng, W., Vander Lugt, B., Khan, A.A., Ciofani, M., Spooner, C.J., Rutz, S., et al. (2012). A genomic regulatory element that directs assembly and function of immune-specific AP-1-IRF complexes. Science 338, 975­980.
+98. Care, M.A., Cocco, M., Laye, J.P., Barnes, N., Huang, Y., Wang, M., Barrans, S., Du, M., Jack, A., Westhead, D.R., et al. (2014). SPIB and BATF provide alternate determinants of IRF4 occupancy in diffuse large B-cell lymphoma linked to disease heterogeneity. Nucleic Acids Res. 42, 7591­7610.
+99. Wan, C.K., Andraski, A.B., Spolski, R., Li, P., Kazemian, M., Oh, J., Samsel, L., Swanson, P.A., 2nd, McGavern, D.B., Sampaio, E.P., et al. (2015). Opposing roles of STAT1 and STAT3 in IL-21 function in CD4+ T cells. Proc. Natl. Acad. Sci. USA 112, 9394­9399.
+100. Guidez, F., Petrie, K., Ford, A.M., Lu, H., Bennett, C.A., MacGregor, A., Hannemann, J., Ito, Y., Ghysdael, J., Greaves, M., et al. (2000). Recruitment of the nuclear receptor corepressor N-CoR by the TEL moiety of the childhood leukemia-associated TEL-AML1 oncoprotein. Blood 96, 2557­2561.
+101. Yoon, H.G., Chan, D.W., Huang, Z.Q., Li, J., Fondell, J.D., Qin, J., and Wong, J. (2003). Purification and functional characterization of the human N-CoR complex: the roles of HDAC3, TBL1 and TBLR1. EMBO J. 22, 1336­1346.
+102. Davis, R.E., Brown, K.D., Siebenlist, U., and Staudt, L.M. (2001). Constitutive nuclear factor kappaB activity is required for survival of activated B cell-like diffuse large B cell lymphoma cells. J. Exp. Med. 194, 1861­1874.
+103. Young, R.M., Wu, T., Schmitz, R., Dawood, M., Xiao, W., Phelan, J.D., Xu, W., Menard, L., Meffre, E., Chan, W.C.C., et al. (2015). Survival of human
+
+lymphoma cells requires B-cell receptor engagement by self-antigens. Proc. Natl. Acad. Sci. USA 112, 13447­13454.
+104. Pindzola, G.M., Razzaghi, R., Tavory, R.N., Nguyen, H.T., Morris, V.M., Li, M., Agarwal, S., Huang, B., Okada, T., Reinhardt, H.C., et al. (2022). Aberrant expansion of spontaneous splenic germinal centers induced by hallmark genetic lesions of aggressive lymphoma. Blood 140, 1119­1131.
+105. Heise, N., De Silva, N.S., Silva, K., Carette, A., Simonetti, G., Pasparakis, M., and Klein, U. (2014). Germinal center B cell maintenance and differentiation are controlled by distinct NF-kappaB transcription factor subunits. J. Exp. Med. 211, 2103­2118.
+106. Laidlaw, B.J., and Cyster, J.G. (2021). Transcriptional regulation of memory B cell differentiation. Nat. Rev. Immunol. 21, 209­220.
+107. Dang, C.V. (2016). A Time for MYC: Metabolism and Therapy. Cold Spring Harb. Symp. Quant. Biol. 81, 79­83.
+108. Ennishi, D., Healy, S., Bashashati, A., Saberi, S., Hother, C., Mottok, A., Chan, F.C., Chong, L., Abraham, L., Kridel, R., et al. (2020). TMEM30A loss-of-function mutations drive lymphomagenesis and confer therapeutically exploitable vulnerability in B-cell lymphoma. Nat. Med. 26, 577­588.
+109. Maesako, Y., Uchiyama, T., and Ohno, H. (2003). Comparison of geneexpression profiles of lymphoma cell lines from transformed follicular lymphoma, Burkitt's lymphoma and de novo diffuse large B-cell lymphoma. Cancer Sci. 94, 774­781.
+110. Stuart, T., Butler, A., Hoffman, P., Hafemeister, C., Papalexi, E., Mauck, W.M., 3rd, Hao, Y., Stoeckius, M., Smibert, P., and Satija, R. (2019). Comprehensive Integration of Single-Cell Data. Cell 177, 1888­ 1902.e21.
+111. Song, L., Cohen, D., Ouyang, Z., Cao, Y., Hu, X., and Liu, X.S. (2021). TRUST4: immune repertoire reconstruction from bulk and single-cell RNA-seq data. Nat. Methods 18, 627­630.
+112. Ding, J., Adiconis, X., Simmons, S.K., Kowalczyk, M.S., Hession, C.C., Marjanovic, N.D., Hughes, T.K., Wadsworth, M.H., Burks, T., Nguyen, L.T., et al. (2020). Systematic comparison of single-cell and single-nucleus RNA-sequencing methods. Nat. Biotechnol. 38, 737­746.
+113. Tirosh, I., Venteicher, A.S., Hebert, C., Escalante, L.E., Patel, A.P., Yizhak, K., Fisher, J.M., Rodman, C., Mount, C., Filbin, M.G., et al. (2016). Single-cell RNA-seq supports a developmental hierarchy in human oligodendroglioma. Nature 539, 309­313.
+114. Dann, E., Henderson, N.C., Teichmann, S.A., Morgan, M.D., and Marioni, J.C. (2022). Differential abundance testing on single-cell data using knearest neighbor graphs. Nat. Biotechnol. 40, 245­253.
+115. Weirauch, M.T., Yang, A., Albu, M., Cote, A.G., Montenegro-Montero, A., Drewe, P., Najafabadi, H.S., Lambert, S.A., Mann, I., Cook, K., et al. (2014). Determination and inference of eukaryotic transcription factor sequence specificity. Cell 158, 1431­1443.
+116. Schep, A.N., Wu, B., Buenrostro, J.D., and Greenleaf, W.J. (2017). chromVAR: inferring transcription-factor-associated accessibility from single-cell epigenomic data. Nat. Methods 14, 975­978.
+117. Vierstra, J., Lazar, J., Sandstrom, R., Halow, J., Lee, K., Bates, D., Diegel, M., Dunn, D., Neri, F., Haugen, E., et al. (2020). Global reference mapping of human transcription factor footprints. Nature 583, 729­736.
+
+Cancer Cell 44, 1­19, March 9, 2026 19
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+STARMETHODS
+KEY RESOURCES TABLE
+
+Article
+
+REAGENT or RESOURCE Antibodies live/dead 780 FOXP3 CD8 CD4 CD3
+
+SOURCE
+ebioscience Biolegend Biolegend Biolegend Biolegend
+
+CD20 Lyt2 CD20
+
+Biolegend BD, Biolegend Leica
+
+TOX CD21 CD23 BLIMP1 KI67 CD3 live/dead 780 FOXP3 CD8 CD4 CD3
+
+Cell Signaling Technology Cell Signaling Technology Leica Santa Cruz Biotechnology Agilent Thermofisher ebioscience Biolegend Biolegend Biolegend Biolegend
+
+CD20
+
+Biolegend
+
+Lyt2
+
+BD, Biolegend
+
+Biological samples
+
+Tonsil and DLBCL biopsies
+
+This paper
+
+Chemicals, peptides, and recombinant proteins
+
+Advanced RPMI 1640 Medium
+
+Thermo Fisher Scientific
+
+Phosphate buffered saline (PBS)
+
+Thermo Fisher Scientific
+
+Fetal Bovine Serum - TET Tested
+
+R&D systems
+
+Penicillin-Streptomycin-Glutamine (100X)
+
+Thermo Fisher Scientific
+
+TransIT-293 Transfection Reagent
+
+Mirus Bio
+
+Dimethylsulfoxid (DMSO)
+
+Millipore Sigma
+
+Lenti-X Concentrator
+
+Takara
+
+Trizma Hydrochloride Solution, pH 7.4
+
+Sigma-Aldrich
+
+MACS BSA Stock Solution
+
+Miltenyi Biotec
+
+Nonidet P40 Substitute
+
+Sigma-Aldrich
+
+Sigma Protector RNase inhibitor
+
+Sigma-Aldrich
+
+Critical commercial assays
+
+MycoAlert Mycoplasma Detection Kit
+
+Lonza
+
+Agilent High Sensitivity DNA Kit
+
+Agilent
+
+Chromium Next GEM Single Cell Multiome ATAC + Gene Expression Chromium Next GEM Chip J Single Cell Kit
+
+10X Genomics 10X Genomics
+
+e1 Cancer Cell 44, 1­19.e1­e12, March 9, 2026
+
+IDENTIFIER
+
+Cat# 65-0865-14 Cat.# 320111; RRID:AB_430882 Cat.# 344723; RRID:AB_2562789 Cat.# 317437; RRID:AB_11204077 Cat.# 344842, 344817; RRID:AB_2616890, AB_10644011 Cat.# 302336; RRID:AB_2563806 Cat.# 553035; RRID:AB_398527 Cat.# CD20-L26-L-CE, 100708; RRID:AB_10734340, AB_312747 Cat.# 73758S Cat.# 76069S Cat.# PA0169 Cat.# sc-66015; RRID:AB_1119615 Cat.#M7240; RRID:AB_2142367 Cat.# RM9107RQ Cat# 65-0865-14 Cat.# 320111; RRID:AB_430882 Cat.# 344723; RRID:AB_2562789 Cat.# 317437; RRID:AB_11204077 Cat.# 344842, 344817; RRID:AB_2616890, AB_10644011 Cat.# 302336; RRID:AB_2563806 Cat.# 553035; RRID:AB_398527
+
+N/A
+
+Cat.# 12633012 Cat.# 10010023 Cat.#S10350 Cat.# 10378016 Cat.# MIR 2704 Cat.#D2650 Cat.# 631232 Cat.#T2194 Cat.# 130-091-376 Cat.# 74385 Cat.# 3335399001
+
+Cat.# LT07-318 Cat.# 5067-4626 Cat.# 1000283
+
+Cat.# 1000234
+
+(Continued on next page)
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+Article
+Continued REAGENT or RESOURCE Chromium Nuclei Isolation Kit Chromium Next GEM Single Cell 5 Kit v2 FOXP3 Fix/Perm Buffer Set Deposited data Bulk RNA and WES of DLBCL Single cell RNA and ATAC of DLBCL and tonsils Validation cohort Discovery cohort 10k Human PBMCs, Multiome v1.0, Chromium Controller
+Tonsil B cells HBL1 TMD8 Pfeiffer Lib DLBCL1 DS FL318
+DOHH2 WSU_DLCL2 HEK293FT Recombinant DNA pBMN-IRESLYT2_ORF_NFKBIA_S32A_S36A Software and algorithms LymphGen 2.0
+CellRanger ARC 2.0.0
+cellranger 5.0.1
+Seurat 4.2.0, 5.1.0 GATK 4.2.3.0
+TRUST4 inferCNV 1.11.1 Seurat 4.2.0, 5.1.0 fgsea 1.19.4 miloR 2.0.0 AUCell 1.24.0 ArchR 1.0.3 UMAP 0.2.10.0
+MACS 2.2.7.1 Python 3.10 and 3.12
+
+ll
+
+SOURCE 10X Genomics 10X Genomics Biolegend
+This publication This publication
+Schmitz et al.3 Ennishi et al.19,108 10X Genomics
+King et al.46 Lab of Martin Dyer Lab of Shuji Tohda ATCC Alison Banham Uk Lab of Hitoshi Ohno ATCC Lab of Kojo Elenitoba-Johnson (University of Pennsylvania) Leibniz institute DSMZ Lab of DSMZ Invitrogen
+This publication
+
+IDENTIFIER Cat.# PN-1000493 Cat.# PN-1000265 Cat.# 421403
+EGA: EGAS50000001227 EGA: EGAS50000001227
+dbGaP: phs001444.v2.p1 EGA: EGAS00001002199 https://www.10xgenomics.com/datasets/ 10-k-human-pbm-cs-multiome-v-1-0chromium-controller-1-standard-2-0-0 GEO: GSE165860 RRID: CVCL_4213 RRID: CVCL_A442 ATCC Cat# CRL-2632, RRID: CVCL_3326 RRID: CVCL_H209 Maesako et al.109 ATCC Cat# CRL-3381 RRID: CVCL_8095
+RRID: CVCL_1179 RRID: CVCL_1902 Invitrogen Cat# R70007, RRID: CVCL_6911
+N/A
+
+N/A
+
+https://llmpp.nih.gov/lymphgen/
+
+lymphgendataportal.php?version=2.0
+
+N/A
+
+https://www.10xgenomics.com/support/
+
+software/cell-ranger-arc/latest/release-
+
+notes/release-notes#cell-ranger-arc-2-0-
+
+may-3-2021
+
+N/A
+
+https://support.10xgenomics.com/single-
+
+cell-gene-expression/software/overview/
+
+welcome
+
+N/A
+
+https://github.com/satijalab/seurat
+
+N/A
+
+https://github.com/broadinstitute/gatk/
+
+releases/tag/4.2.3.0
+
+N/A
+
+https://github.com/liulab-dfci/TRUST4
+
+N/A
+
+https://github.com/broadinstitute/infercnv
+
+N/A
+
+https://github.com/satijalab/seurat
+
+N/A
+
+https://github.com/ctlab/fgsea
+
+N/A
+
+https://github.com/MarioniLab/miloR
+
+N/A
+
+https://github.com/aertslab/AUCell
+
+N/A
+
+https://github.com/GreenleafLab/ArchR
+
+N/A
+
+https://cran.r-project.org/web/packages/
+
+umap/index.html
+
+N/A
+
+https://pypi.org/project/MACS2
+
+N/A
+
+https://www.python.com
+
+(Continued on next page)
+
+Cancer Cell 44, 1­19.e1­e12, March 9, 2026 e2
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+Continued REAGENT or RESOURCE MOFA2 1.16.0
+slingshot 2.14.0
+SCENIC+ 1.0a1 pycisTopic 2.0 scanpy (v1.8.2) Ecotyper
+CytExpert software Spotfire S+8.2
+Other Sony MA900 FACS cell sorter Beckman Coulter Cytoflex S flow cytometer Chromium Controller LUNA-FL Automated Cell Counter Stellaris 8
+
+SOURCE N/A
+N/A
+N/A N/A N/A N/A
+Beckman Coulter N/A
+Sony Biotechnology Beckman Coulter 10X Genomics Logos Biosystems Leica
+
+IDENTIFIER https://www.bioconductor.org/packages/ release/bioc/html/MOFA2.html https://bioconductor.org/packages/ release/bioc/html/slingshot.html https://github.com/aertslab/scenicplus https://github.com/aertslab/pycistopic https://scanpy.readthedocs.io/en/stable/ https://github.com/digitalcytometry/ ecotyper RRID: SCR_017217 https://docs.tibco.com/products/tibcospotfire-s-8-2-0
+N/A N/A N/A L20001 N/A
+
+EXPERIMENTAL MODEL AND STUDY PARTICIPANT DETAILS
+Human participants Tonsil (n = 3) and DLBCL (n = 103) biopsies from 102 patients were obtained from patients at Weill Cornell Medicine and New York Presbyterian Hospital (IRB 107004999, 0201005295, 1410015560, 1302013582), and the National Institutes of Health (IRB 19c0116 NCT04002947, 14c0157 NCT02203526). One patient (sc-91) had 2 biopsies that were analyzed. Publicly available data was utilized and included one 10X Multiome scRNA-seq + scATAC-seq peripheral blood mononuclear cell (PBMC) sample from 10X Genomics and scRNA-seq data from 3 tonsil specimens.46 See Table S1 for details.
+Cell lines DLBCL cell lines were obtained from sources annotated in the key resources table and include HBL1 (male donor), TMD8 (male donor), WSU-DLCL2 (male donor), DOHH2 (male donor), FL-318 (male donor), DS (female donor), DLBCL-1 (female donor), LIB (female donor), and Pfeiffer (male donor). Cell lines were cultured in advanced RPMI medium with 5% fetal bovine serum (FBS), 1% penicillin/streptomycin (Pen/Step) and 1% glutamine (Glu) except for DLBCL-1 which was grown in 10% FBS. HEK293T cells were grown in Dulbecco's modified Eagle medium (DMEM) with 10% FBS, 1% Pen/Step and 1% Glu. Cell lines were grown in humidified incubators with 5% CO2 at 37C. DLBCL cell lines were identified by DNA fingerprinting by examining CNVs by PCR amplification and tested for mycoplasma using the MycoAlert Mycoplasma Detection Kit (Lonza).
+METHOD DETAILS
+Analysis of bulk tumor sequencing Nuclei acids were extracted from either single cell suspension or tissue. Fresh frozen tissue was homogenized using the TissueLyser instrument. DNA and RNA were extracted using the Allprep kit following the manufacturer's instructions (Qiagen). WES libraries were prepared using the Agilent SureSelect Human Exon V7 kit (Agilent) and sequenced using paired end 150 bp reads on a NovaSeq, with an average of 100 million reads per sample. RNA libraries were prepared using the Stranded mRNA Prep kit (Illumina) and sequenced using paired end 100 bp reads on a NovaSeq or NextSeq, with an average of 130 million reads per sample. Data was aligned to the hg19 reference. Mutation calls were generated as previously described3 with the exception of copy number calls. Copy number ratios were determined by GATK 4.2.3.0 and utilized WES of tumor tissue compared to an in house panel of normal samples consisting of tonsil, PBMC, bone marrow, and whole blood (n = 32 samples). The DNA copy number ratios for genomic segments from the GATK output were then processed as previously described to generate gene level, chromosome arm, and whole chromosome copy number calls5 For visualization in Figures 4A and 5B, values were plotted using infercnvplot_cnv(). Gene expression signatures were taken from the SignatureDB database (https://lymphochip.nih.gov/signaturedb/).33 COO and LymphGen subtype classification was assigned as previously described.5
+
+e3 Cancer Cell 44, 1­19.e1­e12, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+Surface and intracellular staining for FACS Single cell suspensions were thawed and washed using room temperature 1X PBS +10% FBS, stained for surface markers for 20 min at 4C, fixed, and stained for intracellular markers following the FOXP3 Fix/Perm Buffer Set (Biolegend) manufacturer's instructions. Cells were permeabilized with intracellular antibodies at 4C overnight. Finally, cells were analyzed using a Beckman Coulter Cytoflex S.
+Sample preparation and single cell RNA and ATAC-seq We analyzed biopsy specimens by scRNA-seq (n = 103) and by scATAC-seq (n = 102). Single nuclei were prepared using viably frozen cell suspensions (n = 89) or directly from snap frozen biopsies (n = 14). Biopsies analyzed by both methods (n = 3) yielded highly correlated gene expression, allowing for linear batch correction to create a uniform scRNA-seq dataset. (Figure S1A; Table S1). We use the terms single cell and single nuclei synonymously, recognizing that the 10X multiome assay utilized in this work is at the single nuclei resolution. Starting material was comprised of either single cell suspension or tissue. Samples that originated from tissues that were difficult to dissociate, e.g., brain cortex, were processed starting from frozen tissue. Tissue samples were processed using the Chromium Nuclei Isolation Kit as written (CG000505 Rev A). In comparison, single cell suspensions were thawed and processed following the 10X nuclei isolation protocol (CG0000365 Rev A). In brief, samples were thawed and washed using room temperature 1X PBS +10% FBS. Cells were lysed for 3 min on ice using lysis buffer (10 mM Tris-HCl pH 7.4, 10 mM NaCl, 3 mM MgCl2, 1% BSA, 0.1% Tween 20, 1 mM DTT, 1 U/L RNase inhibitor) and washed three times using wash buffer (10 mM Tris-HCl pH 7.4, 10 mM NaCl, 3 mM MgCl2, 1% BSA, 0.1% Tween 20, 0.1% Nonidet P40, 0.01% Digitonin, 1 mM DTT, 1U/L RNase inhibitor) on ice. All samples were treated with DNase solution (1X TBS, 1X 10X reaction buffer with MgCl2, 0.1 U/L DNase I) for 5 min on ice to reduce ambient DNA. Subsequently, nuclei concentration was determined using AO/PI on a Luna Automated Fluorescence Cell Counter (Logos Biosystems). We aimed to capture 7,000 nuclei for each sample because we did not perform cell viability discrimination prior to single cell capture. Capture was performed on the 10X Chromium machine. Single cell RNA and ATAC libraries were prepared following the Chromium next GEM single cell multiome ATAC and gene expression protocol (CG000338 Rev D) following the manufacturer's instructions. One cell suspension sample (sc_21) was assayed using the 10X Single cell immune profiling assay following the manufacturer's instructions. For each library type, samples were pooled and sequenced on both a NovaSeq SP to determine pooling parameters and subsequently on an S1 to achieve 50,000 reads per cell for each scRNAseq and scATAC-seq library as we aimed to sequence each library to saturation. scRNA-seq read lengths were read 1: 28 bp, read 2: 90 bp and scATAC-seq read lengths read 1: 50 bp, read 2: 49 bp. See Table S1.
+Multiplex immunofluorescence tissue staining and image acquisition Multiplexed immunofluorescence (MxIF, Figure 5D) was performed using the Opal system (Akoya Biosciences, Marlborough, MA) by staining 4 micron-thick formalin-fixed, paraffin-embedded whole-tissue section (FFPE) biopsy specimens in a Bond RX automated tissue stainer (Leica Biosystems, Buffalo Grove, IL), as described previously PMID: 37774374.
+Briefly, tissue sections were first deparaffinized. Staining was performed on the Leica BOND RX with HIER pretreatments applied at 100C using EDTA-based epitope retrieval solution (ER2, Leica Biosystems). A cyclical staining protocol was then performed, with horseradish peroxidase-mediated deposition of tyramide-Opal fluorophore constructs (Akoya Biosciences, Marlborough, MA) in each cycle, with intervening application of heat, citrate-based epitope retrieval solution (Leica ER1), and Bond Wash Solution (Leica) to execute stripping of primary/secondary antibody complexes between staining cycles. Finally, Spectral DAPI (Akoya Biosciences) was applied per the provided protocols to label nuclei. Antibodies were selected from a menu of validated and clinically tested clones in a CLIA laboratory (Weill Cornell Medicine/New York-Presbyterian Hospital, New York, NY). The following panel of fluorophore/primary antibody pairs was applied to all cases, in sequential order.
+1. Opal 480/CD20(L26) 2. Opal 520/TOX(E6I3Q) 3. Opal 570/CD21(2G9) + CD23(1B12) 4. Opal 620/BLIMP1(3H2E8) 5. Opal 690/KI67(MIB1) 6. Opal 780/CD3(SP7)
+All slides were cover slipped using ProLong Glass Antifade Mountant. The slides were imaged using Leica Stellaris 8, equipped with a 405 nm laser, and a White Light Laser tunable between 440 and 790 nm. The following excitation and emission wavelengths were used to image the fluorophores.
+1. DAPI: excitation wavelength: 405 nm; emission bandpass 430­488 nm 2. Opal 480: excitation wavelength: 450 nm; emission bandpass 460­510 nm 3. Opal 520: excitation wavelength: 494 nm; emission bandpass 508­558 nm 4. Opal 570: excitation wavelength: 550 nm; emission bandpass 560­620 nm 5. Opal 620: excitation wavelength: 588 nm; emission bandpass 598­648 nm 6. Opal 690: excitation wavelength: 676 nm; emission bandpass 686­740 nm
+Cancer Cell 44, 1­19.e1­e12, March 9, 2026 e4
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+7. Opal 780: excitation wavelength: 750 nm; emission bandpass 760­850 nm
+The microscope is equipped with 5 HyD detectors. In order to maximize image acquisition speed and minimize signal crosstalk, the images were acquired in bidirectional mode, in frame switching mode, using 4 tracks.
+Track 1: DAPI and Opal 780 Track 2: Opal 480 and Opal 620 Track 3: Opal 520 and Opal 690 Track 4: Opal 570
+The images were acquired using a 20x/0.75 NA dry objective, at an optical zoom of 2. The images were 291 × 291 microns, with 512 × 512 pixels. Pixel dwell time was 2.09 microsec/pixel, and pixel size was 0.57 microns. Pinhole was 1 Airy unit at 580 nm.
+Virus production In brief, for retrovirus production, HEK293T cells were transfected with pHIT-60/full length GALV or pHIT-60/EA6x3* plasmids. The viral supernatant was collected after 24 h post-transfection, and polybrene was added. Lymphoma cell lines were infected by centrifugation at 2500 rpm for 90 min using the virus-containing supernatant with polybrene at a concentration of 1 mg/mL.
+IB super-repressor The expression vector, pBMN-IRES-LYT2_ORF_NFKBIA_S32A_S36A was constructed by ligation of a PCR-generated NFKBIA_S32A_S36A product into the retroviral vector pBMN-IRES-Lyt2 using Gibson assembly. For ectopic expression, DLBCL cell lines (HBL1, TMD8, Pfeiffer, Lib, DLBCL1, DS, FL-318, DOHH2, WSU-DLCL2) were stably transduced with the NFKBIA vector. Procedures for retrovirus transduction were described previously.42 For toxicity assays, 7 days after transduction, cells were stained for 20 min on ice with anti-LYT2-APC, washed twice with PBS and analyzed on a Beckman Coulter Cytoflex S flow cytometer using the CytExpert software (RRID:SCR_017217). Cell viability was determined by forward side scatter and LY2+. Dots in Figure 6J are biological replicates. For cell sorting and subsequent RNA-seq in Figure 6K, cell lines that are ABC (HBL1, TMD8), GCB REL WT (FL318, WSU-DLBCL2, DOHH2), or GCB REL Amp (DLBCL1, DS, Pfeiffer) were transduced with technical replicates, stained 2 or 3 days after transduction with anti-LYT2-APC as above, and sorted on a Sony MA900 gating on the top 50th percentile of LYT2+ cells to collect 1 million LYT2+ cells for RNA isolation. RNA-seq and signature analysis was performed as described.
+QUANTIFICATION AND STATISTICAL ANALYSIS
+Analysis was performed with Spotfire S+8.2 or R (4.1.0), on either the Biowulf Linux cluster or in R-studio Desktop. Survival analyses were based on overall survival. p-values for dichotomous survival (Figures 3B and S2D) were calculated with a 2-sided log rank test. p-values in Figure 6C were based on a Cox-proportional score test and treating the themes as a continuous variable.
+Processing of scRNA-seq data Demultiplexing was done allowing 1 mismatch in the barcodes. Samples were processed using CellRanger ARC (version 2.0.0) and mapped to the hg38 reference using default parameters cellranger-arc count ­id = sample_ID ­reference = reference_dir ­libraries = libraries.csv. One sample assayed by the 10X immune profiling kit to obtain 5 scRNA-seq was processed using Cellranger (version 5.0.1) and mapped to hg38 (GRCh38-2020-A) using default parameters. Seurat (version 4.2.0) was used to process scRNA-seq. High quality cells were retained that met the following criteria: number of scRNA-seq reads greater than 1000 and less than 95000, number of genes detected in scRNA-seq greater than 200 and less than 9000, and percent of mitochondrial reads less than 40%. In a first pass to remove doublets, a scRNA-seq UMAP for each sample was generated following standard Seurat parameters (outlined in https://satijalab.org/seurat/articles/pbmc3k_tutorial) and doublet clusters which expressed two or more cell-type specific signatures or markers were removed. Next, all remaining cells were merged (n = 103 DLBCL and n = 3 tonsil from this work, n = 1 PBMC from 10X genomics). Subsequently, to generate the UMAP in Figure 1C, data was log normalized using NormalizeData, and 4000 most variable genes were selected for integration. Genes regarding IGHV, IGHJ, IGL, IGK, mitochondria, and ribosome were removed from the highly variable gene list to facilitate integration. Data was scaled using ScaleData, and the cell cycle component and the number of genes detected were regressed out. At the time of analysis, the number of cells was too large and required a reference dataset for integration. Integration anchors were found using cells assayed using the same method. Specifially, we used one PBMC (10X Genomics) and three tonsils (this work) as references in the ``rpca'' reduction.110 The UMAP was constructed in the integrated data space (dims = 1:50). Seurat clusters were identified with a resolution of 0.8 using an integrated shared nearest neighbor graph. Clusters were annotated based on canonical markers (e.g., MS4A1 and IGH genes for B cells; CD3D, CD4, and CD8B for T cells; and FOXP3 for regulatory T cells). In addition, clusters were annotated based on expression of gene expression signatures33 calculated using AddModuleScore, or cell clustering with tonsil cells or a previously annotated PBMC dataset (10X Genomics). Clusters enriched for doublets based on expression of two or more cell-type specific signatures (PanB.1, PanT.2, Monocyte.1, or Mesenchymal.1)
+e5 Cancer Cell 44, 1­19.e1­e12, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+were removed. The TME cells in Figure 1D were selected for analysis because there were >3 samples of each genetic subtype with >50 cells. The total number of TME cells for the y axis denominator in the Figure 1D bottom stacked barplot was based on all non-B cells in each sample that had >20 cells in each Seurat cluster.
+
+B cell clonotype We applied TRUST4111 to reconstruct the VDJ repertoire. First, we ran TRUST4 on the bulk RNA-seq FASTQ files. For each sample, we defined the major clone as that with the highest frequency BCR (>30% of total BCR reads and a frequency at least 3 times greater than that of next highest BCR) and extracted the CDR3 amino acid sequence for both the heavy and light chains. VDJ sequences are located at the 5 of the transcript and the scRNA-seq multiome assay sequences from the 3 end of the transcript. However, there is random priming of internal poly-A stretches in the mRNA transcript and cDNA.112 We also sequenced to saturation for most samples and the BCR is one of the most highly expressed genes in the B cell. We took advantages of these factors and determined VDJ sequences from standard 10X scRNA-seq 3 output without additional enrichment. Thus, we applied TRUST4 to scRNA-seq FASTQ
+files and cross referenced them to the paired bulk RNA-seq derived CDR3 sequence from above. A scRNA-seq cell was annotated as having a major BCR if either the VH or VL CDR3 sequence matched those determined by bulk RNA-seq (Figures 4A and S1F).
+
+Gene expression analysis of bulk and single cell RNA Gene expression and signature average values from bulk RNA-seq data were calculated as previously described.3 Unless otherwise
+
+specified, signature averages of bulk RNA-seq samples were calculated by averaging the normalized log2 expression of the genes in a given signature. Tumor cell of origin (COO) was based on a COO-signature calculated as weighted average of 195 selected genes.3
+
+Gene expression signatures of individual cells were calculated using AddModuleScore(). Throughout this study we also frequently
+
+needed a summary measure of gene expression within a collection of cells. For example, to summarize the overall expression of
+
+the malignant cells within a sample or within a subclone. For a given collection of cells C, we summarized its expression by taking the total of reads for a given gene normalized by the total reads over all genes divided by 107 with an additional constant of 1 added
+
+to avoid extreme values under log transformation. This is detailed in the following formula where xij are read counts for gene i [1, ...,n] in cell j. The value of 107 was chosen since it was around the same order of magnitude that we would expect from the sum in the
+
+denominator.
+
+
+
+
+
+
+
+Cell collection gene expression  iC
+
+=
+
+log2
+
+107  n
+
+xij
+jC
+
+
++ 1
+
+xij
+
+i = 1jC
+
+(Equation 1)
+
+We often also need calculate a weighted signature average of genes in a collection of cells. In general, these weights will be 1 for
+
+genes in the signature list and 0 for all others but they could be a combination of positive and negative values for signatures with
+
+multiple components that represent both positive and negative associations. Since these genes are often highly correlated with
+
+each other but may vary across cells it makes sense to calculate the signature average within a cell rather than to form signatures
+
+from cell wide averages. Also, in order to prevent highly expressed genes from dominating a signature it makes sense to log transform
+
+the expression values before averaging. To estimate this weighted average, we first calculate the weighted average of log scaled expressions for each cell normalized by the total reads for that cell divided by 104 (an order of magnitude estimate of the total reads
+
+for an individual cell), with again, a constant of 1 added to avoid extreme values. We then calculate a weighted average of those cells
+
+to get a signature average for each cell. The formula for this is below with wi being the signature weights.
+
+
+
+
+
+1 sGj = n
+
+n
+
+wi
+
+log2
+
+104xij n
+
++ 1
+
+|wi| i = 1
+
+xkj
+
+i=1
+
+k=1
+
+(Equation 2)
+
+To combine these cell level signature values into cell collection level values, we averaged them weighted by their normalization factors to account for the fact that cells with fewer total reads will be less accurate than those with more reads, so the final average is represented by the formula below.
+
+ n
+
+sGj
+
+xkj
+
+Cell Collection signature average  sGC
+
+=
+
+jC
+
+
+k=1
+n
+
+xkj
+
+jCk = 1
+
+(Equation 3)
+
+The within sample variability of this signature average was calculated as the variance of the sGjfrom the sGC average.
+
+( sGj -
+
+sGj )2
+
+Within collection Signature variability  VGC
+
+=
+
+jC
+# cells in C
+
+(Equation 4)
+
+Cancer Cell 44, 1­19.e1­e12, March 9, 2026 e6
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+
+Adjustment for suspension batch effects The cells analyzed were derived from samples of one of two types, either from cells in suspension (89 samples) or from cells extracted from frozen tissue (14 samples). Unfortunately, the distribution of the samples among the LymphGen subtypes differed significantly between those analyzed from suspension and those derived from tissue (Table S1). Therefore, we used a modeling approach to estimate a correction factor. For each gene we modeled the gene expression across samples with a two variable linear model. In this model the first variable was an indicator of whether the sample was derived from tissue or suspension, while the second variable was a categorical variable indicating the LymphGen subtype. Then for each gene we extracted the coefficient for the effect of a sample being derived from tissue and then subtracted that value from the estimated malignant cell average from all tissue derived samples. We compared these results to a second estimate of differential expression based on a set of three samples for which we had matched samples from tissue and from cell suspension (Figure S1A). The high correlation between these two show that the batch effect was universal across samples and was well estimated by our technique. This same method was also used to adjust the single cell ATACseq motif enrichment Z score averages.
+
+Copy number analysis of scRNA-seq Broadly, we determined the inferred copy number profile from scRNA-seq using inferCNV.113 Here we use the terms copy number variant (CNV) and copy number alteration (CNA) interchangeably. For each sample, we compared the DLBCL B cells to a panel of normal cells, which consisted of B cells from three tonsils (1000 cells/tonsil, total 3000 cells). We ran inferCNV three times for each DLBCL tumor. First, we isolated all B cells for a given tumor and ran inferCNV with ``max_centered_threshold = NA, BayesMaxPNormal = 0.2, cluster_by_groups = F, k_obs_groups = 2'' and incorporated the BCR clonotype annotation to discriminate malignant from nonmalignant B cells. To determine the average CNV signal in Figure S1E, we separated the malignant from nonmalignant B cells for each DLBCL and reran inferCNV with ``max_centered_threshold = NA, BayesMaxPNormal = 0.2, cluster_ by_groups = T'' and calculated the mean of the squares of CNV values across the genome based on infercnv.observations.txt. Malignant B cells were defined as those with CNVs (Figure S1E) and BCR clonotypic enrichment (Figure S1F) relative to tonsil B cells and normal DLBCL B cells. CNVs inferred using scRNA-seq were concordant with those detected by WES of the matching bulk tumor specimen (Figure S1D). Then, we extracted the malignant B cells and ran inferCNV a second time with the addition of ``analysis_mode = `subclusters''' to identify inferCNV subclusters. Third, for display in this work we ran inferCNV with all DLBCL B cells (including non-malignant) and used ``cluster_by_groups = T'' to separate genetic subclones from nonmalignant B cells. The copy number plots in Figures 4A and 5B show the output from ``infercnv.20_HMM_predHMMi6.hmm_mode-samples.Pnorm_0.5.repr_intensities.pdf''. The BCR annotation bar was added based on the cell barcode order from ``run.final.infercnv_obj''.
+
+Refinement of inferCNV clusters into subclones
+
+The inferCNV analysis above generated a total of 539 clusters among the 103 cases. We considered that these inferCNV clusters may
+
+represent different subclones. However, the large number of inferCNV clusters suggested that the clustering algorithm may have
+
+been overly divisive. We therefore decided to merge clusters that had similar average expression pattern. We first used the
+
+method described above (Eq. 1) to define gene expression values for each cluster with the exception that the normalization factor was set to 104 instead of 107. We then selected a set of 9,545 genes whose variance across the cluster averages was greater
+
+than 0.01. We defined the distance between two clusters RMS difference over this selected gene set according to the following
+
+formula:
+
+d(A; B) =    95145 9545(iA-iB)2 i=1
+
+(Equation 5)
+
+where iA and iB represent the expression values of the selected genes for cluster A and cluster B. In general, we observed that within a sample, groups of clusters could be identified for which all of the pairwise distances were
+
+small (generally below 0.2) while the distances between clusters of different groups were larger. Further, we hypothesized that these
+
+groups represented subclones of the tumor (Figure S3B). We therefore decided to algorithmically combine the CNV clusters in a sam-
+
+ple to form putative subclones, by considering all possible ways of merging them and then choosing the one that maximized the
+
+following expression:
+
+Subclone fit =
+
+ (0:2 - d(A; B)) +
+
+ (d(A; B) - 0:2)
+
+(Equation 6)
+
+cluster A;B in same subclone
+
+cluster A;B in different subclone
+
+In this way, clusters tended to be merged if their distance was less than 0.2 and separated if their distance was greater than 0.2. Figure S3B plots the distance values between clusters that were merged into the same subclone versus those that were left separate.
+
+Identification of single cell CNV To determine the chromosome arm level CNVs in the malignant B cells in Figure S1D, each sample was treated as pseudobulk, and we ran inferCNV using ``cluster_by_groups = F,HMM_report_by = `consensus'''. We extracted chromosome segment CNVs from
+
+e7 Cancer Cell 44, 1­19.e1­e12, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+
+ll
+Article
+
+``HMM_CNV_predictions.HMMi6.hmm_mode-samples.Pnorm_0.5.pred_cnv_regions.dat'' and determined the overlap within each chromosome arm. To compare bulk WES and scRNA-seq CNV, we collapsed all CNV to three states: loss, neutral, or gain. The subclone level inferCNV CNV calls are in terms of six state numeric categories, and we defined state >5 as amplification, 4 as gain, 3 as neutral, and <2 as loss, since we did not incorporate information on ploidy. For scRNA-seq based CNV, for each chromosome arm, we averaged each segment as weighted by segment size and only retained those covering >70% of an arm. A fisher's Exact test was utilized to compare the CNV detected in scRNA-seq and WES. To determine the gene level CNV in the genetic subclones for Figures 6E and 6G, we first extracted values from ``HMM_CNV_predictions.HMMi6.hmm_mode-samples.Pnorm_0.3.pred_cnv_genes.dat''. We only retained samples for analysis that had concordant CNV calls in the scRNA-seq subclones and bulk WES CNV tumor.
+
+Development of LymphGen subtype signature scores
+
+Signature scores for a particular LymphGen subtype were calculated by comparing samples of that LymphGen type (referred here-
+
+after as Type) to samples not of that type (referred hereafter as non-Type). For example, when making the BN2 signature score,
+
+``Type'' will refer to samples that were classified as BN2 by the LymphGen algorithm, while non-Type BN2 will refer to all samples
+
+that are not classified BN2 by the LymphGen algorithm. In the case of composite samples that were predicted from the
+
+LymphGen algorithm to be of multiple types, they were in general excluded from modeling of any of the signatures that they were
+
+a composite of. For example, an EZB/BN2 composite sample was excluded from any training or analysis training of the BN2 or
+
+EZB scores but were included as non-MCD in those involving the MCD score. The exception were composites including A53.
+
+Such samples were excluded from the training of the A53 score but were included in the training of the alternative type (e.g., a
+
+A53/EZB composite was treated as EZB when training the EZB predictor). As outlined in Figure 2A, we selected genes for our subtype
+
+signature scores based on three gene expression training sets. The first two were derived from Discovery cohort #1. The first being
+
+the malignant cell scRNA-seq average (see Equation 7) from the 103 single cell experiments on that cohort, the second being bulk
+
+RNA-seq expression from 99 of those for which it was available. The final training set were the 311 bulk RNA-seq samples from Dis-
+
+covery cohort #2. By including both bulk RNA-seq datasets and sets of identified malignant cells we hoped to select genes whose
+
+differential expression was tied to the tumor cells rather than the microenvironment, but which would retain significance in the pres-
+
+ence of that environment. In order for a gene to be selected for the LymphGen score, it must satisfy the following two conditions in
+
+each of the three training sets. First, the average across all samples in the Type group or across all samples in the non-Type group (or
+
+both) must be at least 5. Second, a t test for the gene expression values between the Type samples and non-Type samples must have
+
+a two-sided p-value less than 0.05. If more than 300 genes were identified, then only the 300 of these with the lowest t test p-value in
+
+Discovery cohort #2 were selected. Of the 808 subtype signature genes identified using the Discovery cohorts, 719 (89%) were also
+
+significantly associated (p < 0.05) with the same subtype in the Validation cohort, indicating strong reproducibility of these signatures
+
+across 3 DLBCL cohorts (Table S3).
+
+The predictor score was calculated as a linear combination of gene expression values weighted by the t-statistics in the Type vs.
+
+non-Type distinction in discovery cohort #2. Or in equation form the score for a given sample j
+
+
+
+Model Scorej =
+
+ti yij
+
+(Equation 7)
+
+i  selected genes
+
+Where ti is the t-statistic for gene i, and yij is the gene expression for gene i on sample j.
+
+ROC analysis To unbiasedly test the performance of the predictor within Discovery cohort 2 set we used 10-fold cross-validation, in which Discovery cohort 2 samples were randomly divided into 10 groups of as equal size as possible with as equal distribution of the LymphGen subtypes as possible. Then, the model was retrained (including gene and weight selection) with one of these 10 groups removed and applied to the complete data to obtain model scores. The samples that were left out were then assigned a value equal to their rank within the complete set of scores. This was repeated 10 times each time leaving out a different group until all samples had been assigned a rank based on a model trained without the subset that included that sample. This entire cross-validation process was repeated 5 times for different initial random assignment of the cases into 10 groups. The ROC curves and AUC values shown in Figure S2A were based on the association of these cross-validated ranks with their associated subtype. One sided p-values for the ROC curve were calculated from a normal approximation Mann Whitney test with the sample size set to the total number of Type and Non-Type samples in Discovery cohort 2.
+
+Survival analysis for LymphGen subtype signature scores For each subtype signature we developed a survival optimized cut-point on Discovery cohort 2. We did this by applying a log-rank test to the overall survival for every division of the data by that score into a high and low group and then selecting the cut-point for the division that had the lowest resulting p-value. In order to apply this to the validation cohort it was necessary to normalize them to account for batch differences while at the same time recognizing that two cohorts had significant differences in sample selection. To this end, for each signature, we fit a linear model for that signature on the combined data from Discovery cohort 2 and the Validation cohort. This model included as independent variables, the LymphGen subtype (composite samples were excluded) as well as
+
+Cancer Cell 44, 1­19.e1­e12, March 9, 2026 e8
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+an indicator for which dataset the sample came from (Validation or Discovery). We then extracted the coefficient for the ``dataset'' variable and used this to normalize the scores from the validation samples to match those from Discovery cohort 2. We then applied the discovery optimized cut-point identified above to these normalized Validation scores to define two groups which were tested for survival differences (Figures 3B and S2E).
+Evaluation of the association between subtype signature score and other signatures In order to relate the subtype signature scores to known tumor biology (Figures 2I, S2B, and S2C) we calculated the Pearson correlation in a given cohort (Validation or Discovery cohort 2) between each of the subtype signatures to the averages of gene expression signatures in SignatureDB.33 Much of the relationships that were observed were due to associations of the subtypes (and hence their signatures) to the cell of origin (COO). We were concerned that the large effect of the COO might obscure other interesting biological signatures. Therefore, we looked at an alternative correlation that attempted to remove this COO effect. To do this we first fit a twovariable least squares linear regression that modeled a given subtype signature as a function of a signature from the signature database, and a COO signature score defined previously.3
+Ti =  (Si) + (Ci) + i
+Where for each sample i, Ti represents the subtype signature, Si represents signature average for a signature of interest and Ci represents COO score, and i represents normal error. We calculated a COO adjusted subtype score by subtracting the COO score component.
+T~i = Ti - (Ci) We then report Cor(T~; S) as the COO-adjusted correlation for the signature.
+Tumor microenvironment analysis To annotate the T cell compartment, the entire TME single-cell RNA expression dataset was subset from Figure 1C. The resulting Seurat (5.1.0) object was split by tumor identity, and log transformed. Identification of the 2000 most variable genes and PCA dimension reduction were individually performed on each tumor. Then, each dataset was projected into the others' PCA space using anchors with the same mutual neighborhood requirement by Seurat's IntegrateLayers() function.110 The individual expression data layers were joined by JoinedLayers(). On the resulting integrated PCA dimensions, a nearest-neighbor graph was constructed using FindNeighbors() with default parameters. The first 15 PCA dimensions were used to identify cell clusters by FindClusters() with a resolution of 0.5. The resulting clusters were annotated using the T cell compartment markers from Roider et al.16 (Figure S1H). Next, all non-malignant and non-brain cells were integrated in a similar fashion. T cell annotations from the sub-clustering were transferred to the resulting TME Seurat object (Figure 1D). To infer the degree of exhaustion in the CD8 T cell compartment, the T cell exhaustion signature from Roider et al. was used to generate cell level scores using AUCell. To prevent p-value inflation of subsequent differential testing, the resulting AUCell scores were pseudo-bulk averaged across each CD8 T cell population in each sample. The resulting exhaustion scores per CD8 T cell population visualized in Figure S1I were tested for statistical difference across genetic subtypes by a Wilcoxon rank-sum test. To compare cell type abundances across gene expression and genetic subtypes, the miloR framework114 was used to embed cells into graph based neighborhoods. Ten percent of all cells (prop = 0.1 in makeNhoods()) were sampled using a KNN sampling algorithm to serve as a set of index cells for the neighborhood modeling. Differential abundance testing in Figure 1E across these neighborhoods was performed for each gene expression or genetic subtype versus all others. The number of cells from each experimental condition (e.g., MCD vs. all non-MCD) was counted in each neighborhood. To test for differential abundance, a negative binomial generalized linear model was fit for the counts of each neighborhood, accounting for the different numbers of cells in each sample. The starting material (tissue or cell suspension) was included as a covariate in the model to account for potential batch effects. To control for multiple testing, a spatial FDR correction was applied. Here, the p-values were weighted by the reciprocal of the distance to the kth nearest neighbor. Neighborhoods were assigned to a respective cell type if  85% of cells within the neighborhood came from a shared cell type. Neighborhoods with a significant difference (FDR <0.1) for the given comparison (e.g., MCD versus all non-MCD) are visualized in Figure 1E.
+To infer gene set scores for macrophage characterization in Figure 1F, the AUCell algorithm11 was run on scRNA-seq of all characterized macrophages using the phenotypic gene sets derived from Ma et al.12 Inferred gene set scores were mean-aggregated across each macrophage neighborhood from the differential abundance analysis. Visualization of neighborhood-aggregated gene set scores was performed for MCD-enriched, N1-enriched, and all other (``non-enriched'') macrophage neighborhoods. Statistical testing between MCD-enriched and N1-enriched neighborhoods was performed with the Wilcoxon test. A similar analysis was performed for T cell subsets in Figure S1I across genetic subtypes.
+DLBCL UMAP visualizations To generate a UMAP of malignant B cells, these malignant B cells were first isolated from the merged Seurat object and downsampled to 1000 cells per case, or if the sample had less than 1000 malignant B cells, then all cells were selected. Five cases were excluded because the number of cells were insufficient for integration. In total we proceeded with 98 cases and 93121 cells. Integration anchors were based on the top 4000 most variable genes. Genes regarding IGHV, IGHJ, IGL, IGK, mitochondria, and
+e9 Cancer Cell 44, 1­19.e1­e12, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+ribosome were removed from the highly variable gene list. The data was integrated using IntegrateData(k.weight = 70). We generated the UMAP from the first 30 principal components and performed clustering based on the integrated shared nearest neighbor graph. A cluster composed of doublets was removed. For the final UMAP visualization in Figures 5A and S3F, the number of cells was proportionally downsampled from each Seurat cluster to show 4991 cells. The UMAPs showing gene expression theme scores (Figures 5A, 5B, and 6H) were generated using FeaturePlot(max.cutoff = `q97', min.cutoff = `q1'). The relative proportion of cells in each cluster for Figure S3F was generated using ArchRconfusionMatrix().
+To generate the UMAPs of the subtype signatures, in Figures 2D­2G, we utilized the following data. The input data for Figures 2D and 2E was the scRNA-seq of malignant B cells, downsampled to 1000 cells from each sample or all cells if there were less than 1000, and comprised of 93252 cells from 102 samples; this included all cells from Figure 5A. The input data for Figures 2F and 2G was the bulk RNA-seq of each sample in the validation set. We determined the subtype signatures Z score for each cell or each sample. This associated each with a point in six-dimensional space. We then applied the umap() function from the UMAP package (version 0.2.10.0) to remap these six-dimensional points into a two-dimensional plot. For visualization in Figures 2D and 2E, the cells were downsampled such that there are 1000 cells for each of the 6 genetic subtypes and the plot shown is depicting 6000 cells. The contour lines in Figures 2D and 2E were generated using geom_density2d().
+Analysis of tonsil B cells We integrated all tonsil cells (n = 3 tonsils from this study, n = 3 tonsils from King et al.46) and isolated the B cells based on their annotation in Figure 1C or their published annotation. We then generated a UMAP of all tonsil B cells (Figures 7A and S1G). Data was log normalized using NormalizeData, and the 4000 most variable genes were selected for integration. Genes regarding IGHV, IGHJ, IGL, IGK, mitochondria, and ribosome were removed from the highly variable gene list to facilitate integration. Data was scaled using ScaleData, during which the cell cycle component and the number of genes detected were regressed out. The UMAP was constructed in the integrated data space (dims = 1:50). Seurat clusters were identified with a resolution of 0.8 using an integrated shared nearest neighbor graph. We observed that the memory B cells had subclusters termed Memory1 and Memory2 and identified these using FindSubCluster(resolution = 0.3). We utilized previously published tonsil scRNA-seq signatures and marker genes to identify that the Memory1 subset were most similar to pre-Memory B cells.14 We performed differential expression analysis using FindMarkers() to compare Memory1 cells to all other tonsil B cells (excluding Naive cells) and confirmed that the Memory1 subset were indeed pre-Memory B cells based on significantly higher expression of PLAC6, CCR6, B2M, CELF2, and BANK1.
+For the enrichment analysis in Figure S3D, we first performed differential expression of each B cell subset using FindAllMarkers (method = ``MAST''). Then, for each cell subset, we performed pre-ranked GSEA using fgsea (1.19.4) with 1,000,000 permutations. The input query gene list was ranked by the log2 fold change. The input pathway list was the top 100 ranked genes for each signature. If ranking information was unavailable in a published signature, the pathway list was comprised of 100 randomly selected genes. A NES of 0 indicates there were insufficient differentially expressed genes to perform pre-ranked GSEA.
+Determination of ecotype B cell states The input data was the downsampled set of malignant B cells from Figure 5A and included 93252 cells from 102 samples. The EcoTyper_recovery_scRNA.R script from Steen et al.50 was run to determine the lymphoma ecotype B cell state assignment. Of the 93,252 cells that were analyzed, 72,246 cells were assigned to one B cell state, see Table S5. The Ecotype classification results are plotted in Figures S2D and S3F. Previously published Ecotyper B cell states S1-S5 in Figure S2C and S3D were defined as the top 20% of genes in each state ranked by marker score.
+Analysis of scATAC-seq The corresponding scATAC-seq of the malignant B cells was analyzed using ArchR82 (version 1.0.3). Cells were retained if the TSS enrichment was greater than 1 and the number of fragments was greater than 100. The function addGroupCoverages was utilized to merge cells within each group to generate pseudo-bulk replicates and then merge these replicates into a single insertion coverage file. Groups were defined as subclones with REL amplification or wild type copy number (Figure 6G). Peaks were called for each group with MACS2 using addReproduciblePeakSet. We added TF motif annotations from CisBP using addMotifAnnotations. Next, we identified marker peaks that differentiated a given group while controlling for TSS enrichment and the number of fragments using getMarkerFeatures. Marker peaks were defined using default settings peakAnnoEnrichment(cutOff = FDR  0.1 & Log2FC  0.5). TF motif enrichment in the marker peaks was determined using a hypergeometric test in Figure 6I. For TF motif enrichment at the single cell level for Figure 8A, we first grouped samples based on their genetic subtype and calculated pseudobulk group coverages using addGroupCoverages. Peaks were called for each group, as defined by their genetic subtype, with MACS2 using addReproduciblePeakSet. TF motif annotations, derived from CisBP115 or custom motifs,22,98 were incorporated using addMotifAnnotations. We identified a background peak set with addBgdPeaks that controlled for the total accessibility and GC content. Next, addDeviationMatrix was run to compute the Chromvar116 deviations and Z-scores of the cisbp motif set within single cells. This approach enabled the assessment of TF motif enrichment in chromatin accessibility while accounting for biases introduced by the background peak set. Within each subclone the cell level enrichment scores of a given TF were averaged to provide a ``Z score average'' for that TF on that subclone. Similarly, sample level Z score averages were generated. As with the scRNA-seq, we observed significant batch effects due to sample type (tissue vs. cell suspension) in these Z score averages, and we adjusted for them in a similar way (see previous section).
+Cancer Cell 44, 1­19.e1­e12, March 9, 2026 e10
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+Since many of the TFs shared similar motifs,117 there was a great deal of correlation in the Z score averages, with many TFs having identical values. To account for this redundancy, we clustered the sample level Z-scores, and identified clusters of TFs whose correlation was greater than 0.9. There were 103 such clusters, each of which included between 2 and 28 TFs. Overall, 615 of the 875 TFs were contained in one of these clusters. Z score averages for the TFs in each of these clusters were removed from the analysis and replaced with a single set of values (at either the sample or subclone level) equal to the first principal component of the Z score averages of the TFs in that cluster. This resulted in a final dataset consisting of 363 ``TF-scores'', 260 of which represented the averages of individual TFs that were not correlated (r < 0.9) with any other TF, and 103 representing cluster principal components. For purposes of display, an exemplar TF was chosen from within each cluster based on their biological significance, and the cluster was assigned the name of that TF. Finally, the degree of association between these 363 TF-scores and the themes or subtype expression signatures were represented by their Pearson correlation. Values plotted in Figure 8A represent those associations with a correlation >0.3 and with biological relevance in DLBCL. Statistical significance of this association was evaluated using an ANOVA test.
+Inference of enhancer-driven gene-regulatory networks by SCENIC+ To model enhancer-driven gene-regulatory networks (eRegulons) from the generated single cell ATAC and gene expression data, SCENIC+ was applied to the multimodal data from tonsillar B cells (Figure 7C) or a combined dataset of malignant B cells and tonsillar B cells (Figure 8B). In brief, single cell gene expression output from cellranger (see above) was processed using scanpy with standard quality control metrics (min. genes per cell = 100, max. genes per cell <5000, mitochondrial transcript content <30) followed by lognormalization. Single cell ATAC sequencing data output from cellranger was processed using pycistopic following the authors' manual (https://pycistopic.readthedocs.io/en/latest/notebooks/human_cerebellum.html#Set-up). Here, fragment files for each malignant subclone and/or non-malignant B-cell population were generated using the hg38 chromosomal reference (http:// hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes). Peaks were called using MACS2 with default settings (input_format = `BEDPE', shift = 73, ext_size = 146, keep_dup = `all') and consensus peaks were generated with get_consensus_peaks(). For quality control, pycistopic's automatic thresholds for the minimum number of unique fragments and the minimum TSS enrichment were determined per subclone and only cells passing these thresholds were maintained for further analysis. To infer sets of co-accessible regions (topics), topic modeling was performed with serial Latent Dirichlet allocation (LDA) using MALLET with default parameters. Models with different number of topics were trained and the optimal number of topics (n = 50) was selected based on the topic selection criteria (such as log likelihood) as highlighted by Gonzalez-Blas et al.72 Topic binarization was executed by the top-n (n = 3000) regions per topic. Default region accessibility imputation was performed with pycistopic's impute_accessibility(). Differentially accessible regions (DAR) for the genetic subtypes across malignant B cell subclones and/or tonsillar B-cells were computed by Wilcoxon rank-sum test on the imputed probability matrix and selected regions (adjpval_thr = 0.05, log2fc_thr = np.log2(1.5)). Differentially accessible genes (DAG) were identified by first inferring the gene activity linking expression to chromatin accessibility using get_gene_activity() with default settings and differential testing by Wilcoxon rank-sum test (adjpval_thr = 0.05, log2fc_thr = np.log2(1.5)). For subsequent eRegulon modeling, the scRNA-seq and the scATAC-seq were subsetted to cells with both layers available after processing. The SCENIC+ Snakemake pipeline was applied to the resulting data layers with the precomputed cisTarget database (https://resources.aertslab.org/cistarget/databases/homo_sapiens/hg38/screen/mc_v10_clust/region_ based/) and default parameters for data preparation, motif enrichment and inference (see config.yaml at https://scenicplus. readthedocs.io/en/latest/human_cerebellum.html) following the author's instructions. For integration of the eRegulon target gene (RNA AUC) or target region (ATAC AUC) enrichment scores, AUCell scores were averaged for each direct eRegulon across subclones and tonsillar B-cells followed by feature-wise scaling. Subsequently, a multi-omics factor analysis model was trained on all the RNA AUC and ATAC AUC scores using mofapy with default parameters (spikeslab_weights = True, ard_weights = True). The resulting latent factors were subjected to the UMAP algorithm (min_dist = 1, spread = 3, n_epochs = 500 and otherwise default parameters) for further dimensionality reduction. eRegulons plotted in Figure 7B represent those with statistically significant (p < 0.05 as determined by Wilcoxon rank-sum test) RNA AUC or ATAC AUC differences for the tonsillar B-cell populations, those in Figure 8C have both statistically significant RNA AUC and ATAC AUC differences between analyzed populations. To visualize the association of either tonsil B cell differentiation trajectories or malignant B cell gene expression theme scores with RNA AUC and ATAC AUC scores, LOESS correlation models were fitted. p-values for these models were computed by comparing each model's R2 to a background distribution of R2 determined by permutation testing (n = 1000 permutations) with random subsampling of eRegulon AUCell scores in each iteration.
+Development of gene expression themes of subclonal variation We utilized SignatureDB, a database of 472 gene expression signatures known to be relevant to DLBCL.33 We calculated the expression average for each subclone and signature (Eq. 3), and normalized them by dividing by the square root of their average within subclone variability (Eq. 4). To highlight intratumor phenotypic heterogeneity, we calculated a Deviance value for each subclone of each signature. These Deviance values were defined as the variability-normalized signature average of a given subclone minus that average of all subclones for that same sample. Samples with only one subclone were excluded from this analysis for a total of 221 subclones. We then selected 94 signatures whose average squared deviance across the entire set of subclones was greater than 0.5 to be representative of the strongest biological variability across subclones. We hoped to cluster these signatures in order to consolidate our understanding of the underlying biology behind subclonal differentiation, but recognized that for a given axis of differentiation, there could be signatures of genes that are both positively and negatively correlated with it. Therefore, we created
+e11 Cancer Cell 44, 1­19.e1­e12, March 9, 2026
+
+Please cite this article in press as: Wang et al., Axes of biological variation in diffuse large B cell lymphoma, Cancer Cell (2025), https://doi.org/10.1016/ j.ccell.2025.12.015
+ll
+Article
+a dataset that included the normalized deviances and also included a second copy of the signature with the deviances multiplied by minus one. The set of deviances and their mirror images were hierarchically clustered using centroid linkage with uncentered correlation as a distance metric. This resulted in a mirror image heatmap as illustrated in Figure S3C. Six clusters of signatures with an uncentered correlation greater than 0.8 and whose signatures showed a coherent biological relationship were extracted to represent themes of phenotypic variation across subclones. A ``theme score'' was calculated as the first principal component of the subclone averages for the signatures in that theme. This loading weight for the signatures in each theme was preserved (including the adjustment for within subclone variability) to allow for the calculation of a ``theme score'' in other contexts. Theme scores for individual cells were calculated by first generating signature averages for the cells from AddModuleScore() and then applying the loading weights to calculate a weighted average for the final theme score in Figures 5A, 5B, and 6H. These individual cell level theme scores were utilized as input for Figures 4C, 5C, and S3E. We needed to be careful when translating the themes to bulk data, since many of the genes included in the theme signatures may also be expressed in non-malignant cells, introducing noise. Therefore, in calculating the themes, we only wanted to include those genes for which the expression pattern on the bulk RNA-seq from Discovery cohort #1 was strongly correlated with the matched expression from the scRNA-seq malignant B cells as calculated from Eq. 1. Those genes with correlations greater than 0.5 were used the calculate signature averages. Then, these averages were weighted with the previously recorded loadings to generate the final theme value (Figures 6A and S4). For Figure 5D, the stacked bar plot denotes the proportion of cells in subclones with a deviance score >0.1. For Figures 4E and 4F, and Table S5, we selected the top 100 genes ranked by their correlation to the subclonal theme score. Subclone clusters were determined by centroid linkage clustering and utilizing the uncentered distance metric. The Circos lines were plotted using circos.heatmap.link().
+ANOVA analysis of the relationship between theme and subtype signature To determine the extent to which the subtype signatures were related to the previously defined themes, for each subtype signature we fit a six variable linear regression modeling that subtype signature as the function of the six themes. We then applied Analysis of variance techniques to divide the overall variability of the subtype signature into seven components, one for each theme plus a residual component that couldn't be explained by the themes. We then divided the calculated variance of each of the components to get the proportion of the variance explained. While these proportions described the strength of association between a theme and a signature, they failed to express the direction of the association. To account for this, we multiplied each proportion (except the one representing the residual) by the sign of the coefficient in the linear model, and then plotted this result so that a strong positive relationship would be represented by a large positive number and a strong negative association would be represented by a large negative number (Figure 6B).
+Association of themes and LymphGen scores with genomic alterations As previously descibed3,5 set of 163,427 ``features'' indicating different types of genomic alternations was identified. These consisted of copy number changes (homozygous loss, heterozygous loss, single copy gain, amplification) either focally on individual genes or on whole arms, or one of several different types of mutations (truncating, synonymous, non-truncating non-synonymous) on a gene or combinations of mutations and copy number changes. This list was filtered to a set of 64,710 features that were found in 10 or more samples on the validation cohort. To test the relationship between these features and the themes, we performed a t test for the difference in their theme value between those samples that had a given genetic feature, and those that didn't. Since there was great overlap between the features of a given gene, we only used the most statistically significant feature to represent each gene. The resulting mean difference and log10 p-values for the Cell Cycle and Memory B-cell Theme are shown in Figures 6D and 6F and the full results are in Table S8. In Figure 3A and Table S6 a similar methodology was used to show the relationship between the genomic alternation features and the LymphGen gene expression scores. In this case the features displayed were selected from among those known to be predictive for a given LymphGen type. Two different t-tests were calculated. The first (left hand panel) t test compared the signature score between those tumors with and without the feature and was done on only those samples that were definitively assigned as a specific type (i.e., MCD, BN2, N1, A53, EZB, ST2). On the right side, the t test was done on only the samples that were left unassigned by the LymphGen algorithm, (i.e., ``Other'' or ``unassigned'' or ``unclass''). Composite samples (e.g., MCD/BN2) were not included in this analysis.
+Cancer Cell 44, 1­19.e1­e12, March 9, 2026 e12
+
+

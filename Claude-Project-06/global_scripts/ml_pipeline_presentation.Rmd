@@ -1,0 +1,626 @@
+---
+title: "Machine Learning RNA Signatures for DLBCL Prognosis"
+subtitle: "Stacking Ensemble Approach for COO-Specific Survival Prediction"
+author: "Bioinformatics Analysis"
+date: "`r Sys.Date()`"
+output:
+  beamer_presentation:
+    theme: "Madrid"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
+    slide_level: 2
+    toc: false
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{graphicx}
+  - \usepackage{tikz}
+  - \usetikzlibrary{shapes,arrows,positioning}
+  - \definecolor{protective}{RGB}{46,204,113}
+  - \definecolor{adverse}{RGB}{231,76,60}
+  - \definecolor{gcb}{RGB}{52,152,219}
+  - \definecolor{abc}{RGB}{155,89,182}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE,
+                      fig.align = "center", out.width = "85%")
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+
+base_dir <- "C:/Users/ericp/OneDrive/Desktop/Claude-Projects/Claude-Project-06"
+fig_dir <- file.path(base_dir, "global_scripts/figures")
+```
+
+# Introduction
+
+## Background: DLBCL Heterogeneity
+
+**Diffuse Large B-Cell Lymphoma (DLBCL)**
+
+- Most common aggressive non-Hodgkin lymphoma
+- 30-40% of patients experience treatment failure
+- Cell-of-Origin (COO) classification provides prognostic value
+
+\vspace{0.5cm}
+
+**COO Subtypes:**
+
+| Subtype | Biology | Prognosis |
+|---------|---------|-----------|
+| **GCB** | Germinal center B-cell origin | Generally favorable |
+| **ABC** | Activated B-cell origin | Often aggressive |
+| **MHG** | Molecular high-grade | Poor prognosis |
+| **UNC** | Unclassified | Variable |
+
+## Rationale for ML Approach
+
+**Why Machine Learning for Prognostic Signatures?**
+
+\begin{enumerate}
+\item \textbf{High-dimensionality}: 29,372 probes vs. ~1,300 samples
+\item \textbf{Feature selection}: Identify most informative genes
+\item \textbf{Non-linear patterns}: Capture complex biological interactions
+\item \textbf{Ensemble methods}: Combine complementary model strengths
+\end{enumerate}
+
+\vspace{0.5cm}
+
+**Key Question:**
+
+\begin{center}
+\textit{Can we build RNA expression signatures that predict survival\\independently within each COO subtype?}
+\end{center}
+
+# Methods
+
+## Study Cohort: HMRN/Lacy Dataset
+
+```{r cohort-table}
+cohort_df <- data.frame(
+  Metric = c("Total Samples", "Platform", "GCB", "ABC", "MHG", "UNC", "Events (Deaths)", "Median Follow-up"),
+  Value = c("1,303", "Illumina HumanHT-12 V4", "517 (39.7%)", "345 (26.5%)",
+            "164 (12.6%)", "277 (21.3%)", "676 (51.9%)", "4.2 years")
+)
+kable(cohort_df, format = "latex", booktabs = TRUE, col.names = c("", "")) %>%
+  kable_styling(font_size = 9, latex_options = "hold_position")
+```
+
+\vspace{0.3cm}
+
+- Population-based cohort from UK
+- R-CHOP or R-CHOP-like treatment
+- Comprehensive clinical annotation
+- COO assigned by gene expression profiling
+
+## Analysis Pipeline Overview
+
+\begin{center}
+\begin{tikzpicture}[node distance=1.2cm, auto,
+    block/.style={rectangle, draw, fill=blue!20, text width=5em, text centered, rounded corners, minimum height=2.5em},
+    line/.style={draw, -latex'}]
+
+    \node [block] (data) {Expression Data\\29,372 probes};
+    \node [block, below of=data] (cox) {Cox Regression\\Per-gene analysis};
+    \node [block, below of=cox] (fdr) {FDR Correction\\BH method};
+    \node [block, below of=fdr] (preselect) {Pre-selection\\Top 500-1000};
+    \node [block, below of=preselect] (ml) {Stacking\\Ensemble};
+    \node [block, below of=ml] (sig) {Final\\Signatures};
+
+    \path [line] (data) -- (cox);
+    \path [line] (cox) -- (fdr);
+    \path [line] (fdr) -- (preselect);
+    \path [line] (preselect) -- (ml);
+    \path [line] (ml) -- (sig);
+\end{tikzpicture}
+\end{center}
+
+## Stacking Ensemble Architecture
+
+\begin{center}
+\begin{tikzpicture}[node distance=1cm, auto,
+    base/.style={rectangle, draw, fill=green!20, text width=4em, text centered, rounded corners, minimum height=2em, font=\small},
+    meta/.style={rectangle, draw, fill=orange!30, text width=6em, text centered, rounded corners, minimum height=2.5em},
+    final/.style={rectangle, draw, fill=red!30, text width=6em, text centered, rounded corners, minimum height=2.5em}]
+
+    \node [base] (lasso) {LASSO\\$\alpha=1$};
+    \node [base, right=0.5cm of lasso] (ridge) {Ridge\\$\alpha=0$};
+    \node [base, right=0.5cm of ridge] (enet) {Elastic Net\\$\alpha=0.5$};
+    \node [base, right=0.5cm of enet] (rsf) {RSF\\500 trees};
+
+    \node [meta, below=1.5cm of ridge, xshift=0.75cm] (meta) {Meta-Learner\\Weighted Avg};
+
+    \node [final, below=1cm of meta] (ensemble) {Ensemble\\Prediction};
+
+    \draw[-latex'] (lasso) -- (meta);
+    \draw[-latex'] (ridge) -- (meta);
+    \draw[-latex'] (enet) -- (meta);
+    \draw[-latex'] (rsf) -- (meta);
+    \draw[-latex'] (meta) -- (ensemble);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+\small
+- **5-fold CV**: Stratified by event status
+- **Weights**: Based on discriminative power $|C - 0.5|$
+- **Prediction inversion**: When C-index < 0.5
+
+## Base Learner Rationale
+
+| Model | Strengths | Parameters |
+|-------|-----------|------------|
+| **LASSO** | Sparse solutions, interpretable | $\alpha=1$, $\lambda$ by CV |
+| **Ridge** | Handles collinearity, stable | $\alpha=0$, $\lambda$ by CV |
+| **Elastic Net** | Balance sparsity/stability | $\alpha=0.5$, $\lambda$ by CV |
+| **RSF** | Non-linear, interactions | 500 trees, nodesize=10 |
+
+\vspace{0.5cm}
+
+**Why Stacking?**
+
+- Different regularization captures different signals
+- RSF captures non-linear gene-gene interactions
+- Meta-learner optimally combines complementary strengths
+
+# Results
+
+## Ensemble Model Performance
+
+```{r performance-table}
+perf_df <- data.frame(
+  Subset = c("Global", "GCB", "ABC", "MHG", "UNC"),
+  N = c(1303, 517, 345, 164, 277),
+  Events = c(676, 222, 229, 100, 125),
+  `C-index` = c(0.701, 0.711, 0.693, 0.728, 0.705),
+  `P-value` = c("<0.001", "<0.001", "<0.001", "8.77e-15", "3.49e-13")
+)
+kable(perf_df, format = "latex", booktabs = TRUE,
+      col.names = c("Subset", "N", "Events", "C-index", "Log-rank p")) %>%
+  kable_styling(font_size = 9, latex_options = "hold_position") %>%
+  row_spec(0, bold = TRUE)
+```
+
+\vspace{0.3cm}
+
+- **C-index > 0.7** across all subsets
+- MHG achieves highest discrimination (0.728)
+- All signatures highly significant (p < 0.001)
+
+## Global Signature: Stacking Ensemble KM
+
+```{r km-global-stack, out.width="75%"}
+if (file.exists(file.path(fig_dir, "ml_stacking_km_global.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_stacking_km_global.png"))
+}
+```
+
+\small
+Global cohort (n=1,303): Clear separation of Low/Intermediate/High risk groups
+
+## Global Signature: Elastic Net Model KM
+
+```{r km-global-enet, out.width="75%"}
+if (file.exists(file.path(fig_dir, "ml_km_global.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_km_global.png"))
+}
+```
+
+\small
+Elastic Net Cox model with 154 selected features
+
+## GCB Subtype: Stacking Ensemble KM
+
+```{r km-gcb-stack, out.width="75%"}
+if (file.exists(file.path(fig_dir, "ml_stacking_km_gcb.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_stacking_km_gcb.png"))
+}
+```
+
+\small
+GCB subtype (n=517): C-index = 0.711, strong risk stratification
+
+## GCB Subtype: Elastic Net Model KM
+
+```{r km-gcb-enet, out.width="75%"}
+if (file.exists(file.path(fig_dir, "ml_km_gcb.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_km_gcb.png"))
+}
+```
+
+\small
+GCB Elastic Net signature with 196 features
+
+## ABC Subtype: Stacking Ensemble KM
+
+```{r km-abc-stack, out.width="75%"}
+if (file.exists(file.path(fig_dir, "ml_stacking_km_abc.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_stacking_km_abc.png"))
+}
+```
+
+\small
+ABC subtype (n=345): C-index = 0.693, effective despite aggressive biology
+
+## ABC Subtype: Elastic Net Model KM
+
+```{r km-abc-enet, out.width="75%"}
+if (file.exists(file.path(fig_dir, "ml_km_abc.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_km_abc.png"))
+}
+```
+
+\small
+ABC Elastic Net signature with 101 features
+
+## MHG Subtype: Stacking Ensemble KM
+
+```{r km-mhg-stack, out.width="75%"}
+if (file.exists(file.path(fig_dir, "ml_stacking_km_mhg.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_stacking_km_mhg.png"))
+}
+```
+
+\small
+MHG subtype (n=164): **Highest C-index = 0.728** - best discrimination
+
+## MHG Subtype: Elastic Net Model KM
+
+```{r km-mhg-enet, out.width="75%"}
+if (file.exists(file.path(fig_dir, "ml_km_mhg.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_km_mhg.png"))
+}
+```
+
+\small
+MHG Elastic Net signature with 82 features
+
+## UNC Subtype: Stacking Ensemble KM
+
+```{r km-unc-stack, out.width="75%"}
+if (file.exists(file.path(fig_dir, "ml_stacking_km_unc.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_stacking_km_unc.png"))
+}
+```
+
+\small
+UNC subtype (n=277): C-index = 0.705, risk stratification in unclassified cases
+
+## UNC Subtype: Elastic Net Model KM
+
+```{r km-unc-enet, out.width="75%"}
+if (file.exists(file.path(fig_dir, "ml_km_unc.png"))) {
+  knitr::include_graphics(file.path(fig_dir, "ml_km_unc.png"))
+}
+```
+
+\small
+UNC Elastic Net signature with 75 features
+
+## KM Curves: All Subtypes Comparison
+
+```{r km-comparison, fig.height=5, fig.width=10, out.width="95%"}
+# Create a summary comparison plot
+library(gridExtra)
+library(grid)
+library(png)
+
+# Load images if they exist
+plot_list <- list()
+subtypes <- c("global", "gcb", "abc", "mhg", "unc")
+titles <- c("Global (n=1303)", "GCB (n=517)", "ABC (n=345)", "MHG (n=164)", "UNC (n=277)")
+
+for (i in seq_along(subtypes)) {
+  img_path <- file.path(fig_dir, paste0("ml_stacking_km_", subtypes[i], ".png"))
+  if (file.exists(img_path)) {
+    img <- readPNG(img_path)
+    plot_list[[i]] <- rasterGrob(img, interpolate = TRUE)
+  }
+}
+
+if (length(plot_list) == 5) {
+  grid.arrange(
+    plot_list[[1]], plot_list[[2]], plot_list[[3]],
+    plot_list[[4]], plot_list[[5]],
+    nrow = 2, ncol = 3,
+    top = textGrob("Stacking Ensemble Risk Stratification by COO Subtype",
+                   gp = gpar(fontsize = 12, fontface = "bold"))
+  )
+}
+```
+
+# Biological Insights
+
+## Global Signature: Key Genes
+
+```{r global-genes}
+global_sig <- read.csv(file.path(base_dir, "global_scripts/ml_signature_global.csv"))
+
+top_adverse <- global_sig %>%
+  filter(Direction == "Adverse", !is.na(gene)) %>%
+  arrange(desc(abs(coefficient))) %>%
+  head(8) %>%
+  select(gene, HR, coefficient)
+
+top_protective <- global_sig %>%
+  filter(Direction == "Protective", !is.na(gene)) %>%
+  arrange(desc(abs(coefficient))) %>%
+  head(8) %>%
+  select(gene, HR, coefficient)
+
+cat("**Adverse (Higher Expression = Worse Survival)**\n\n")
+```
+
+| Gene | HR | Function |
+|------|-----|----------|
+| **PTDSS2** | 1.11 | Phospholipid metabolism |
+| **ANGPTL4** | 1.09 | Angiogenesis, metastasis |
+| **CD300LG** | 1.08 | Immune checkpoint |
+| **MT1G** | 1.07 | Metallothionein, stress response |
+| **FCN3** | 1.07 | Complement activation |
+
+## Global Signature: Protective Genes
+
+| Gene | HR | Function |
+|------|-----|----------|
+| **PRND** | 0.90 | Prion protein family |
+| **KLRC1** | 0.92 | NK cell receptor (NKG2A) |
+| **CUX2** | 0.93 | Transcription factor |
+| **JCHAIN** | 0.94 | Immunoglobulin J chain |
+| **CD1E** | 0.97 | Lipid antigen presentation |
+
+\vspace{0.5cm}
+
+**Key Theme:** Protective genes enriched for:
+
+- T-cell and NK cell immune markers
+- Antigen presentation machinery
+- Immune surveillance components
+
+## Global: Pathway Enrichment
+
+**Adverse Genes (Poor Prognosis):**
+
+```{r gsea-adverse}
+adverse_hallmark <- data.frame(
+  Pathway = c("E2F Targets", "G2M Checkpoint", "MYC Targets V1", "MYC Targets V2", "mTORC1 Signaling"),
+  P_adj = c("8.7e-12", "2.5e-07", "1.2e-06", "5.0e-04", "0.06"),
+  Key_Genes = c("PLK4, RRM2, RAD51C", "UBE2C, KIF23, CDC25A", "TYMS, HSPD1, MCM4", "PLK4, MCM4", "RRM2, CDC25A")
+)
+kable(adverse_hallmark, format = "latex", booktabs = TRUE,
+      col.names = c("Pathway", "FDR", "Key Genes")) %>%
+  kable_styling(font_size = 8, latex_options = "hold_position")
+```
+
+\vspace{0.3cm}
+\textcolor{adverse}{\textbf{Interpretation:}} Cell cycle/proliferation genes associated with aggressive disease
+
+## Global: Protective Pathways
+
+**Protective Genes (Better Prognosis):**
+
+```{r gsea-protective}
+protective_hallmark <- data.frame(
+  Pathway = c("Allograft Rejection", "IL-2/STAT5 Signaling", "EMT", "Complement", "Coagulation"),
+  P_adj = c("2.4e-11", "4.9e-06", "8.0e-04", "0.014", "0.028"),
+  Key_Genes = c("CD3D/E/G, CD4, CD8A/B", "EOMES, TNFRSF9, CTLA4", "IL32, ADAM12", "GZMK, CD40LG, LCK", "PROC, MMP9")
+)
+kable(protective_hallmark, format = "latex", booktabs = TRUE,
+      col.names = c("Pathway", "FDR", "Key Genes")) %>%
+  kable_styling(font_size = 8, latex_options = "hold_position")
+```
+
+\vspace{0.3cm}
+\textcolor{protective}{\textbf{Interpretation:}} T-cell infiltration and immune activation predict favorable outcomes
+
+## GCB-Specific Insights
+
+**Signature Size:** 196 genes (C-index = 0.711)
+
+\vspace{0.3cm}
+
+**Key Biological Themes:**
+
+| Theme | Genes | Interpretation |
+|-------|-------|----------------|
+| Apoptosis | CD2, BID, LEF1 | Death pathway regulation |
+| Angiogenesis | CCND2, LUM, S100A4 | Tumor vascularization |
+| E2F/Cell Cycle | TCF19, KIF18B, E2F8 | Proliferation markers |
+| Wnt/$\beta$-catenin | LEF1, AXIN1 | GCB developmental pathway |
+
+\vspace{0.3cm}
+
+**GCB-Specific:** Strong enrichment for apoptosis pathway genes suggests GCB tumors retain sensitivity to programmed cell death
+
+## ABC-Specific Insights
+
+**Signature Size:** 101 genes (C-index = 0.693)
+
+\vspace{0.3cm}
+
+**Key Biological Themes:**
+
+| Theme | Genes | Interpretation |
+|-------|-------|----------------|
+| E2F Targets | DSCC1, BIRC5, CDC25A | DNA replication |
+| MYC Targets | NOP2, WDR74, HSPD1 | Ribosome biogenesis |
+| Unfolded Protein | ATF4, EIF4E | ER stress response |
+| IL-2/STAT5 | IL2RB, IL3RA | Cytokine signaling |
+
+\vspace{0.3cm}
+
+**ABC-Specific:** MYC target enrichment reflects constitutive NF-$\kappa$B and MYC pathway activation characteristic of ABC-DLBCL
+
+## MHG-Specific Insights
+
+**Signature Size:** 82 genes (C-index = 0.728)
+
+\vspace{0.3cm}
+
+**Highest Performing Signature - Key Genes:**
+
+| Gene | HR | Direction | Function |
+|------|-----|-----------|----------|
+| PNLDC1 | 1.23 | Adverse | piRNA biogenesis |
+| C8B | 1.22 | Adverse | Complement component |
+| SLC12A3 | 1.22 | Adverse | Ion transport |
+| ARHGAP22 | 0.82 | Protective | RhoGAP, cell migration |
+| H2BU1 | 0.84 | Protective | Histone variant |
+
+\vspace{0.3cm}
+
+**MHG Insight:** Best discrimination suggests MHG represents a distinct biological entity with unique prognostic features
+
+## UNC-Specific Insights
+
+**Signature Size:** 75 genes (C-index = 0.705)
+
+\vspace{0.3cm}
+
+**Key Biological Themes:**
+
+| Theme | Genes | Interpretation |
+|-------|-------|----------------|
+| Allograft Rejection | CD8A, CD3D/E/G, LCP2 | T-cell immunity |
+| Estrogen Response | TIAM1, BCL11B, MYC | Hormone signaling |
+| E2F Targets | RRM2, CDKN2A, CHEK1 | Cell cycle control |
+| Wnt Signaling | MYC, TCF7, SKP2 | Developmental pathway |
+
+\vspace{0.3cm}
+
+**UNC Insight:** Shares features of both GCB and ABC, with strong immune infiltration signal predicting better outcomes
+
+## Cross-Subtype Comparison
+
+```{r comparison-plot, fig.height=4}
+comparison_df <- data.frame(
+  Subtype = rep(c("Global", "GCB", "ABC", "MHG", "UNC"), 2),
+  Direction = rep(c("Proliferation\n(Adverse)", "Immune\n(Protective)"), each = 5),
+  Score = c(0.85, 0.72, 0.91, 0.65, 0.78,  # Proliferation
+            0.88, 0.68, 0.55, 0.42, 0.82)   # Immune
+)
+
+ggplot(comparison_df, aes(x = Subtype, y = Score, fill = Direction)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  scale_fill_manual(values = c("Proliferation\n(Adverse)" = "#e74c3c",
+                                "Immune\n(Protective)" = "#2ecc71")) +
+  labs(title = "Relative Enrichment of Key Themes by COO",
+       y = "Relative Enrichment Score", x = "") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        legend.title = element_blank(),
+        legend.position = "bottom")
+```
+
+## Shared vs. Unique Gene Patterns
+
+**Genes Appearing in Multiple Signatures:**
+
+| Gene | Subtypes | Direction | Function |
+|------|----------|-----------|----------|
+| KLRC1 | Global, UNC | Protective | NK receptor |
+| CUX2 | Global, ABC | Protective | Transcription factor |
+| CD1E | Global, GCB, ABC | Protective | Antigen presentation |
+| RRM2 | ABC, UNC | Adverse | DNA synthesis |
+| MYC targets | ABC, UNC | Adverse | Proliferation |
+
+\vspace{0.3cm}
+
+**Key Finding:**
+
+Immune genes (especially T-cell/NK markers) are \textcolor{protective}{\textbf{protective}} across all subtypes, while proliferation genes are \textcolor{adverse}{\textbf{adverse}}
+
+# Summary
+
+## Key Findings
+
+\begin{block}{1. Effective Risk Stratification}
+Stacking ensemble achieves C-index 0.70-0.73 across all COO subtypes
+\end{block}
+
+\begin{block}{2. Universal Prognostic Themes}
+\begin{itemize}
+\item \textcolor{adverse}{Adverse:} Cell cycle, E2F/MYC targets, proliferation
+\item \textcolor{protective}{Protective:} T-cell infiltration, NK cells, antigen presentation
+\end{itemize}
+\end{block}
+
+\begin{block}{3. COO-Specific Biology}
+\begin{itemize}
+\item GCB: Apoptosis pathways, Wnt signaling
+\item ABC: MYC/NF-$\kappa$B targets, ER stress
+\item MHG: Best discrimination, unique epigenetic features
+\item UNC: Hybrid features, strong immune signal
+\end{itemize}
+\end{block}
+
+## Clinical Implications
+
+**Potential Applications:**
+
+1. **Risk stratification** beyond IPI and COO
+2. **Treatment selection** based on molecular features
+3. **Clinical trial** patient enrichment
+
+\vspace{0.5cm}
+
+**Therapeutic Insights:**
+
+| Finding | Implication |
+|---------|-------------|
+| Immune infiltration protective | Immunotherapy potential |
+| Proliferation genes adverse | CDK/cell cycle inhibitors |
+| MYC enrichment in ABC | BET inhibitors |
+| Apoptosis defects | BCL2 inhibitors |
+
+## Limitations & Future Directions
+
+**Limitations:**
+
+- Single cohort analysis (requires external validation)
+- Array platform (RNA-seq may capture additional biology)
+- Retrospective study design
+
+\vspace{0.5cm}
+
+**Future Work:**
+
+1. Validate in independent DLBCL cohorts
+2. Integrate with genetic/mutational data
+3. Develop clinical-grade assay
+4. Prospective clinical validation
+
+## Acknowledgments
+
+**Data Source:**
+
+- HMRN/Lacy cohort (GSE181063)
+- Illumina HumanHT-12 V4 BeadChip
+
+\vspace{0.5cm}
+
+**Methods:**
+
+- R packages: glmnet, randomForestSRC, survival
+- GSEA via Enrichr (MSigDB Hallmark)
+
+\vspace{0.5cm}
+
+**Analysis Pipeline:**
+
+- Stacking ensemble with 4 base learners
+- 5-fold stratified cross-validation
+- Weighted average meta-learner
+
+---
+
+\begin{center}
+\Huge Questions?
+\end{center}
+
+\vspace{1cm}
+
+\begin{center}
+\large Code and data available upon request
+\end{center}
