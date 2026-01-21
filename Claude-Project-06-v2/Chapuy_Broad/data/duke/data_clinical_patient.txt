@@ -1,0 +1,1006 @@
+#Patient Identifier	Sex	Age at Diagnosis	Initial Treatment Response	B Symptoms at Diagnosis	Testicular Involvement	CNS Status	CNS Relapse	Overall Survival (Months)	IPI	ECOG IPI Score	AnnArbor Stage IPI	LDH IPI Factor	Extranodal IPI Factor	Age IPI Factor
+#Identifier to uniquely specify a patient.	Sex	Age at Diagnosis	Initial Treatment Response	Presence of B Symptoms at Diagnosis?	Yes or No indicator for testicular involvement	CNS status.	CNS Relapse	Overall survival in months since initial diagonosis.	International Prognostic Index (IPI)	IPI factor ECOG; 0 = ECOG <= 1; 1 = ECOG > 1	Ann Arbor staging as an IPI Factor	IPI factor LDH; LDH > normal reference, 1;  LDH <= normal reference, 0	IPI factor Extranodal; 1 = Extranodal sites > 1; 0 = Extranodal sites <= 1	IPI factor age; 1 = age > 60 years; 0 = age <=60 years
+#STRING	STRING	NUMBER	STRING	STRING	STRING	STRING	STRING	NUMBER	NUMBER	NUMBER	NUMBER	NUMBER	NUMBER	NUMBER
+#1	1	1	1	1	1	1	1	1	1	1	1	1	1	1
+PATIENT_ID	SEX	AGE_AT_DIAGNOSIS	INITIAL_TX_RESPONSE	B_SYMPTOMS_AT_DIAGNOSIS	TESTICULAR_INVOLVEMENT	CNS_STATUS	CNS_RELAPSE	OS_MONTHS	IPI	IPI_ECOG	IPI_ANNARBOR_STAGE	IPI_LDH	IPI_EXTRANODAL_SITES	IPI_AGE
+DLBCL_DUKE_648	Female	31.1	Complete response	Yes	Female	No		17.936	3	0	1	1	1	0
+DLBCL_DUKE_658	Male	50.4		Yes										0
+DLBCL_DUKE_683	Male	55.3	Complete response	No	No	No		79.648	3	1	1	1	0	0
+DLBCL_DUKE_684	Female	53.5	Complete response	No	Female	No		56.848	1	0	0	1	0	0
+DLBCL_DUKE_689	Female	15.3	Complete response	Yes	Female			69.616	3	0	1	1	1	0
+DLBCL_DUKE_690	Male	51.5	Complete response	No	No	No		86.032	0	0	0	0	0	0
+DLBCL_DUKE_695	Female	54.1		Yes	Female	No			2	1	0	1	0	0
+DLBCL_DUKE_702	Male	48.1	Complete response	Yes	No	No		127.072	3	0	1	1	1	0
+DLBCL_DUKE_704	Female	79	Complete response	No	Female			124.64	1	0	0	0	0	1
+DLBCL_DUKE_705	Male	89.3		No	No	No			4	1	1	1	0	1
+DLBCL_DUKE_707	Male	55.2	Partial response	Yes	No			35.568	4	1	1	1	1	0
+DLBCL_DUKE_759	Male	57.5	Complete response	Yes	No	No		199.12	2	0	1	1	0	0
+DLBCL_DUKE_787	Female	62.3	Complete response	No	Female	No		160.816	2	0	0	1	0	1
+DLBCL_DUKE_790	Male	65.7	Complete response		No	No		134.368	1	0	0	0	0	1
+DLBCL_DUKE_793	Male	57.3	Complete response	No	No	No		145.008	0	0	0	0	0	0
+DLBCL_DUKE_799	Male	72.3	Complete response	No	No	No		16.72	2	0	0	1	0	1
+DLBCL_DUKE_800	Male	77.9	Complete response	No	No	No		171.152	3	0	1	1	0	1
+DLBCL_DUKE_813	Male	9.8	Complete response	Yes	No	No		158.992	1	0	1	0	0	0
+DLBCL_DUKE_816	Male	50.9	Complete response	Yes	No	No		135.584	1	0	1	0	0	0
+DLBCL_DUKE_823	Female	61.3	Complete response	No	Female	No		61.408	3	0	1	1	0	1
+DLBCL_DUKE_829	Female	79.6	Partial response	No	Female			59.584	2	0	1	0	0	1
+DLBCL_DUKE_830	Male	53.6	Complete response	No	No			58.368	1	0	1	0	0	0
+DLBCL_DUKE_831	Male	39	Complete response	No	No	No		181.488	1	0	0	1	0	0
+DLBCL_DUKE_832	Female	57.9	Complete response	No	Female	No		119.168	1	0	1	0	0	0
+DLBCL_DUKE_1008	Male	74.7	Complete response	Yes	No	No	No	13.376	3	0	1	1	0	1
+DLBCL_DUKE_1016	Female	87.8	Partial response	No	Female	No	No	142.88	3	1	0	1	0	1
+DLBCL_DUKE_2043	Female	76.6	Complete response		Female	No		279.376	3	0	1	1	0	1
+DLBCL_DUKE_2044	Female	70.9	Partial response		Female	No		181.184	2	0	0	1	0	1
+DLBCL_DUKE_2045	Male	71.5	No response					24.32		1	1			1
+DLBCL_DUKE_2046	Female	84	Complete response		Female	No		10.032	2	0	0	1	0	1
+DLBCL_DUKE_2047	Female	59.3	Complete response		Female	No		269.648	0	0	0	0	0	0
+DLBCL_DUKE_2048	Male	32.9	Complete response		No	No		250.496	0	0	0	0	0	0
+DLBCL_DUKE_2057	Male	51.9	Complete response	No	No	No		307.648	2	0	1	0	1	0
+DLBCL_DUKE_2060	Male	86.3	Partial response	No	No	No		4.864	2	0	0	1	0	1
+DLBCL_DUKE_2072	Male	69.7	Complete response	Yes	No	No		19.152	2	1	0	0	0	1
+DLBCL_DUKE_2073	Male	66.5	Complete response	Yes	No	No		111.568			1		0	1
+DLBCL_DUKE_2074	Male	75.3	Complete response	No	Yes	No		148.352	4	1	1	1	0	1
+DLBCL_DUKE_2075	Male	53.8	Complete response	No	No	No		158.384	1	0	1	0	0	0
+DLBCL_DUKE_2076	Male	73.7	Complete response		No	No		129.808	2	0	0	1	0	1
+DLBCL_DUKE_2077	Male	67.1	Complete response	Yes	Yes	No		132.24	4	1	1	1	0	1
+DLBCL_DUKE_2078	Female	71.3	No response		Female	No		75.392	4	0	1	1	1	1
+DLBCL_DUKE_2079	Female	83.3	No response	No	Female	No		1.216	5	1	1	1	1	1
+DLBCL_DUKE_2080	Male	74	No response		No	No		32.832	2	0	0	1	0	1
+DLBCL_DUKE_2081	Male	74.6		No	Yes	No		51.68	2	0	0	1	0	1
+DLBCL_DUKE_2083	Female	68.7	Partial response	No	Female	No		209.76	2	0	0	1	0	1
+DLBCL_DUKE_2084	Female	73.1	Complete response		Female	No		72.96	1	0	0	0	0	1
+DLBCL_DUKE_2085	Male	54.5	Partial response	No	No	No		19.152	1	0	1	0	0	0
+DLBCL_DUKE_2087	Female	60.9	No response	No	Female	Yes		35.264	4	1	1	1	0	1
+DLBCL_DUKE_2088	Male	86.8	Complete response	No	No	No		52.592	4	1	1	1	0	1
+DLBCL_DUKE_2089	Male	68.4	Complete response	No	No	No		75.392	2	0	0	1	0	1
+DLBCL_DUKE_2091	Female	76.9	Complete response	No	Female	No		55.632	1	0	0	0	0	1
+DLBCL_DUKE_2092	Male	53.1	Complete response	Yes	No	No		58.064	2	0	1	1	0	0
+DLBCL_DUKE_2093	Male	64.6	Complete response	No	No	No		44.08	1	0	0	0	0	1
+DLBCL_DUKE_2095	Male	28.6	Complete response	No	No	No		41.04	0	0	0	0	0	0
+DLBCL_DUKE_2097	Female	54.1	Complete response	No	Female	No		27.36	2	0	1	1	0	0
+DLBCL_DUKE_2100	Male	39.2	Complete response		No	No		319.504			0	1	0	0
+DLBCL_DUKE_2101	Female	60.7	Complete response	Yes	Female	No		135.888	1	0	0	0	0	1
+DLBCL_DUKE_2102	Female	46.6	Complete response	No	Female	No		90.896	0	0	0	0	0	0
+DLBCL_DUKE_2103	Male	77.4	Complete response		Yes	No		152.912		0	0		0	1
+DLBCL_DUKE_2106	Female	86.6	Complete response	No	Female	No		45.6	1	0	0	0	0	1
+DLBCL_DUKE_2107	Female	63.6	Complete response		Female	No		40.128	2	0	1	0	0	1
+DLBCL_DUKE_2109	Female	88.6	Partial response	No	Female	No		34.048	1	0	0	0	0	1
+DLBCL_DUKE_2110	Male	26.3	Complete response	No	No	No		23.408	2	0	1	0	1	0
+DLBCL_DUKE_2111	Male	62	No response	No	No	No		9.424	3	1	0	1	0	1
+DLBCL_DUKE_2112	Female	85.4	Complete response	No	Female	No		31.008	2	0	0	1	0	1
+DLBCL_DUKE_2113	Female	79.2			Female	No		2.128	3	1	1	0	0	1
+DLBCL_DUKE_2114	Female	78.8	Complete response	No	Female	No		229.216	4	1	1	1	0	1
+DLBCL_DUKE_2115	Male	73.1	Complete response	No	No	Yes		25.84	3	0	1	1	0	1
+DLBCL_DUKE_2120	Male	64.4	No response	Yes	No	No	No	99.408	3	0	1	1	0	1
+DLBCL_DUKE_2121	Male	51.8	Complete response	Yes	No	No	No	115.216	3	0	1	1	1	0
+DLBCL_DUKE_2122	Male	31.8	No response	No		No	No	92.416		0	0	1		0
+DLBCL_DUKE_2123	Male	39.9	Complete response	No		No		33.744		0	1			0
+DLBCL_DUKE_2124	Male	51.2	Complete response					306.736		0	1			0
+DLBCL_DUKE_2125	Female	44.1	Complete response	No	Female	No		68.704	2	0	1	1	0	0
+DLBCL_DUKE_2126	Female	52.8	No response	No	Female	No	No	27.36	1	0	0	1	0	0
+DLBCL_DUKE_2127	Female	56.5	Complete response		Female	No		22.192		0	1		0	0
+DLBCL_DUKE_2128	Female	57.5	Complete response	Yes	Female	No		68.4	2	1	0	1	0	0
+DLBCL_DUKE_2130	Female	68.8	Complete response		Female	No	No	324.976	3	0	1	1	0	1
+DLBCL_DUKE_2133	Male	58.9	Complete response		Yes	No		319.808	3	0	1	1	1	0
+DLBCL_DUKE_2134	Female	64.1	Complete response		Female	No		165.376		0	1		1	1
+DLBCL_DUKE_2135	Male	61.3	Complete response			No		41.648		1	1	1		1
+DLBCL_DUKE_2136	Male	23.1	No response	Yes	No	No		186.352	3	1	1	0	1	0
+DLBCL_DUKE_2137	Male	62.6	Complete response		No	No				0		1	0	1
+DLBCL_DUKE_2138	Male	41.9	Complete response	Yes		No		33.744		0	1			0
+DLBCL_DUKE_2140	Male	22.2	No response	Yes	No	No		164.768	4	1	1	1	1	0
+DLBCL_DUKE_2141	Male	53.9	Complete response	Yes	No	No		128.592	3	1	1	1	0	0
+DLBCL_DUKE_2142	Female	24.4	Complete response	Yes	Female	No		4.256		0	1		0	0
+DLBCL_DUKE_2143	Female	66.2			Female	No		2.432		1	1			1
+DLBCL_DUKE_2144	Female	51.1	No response	Yes	Female	No		18.848		0	0			0
+DLBCL_DUKE_2145	Male	45.1	Complete response			No		65.36		0	1	1		0
+DLBCL_DUKE_2146	Male	30.5	Complete response	No		No		101.232		0	0	1		0
+DLBCL_DUKE_2147	Female	81.7	No response		Female	No	No	13.984		0	1		1	1
+DLBCL_DUKE_2148	Male	81	Complete response			No		103.664		0				1
+DLBCL_DUKE_2149	Female	62.2	No response	No	Female	No		29.488		0	0	0		1
+DLBCL_DUKE_2150	Male	62.5	Complete response	No	No	No		57.76	5	1	1	1	1	1
+DLBCL_DUKE_2151	Female	44	Complete response	Yes	Female	No		25.536	3	1	1	1	0	0
+DLBCL_DUKE_2152	Female	61.8	Complete response		Female	No		33.744		0	0	0		1
+DLBCL_DUKE_2153	Female	72.1	Complete response	Yes	Female	No		267.216		0	1			1
+DLBCL_DUKE_2154	Male	52.9	Complete response		No	No		71.136	2	0	1	0	1	0
+DLBCL_DUKE_2155	Male	25.6	Complete response	Yes	No	No		104.88	3	0	1	1	1	0
+DLBCL_DUKE_2156	Male	47	No response			No		58.672		0	0	0		0
+DLBCL_DUKE_2157	Male	57.7	Complete response	Yes	No	No		79.344	3	0	1	1	1	0
+DLBCL_DUKE_2158	Male	55.5	Complete response	Yes	No	No		337.44	2	0	1	1	0	0
+DLBCL_DUKE_2159	Male	50	Complete response	No	No	No		36.784	3	1	1	1	0	0
+DLBCL_DUKE_2160	Female	38.5	Complete response	No	Female	No		60.192	2	0	1	1	0	0
+DLBCL_DUKE_2161	Male	55.1	Complete response	No	No	No		90.592	2	0	1	1	0	0
+DLBCL_DUKE_2162	Male	37.6	Complete response	Yes				216.448		1	0	1		0
+DLBCL_DUKE_2163	Female	54.8	Complete response	Yes	Female			35.264		0	1	1		0
+DLBCL_DUKE_2164	Male	64.9	Complete response	Yes				38		0	1			1
+DLBCL_DUKE_2165	Female	44.1	Complete response		Female	No		68.4	3	0	1	1	1	0
+DLBCL_DUKE_2166	Male	51.2		No	No	No			4	1	1	1	1	0
+DLBCL_DUKE_2190	Male	79.7	Complete response	No	No	No	Yes	200.64	3	0	1	1	0	1
+DLBCL_DUKE_2191	Female	80.4	No response	No	Female	No	No	40.432	4	0	1	1	1	1
+DLBCL_DUKE_2192	Female	68.9	Partial response	Yes	Female	No	No	51.68	2	1	0	0	0	1
+DLBCL_DUKE_2193	Male	41.9	Complete response	No	No	No	Yes	32.528			1		1	0
+DLBCL_DUKE_2194	Female	66.3	Complete response	No	Female	No	No	59.584	3	0	1	1	0	1
+DLBCL_DUKE_2195	Female	42.3	Complete response	Yes	Female	No	No	210.672	1	0	0	1	0	0
+DLBCL_DUKE_2196	Female	44.6	Complete response	No	Female	No	No	184.832	0	0	0	0	0	0
+DLBCL_DUKE_2198	Male	88.6	Complete response	No	No	No	No	64.752	3	1	1	0	0	1
+DLBCL_DUKE_2199	Male	49.4	Complete response	No	No	No	No	110.656	2	0	1	1	0	0
+DLBCL_DUKE_2200	Male	73.2	Complete response	No	No	No		268.736		0		1	1	1
+DLBCL_DUKE_2201	Male	79	Complete response	No	No	No	No	191.52	1	0	0	0	0	1
+DLBCL_DUKE_2203	Male	58	Complete response	Yes	No	No	No	60.8	3	1	1	1	0	0
+DLBCL_DUKE_2204	Female	80.8	Complete response	Yes	Female	No	No	100.32	4	1	1	0	1	1
+DLBCL_DUKE_2205	Female	56.7	Complete response	Yes	Female	No	No	164.768	0	0	0	0	0	0
+DLBCL_DUKE_2206	Female	73.6	Complete response	Yes	Female	No	No	86.64	3	0	1	1	0	1
+DLBCL_DUKE_2207	Female	42.1	Complete response	Yes	Female	No	No	345.04	1	0	1	0	0	0
+DLBCL_DUKE_2208	Female	72.5	Complete response	No	Female	No	No	286.672	2	1	0	0	0	1
+DLBCL_DUKE_2209	Female	29.7	Complete response	No	Female	No	No	164.464	1	0	1	0	0	0
+DLBCL_DUKE_2210	Female	69	Complete response	Yes	Female	No		18.544	5	1	1	1	1	1
+DLBCL_DUKE_2211	Male	69.5	Complete response	Yes	No	No	No	84.208	4	1	1	1	0	1
+DLBCL_DUKE_2212	Male	51.1	No response	Yes	No	No	No	29.792	2	0	1	0	1	0
+DLBCL_DUKE_2213	Female	56.7	Complete response	No	Female	No		383.344	1	0	1	0	0	0
+DLBCL_DUKE_2214	Female	48.9	No response	Yes	Female	No	No	22.8	1	0	1	0	0	0
+DLBCL_DUKE_2215	Male	73.2	Partial response	Yes	No	No	No	4.256		0	0		0	1
+DLBCL_DUKE_2216	Male	71.5	Complete response	No	Yes	No	Yes	191.216	2	0	1	0	0	1
+DLBCL_DUKE_2217	Female	63.1	Partial response	Yes	Female	No	No	331.664		1	0		0	1
+DLBCL_DUKE_2219	Male	78.8	Partial response	No	No	No	No	6.992	5	1	1	1	1	1
+DLBCL_DUKE_2220	Male	49.6	Partial response	Yes	No	No	No	44.688		0	1		0	0
+DLBCL_DUKE_2221	Female	79.2	Complete response	No	Female	No	No	129.2	3	0	1	1	0	1
+DLBCL_DUKE_2222	Female	62.3	Complete response	No	Female	No	No	318.288	4	1	1	1	0	1
+DLBCL_DUKE_2223	Male	65.8	Complete response	No	No	No	No	217.664	3	1	1	0	0	1
+DLBCL_DUKE_2224	Female	55	Complete response	Yes	Female	No	No	11.552	3	0	1	1	1	0
+DLBCL_DUKE_2225	Male	66.1	Complete response	No	Yes	No	No	256.576	3	0	1	1	0	1
+DLBCL_DUKE_2226	Male	55.6	Complete response	No	No	No	No	203.376	0	0	0	0	0	0
+DLBCL_DUKE_2227	Female	73.3	Complete response	No	Female	No	No	224.352	3	0	1	0	1	1
+DLBCL_DUKE_2228	Female	62.7	Complete response	Yes	Female	No	No	168.416	3	0	1	1	0	1
+DLBCL_DUKE_2229	Female	63.4	No response	No	Female	No	No	41.344	3	0	1	1	0	1
+DLBCL_DUKE_2230	Female	37.4	Complete response	Yes	Female	No	Yes	149.872	2	0	1	1	0	0
+DLBCL_DUKE_2231	Female	70.1		No	Female	Yes	No	4.256			1	1	0	1
+DLBCL_DUKE_2232	Female	71.7	Complete response	No	Female	No	No	191.824	1	0	0	0	0	1
+DLBCL_DUKE_2233	Female	50.9	Complete response	No	Female	No	No	136.8	1	0	0	1	0	0
+DLBCL_DUKE_2234	Female	82.7	No response	Yes	Female	No	No	8.816	3	0	1	1	0	1
+DLBCL_DUKE_2235	Male	80.6	Complete response	No	No	No	No	162.944	2	0	0	1	0	1
+DLBCL_DUKE_2236	Female	70.8	Complete response	No	Female	No	No	66.272	3	0	1	0	1	1
+DLBCL_DUKE_2237	Female	78.4	Complete response	No	Female	No	No	134.672	4	1	1	0	1	1
+DLBCL_DUKE_2238	Female	58.5	Complete response	No	Female	No	No	119.472	3	0	1	1	1	0
+DLBCL_DUKE_2239	Male	77.6	Complete response	No	Yes	No	No	117.04	5	1	1	1	1	1
+DLBCL_DUKE_2240	Male	45	Complete response	Yes	No	No	No	17.328	1	0	0	1	0	0
+DLBCL_DUKE_2241	Female	60.6	Complete response	Yes	Female	No	No	115.216	2	0	0	1	0	1
+DLBCL_DUKE_2242	Female	51	Complete response	No	Female	No	No	91.808	0	0	0	0	0	0
+DLBCL_DUKE_2243	Female	82.9	Complete response	No	Female	No	No	94.544	1	0	0	0	0	1
+DLBCL_DUKE_2244	Male	60.7	Partial response	No	No	No	Yes	38	4	0	1	1	1	1
+DLBCL_DUKE_2246	Male	54.6	Complete response	No	No	No	No	74.784	0	0	0	0	0	0
+DLBCL_DUKE_2247	Male	55.2	Complete response	No	No	No	No	355.376	1	0	0	1	0	0
+DLBCL_DUKE_2248	Male	26.3	Complete response	No	No	No	No	199.424	1	0	0	1	0	0
+DLBCL_DUKE_2249	Female	45.8	Complete response	No	Female	No	No	338.656		0		0	0	0
+DLBCL_DUKE_2250	Female	49.8	Complete response	Yes	Female	No	No	238.944	3	1	1	1	0	0
+DLBCL_DUKE_2251	Male	62.6	Complete response	No	No	No	No	135.584	2	0	1	0	0	1
+DLBCL_DUKE_2252	Male	69.6	Complete response	No	No	No	No	241.68	1	0	0	0	0	1
+DLBCL_DUKE_2253	Male		Complete response	Yes	No	No		77.52		0	1	0	0	
+DLBCL_DUKE_2254	Female		No response	No	Female	No		176.32		0	0	1	0	
+DLBCL_DUKE_2255	Female			No	Female	No		156.256		1	1		0	
+DLBCL_DUKE_2256	Female			Yes	Female	No		102.752		0	0	0	0	
+DLBCL_DUKE_2257	Female			Yes	Female	No		98.496		0	1	0	0	
+DLBCL_DUKE_2259	Female			Yes	Female	No		24.016			1	0	0	
+DLBCL_DUKE_2260	Male		Complete response	No	No	No		124.336		0	1	1	0	
+DLBCL_DUKE_2261	Female		Complete response	Yes	Female	No		287.888		0	1	1	1	
+DLBCL_DUKE_2262	Male			No	No	No		60.8		1	1	1	0	
+DLBCL_DUKE_2263	Male		Complete response	No	No	No		9.12				0	1	
+DLBCL_DUKE_2269	Female			No	Female	No		17.024			0	0	1	
+DLBCL_DUKE_2270	Male			No	No	No		75.088		0	0	1	0	
+DLBCL_DUKE_2271	Female			No	Female	No		67.792		1	0	1	0	
+DLBCL_DUKE_2272	Male		Complete response	No	No	No		253.232		0	0	1	0	
+DLBCL_DUKE_2273	Male			No	No	No		13.072		1	1	1	0	
+DLBCL_DUKE_2274	Male			No	No	No		276.944		0	1	1	0	
+DLBCL_DUKE_2278	Male			No	No	No		170.848		1	1	1	1	
+DLBCL_DUKE_2279	Female		Complete response	No	Female	No		45.904		1	1	1	1	
+DLBCL_DUKE_2281	Female		Complete response	No	Female	No		22.496		0	0	1	1	
+DLBCL_DUKE_2286	Female			No	Female	No		38.608		0	1	1	1	
+DLBCL_DUKE_2290	Female				Female	No		62.928		1	1	1		
+DLBCL_DUKE_2291	Male		No response		No	No		153.824		0	0		0	
+DLBCL_DUKE_2293	Female			Yes	Female	No		229.824		0		0	0	
+DLBCL_DUKE_2297	Male			No	No	Yes		50.768		1	1	0	0	
+DLBCL_DUKE_2298	Female			No	Female	No	No	110.048		0	1	1	0	
+DLBCL_DUKE_2300	Female		Complete response	Yes	Female	Yes	No	8.512				1	0	
+DLBCL_DUKE_2302	Male			No	No	Yes	No	26.448		0		0	0	
+DLBCL_DUKE_2303	Female		Complete response	Yes	Female	No		66.88		0	1	1	0	
+DLBCL_DUKE_2306	Female				Female	No		23.712		1	1	1	1	
+DLBCL_DUKE_2307	Male			Yes	No	No		48.64		1	1	1	1	
+DLBCL_DUKE_2448	Male	51.1	Complete response	Yes	No	No	No	15.504	2	0	1	1	0	0
+DLBCL_DUKE_2449	Male	31.3	Complete response	No	No	No	No	90.896	0	0	0	0	0	0
+DLBCL_DUKE_2450	Female	47	Complete response	Yes	Female	No	No	103.664	2	0	1	1	0	0
+DLBCL_DUKE_2451	Male	52	Complete response	Yes	Yes	No	No	101.232	3	1	1	1	0	0
+DLBCL_DUKE_2453	Female	62.4	Complete response	No	Female	No	No	57.456	3	0	1	1	0	1
+DLBCL_DUKE_2455	Male	57.2	Complete response	No	No	No	No	96.672	2	0	1	1	0	0
+DLBCL_DUKE_2459	Male	65.9	Complete response	Yes	No	No	No	79.04	3	0	1	1	0	1
+DLBCL_DUKE_2461	Male	38.1	Complete response	No	No	No	No	100.016	1	0	0	1	0	0
+DLBCL_DUKE_2462	Male	55.4	Complete response	Yes	No	No	No	113.696	0	0	0	0	0	0
+DLBCL_DUKE_2463	Female	65.1	Complete response	No	Female	No	No	182.704	5	1	1	1	1	1
+DLBCL_DUKE_2464	Male	30.3	Complete response	Yes	No	No	No	108.832	4	1	1	1	1	0
+DLBCL_DUKE_2466	Male	65	Complete response	No	No	No		209.456	1	0	0	0	0	1
+DLBCL_DUKE_2467	Female	76.4	Complete response	Yes	Female	No	No	74.48	2	0	1	0	0	1
+DLBCL_DUKE_2468	Male	46.9	Complete response	No	No	No		150.784	1	0	0	1	0	0
+DLBCL_DUKE_2469	Female	58.6	Complete response	No	Female	No	No	91.808	1	0	1	0	0	0
+DLBCL_DUKE_2470	Female	75.4	Complete response	No	Female	No	Yes	162.336	5	1	1	1	1	1
+DLBCL_DUKE_2471	Male	55.5	Complete response	No	No	No		31.92	1	0	0	1	0	0
+DLBCL_DUKE_2472	Male	77.6	Partial response	No	No	No		20.064	3	1	0	1	0	1
+DLBCL_DUKE_2473	Male	30.8	Partial response	Yes	No	No	Yes	139.84	4	1	1	1	1	0
+DLBCL_DUKE_2474	Female	59.4	Complete response	No	Female	No	No	266.912	2	0	1	0	1	0
+DLBCL_DUKE_2475	Female	11.5	Partial response	Yes	Female	No	Yes	17.632	4	1	1	1	1	0
+DLBCL_DUKE_2476	Male	52.8	Complete response	No	No	No		64.448	0	0	0	0	0	0
+DLBCL_DUKE_2477	Female	64.7	Complete response	No	Female	No		117.04	1	0	0	0	0	1
+DLBCL_DUKE_2478	Male	66.1	Complete response	No	No	No		116.736	2	1	0	0	0	1
+DLBCL_DUKE_2479	Male	58.7	Complete response	No	No	No		75.696	3	1	1	0	1	0
+DLBCL_DUKE_2480	Male	92.1		Yes	No	No		3.648	5	1	1	1	1	1
+DLBCL_DUKE_2481	Male	40.6	Complete response	Yes	No	Yes	Yes	55.936	4	1	1	1	1	0
+DLBCL_DUKE_2482	Male	72.3		No	No	Yes		3.04		1		1	0	1
+DLBCL_DUKE_2483	Male	55.7	Partial response	No	No	No	No	15.2	3	1	0	1	1	0
+DLBCL_DUKE_2485	Male	64.6	Partial response	Yes	No	No	No	41.344	3	1	0	1	0	1
+DLBCL_DUKE_2487	Female	81.6	Partial response	Yes	Female	No		8.512	1	0	0	0	0	1
+DLBCL_DUKE_2488	Female	62	Complete response	No	Female	No		94.544	1	0	0	0	0	1
+DLBCL_DUKE_2522	Male	66.4	Complete response	Yes	No	No	Yes	20.976	3	0	1	1	0	1
+DLBCL_DUKE_2523	Female	77.1	Complete response	No	Female	No		174.8	1	0	0	0	0	1
+DLBCL_DUKE_2524	Female		Complete response	No	Female	No				0	0	0	0	
+DLBCL_DUKE_2525	Male	53	Complete response	No	No	No		172.368	2	0	1	1	0	0
+DLBCL_DUKE_2527	Male	66.6		Yes	No	No		2.736	5	1	1	1	1	1
+DLBCL_DUKE_2528	Male	78.8	Complete response	Yes	Yes	No		9.728	3	1	1	0	0	1
+DLBCL_DUKE_2529	Male	83.3	Complete response	No	No	No		169.328	1	0	0	0	0	1
+DLBCL_DUKE_2530	Male	41.5	Complete response	No	No	No	No	312.816	1	0	1	0	0	0
+DLBCL_DUKE_2532	Male	41.3	Complete response	Yes	No	No		171.152		0	1		0	0
+DLBCL_DUKE_2533	Male	65.4	Complete response	No	No	No		168.112	3	0	1	1	0	1
+DLBCL_DUKE_2534	Female	70.6		No	Female	No		3.344	1	0	0	0	0	1
+DLBCL_DUKE_2538	Male	72.5	Complete response	No	No	No		159.296	1	0	0	0	0	1
+DLBCL_DUKE_2539	Female	67.4	Complete response	No	Female	No	No	131.328	1	0	0	0	0	1
+DLBCL_DUKE_2540	Male		Complete response	Yes	No	No	No			0	1	1	1	
+DLBCL_DUKE_2541	Female	39.6	Complete response	No	Female	No		165.072	0	0	0	0	0	0
+DLBCL_DUKE_2542	Female	81.1	Complete response	No	Female	No		63.232	3	0	1	1	0	1
+DLBCL_DUKE_2543	Female	53	Complete response	No	Female	No		165.072	1	0	1	0	0	0
+DLBCL_DUKE_2544	Male	58.5	Complete response	Yes	No	No		163.552	2	0	1	1	0	0
+DLBCL_DUKE_2545	Male	58	Complete response	Yes	Yes	No		162.336	2	0	1	1	0	0
+DLBCL_DUKE_2547	Male	60.3	Complete response	No	No	No		160.816	1	0	0	0	0	1
+DLBCL_DUKE_2548	Male	64	Complete response	Yes	No	No		159.296	2	0	1	0	0	1
+DLBCL_DUKE_2549	Male	70.2	Complete response	Yes	No	No		46.816	3	0	1	1	0	1
+DLBCL_DUKE_2550	Female	82.7		Yes	Female	No		4.56	3	1	1	0	0	1
+DLBCL_DUKE_2551	NA	72.1	Complete response	Yes	Female	No		150.784	4	0	1	1	1	1
+DLBCL_DUKE_2552	Male	43.8	Partial response	No	No	No	No	56.544	1	0	1	0	0	0
+DLBCL_DUKE_2553	Female		Complete response	Yes	Female	No				0	1	0	0	
+DLBCL_DUKE_2554	Male	44.5	Complete response	No	No	No	No	316.16		0	1		0	0
+DLBCL_DUKE_2555	Female	69.2	Complete response	Yes	Female	No	Yes	28.88	4	1	1	1	0	1
+DLBCL_DUKE_2556	Male	59	Complete response	No	No	No		154.128	0	0	0	0	0	0
+DLBCL_DUKE_2559	Male	65.3	Complete response	No	No	No		39.824	2	0	0	1	0	1
+DLBCL_DUKE_2560	Male	76.2	Complete response	No	No	No		153.52	1	0	0	0	0	1
+DLBCL_DUKE_2561	Female		Complete response	No	Female	No				0	1	0	0	
+DLBCL_DUKE_2562	Female	70.9	Complete response	No	Female	No	Yes	144.704	2	0	1	0	0	1
+DLBCL_DUKE_2565	Female	38.6	Complete response	No	Female	No		152	0	0	0	0	0	0
+DLBCL_DUKE_2566	Female	75.5	Complete response	No	Female	No	No	14.896	2	0	0	1	0	1
+DLBCL_DUKE_2567	Male	63.3	Complete response	No	No	No		152.912		0	1		0	1
+DLBCL_DUKE_2570	Female	62.2	Complete response	No	Female	No		150.176	2	0	1	0	0	1
+DLBCL_DUKE_2571	Male	47.7	Complete response	No	No	No		149.568	1	0	0	1	0	0
+DLBCL_DUKE_2573	Female	65.5	Complete response	No	Female	No		148.352	1	0	0	0	0	1
+DLBCL_DUKE_2575	Male	58.9		Yes	No	No		1.824		1	1		1	0
+DLBCL_DUKE_2576	Male	55.5	No response	Yes	No	No	Yes	64.144	3	1	1	1	0	0
+DLBCL_DUKE_2577	Male	75.6	Complete response	No	No	No		53.2		0	1		0	1
+DLBCL_DUKE_2578	Female	46.1	Complete response	No	Female	No	No	147.136	0	0	0	0	0	0
+DLBCL_DUKE_2580	Female	58.8	Complete response	No	Female	No		144.4	2	0	1	1	0	0
+DLBCL_DUKE_2581	Female	53.4	Complete response	Yes	Female	No		143.792	3	1	1	1	0	0
+DLBCL_DUKE_2582	Female	61.6	Complete response	No	Female	No		143.184	2	0	1	0	0	1
+DLBCL_DUKE_2585	Female	74.2		Yes	Female	No		4.864	4	1	1	0	1	1
+DLBCL_DUKE_2588	Female	79.5		Yes	Female	No		2.736	4	1	1	1	0	1
+DLBCL_DUKE_2591	Female	84.4	Partial response	No	Female	No		12.16	4	1	1	1	0	1
+DLBCL_DUKE_2593	Male	63.8	Partial response	No	No	No		134.368	2	0	1	0	0	1
+DLBCL_DUKE_2594	Male	80.2	Complete response	No	Yes	No		126.16	1	0	0	0	0	1
+DLBCL_DUKE_2596	Female		Complete response	No	Female	No	No			0	0	0	0	
+DLBCL_DUKE_2597	Male	47.4	Complete response	No	No	No	Yes	27.36	2	0	1	1	0	0
+DLBCL_DUKE_2599	Female	90.2	Complete response	Yes	Female	No		17.632	2	0	1	0	0	1
+DLBCL_DUKE_2600	Female	67.8		No	Female	No		2.432	3	0	1	1	0	1
+DLBCL_DUKE_2602	Male	65.2	Complete response	No	No	No	No	207.024	2	0	1	0	0	1
+DLBCL_DUKE_2603	Female	76.2	Complete response	No	Female	No		131.024	2	0	1	0	0	1
+DLBCL_DUKE_2604	Female	79.1	Complete response	Yes	Female	No		129.2	2	0	1	0	0	1
+DLBCL_DUKE_2605	Male		Complete response	Yes	No	No	No			0	1	1	0	
+DLBCL_DUKE_2606	Female	56.5	Complete response	Yes	Female	No		129.2	2	0	1	1	0	0
+DLBCL_DUKE_2608	Male	76.3	No response	No	No	No	No	32.832		0	1		0	1
+DLBCL_DUKE_2609	Female	50.5	Complete response	No	Female	No		127.376	1	0	0	1	0	0
+DLBCL_DUKE_2611	Female	79.1	Complete response	No	Female	No		127.376	1	0	0	0	0	1
+DLBCL_DUKE_2612	Male	70.7	Complete response	No	Yes	No	No	169.024	1	0	0	0	0	1
+DLBCL_DUKE_2613	Male	51.5	Complete response	No	No	No	No	99.104		0	0		0	0
+DLBCL_DUKE_2614	Male	77.3	Partial response	No	No	No		10.032	2	0	1	0	0	1
+DLBCL_DUKE_2616	Male	80.6	Complete response	No	No	No	No	110.048	4	1	1	1	0	1
+DLBCL_DUKE_2617	Male		Complete response	No	No	No				0	0	0	0	
+DLBCL_DUKE_2619	Male	65	Complete response	No	No	No		122.208	2	0	1	0	0	1
+DLBCL_DUKE_2620	Female	80.8		No	Female	No		4.256	3	0	1	1	0	1
+DLBCL_DUKE_2621	Male	63.9	Complete response	Yes	No	No		121.904	3	0	1	1	0	1
+DLBCL_DUKE_2622	Male	69.2	Complete response	No	Yes	No	Yes	94.848	2	0	1	0	0	1
+DLBCL_DUKE_2624	Male	49.7	Complete response	No	No	No		121.296	2	0	1	1	0	0
+DLBCL_DUKE_2626	Male	60.7	Complete response	Yes	No	No		120.688	2	0	0	1	0	1
+DLBCL_DUKE_2628	Male	39.2	Complete response	No	No	No		118.256	2	0	1	1	0	0
+DLBCL_DUKE_2629	Male	71.1	Complete response	No	No	No		119.472	2	0	1	0	0	1
+DLBCL_DUKE_2630	Male		Complete response	No	No	No	No			0	0	0	0	
+DLBCL_DUKE_2632	Male	88.3		No	No	No		8.512	2	0	1	0	0	1
+DLBCL_DUKE_2634	Male	82.1	Partial response	Yes	No	No		85.424	3	0	1	1	0	1
+DLBCL_DUKE_2635	Female	69.6	Complete response	Yes	Female	No		116.432	2	0	0	0	1	1
+DLBCL_DUKE_2636	Female	46.6	Complete response	No	Female	No	No	31.616	3	1	1	1	0	0
+DLBCL_DUKE_2637	Female		Complete response	No	Female	No	No			0	1	0	0	
+DLBCL_DUKE_2639	Male	47.9	Complete response	Yes	No	No		114	2	0	1	1	0	0
+DLBCL_DUKE_2640	Female	63.5	Complete response	Yes	Female	No		113.392	2	0	1	0	0	1
+DLBCL_DUKE_2642	Male	69.3	Complete response	Yes	No	No		113.392	3	0	1	1	0	1
+DLBCL_DUKE_2643	Female	61.2	Complete response	No	Female	No		113.392	3	0	1	1	0	1
+DLBCL_DUKE_2644	Male	67.8	Complete response	Yes	No	No		12.16	3	1	1	0	0	1
+DLBCL_DUKE_2646	Male	62.3	Complete response	No	No	No	Yes	49.552	4	0	1	1	1	1
+DLBCL_DUKE_2647	Female	77.9	Complete response	No	Female	No		110.352	3	0	1	1	0	1
+DLBCL_DUKE_2649	Male	74	Complete response	Yes	No	No		109.136	2	0	1	0	0	1
+DLBCL_DUKE_2650	Female			No	Female	No				0	1	0	0	
+DLBCL_DUKE_2651	Female	59.2	Complete response	No	Female	No		109.44	0	0	0	0	0	0
+DLBCL_DUKE_2652	Male	80	Complete response	No	No	No		53.2	3	0	1	0	1	1
+DLBCL_DUKE_2654	Male	63.1	Complete response	No	No	No		107.616	2	0	1	0	0	1
+DLBCL_DUKE_2655	Male	85.2	Complete response	No	No	No	No	86.032	2	0	1	0	0	1
+DLBCL_DUKE_2656	Male	73.7	Partial response	Yes	No	No		38.912	4	1	1	1	0	1
+DLBCL_DUKE_2657	Male	74	Complete response	Yes	No	No		104.88	1	0	0	0	0	1
+DLBCL_DUKE_2658	Female	73.7	Complete response	Yes	Female	No	Yes	38.608		0	1	1		1
+DLBCL_DUKE_2659	Male	85.6	Complete response	No	Yes	No		102.144	1	0	0	0	0	1
+DLBCL_DUKE_2660	Male	71.4	Complete response	No	No	No		101.84	1	0	0	0	0	1
+DLBCL_DUKE_2662	Female	65.4	Complete response	Yes	Female	No		102.448	3	0	1	1	0	1
+DLBCL_DUKE_2663	Female	47.8	Complete response	Yes	Female	No		101.232	2	0	0	1	1	0
+DLBCL_DUKE_2664	Female	73.6	Complete response	Yes	Female	No	No	16.416	2	0	1	0	0	1
+DLBCL_DUKE_2666	Female	60.4	Complete response	Yes	Female	No	No	20.368	4	1	1	1	0	1
+DLBCL_DUKE_2667	Male	74.6	Complete response	No	Yes	No		98.496	1	0	0	0	0	1
+DLBCL_DUKE_2669	Female		Complete response	No	Female	No				0	0	0	0	
+DLBCL_DUKE_2671	Male	70.3	Complete response	Yes	No	No	Yes	18.848	5	1	1	1	1	1
+DLBCL_DUKE_2673	Female	69.9	Complete response	No	Female	No		95.456	2	0	0	1	0	1
+DLBCL_DUKE_2675	Female		Complete response	Yes	Female	No	No			0	0	1	0	
+DLBCL_DUKE_2676	Male	31.3	Complete response	No	No	No		94.24	0	0	0	0	0	0
+DLBCL_DUKE_2677	Female	70.4	Complete response	No	Female	No		92.416	4	0	1	1	1	1
+DLBCL_DUKE_2678	Female	75.7	Complete response	Yes	Female	No		91.504	3	0	1	1	0	1
+DLBCL_DUKE_2680	Male	66.4	Complete response	No	No	No		93.024	1	0	0	0	0	1
+DLBCL_DUKE_2681	Male	62.4	Complete response	No	No	No		89.68	3	0	0	1	1	1
+DLBCL_DUKE_2684	Female	73.5	Complete response	No	Female	No		87.856	3	0	1	1	0	1
+DLBCL_DUKE_2685	Female	77.2		Yes	Female	No		4.256		0	1		1	1
+DLBCL_DUKE_2687	Male	69.5	Complete response	No	Yes	No		86.64	1	0	0	0	0	1
+DLBCL_DUKE_2688	Male	78.4	Complete response	Yes	No	No	Yes	57.152	3	0	1	1	0	1
+DLBCL_DUKE_2689	Male	67.1	Complete response	Yes	No	No		87.248	3	0	1	1	0	1
+DLBCL_DUKE_2690	Female	55.1	Complete response	No	Female	No		88.16		0	0		0	0
+DLBCL_DUKE_2691	Male	66	Complete response	No	No	No		86.032	1	0	0	0	0	1
+DLBCL_DUKE_2692	Female		Complete response	No	Female	No	No			0	1	0	0	
+DLBCL_DUKE_2696	Male	34.6	Complete response	No	No	No		80.256	1	1	0	0	0	0
+DLBCL_DUKE_2697	Male	33.3	Complete response	No	No	No		83.904	0	0	0	0	0	0
+DLBCL_DUKE_2698	Male	69.2	Complete response	No	No	No	No	85.12	5	1	1	1	1	1
+DLBCL_DUKE_2699	Female	83.8	Complete response	No	Female	No	No	29.488	4	0	1	1	1	1
+DLBCL_DUKE_2700	Male	9.4	Complete response	Yes	No	No		79.04	4	1	1	1	1	0
+DLBCL_DUKE_2704	Male	63.3	Partial response	No	No	No	No	59.28	3	0	1	0	1	1
+DLBCL_DUKE_2705	Male	52.9	Complete response	Yes	No	No		71.44	3	1	1	0	1	0
+DLBCL_DUKE_2706	Male	64.5	Complete response	Yes	No	No	Yes	24.624	4	1	1	1	0	1
+DLBCL_DUKE_2707	Male	74.4	Complete response	Yes	No	No		67.184	3	1	0	1	0	1
+DLBCL_DUKE_2709	Female	84.8	Complete response	Yes	Female	No	Yes	17.936	2	1	0	0	0	1
+DLBCL_DUKE_2713	Male	54.4	Complete response	Yes	No	No		35.872	2	1	0	1	0	0
+DLBCL_DUKE_2714	Male	64.6		Yes	No	No		0.304	5	1	1	1	1	1
+DLBCL_DUKE_2715	Female	80.6	Complete response	No	Female	No	No	114.304	3	0	1	0	1	1
+DLBCL_DUKE_2716	Male	45.2	Complete response	No	No	No	No	141.36	1	0	1	0	0	0
+DLBCL_DUKE_2718	Female	39.1	Complete response	Yes	Female	No		124.032	2	0	1	1	0	0
+DLBCL_DUKE_2719	Male	47.1	Complete response	Yes	No	No		134.368	2	1	1	0	0	0
+DLBCL_DUKE_2720	Male	49	No response	No	No	No		67.184	3	0	1	1	1	0
+DLBCL_DUKE_2725	Male	50.5	Complete response	No	No	No		61.104	0	0	0	0	0	0
+DLBCL_DUKE_2727	Female	54.3	Complete response	Yes	Female	No		122.816	2	0	1	1	0	0
+DLBCL_DUKE_2728	Female	62.4	No response	Yes	Female	No		30.096	4	1	1	0	1	1
+DLBCL_DUKE_2758	Male	79	Complete response	No	No	No		10.032	3	0	1	0	1	1
+DLBCL_DUKE_2761	Male	67	Complete response	No	No	No		37.088	3	0	1	1	0	1
+DLBCL_DUKE_2762	Female	50.7	Complete response	No	Female	No		124.032	1	0	0	1	0	0
+DLBCL_DUKE_2763	Female	57.5	Complete response	No	Female	No		93.936	1	0	1	0	0	0
+DLBCL_DUKE_2764	Male	35.3	Complete response	Yes	No	No		79.648	3	1	1	0	1	0
+DLBCL_DUKE_2765	Male	33.4	Complete response	Yes	No	No		166.896	4	1	1	1	1	0
+DLBCL_DUKE_2766	Male	29.1	Complete response	Yes	No	No		184.528	3	1	1	0	1	0
+DLBCL_DUKE_2767	Male	48.4	Complete response	Yes	No	No		116.128	3	0	1	1	1	0
+DLBCL_DUKE_2768	Female	35.8	No response	No	Female	No		32.832	1	0	0	1	0	0
+DLBCL_DUKE_2769	Female	46.2	Partial response	No	Female	No		10.944	2	1	0	1	0	0
+DLBCL_DUKE_2770	Male	38.4	Complete response	Yes	No	Yes		101.232	3	0	1	1	1	0
+DLBCL_DUKE_2771	Male	69.1		Yes	No	No		7.296	4	1	1	0	1	1
+DLBCL_DUKE_2772	Female	74.9	Complete response	No	Female	No		13.68	3	1	0	1	0	1
+DLBCL_DUKE_2773	Male	63.9	Complete response	Yes	No	No		178.448	4	0	1	1	1	1
+DLBCL_DUKE_2775	Male	14.7	Complete response	No	No	No		166.896	1	0	0	1	0	0
+DLBCL_DUKE_2776	Female	69.7	Complete response	No	Female	No		14.288	3	0	1	0	1	1
+DLBCL_DUKE_2777	Male	48.8	Complete response	No	No	No		91.2	3	0	1	1	1	0
+DLBCL_DUKE_2778	Male	54.6	Complete response	No	No	No		61.712	3	0	1	1	1	0
+DLBCL_DUKE_2779	Female	26.9	Complete response	Yes	Female	No		56.544	2	1	0	1	0	0
+DLBCL_DUKE_2781	Female	53.6	Complete response	No	Female	No		55.632	1	0	0	1	0	0
+DLBCL_DUKE_2783	Male	33.7	Complete response	No	No	No		52.896	0	0	0	0	0	0
+DLBCL_DUKE_2784	Male	60.8	Partial response	Yes	No	No		16.72	5	1	1	1	1	1
+DLBCL_DUKE_2785	Female	50.5	Complete response	No	Female	No		52.288	2	1	0	1	0	0
+DLBCL_DUKE_2786	Male	29.5	Complete response	No	No	No		47.12	4	1	1	1	1	0
+DLBCL_DUKE_2788	Female	70.6	No response	Yes	Female	No		316.16	5	1	1	1	1	1
+DLBCL_DUKE_2789	Female	50.8	Complete response	No	Female	No		36.48	0	0	0	0	0	0
+DLBCL_DUKE_2790	Male	58	Complete response	Yes	No	No		38.912	4	1	1	1	1	0
+DLBCL_DUKE_2791	Male	15.1	Complete response	No	No	No		40.128	1	0	1	0	0	0
+DLBCL_DUKE_2792	Female	93.4	Complete response	No	Female	No		34.352	1	0	0	0	0	1
+DLBCL_DUKE_2793	Female	64.6		Yes	Female	No		36.784	3	1	0	1	0	1
+DLBCL_DUKE_2794	Female	60.3	Complete response	No	Female	No		32.528	2	0	1	0	0	1
+DLBCL_DUKE_2805	Male	50.3	Complete response	No	No	No	No	126.768	1	0	1	0	0	0
+DLBCL_DUKE_2806	Male	61.6	Complete response	No	No	No	No	124.64	1	0	0	0	0	1
+DLBCL_DUKE_2808	Female	68.6	Complete response	No	Female	No	No	114	1	0	0	0	0	1
+DLBCL_DUKE_2809	Male	27.1	Complete response	No	No	Yes	No	114	0	0	0	0	0	0
+DLBCL_DUKE_2810	Female	59.2	Complete response	No	Female	No	No	114.304	1	0	0	1	0	0
+DLBCL_DUKE_2812	Female	69.9	Complete response	Yes	Female	No	No	44.992		0	0		0	1
+DLBCL_DUKE_2813	Male	51.3	No response	Yes	No	No	No	11.552	1	0	1	0	0	0
+DLBCL_DUKE_2814	Female	57.9	Complete response	Yes	Female	No	No	104.576	1	0	1	0	0	0
+DLBCL_DUKE_2815	Female	51.2	Complete response	Yes	Female	No	No	103.056	2	0	1	1	0	0
+DLBCL_DUKE_2816	Male	36.4	Complete response	No	No	No	No	99.712	0	0	0	0	0	0
+DLBCL_DUKE_2818	Female	88	Complete response	No	Female	No	No	31.616	3	1	1	0	0	1
+DLBCL_DUKE_2819	Female	78.7	Complete response	No	Female		No	101.84	1	0	0	0	0	1
+DLBCL_DUKE_2820	Female	71.5	Partial response	Yes	Female	No	No	26.752	3	1	1	0	0	1
+DLBCL_DUKE_2821	Female	51.3	Complete response	No	Female	No	No	83.904	0	0	0	0	0	0
+DLBCL_DUKE_2823	Male	54.4	Complete response	No	No	No	No	94.544	1	0	1	0	0	0
+DLBCL_DUKE_2824	Male	63.1	Complete response	Yes	No	No	No	89.072	2	0	1	0	0	1
+DLBCL_DUKE_2826	Male	61.7	Complete response	Yes	No	No	No	79.04		0	1		0	1
+DLBCL_DUKE_2827	Male	73.7	Complete response	No	No	No	No	51.68	1	0	0	0	0	1
+DLBCL_DUKE_2828	Male	18.4	Complete response	No	No	No	No	47.12	0	0	0	0	0	0
+DLBCL_DUKE_2829	Female		Complete response	No	Female	No	No	80.256		0	0	0	0	
+DLBCL_DUKE_2830	Male		Complete response	No	No	No	No	21.888		0	1	1	0	
+DLBCL_DUKE_2831	Male	52.2	No response	Yes	No	No	No	78.432		0	0		0	0
+DLBCL_DUKE_2832	Male	78	No response	Yes	No	No	No	38.912		0	1		0	1
+DLBCL_DUKE_2833	Male	52.3	Complete response	No	No	No	No	73.568	2	0	1	1	0	0
+DLBCL_DUKE_2834	Female	67	Complete response	No	Female	No	No	71.44	3	1	1	0	0	1
+DLBCL_DUKE_2836	Male	59.7	Complete response	Yes	No	No	No	65.664	3	1	1	1	0	0
+DLBCL_DUKE_2837	Male	28.7	Complete response	No	No	No	No	70.832	1	0	1	0	0	0
+DLBCL_DUKE_2838	Male	56.9	Complete response	No	No	No	No	58.976	0	0	0	0	0	0
+DLBCL_DUKE_2839	Male	59.7	Complete response	Yes	No	No	No	54.72	4	1	1	1	1	0
+DLBCL_DUKE_2840	Male	67.4	Complete response	Yes	No	No	No	54.112	1	0	0	0	0	1
+DLBCL_DUKE_2841	Male	71.7	Complete response	No	No		No	45.296	1	0	0	0	0	1
+DLBCL_DUKE_2843	Female	56.4	Complete response	No	Female	No	No	48.64	0	0	0	0	0	0
+DLBCL_DUKE_2844	Male	3.1	Complete response	Yes	No	No	No	52.592	2	0	1	1	0	0
+DLBCL_DUKE_2865	Male	50.2	Complete response	No	Yes	No	Yes	184.832	3	1	1	0	1	0
+DLBCL_DUKE_2867	Female	61	Complete response	Yes	Female	No		174.496	3	1	0	1	0	1
+DLBCL_DUKE_2871	Male	53.7	Partial response	Yes	No	No		4.864	4	1	1	1	1	0
+DLBCL_DUKE_2872	Male	30.1	Complete response	Yes	No	No	No	209.456	4	1	1	1	1	0
+DLBCL_DUKE_2873	Male	64.4	Complete response	No	No	Yes		82.688	3	0	1	0	1	1
+DLBCL_DUKE_2874	Male	67.7		No	No	No		2.128	5	1	1	1	1	1
+DLBCL_DUKE_2877	Male	46.6	Complete response	Yes	No	No		147.44	2	0	1	0	1	0
+DLBCL_DUKE_2878	Female	80.1	Partial response	Yes	Female	No	No	28.272	5	1	1	1	1	1
+DLBCL_DUKE_2879	Male	77.2	Complete response	No	Yes	No		167.808	2	0	1	0	0	1
+DLBCL_DUKE_2881	Male	62.9	Complete response	Yes	No	No	No	33.744	5	1	1	1	1	1
+DLBCL_DUKE_2882	Female	79.6	Complete response	Yes	Female	No	Yes	59.888	5	1	1	1	1	1
+DLBCL_DUKE_2884	Male	59	Complete response	Yes	No	No		117.952	2	0	1	0	1	0
+DLBCL_DUKE_2886	Female	54.9	Complete response	No	Female	No		133.152	0	0	0	0	0	0
+DLBCL_DUKE_2887	Female	63	Complete response	No	Female	No		107.008	2	1	0	0	0	1
+DLBCL_DUKE_2888	Female	85.3	Complete response	No	Female	No		45.296	2	0	0	1	0	1
+DLBCL_DUKE_2889	Male	73.1		No	No	No		11.248	3	1	0	1	0	1
+DLBCL_DUKE_2891	Female	54.4		Yes	Female	No		143.184	1	1	0	0	0	0
+DLBCL_DUKE_2892	Female	66.7	Partial response	No	Female	No	Yes	13.376	5	1	1	1	1	1
+DLBCL_DUKE_2893	Male	39.2	Complete response	Yes	No	No		59.888	3	0	1	1	1	0
+DLBCL_DUKE_2894	Female	78.3	Complete response	Yes	Female	No	No	72.96	3	0	1	0	1	1
+DLBCL_DUKE_2895	Male	57.1	Partial response	Yes	No	No		52.592	1	0	0	1	0	0
+DLBCL_DUKE_2897	Female	40.8	Complete response	Yes	Female		Yes	56.848	4	1	1	1	1	0
+DLBCL_DUKE_2898	Male	72.7	Complete response	Yes	No	No		70.528	4	1	1	0	1	1
+DLBCL_DUKE_2899	Female	72.3	Complete response	Yes	Female	No	Yes	36.48	4	1	1	1	0	1
+DLBCL_DUKE_2900	Male	42.8	Complete response	Yes	No	No		108.224	4	1	1	1	1	0
+DLBCL_DUKE_2901	Male	71	Complete response	No	No	No		40.736	3	0	1	0	1	1
+DLBCL_DUKE_2902	Female	74.4		No	Female	No		4.256	2	1	0	0	0	1
+DLBCL_DUKE_2903	Male	68.8		No	No	No		12.768	3	0	1	0	1	1
+DLBCL_DUKE_2904	Male	63.8	Complete response	No	No	No		41.344	5	1	1	1	1	1
+DLBCL_DUKE_2905	Female	75	Complete response	No	Female			45.6	2	0	0	0	1	1
+DLBCL_DUKE_2908	Male	64.6	Complete response	Yes	No	No		64.752	4	0	1	1	1	1
+DLBCL_DUKE_2909	Female	64.6		Yes	Female	No		13.984	5	1	1	1	1	1
+DLBCL_DUKE_2910	Male	57.6	No response	No	No	No	No	35.872	3	1	1	1	0	0
+DLBCL_DUKE_2912	Male	50.1	Partial response	Yes	No	No	No	70.528		0	1		0	0
+DLBCL_DUKE_2915	Female	66.1	Complete response	No	Female	No		15.808	1	0	0	0	0	1
+DLBCL_DUKE_2917	Male	76.1	Complete response	No	No	No		261.136	4	1	1	1	0	1
+DLBCL_DUKE_2918	Male	25.8	Complete response	Yes	No	No		290.016	3	0	1	1	1	0
+DLBCL_DUKE_2919	Female	47.5	Complete response	No	Female	No	No	284.24	2	0	1	1	0	0
+DLBCL_DUKE_2921	Female	69.2		No	Female	Yes		3.648	4	1	1	1	0	1
+DLBCL_DUKE_2922	Male	23.5	Complete response	No	No	No		265.696	0	0	0	0	0	0
+DLBCL_DUKE_2923	Male	74.3	No response	No	No	Yes	Yes	23.408	5	1	1	1	1	1
+DLBCL_DUKE_2925	Female	65.7	Complete response	Yes	Female	No		275.12	4	0	1	1	1	1
+DLBCL_DUKE_2928	Male	79.2		No	No	No		9.424	3	1	0	1	0	1
+DLBCL_DUKE_2931	Female	27.9	Complete response	No	Female	No		235.6	0	0	0	0	0	0
+DLBCL_DUKE_2933	Female	61.3	Complete response	No	Female			243.808	3	0	1	1	0	1
+DLBCL_DUKE_2934	Female	68.6	Complete response	Yes	Female		No	225.264	4	0	1	1	1	1
+DLBCL_DUKE_2935	Female	61.7	Complete response	No	Female			233.168	3	0	1	1	0	1
+DLBCL_DUKE_2936	Male	55.8	Partial response	No	No		No	66.272	3	0	1	1	1	0
+DLBCL_DUKE_2939	Male	71.3	No response	Yes	No		No	24.624	2	0	0	1	0	1
+DLBCL_DUKE_2940	Male	43.5	No response	Yes	No	Yes	No	15.808	3	0	1	1	1	0
+DLBCL_DUKE_2941	Male	54.1	Partial response	Yes	No	No	Yes	59.28	3	0	1	1	1	0
+DLBCL_DUKE_2944	Male	69.9	Complete response	No	No	No		190.912	1	0	0	0	0	1
+DLBCL_DUKE_2945	Male	73.3	Complete response	Yes	No	No	Yes	68.704	4	0	1	1	1	1
+DLBCL_DUKE_2946	Female	55.9	Complete response	No	Female	No		187.872	2	0	1	1	0	0
+DLBCL_DUKE_2947	Male	74.4	Complete response	Yes	No	No	No	50.464	5	1	1	1	1	1
+DLBCL_DUKE_2948	Female	71.5	Complete response	No	Female	No		183.008	1	0	0	0	0	1
+DLBCL_DUKE_2949	Male	57.7	Partial response	No	No	No	No	25.84	3	0	1	1	1	0
+DLBCL_DUKE_2950	Male	65.6		No	No			5.776	3	0	1	1	0	1
+DLBCL_DUKE_2951	Male	52.1	Complete response	Yes	No			166.896	2	0	1	1	0	0
+DLBCL_DUKE_2952	Male	80.2		No	No			7.6	4	1	0	1	1	1
+DLBCL_DUKE_2953	Female	55.8	Complete response	No	Female			150.48	3	0	1	1	1	0
+DLBCL_DUKE_2954	Female	63	Complete response	No	Female			149.264	3	0	1	1	0	1
+DLBCL_DUKE_2955	Female	87.8	Complete response	No	Female			142.88	5	1	1	1	1	1
+DLBCL_DUKE_2956	Male	47	Complete response	No	No	No		141.36	0	0	0	0	0	0
+DLBCL_DUKE_2957	Female	61.4	Complete response	Yes	Female	No		138.016	4	0	1	1	1	1
+DLBCL_DUKE_2958	Male	31	Complete response	Yes	No	No		129.808	1	0	0	1	0	0
+DLBCL_DUKE_2995	Female				Female									
+DLBCL_DUKE_2996	Female	73.6		Yes	Female	No		138.928	2	1	0	0	0	1
+DLBCL_DUKE_2998	Female				Female									
+DLBCL_DUKE_2999	Male	25.1	Complete response	Yes		No		49.856		0	0	1		0
+DLBCL_DUKE_3382	Male	90.8	Complete response	No	No	No		150.176	3	0	1	1	0	1
+DLBCL_DUKE_3384	Male	53.4	No response	Yes	No	No	No	21.888	3	1	1	1	0	0
+DLBCL_DUKE_3385	Female	49.6	Complete response	No	Female	No		158.992	0	0	0	0	0	0
+DLBCL_DUKE_3386	Female	52.4	Complete response	No	Female	No		65.056	2	0	1	0	1	0
+DLBCL_DUKE_3387	Female	58.4	Complete response	No	Female	No		156.56	3	0	1	1	1	0
+DLBCL_DUKE_3388	Male	78.3	Complete response	No	No	No		85.728	3	0	1	1	0	1
+DLBCL_DUKE_3389	Male	37.6	Complete response	Yes	No	No		145.008	4	1	1	1	1	0
+DLBCL_DUKE_3390	Male	71.5	Complete response	No	No	No		37.392	1	0	0	0	0	1
+DLBCL_DUKE_3394	Female	67	Complete response	Yes	Female	No		299.44	2	0	0	1	0	1
+DLBCL_DUKE_3396	Male	57.8	Complete response	Yes	No	No		376.656	1	0	0	1	0	0
+DLBCL_DUKE_3397	Male	40.3	Complete response	No	No	No		345.04	0	0	0	0	0	0
+DLBCL_DUKE_3398	Male	68	Complete response	Yes	No	No		363.28	2	0	0	1	0	1
+DLBCL_DUKE_3399	Female	34.2	Complete response	No	Female			334.4	3	0	1	1	1	0
+DLBCL_DUKE_3400	Male	55	Complete response	No	No	No		318.592	2	0	1	1	0	0
+DLBCL_DUKE_3401	Male	57	Complete response	Yes	No	No		329.84	0	0	0	0	0	0
+DLBCL_DUKE_3403	Female	57	Complete response	Yes	Female	No		179.968		0	1		1	0
+DLBCL_DUKE_3404	Female	57.6	Complete response	No	Female	No		152	2	0	1	1	0	0
+DLBCL_DUKE_3405	Female	69	Complete response	No	Female			174.496	1	0	0	0	0	1
+DLBCL_DUKE_3406	Male	64	Complete response	No	No			187.568	1	0	0	0	0	1
+DLBCL_DUKE_3407	Female	72	Complete response	Yes	Female	No		159.296	1	0	0	0	0	1
+DLBCL_DUKE_3408	Female	46.6	Complete response	No	Female	No		175.408	2	0	1	1	0	0
+DLBCL_DUKE_3409	Female	61.9	Complete response	No	Female	No		160.816	2	0	1	0	0	1
+DLBCL_DUKE_3411	Female	77.1	Complete response	Yes	Female	No		155.952	2	0	1	0	0	1
+DLBCL_DUKE_3412	Male	79.4	Complete response	Yes	No	No		75.392	2	0	1	0	0	1
+DLBCL_DUKE_3413	Female	63.4	Complete response	No	Female	No		172.064	3	0	1	0	1	1
+DLBCL_DUKE_3417	Female	73.6	Complete response	No	Female	No		169.328	2	0	0	1	0	1
+DLBCL_DUKE_3418	Female	66.7	Complete response	No	Female			148.656	3	0	0	1	1	1
+DLBCL_DUKE_3419	Female	74.2	Complete response	Yes	Female	No		162.336	3	0	1	1	0	1
+DLBCL_DUKE_3422	Male	75	Complete response	No	No	No		156.56	3	0	1	1	0	1
+DLBCL_DUKE_3423	Female	86.3	Complete response	Yes	Female	No		114	4	0	1	1	1	1
+DLBCL_DUKE_3424	Female	43.5	Complete response	No	Female	No		127.984	1	0	0	1	0	0
+DLBCL_DUKE_3428	Female	59	Complete response	Yes	Female	No		138.624	1	0	0	0	1	0
+DLBCL_DUKE_3429	Male	46	Complete response	No	No	No		131.936	0	0	0	0	0	0
+DLBCL_DUKE_3430	Male	59.4	Complete response	Yes	No	No			0	0	0	0	0	0
+DLBCL_DUKE_3431	Female	48.6	Complete response	Yes	Female	No		133.456	0	0	0	0	0	0
+DLBCL_DUKE_3432	Female	57.1	Complete response	Yes	Female	No		132.544	0	0	0	0	0	0
+DLBCL_DUKE_3433	Male	40.7	Complete response	No	No	No		100.32	0	0	0	0	0	0
+DLBCL_DUKE_3434	Male	58.3	Complete response	No	No			130.416	1	0	1	0	0	0
+DLBCL_DUKE_3435	Male	75	Complete response	No	No	No		134.976	2	0	1	0	0	1
+DLBCL_DUKE_3438	Male	59.4	Complete response	No	No	No		125.856	0	0	0	0	0	0
+DLBCL_DUKE_3439	Male	47.9	No response	Yes	No	No		123.728	2	0	1	0	1	0
+DLBCL_DUKE_3440	Female	48.7	No response	Yes	Female	No		26.752	3	0	1	1	1	0
+DLBCL_DUKE_3441	Female	78	Complete response	Yes	Female	No		119.168	4	0	1	1	1	1
+DLBCL_DUKE_3444	Female	79.2	Complete response	Yes	Female	No		38.912	4	0	1	1	1	1
+DLBCL_DUKE_3446	Male	73.7	Complete response	Yes	No	No		118.256	2	0	1	0	0	1
+DLBCL_DUKE_3447	Female	63.9	Complete response	No	Female	No		39.824	1	0	0	0	0	1
+DLBCL_DUKE_3448	Female	73	Complete response	Yes	Female	No		109.136	3	1	1	0	0	1
+DLBCL_DUKE_3449	Male	53.9	Complete response	No	No			107.92	0	0	0	0	0	0
+DLBCL_DUKE_3450	Male	74	Complete response	Yes	No	No		74.48	4	1	1	1	0	1
+DLBCL_DUKE_3451	Male	64.6	Complete response	Yes	No	No		101.232	3	0	1	0	1	1
+DLBCL_DUKE_3452	Male	63.9	Complete response	No	No	No		106.4	1	0	0	0	0	1
+DLBCL_DUKE_3453	Male	84.4	Complete response	No	No	No		109.744	1	0	0	0	0	1
+DLBCL_DUKE_3454	Female	24.3	No response	Yes	Female	No		42.256	2	0	1	1	0	0
+DLBCL_DUKE_3455	Male	40.2	Complete response	No	No	No		82.688	0	0	0	0	0	0
+DLBCL_DUKE_3456	Male	78.3	Complete response	Yes	No	No		147.44		0	0		0	1
+DLBCL_DUKE_3457	Male	85.1	Complete response	Yes	No			99.712	3	1	1	0	0	1
+DLBCL_DUKE_3458	Male	66.7	Complete response	Yes	No	No		100.928	3	0	1	0	1	1
+DLBCL_DUKE_3459	Male	68.3	Complete response	No	No	No		99.712	4	0	1	1	1	1
+DLBCL_DUKE_3460	Male	58.3	Complete response	Yes	No	No		89.376	2	0	1	0	1	0
+DLBCL_DUKE_3461	Male	70.8	Complete response	No	No	Yes		39.52	2	1	0	0	0	1
+DLBCL_DUKE_3462	Male	63	No response	Yes	No	No		30.4	5	1	1	1	1	1
+DLBCL_DUKE_3463	Female	40.6	Complete response	No	Female	No		89.68	0	0	0	0	0	0
+DLBCL_DUKE_3464	Male	60.1	Complete response	No	No	No		86.336	2	0	1	0	0	1
+DLBCL_DUKE_3465	Female	34.8	Complete response	Yes	Female	No		89.68	2	0	1	1	0	0
+DLBCL_DUKE_3467	Male	70.8	Complete response	No	No			92.72	4	1	1	0	1	1
+DLBCL_DUKE_3468	Female	56.4	No response	No	Female	No	Yes	33.44	3	1	1	1	0	0
+DLBCL_DUKE_3470	Male	44.1	Complete response	No	Yes			78.128	0	0	0	0	0	0
+DLBCL_DUKE_3471	Male	51.2	Complete response	No	No	No		82.08	1	0	1	0	0	0
+DLBCL_DUKE_3472	Male	55.2	Complete response	No	Yes			79.344	2	0	1	0	1	0
+DLBCL_DUKE_3473	Male	71.9	Complete response	Yes	No	No		17.936	2	0	1	0	0	1
+DLBCL_DUKE_3474	Female	61.9	Complete response	No	Female	No		77.216	5	1	1	1	1	1
+DLBCL_DUKE_3475	Female	49.2	Complete response	No	Female	No		63.536	1	0	1	0	0	0
+DLBCL_DUKE_3476	Female	45.4	Complete response	No	Female	Yes		65.968	0	0	0	0	0	0
+DLBCL_DUKE_3477	Female	70.7	Complete response	No	Female	No		63.536	3	0	1	1	0	1
+DLBCL_DUKE_3478	Female	77	Complete response	No	Female			53.504	4	1	1	1	0	1
+DLBCL_DUKE_3479	Male	88.3	Complete response	No	No	No		60.192	3	1	0	1	0	1
+DLBCL_DUKE_3480	Male	84.9	No response	No	No	No		6.688	4	1	1	1	0	1
+DLBCL_DUKE_3481	Male	31.1	Complete response	Yes	No	No		59.584	2	1	1	0	0	0
+DLBCL_DUKE_3482	Male	63	Complete response	No	No	No		58.064	2	0	1	0	0	1
+DLBCL_DUKE_3483	Male	52.3	Complete response	Yes	Yes		Yes	26.144	2	0	1	0	1	0
+DLBCL_DUKE_3484	Female	67.9	Complete response	No	Female	No		54.72	1	0	0	0	0	1
+DLBCL_DUKE_3485	Male	81.5	Partial response	Yes	No	No		53.2	1	0	0	0	0	1
+DLBCL_DUKE_3486	Male	44.1	No response	Yes	No	No		27.36	1	0	0	1	0	0
+DLBCL_DUKE_3487	Female	58.8	No response	Yes	Female	No	Yes	30.4	1	0	1	0	0	0
+DLBCL_DUKE_3488	Female	58	Complete response	Yes	Female	No		268.736	1	0	0	1	0	0
+DLBCL_DUKE_3489	Male	49.7	Complete response	No	No	No		326.192	0	0	0	0	0	0
+DLBCL_DUKE_3490	Female	61	Partial response	No	Female	No		166.896	4	0	1	1	1	1
+DLBCL_DUKE_3493	Female	48	No response	Yes	Female	No		333.488	3	1	1	1	0	0
+DLBCL_DUKE_3495	Female	70.5	Complete response	Yes	Female	No		117.952	2	0	1	0	0	1
+DLBCL_DUKE_3496	Female	71.4	Complete response	No	Female		Yes	154.736	3	0	1	1	0	1
+DLBCL_DUKE_3497	Female	75	Complete response	Yes	Female	No		81.472	4	1	1	1	0	1
+DLBCL_DUKE_3498	Female	56	Complete response	Yes	Female	No		144.704	3	1	1	1	0	0
+DLBCL_DUKE_3500	Male	71.9	Complete response	No	No	No		132.848	3	1	1	0	0	1
+DLBCL_DUKE_3502	Female	79.2	Complete response	Yes	Female	No		107.616	4	1	1	1	0	1
+DLBCL_DUKE_3503	Female	64	Complete response	No	Female	No		85.12	2	0	1	0	0	1
+DLBCL_DUKE_3504	Female	74	Complete response	No	Female	No		70.224	2	0	1	0	0	1
+DLBCL_DUKE_3505	Female	57.5	No response	Yes	Female	No		10.944	3	1	1	1	0	0
+DLBCL_DUKE_3506	Male	57.9	Complete response	No	No	No		59.584	0	0	0	0	0	0
+DLBCL_DUKE_3507	Female	22	Complete response	Yes	Female	No		53.504	2	0	1	0	1	0
+DLBCL_DUKE_3508	Male	81	Complete response	No	No	No			2	0	1	0	0	1
+DLBCL_DUKE_3510	Female	80.8		Yes	Female	No		2.128	5	1	1	1	1	1
+DLBCL_DUKE_3511	Female	79.5	Complete response	No	Female	No	No	94.544	2	0	1	0	0	1
+DLBCL_DUKE_3512	Male	56.4	Complete response	Yes		No				0	1	1		0
+DLBCL_DUKE_3513	Male	73.7	Complete response		No	No		51.68	2	1	0	0	0	1
+DLBCL_DUKE_3514	Female	25.1	Complete response		Female					0	1			0
+DLBCL_DUKE_3515	Male	54.3	Complete response	No	No					0	1	0		0
+DLBCL_DUKE_3517	Female	80.9	Complete response	Yes	Female	No	No	169.328	3	0	1	1	0	1
+DLBCL_DUKE_3519	Male	60.9	Complete response	No	No					0	1	1		1
+DLBCL_DUKE_3520	NA				Female									
+DLBCL_DUKE_3521	Male	54.7	Complete response	No	No			11.552		1	0	1		0
+DLBCL_DUKE_3522	Female	65.2	Complete response		Female	No	No	99.408		0	1		1	1
+DLBCL_DUKE_3523	Male	60.4	Complete response	No	No	No	No	296.096	1	0	0	0	0	1
+DLBCL_DUKE_3525	Female	67.8			Female			2.128	4	1	1	1	0	1
+DLBCL_DUKE_3527	Male	45.7	Complete response	No	No		Yes	26.448		1	1	1		0
+DLBCL_DUKE_3528	Female	52.1	Partial response	No	Female	No		131.328		0	1	1		0
+DLBCL_DUKE_3529	Female	43.9	Complete response	No	Female	No		295.488	0	0	0	0	0	0
+DLBCL_DUKE_3531	Male													
+DLBCL_DUKE_3532	Female	57.4	Complete response	No	Female	No		20.672		0	1	1		0
+DLBCL_DUKE_3535	Male	72.6	Complete response	No	No	No	No	115.216	3	0	1	1	0	1
+DLBCL_DUKE_3536	Female	51	Complete response	No	Female		No	246.848			0	1		0
+DLBCL_DUKE_3537	Male	66.5						58.672						1
+DLBCL_DUKE_3538	Male	58	Complete response	No				17.936		1	0			0
+DLBCL_DUKE_3539	NA				Female									
+DLBCL_DUKE_3540	Male	67.5	Complete response	Yes		No	No	52.592		1	1	1		1
+DLBCL_DUKE_3542	Female				Female									
+DLBCL_DUKE_3545	Male	66.5	No response	No	No	No	No	257.792	3	0	1	0	1	1
+DLBCL_DUKE_3546	Male	73.8	Complete response	No	No	No	Yes	239.552	3	0	1	1	0	1
+DLBCL_DUKE_3547	Male	31.2	No response	No	No	No	No	65.664		0	1		0	0
+DLBCL_DUKE_3548	Female	60.2	Complete response	No	Female	No	No	359.632	1	0	0	0	0	1
+DLBCL_DUKE_3549	Female	55.6	Complete response	No	Female	No	No	353.248	1	0	1	0	0	0
+DLBCL_DUKE_3551	Male	70.8	Complete response	No	No	No	No	11.552	3	0	1	1	0	1
+DLBCL_DUKE_3552	Male	79.7	Complete response	No	No	No	No	259.92	1	0	0	0	0	1
+DLBCL_DUKE_3553	Male	62.4	Complete response	Yes	No	No	No	283.936	4	0	1	1	1	1
+DLBCL_DUKE_3555	Female	77.4	Complete response	No	Female	No	No	155.344	2	0	1	0	0	1
+DLBCL_DUKE_3556	Female	66.6	Complete response	No	Female	No	No	122.512	1	0	0	0	0	1
+DLBCL_DUKE_3557	Male	68.2	Complete response	Yes	No	No	No	108.832	1	0	0	0	0	1
+DLBCL_DUKE_3558	Male	17.5	Complete response	No	No	No	No	93.328	0	0	0	0	0	0
+DLBCL_DUKE_3559	Female	85.8	Partial response	No	Female	No	No	40.432	3	1	1	0	0	1
+DLBCL_DUKE_3560	Male	74.5	Complete response	No	No	No	No	129.2	2	0	0	1	0	1
+DLBCL_DUKE_3561	Male	91.1					No	10.032				1		1
+DLBCL_DUKE_3562	Female	85.6	Complete response	No	Female	No	No	35.264	2	0	1	0	0	1
+DLBCL_DUKE_3563	Male	26.6	Complete response	No	No	No	No	228.912	1	0	0	1	0	0
+DLBCL_DUKE_3565	Female	60.2	Complete response	Yes	Female	No	No	324.976	5	1	1	1	1	1
+DLBCL_DUKE_3566	Male	64.2	Partial response	Yes	No	No	Yes	28.272	5	1	1	1	1	1
+DLBCL_DUKE_3579	Male	27	Complete response	No		No	No	172.368	1	0	0	1	0	0
+DLBCL_DUKE_3580	Male	37.3	Partial response			No	No	50.768	1	0	0	1	0	0
+DLBCL_DUKE_3582	Female	44.6	Complete response	No	Female	No	No	283.328	2	0	1	1	0	0
+DLBCL_DUKE_3584	Male	58	Complete response	No	No	No	No	167.2	2	0	1	1	0	0
+DLBCL_DUKE_3585	Female	58.1	Complete response	No	Female	No	No	211.28	1	0	0	1	0	0
+DLBCL_DUKE_3586	Female	59	Complete response	No	Female	No	No	265.696	2	0	1	1	0	0
+DLBCL_DUKE_3587	Female	59.7	Complete response		Female	No	No	214.32	1	0	0	1	0	0
+DLBCL_DUKE_3589	Female	60.8	Complete response	Yes	Female	No	No	332.272	3	0	1	1	0	1
+DLBCL_DUKE_3590	Male	65.9	Complete response	No	No	No	No	172.976	5	1	1	1	1	1
+DLBCL_DUKE_3591	Female	68.6	Complete response	No	Female	No	No	270.864	3	0	1	1	0	1
+DLBCL_DUKE_3592	Male	69.4	Complete response	Yes	No	No	No	262.048	5	1	1	1	1	1
+DLBCL_DUKE_3593	Male	75	Complete response	No		No	No	121.296	3	0	1	1	0	1
+DLBCL_DUKE_3594	Female	76.5	Complete response	No	Female	No	No	285.76	4	0	1	1	1	1
+DLBCL_DUKE_3595	Female	77	No response		Female	No	No	5.776	3	1	0	1	0	1
+DLBCL_DUKE_3596	Male	77	Complete response	No		No	No	120.384	3	0	1	1	0	1
+DLBCL_DUKE_3597	Male	46.2	Partial response	No		No	No	60.8	2	0	1	1	0	0
+DLBCL_DUKE_3598	Male	56.6	Complete response	Yes	Yes	No	Yes	88.768	3	1	1	1	0	0
+DLBCL_DUKE_3600	Female	74.4	Complete response	No	Female	No	No	174.192	3	0	0	1	1	1
+DLBCL_DUKE_3601	Female	70.6	Complete response	Yes	Female	No	No	37.088	3	0	1	1	0	1
+DLBCL_DUKE_3602	Female	80.4	Complete response	Yes	Female	No	No	268.432	4	0	1	1	1	1
+DLBCL_DUKE_3603	Female	46.1	Complete response	No	Female	No	No	165.072	0	0	0	0	0	0
+DLBCL_DUKE_3604	Male	72.4	Partial response	No		No	No	193.648	1	0	0	0	0	1
+DLBCL_DUKE_3605	Male	66.7	Complete response	Yes		No	No	219.488	1	0	0	0	0	1
+DLBCL_DUKE_3606	Male	63.6	Partial response	Yes		No	No	211.28	3	0	1	1	0	1
+DLBCL_DUKE_3607	Male	18.2	Complete response	No		No	No	159.6	0	0	0	0	0	0
+DLBCL_DUKE_3608	Male	45.8	Complete response	No		No	No	186.048	1	0	0	1	0	0
+DLBCL_DUKE_3609	Male	53.7	Complete response	No		No	No	232.56	2	0	1	1	0	0
+DLBCL_DUKE_3610	Male	55.5	Complete response	No	Yes	No	No	278.16	1	0	0	1	0	0
+DLBCL_DUKE_3611	Female	53.2	Partial response	Yes	Female	No	No	173.28	1	0	0	1	0	0
+DLBCL_DUKE_3612	Female	69	Complete response	No	Female	No	No	141.056	1	0	0	0	0	1
+DLBCL_DUKE_3613	Female	42.7	Complete response	No	Female	No	No	229.824	0	0	0	0	0	0
+DLBCL_DUKE_3614	Male	52.3	Complete response	No	No	No	No	253.536	3	1	1	1	0	0
+DLBCL_DUKE_3615	Male	60.3	Complete response	Yes	No	No	No	179.664	4	1	1	1	0	1
+DLBCL_DUKE_3616	Male	65.4	Complete response	No	No	No	No	170.848	3	0	1	0	1	1
+DLBCL_DUKE_3617	Male	77.4	Complete response	No	No	No	No	208.24	1	0	0	0	0	1
+DLBCL_DUKE_3618	Male	57.2	Complete response	No		No	No	155.952	0	0	0	0	0	0
+DLBCL_DUKE_3620	Female	84.2	Complete response	No	Female	No	No	59.888	1	0	0	0	0	1
+DLBCL_DUKE_3622	Male	76	Complete response	Yes	Yes	No	Yes	14.288	5	1	1	1	1	1
+DLBCL_DUKE_3623	Male	67.9	Partial response	No		No	No	238.336	4	1	1	1	0	1
+DLBCL_DUKE_3624	Female	75.5	Complete response	No	Female	No	No	222.224	1	0	0	0	0	1
+DLBCL_DUKE_3625	Male	63.4	Complete response	No		No	No	167.808	4	1	1	1	0	1
+DLBCL_DUKE_3627	Female	59	Complete response	No	Female	No	No	170.848	3	0	1	1	1	0
+DLBCL_DUKE_3628	Male	56.6	Complete response	No		No	No	157.168	0	0	0	0	0	0
+DLBCL_DUKE_3629	Male	70.6	Partial response	Yes	No	No	No	18.544	4	1	1	1	0	1
+DLBCL_DUKE_3630	Female	65.4	Complete response	Yes	Female	No	No	190	3	1	0	1	0	1
+DLBCL_DUKE_3631	Male	59.9	Partial response	No		No	No	174.496	0	0	0	0	0	0
+DLBCL_DUKE_3632	Female	52.8	No response	Yes	Female	No	No	10.944	1	1	0	0	0	0
+DLBCL_DUKE_3634	Male	54.5	Partial response	No	No	No	No	170.848	2	0	1	1	0	0
+DLBCL_DUKE_3635	Male	47.8	Complete response	No		No	No	170.24	0	0	0	0	0	0
+DLBCL_DUKE_3636	Male	62.5	Partial response	No			No	164.464		0	0	0		1
+DLBCL_DUKE_3637	Male	57.9	Complete response	No		No	No	116.736	0	0	0	0	0	0
+DLBCL_DUKE_3638	Female	73.6	Complete response	Yes	Female	No	No	49.552	4	1	1	1	0	1
+DLBCL_DUKE_3639	Male	50.2	Complete response	No		No	No	164.16	2	0	1	1	0	0
+DLBCL_DUKE_3640	Male	58.1	Complete response	No	No	No	No	202.464	0	0	0	0	0	0
+DLBCL_DUKE_3642	Female	67.5	Partial response	Yes	Female	No	No	78.432	4	1	1	1	0	1
+DLBCL_DUKE_3643	Female	65.6	Partial response	Yes	Female	No	No	47.12	3	1	1	0	0	1
+DLBCL_DUKE_3644	Female	36.2	Complete response	No	Female	No	No	134.976	0	0	0	0	0	0
+DLBCL_DUKE_3645	Male	66.8	Partial response	No		No	No	155.344	2	0	0	1	0	1
+DLBCL_DUKE_3646	Male	46.5	Complete response	No	No	No	No	29.488	4	1	1	1	1	0
+DLBCL_DUKE_3647	Male	58.3	Partial response	Yes	No	No	No	163.248	3	1	1	1	0	0
+DLBCL_DUKE_3648	Female	41.8	Complete response	No	Female	No	No	169.632	4	1	1	1	1	0
+DLBCL_DUKE_3649	Male	55.1	Complete response	No		No	No	169.024	2	0	1	1	0	0
+DLBCL_DUKE_3651	Male	45.4	Complete response	Yes		No	No	163.248	3	1	1	1	0	0
+DLBCL_DUKE_3652	Male	30	Complete response	Yes	No	No	No	164.16	4	1	1	1	1	0
+DLBCL_DUKE_3653	Female	69.7	Complete response	Yes	Female	No	No	162.032	3	1	0	1	0	1
+DLBCL_DUKE_3654	Female	73.4	Complete response	Yes	Female	No	No	164.464	3	1	0	1	0	1
+DLBCL_DUKE_3655	Male	71.5	No response	No		No	No	16.112	4	1	1	1	0	1
+DLBCL_DUKE_3656	Female	62.4	Complete response	No	Female	No	No	129.808	1	0	0	0	0	1
+DLBCL_DUKE_3657	Male	72.1	Partial response	Yes		No	No	21.888	4	1	1	1	0	1
+DLBCL_DUKE_3659	Male	53.3	Complete response	No		No	No	127.072	2	0	1	1	0	0
+DLBCL_DUKE_3660	Female	73.2	Complete response	Yes	Female	No	No	86.336	4	1	1	1	0	1
+DLBCL_DUKE_3661	Male	54	Complete response	No		No	No	134.368	0	0	0	0	0	0
+DLBCL_DUKE_3662	Male	28.1	Complete response	Yes		No	No	32.832	3	1	1	1	0	0
+DLBCL_DUKE_3663	Female	65.3	Complete response	No	Female	No	No	134.064	1	0	0	0	0	1
+DLBCL_DUKE_3664	Male	66.2	Complete response	No		No	No	114.912	3	0	1	1	0	1
+DLBCL_DUKE_3665	Male	50.1	Partial response	No		No	No	137.712	0	0	0	0	0	0
+DLBCL_DUKE_3666	Female	48.8	Complete response	No	Female	No	No	132.24	0	0	0	0	0	0
+DLBCL_DUKE_3667	Male	57.8	Complete response	No		No	No	134.064	1	0	0	1	0	0
+DLBCL_DUKE_3668	Female	48.7	Partial response	Yes	Female	No	No	25.536	1	0	0	1	0	0
+DLBCL_DUKE_3669	Male	55	Complete response	No		No	No	155.04	2	1	1	0	0	0
+DLBCL_DUKE_3671	Female	69.5	Complete response	No	Female	No	No	130.72	1	0	0	0	0	1
+DLBCL_DUKE_3672	Female	80.1	Complete response	No	Female	No	No	157.472	1	0	0	0	0	1
+DLBCL_DUKE_3673	Male	50	Complete response	No		No	No	131.632	1	0	0	1	0	0
+DLBCL_DUKE_3674	Male	83.5	Complete response	No		No	No	51.072	1	0	0	0	0	1
+DLBCL_DUKE_3675	Male	34.5	Partial response	No		No	No	105.792	2	0	1	1	0	0
+DLBCL_DUKE_3677	Female	47.8	Complete response	No	Female	No	No	107.312	0	0	0	0	0	0
+DLBCL_DUKE_3679	Female	55.6	Complete response	No	Female	No	No	84.512	3	1	0	1	1	0
+DLBCL_DUKE_3680	Male	68.5	Partial response	No	No	No	No	47.424	4	0	1	1	1	1
+DLBCL_DUKE_3681	Male	17.9	Complete response	No	No	No	No	120.688	0	0	0	0	0	0
+DLBCL_DUKE_3682	Male	16.1	Complete response	No		No	No	108.224	0	0	0	0	0	0
+DLBCL_DUKE_3683	Male	60.4	Complete response	No	No	No	No	127.68	4	0	1	1	1	1
+DLBCL_DUKE_3684	Female	68.9	Complete response	Yes	Female	No	No	128.896	4	1	1	1	0	1
+DLBCL_DUKE_3685	Male	60.5	Complete response	No		No	No	132.848	1	0	0	0	0	1
+DLBCL_DUKE_3686	Female	62.3	Partial response	No	Female	No	No	94.24	2	0	0	1	0	1
+DLBCL_DUKE_3687	Male	40.5	Complete response	Yes		No	Yes	17.328	2	1	0	1	0	0
+DLBCL_DUKE_3688	Female	49.4	Partial response	No	Female	No	No	186.352	1	0	1	0	0	0
+DLBCL_DUKE_3689	Male	59.4	Complete response	Yes		No	No	75.392	1	0	0	1	0	0
+DLBCL_DUKE_3691	Female	81.9		Yes	Female	No	No	3.648	2	0	0	1	0	1
+DLBCL_DUKE_3692	Male	63	Complete response	No	No	No	No	86.64	5	1	1	1	1	1
+DLBCL_DUKE_3693	Female	76	Complete response	Yes	Female	No	No	83.6	4	1	1	1	0	1
+DLBCL_DUKE_3694	Female	59.6	Complete response	Yes	Female	No	No	84.512	3	1	1	1	0	0
+DLBCL_DUKE_3696	Male	74.1	Partial response	No		No	No	10.64			1	1	0	1
+DLBCL_DUKE_3697	Female	83.9	Complete response	Yes	Female	No	No	86.032	3	0	1	1	0	1
+DLBCL_DUKE_3698	Male	45.4	Complete response	Yes			No	76.304		1	0	1		0
+DLBCL_DUKE_3699	Male	76.3	Complete response	No		No	No	92.416	4	1	1	1	0	1
+DLBCL_DUKE_3700	Male	44.2	Complete response	No		No	No	71.44	0	0	0	0	0	0
+DLBCL_DUKE_3701	Male	65.1	Complete response	No		No	No	96.672	2	0	1	0	0	1
+DLBCL_DUKE_3703	Male	44.2	Complete response	No		No	No	106.4	0	0	0	0	0	0
+DLBCL_DUKE_3704	Female	69.6	Partial response	No	Female	No	No	92.112	3	0	1	1	0	1
+DLBCL_DUKE_3705	Female	70	Complete response	No	Female	No	No	82.688	2	0	0	1	0	1
+DLBCL_DUKE_3706	Male	54.9	Partial response	Yes		No	No	49.856	2	0	1	1	0	0
+DLBCL_DUKE_3707	Female	30.8	Complete response	No	Female	No	No	58.368	0	0	0	0	0	0
+DLBCL_DUKE_3708	Male	66.5	Partial response	Yes		No	No	51.072	3	0	1	1	0	1
+DLBCL_DUKE_3709	Female	73.6	Complete response	No	Female	No	No	54.72	1	0	0	0	0	1
+DLBCL_DUKE_3711	Female	81.2	Complete response	Yes	Female	No	No	52.896	4	1	1	1	0	1
+DLBCL_DUKE_3712	Male	80.6	Partial response	No		No	No	48.336	3	0	1	1	0	1
+DLBCL_DUKE_3713	Female	52.3	Complete response	No	Female	No	No	51.072	0	0	0	0	0	0
+DLBCL_DUKE_3715	Female	62.4	Partial response	No	Female	No	No	51.984	3	0	1	1	0	1
+DLBCL_DUKE_3716	Female	68.4	Complete response	No	Female	No	Yes	269.648			0		0	1
+DLBCL_DUKE_3717	Female	70.6	Complete response	Yes	Female	No	No	66.88	2	1	0	0	0	1
+DLBCL_DUKE_3718	Male	65.1	Complete response	No	No	No	No	64.752	1	0	0	0	0	1
+DLBCL_DUKE_3719	Female	29.1	Complete response	No	Female	No	No	65.056	0	0	0	0	0	0
+DLBCL_DUKE_3721	Male	61.5	Complete response	No		No	No	73.568	2	0	1	0	0	1
+DLBCL_DUKE_3722	Male	44.2	Complete response	No		No	No	70.528	0	0	0	0	0	0
+DLBCL_DUKE_3724	Male	71.3	Partial response	Yes		No	No	70.224	3	0	1	1	0	1
+DLBCL_DUKE_3725	Female	57.7	Complete response	No	Female	No	No	77.216	2	1	0	1	0	0
+DLBCL_DUKE_3726	Male	46.8	Complete response	No	No	No	No	68.096	2	0	1	1	0	0
+DLBCL_DUKE_3727	Female	46.6	Complete response	No	Female	No	No	69.616	0	0	0	0	0	0
+DLBCL_DUKE_3728	Male	66.4	Partial response	Yes	No	No	No	69.92	4	1	1	1	0	1
+DLBCL_DUKE_3729	Male	52	Complete response	Yes	No	No	No	77.52	3	0	1	1	1	0
+DLBCL_DUKE_3730	Female	61.4	Complete response	Yes	Female	No	No	86.944	5	1	1	1	1	1
+DLBCL_DUKE_3731	Female	75.3	Partial response	Yes	Female	No	No	7.904	4	1	1	1	0	1
+DLBCL_DUKE_3732	Male	56.5	Complete response	No	No	No	No	72.352	1	0	1	0	0	0
+DLBCL_DUKE_3733	Female	75.3	Complete response	No	Female	No	No	55.936	1	0	0	0	0	1
+DLBCL_DUKE_3734	Male	71.1	Partial response	No		No	No	55.936	2	0	0	1	0	1
+DLBCL_DUKE_3735	Female	56.7	Partial response	No	Female	No	No	51.072	1	0	0	1	0	0
+DLBCL_DUKE_3736	Male	73.1	Complete response	Yes	No	No	No	56.848	1	0	0	0	0	1
+DLBCL_DUKE_3737	Female	73.5	Complete response	No	Female	No	No	38	1	0	0	0	0	1
+DLBCL_DUKE_3739	Male	67.4	Complete response	No		No	No	55.936	1	0	0	0	0	1
+DLBCL_DUKE_3740	Female	72.4	Complete response	No	Female	No	No	48.032	1	0	0	0	0	1
+DLBCL_DUKE_3741	Female	60.3	Complete response	Yes	Female	No	No	48.032	4	1	1	1	0	1
+DLBCL_DUKE_3742	Male	62.8	Complete response	No	No	No	No	48.64	4	0	1	1	1	1
+DLBCL_DUKE_3743	Female	56.8	No response	No	Female	No	No	13.68	4	1	1	1	1	0
+DLBCL_DUKE_3744	Female	65	Complete response	No	Female	No	No	33.136	2	0	0	1	0	1
+DLBCL_DUKE_3745	Male	60.1	Complete response	No		No	No	44.688	2	0	0	1	0	1
+DLBCL_DUKE_3746	Male	76	Complete response	No	No	No	No	45.6	2	0	0	1	0	1
+DLBCL_DUKE_3747	Female	65.7	Partial response	Yes	Female	No	No	46.816	4	1	1	1	0	1
+DLBCL_DUKE_3748	Male	72.6	Complete response	No		No	No	43.168	1	0	0	0	0	1
+DLBCL_DUKE_3749	Male	57.3	Complete response	No		No	No	38	0	0	0	0	0	0
+DLBCL_DUKE_3750	Male	53.4	Complete response	No	Yes	No	No	43.168	3	0	1	1	1	0
+DLBCL_DUKE_3751	Female	67.7	Complete response	Yes	Female	No	No	33.744	2	0	1	0	0	1
+DLBCL_DUKE_3753	Male	71.2	Complete response	No	Yes	No	No	28.272	2	1	0	0	0	1
+DLBCL_DUKE_3754	Female	68.8	Complete response	Yes	Female	No	No	31.92	3	1	1	0	0	1
+DLBCL_DUKE_3755	Male	66.2	Complete response	No	No	No	No	34.352	3	1	1	0	0	1
+DLBCL_DUKE_3756	Male	62.7	No response	No	No	No	No	33.44	3	0	1	1	0	1
+DLBCL_DUKE_3757	Male	63.3	Complete response	No	No	No	No	23.104	1	0	0	0	0	1
+DLBCL_DUKE_3758	Male	46.9	Complete response	Yes	No	No	No	24.928	4	1	1	1	1	0
+DLBCL_DUKE_3759	Male	34.8	Complete response	Yes	No	No	No	62.928	2	0	1	1	0	0
+DLBCL_DUKE_3760	Female	67.5	Complete response	No	Female	No	No	57.76	4	1	1	1	0	1
+DLBCL_DUKE_3761	Male	52.6	Complete response	No		No	No	99.408	0	0	0	0	0	0
+DLBCL_DUKE_3762	Male	29.9	Complete response	Yes		No	No	108.224	3	1	1	1	0	0
+DLBCL_DUKE_3763	Male	58	Complete response	Yes		No	Yes	49.248	2	0	1	1	0	0
+DLBCL_DUKE_3764	Female	58.4	Complete response	No	Female	No	No	89.376	2	0	0	1	1	0
+DLBCL_DUKE_3765	Female	63.4	Complete response	Yes	Female	No	No	73.568	4	1	1	1	0	1
+DLBCL_DUKE_3766	Female	61.7	Complete response	Yes	Female	No	No	59.888	4	1	1	1	0	1
+DLBCL_DUKE_3767	Male	57.5	Complete response	No		No	No	75.088	0	0	0	0	0	0
+DLBCL_DUKE_3770	Male	64	Complete response	Yes	No	No	No	52.896	4	1	1	1	0	1
+DLBCL_DUKE_3771	Male	49.8	Complete response	Yes	No	No	No	52.592	4	1	1	1	1	0
+DLBCL_DUKE_3775	Male	22.3	Complete response	Yes	No	No	No	39.52	4	1	1	1	1	0
+DLBCL_DUKE_3776	Male	67.5	Complete response	No	Yes	No	No	178.448	1	0	0	0	0	1
+DLBCL_DUKE_3777	Male	66.1	Complete response	Yes	Yes	No	Yes	122.816	3	1	0	1	0	1
+DLBCL_DUKE_3778	Male	67.9	Complete response	No	Yes	No	No	159.296	2	1	0	0	0	1
+DLBCL_DUKE_3779	Male	77.9	Complete response	No	Yes	No	No	133.76	3	1	0	1	0	1
+DLBCL_DUKE_3780	Male	78.3	Complete response	No	Yes	No	No	128.288	1	0	0	0	0	1
+DLBCL_DUKE_3781	Male	65.1	Complete response	No	Yes	No	No	99.712	1	0	0	0	0	1
+DLBCL_DUKE_3782	Male	58.5	Complete response	No	Yes	No	No	68.4	2	1	0	1	0	0
+DLBCL_DUKE_3783	Male	71.6	Complete response	Yes	Yes	No	No	61.712	2	1	0	0	0	1
+DLBCL_DUKE_3784	Male	70.1	Complete response	No	Yes	No	No	50.464	2	1	0	0	0	1
+DLBCL_DUKE_3785	Male	60.8	Complete response	No	Yes	No	No	34.352	1	0	0	0	0	1
+DLBCL_DUKE_3786	Male	26.9	Complete response	Yes	No	No	No	44.08	3	1	1	1	0	0
+DLBCL_DUKE_3787	Male	64.4	Complete response	Yes	Yes	No	No	38.304	4	0	1	1	1	1
+DLBCL_DUKE_3810	Male	68.5		No	No	Yes		4.256			1		1	1
+DLBCL_DUKE_3811	Male	48.8	Complete response		No	No		314.032			0		0	0
+DLBCL_DUKE_3812	Male	60	Complete response	No	No	No		318.288			0		0	1
+DLBCL_DUKE_3813	Female	71.3	Complete response		Female	No		131.024			1		0	1
+DLBCL_DUKE_3814	Male	37.9	Complete response		No	No	No	104.576			1		0	0
+DLBCL_DUKE_3815	Female	44.5	Complete response	Yes	Female			152.608		0	1		0	0
+DLBCL_DUKE_3816	Female	41.5		Yes	Female			2.432					0	0
+DLBCL_DUKE_3817	Female	37.9	Partial response	No	Female			54.112			1	1	0	0
+DLBCL_DUKE_3819	Male	45.5	Complete response	Yes	No	No		299.44			0		0	0
+DLBCL_DUKE_3820	Male	54.4	Complete response	No	No	No		241.376			0		0	0
+DLBCL_DUKE_3821	Female	35.8	Complete response	No	Female			280.896			0		0	0
+DLBCL_DUKE_3822	Female	67	Complete response	Yes	Female	Yes	Yes	31.92			1		0	1
+DLBCL_DUKE_3823	Female	76.3	Complete response		Female	No					1		0	1
+DLBCL_DUKE_3824	Female	73.1	Complete response	No	Female		No	42.864					0	1
+DLBCL_DUKE_3825	Male	50.7	Complete response		No	No		69.008			1		0	0
+DLBCL_DUKE_3826	Female	82.2		No	Female			32.528			1		0	1
+DLBCL_DUKE_3827	Female	77.1		No	Female	Yes		2.736			1		0	1
+DLBCL_DUKE_3828	Female	85.4	Complete response		Female			166.592			0		0	1
+DLBCL_DUKE_3829	Female	80.9	Complete response		Female	No		24.928		1	1		0	1
+DLBCL_DUKE_3830	Male	58.7	Complete response	Yes	No	No		252.32			1		0	0
+DLBCL_DUKE_3831	Female	81.6	Complete response	Yes	Female			143.792		1	1		0	1
+DLBCL_DUKE_3832	Male	71.6	Partial response	No	No	No	Yes	66.272			0		0	1
+DLBCL_DUKE_3833	Male	63.6	Complete response	Yes	No	No		248.976			1	1	0	1
+DLBCL_DUKE_3834	Female	36	Complete response	Yes	Female			105.792			0		0	0
+DLBCL_DUKE_3835	Male	58.2	Complete response	No	No	No		216.752			1	1	1	0
+DLBCL_DUKE_3836	Male	40	Complete response	Yes	No		No	51.376			0		0	0
+DLBCL_DUKE_3837	Male	51.9	Partial response	Yes	No	No	No	22.8			1	1	0	0
+DLBCL_DUKE_3838	Female	66.6	Partial response	Yes	Female	No	Yes	36.48			0		0	1
+DLBCL_DUKE_3839	Male	70.7	Complete response	Yes	No	No		220.4			1		0	1
+DLBCL_DUKE_3840	Male	75.1	Complete response	No	No	No		226.784			0		0	1
+DLBCL_DUKE_3842	Female	82.1	Complete response	Yes	Female	No		138.32			0		0	1
+DLBCL_DUKE_3843	Male	50.5	Complete response	No	No	No		53.808			1		0	0
+DLBCL_DUKE_3845	Female	74.4	Complete response	Yes	Female	No		135.888				1	0	1
+DLBCL_DUKE_3846	Male	76.7		Yes	No	No		171.456			1	1	0	1
+DLBCL_DUKE_3847	Male	47.1	Complete response	Yes	No	No		192.736			1		0	0
+DLBCL_DUKE_3848	Male	74.9	Complete response	No	No	No		191.52			1	0	0	1
+DLBCL_DUKE_3849	Female	63.4	Partial response	Yes	Female			41.344			1		0	1
+DLBCL_DUKE_3851	Male	55	Complete response		No	No		47.12				0	0	0
+DLBCL_DUKE_3852	Male	75.3	Complete response	Yes	No	No					1		1	1
+DLBCL_DUKE_3854	Female	70.8	Complete response		Female			202.464					0	1
+DLBCL_DUKE_3856	Male	36.8	Complete response	Yes	No	No		166.592			0		0	0
+DLBCL_DUKE_3857	Male	71.1		Yes	No	No		181.488			1		0	1
+DLBCL_DUKE_3859	Male	83.6		No	No	No		1.216		0	0		0	1
+DLBCL_DUKE_3861	Female	85.8		No	Female	No		120.992			0		0	1
+DLBCL_DUKE_3865	Male	72.2	Complete response		No	No		133.152					0	1
+DLBCL_DUKE_3867	Female	31.2	Complete response	No	Female			117.04			0		0	0
+DLBCL_DUKE_3871	Female	83.9			Female								0	1
+DLBCL_DUKE_3872	Male	72.8		No	No	No		1.824			1	1	0	1
+DLBCL_DUKE_3873	Female	76		No	Female	No		0.912			1		0	1
+DLBCL_DUKE_3875	Male	66.6	Complete response		No	No		74.48			1	1	0	1
+DLBCL_DUKE_3876	Male	54.8	Complete response		No	No	Yes	27.968					0	0
+DLBCL_DUKE_3879	Female	81.6	Complete response	No	Female	No		16.416			0		0	1
+DLBCL_DUKE_3880	Male	59.5	Complete response	No	No			77.52			1		1	0
+DLBCL_DUKE_3881	Male	76.3	Complete response	No	No			65.968			1		0	1
+DLBCL_DUKE_3882	Male	68.8	Partial response	Yes	No	No		71.44			1		1	1
+DLBCL_DUKE_3883	Female	60.3	Complete response	No	Female			51.376			1		0	1
+DLBCL_DUKE_3885	Male	56.4	No response	Yes	No	No		12.16		0	1		0	0
+DLBCL_DUKE_3886	Male	59.6	Complete response		No			36.48			1		1	0
+DLBCL_DUKE_3887	Female	69.9	Complete response		Female	No		35.264	3	0	0	1	1	1
+DLBCL_DUKE_3888	Female	73.9	Complete response	Yes	Female	No	Yes	36.784			1		1	1
+DLBCL_DUKE_3889	Female	74.9	Complete response		Female			41.952			0		0	1
+DLBCL_DUKE_3891	Female	75.5	Complete response		Female			55.632			0		0	1
+DLBCL_DUKE_3892	Female	53.8	Complete response		Female			51.376			0		0	0
+DLBCL_DUKE_3893	Female	67.7	Complete response	Yes	Female			31.312			0		0	1
+DLBCL_DUKE_3894	Female	51.4	Complete response	No	Female	No		16.72			0		0	0
+DLBCL_DUKE_3895	Female	66		No	Female	No		47.728			1		0	1
+DLBCL_DUKE_3896	Male	56.6			No	No							0	0
+DLBCL_DUKE_3898	Male	75.2	Complete response	No	No			18.24		0	0		0	1
+DLBCL_DUKE_3899	Male	69.6	Complete response	No	No			31.92		0	1		1	1
+DLBCL_DUKE_3900	Female	66.2	Complete response	No	Female	No		30.4			1		1	1
+DLBCL_DUKE_3901	Female	66.1	Partial response		Female	No	Yes	20.064			1	1	1	1
+DLBCL_DUKE_3902	Female	82.3	Complete response	No	Female			140.448		0	0	1		1
+DLBCL_DUKE_3903	Male	86	No response	No	No	No		2.128	2	0	0	1	0	1
+DLBCL_DUKE_3904	Male	45.9	No response	Yes	No	No		8.816	3	0	1	1	1	0
+DLBCL_DUKE_3905	Female	65.2	Complete response	No	Female	Yes		99.408	3	0	1	0	1	1
+DLBCL_DUKE_3906	Female	59.8	Complete response	No	Female	No		248.672	2	0	1	1	0	0
+DLBCL_DUKE_3907	Female	79	No response	Yes	Female	No		297.616	2	0	0	1	0	1
+DLBCL_DUKE_3908	Male	47.9	Complete response	No				229.824		0	1	1		0
+DLBCL_DUKE_3909	Female	76.1	Complete response	No	Female	No		62.928	4	0	1	1	1	1
+DLBCL_DUKE_3910	Male	69.4	Complete response	No	No	No		36.176	4	1	1	1	0	1
+DLBCL_DUKE_3911	Female	71.4	Complete response	No	Female	No		151.696	3	0	1	0	1	1
+DLBCL_DUKE_3912	Male	63.3	No response	No	No	No		40.128	5	1	1	1	1	1
+DLBCL_DUKE_3913	Female	91.7	Complete response	No	Female	No		58.976		0	0	0		1
+DLBCL_DUKE_3914	Male	71.8	Complete response	No				318.592		0	0	0		1
+DLBCL_DUKE_3915	Male	63	Complete response	No		No		197.6		0	0	0		1
+DLBCL_DUKE_3916	Male	61	Complete response	Yes	No	No		228.912	2	0	1	0	0	1
+DLBCL_DUKE_3917	Male	57.7	Complete response	No		No		227.696		0	0	1		0
+DLBCL_DUKE_3918	Female	79.6	No response	Yes	Female	No		5.472	4	1	1	1	0	1
+DLBCL_DUKE_3919	Male	53.3	Complete response	No				197.6		0	0	0		0
+DLBCL_DUKE_3920	Male	63.5	Complete response	No				282.72		0	1	0		1
+DLBCL_DUKE_3921	Female	64.7	Complete response	No	Female			48.032		0	0	0		1
+DLBCL_DUKE_3922	Male	80.3	Complete response	No	No	No		126.768	1	0	0	0	0	1
+DLBCL_DUKE_3923	Male	50.9	Complete response	No	No	No		124.944	2	0	1	1	0	0
+DLBCL_DUKE_3924	Male	69.7	Complete response	No	No	Yes		86.336	2	0	1	0	0	1
+DLBCL_DUKE_3925	Female	60.2	Complete response	No	Female	No		103.056	2	0	1	0	0	1
+DLBCL_DUKE_3926	Male	42.4	Complete response	Yes	No	Yes		104.576	2	0	1	0	1	0
+DLBCL_DUKE_3927	Female	62.1	Complete response	No	Female	No		168.72	2	0	1	0	0	1
+DLBCL_DUKE_3928	Male	60	Complete response	No	No	No		36.48	4	0	1	1	1	1
+DLBCL_DUKE_3929	Male	52.8	Complete response	No	No	No		360.848	2	0	1	1	0	0
+DLBCL_DUKE_3930	Male	60.5	Complete response	Yes				210.672		0	1	1		1
+DLBCL_DUKE_3931	Male	34.3	Complete response	No				241.072		0	0	0		0
+DLBCL_DUKE_3932	Male	77.3	Complete response	No				65.968		0	0	0		1
+DLBCL_DUKE_3933	Male	75.5	Complete response	No	No	No		152.608	3	0	1	0	1	1
+DLBCL_DUKE_3934	Male	33.2	Complete response	No				178.752		0	0	0		0
+DLBCL_DUKE_3935	Male	50	No response	Yes				38.304		0	1	1		0
+DLBCL_DUKE_3936	Female	59.9	Complete response	No	Female	No		260.832		0	0	1		0
+DLBCL_DUKE_3937	Male	77.8	No response	Yes	No	No		3.344	3	1	1	0	0	1
+DLBCL_DUKE_3938	Female	79.3	No response	No	Female	No		34.352	4	1	1	1	0	1
+DLBCL_DUKE_3939	Female	52.6	Complete response	No	Female	No		207.024		1	0	1		0
+DLBCL_DUKE_3940	Male	52	Partial response	Yes				241.68		0	0	1		0
+DLBCL_DUKE_3941	Male	80.9	Partial response	No				235.6		0	1	1		1
+DLBCL_DUKE_3942	Male	61	No response	No	No	No		18.24	4	0	1	1	1	1
+DLBCL_DUKE_3943	Male	65	Complete response	No	No	No		176.624	3	0	1	1	0	1
+DLBCL_DUKE_3944	Female	71.4	Complete response	No	Female	No		171.76		0	0	0		1
+DLBCL_DUKE_3945	Female	72.6	Complete response	No	Female			299.44		0	0	0		1
+DLBCL_DUKE_3946	Male	52	Complete response	No				113.696		0	0	0		0
+DLBCL_DUKE_3948	Female	68	Complete response	Yes	Female	No		277.856		0	0	0		1
+DLBCL_DUKE_3949	Female	61.2	Complete response	No	Female	No		231.648	1	0	0	0	0	1
+DLBCL_DUKE_3950	Female	23.4	Complete response	No	Female	No		153.824	1	0	1	0	0	0
+DLBCL_DUKE_3951	Male	48.8	Complete response	No	No	No		152.608	2	0	1	0	1	0
+DLBCL_DUKE_3952	Male	42.3	No response	Yes	No	Yes		16.112	3	0	1	1	1	0
+DLBCL_DUKE_3953	Male	70.9	Complete response	No	No	No		131.024	3	0	1	0	1	1
+DLBCL_DUKE_3954	Male	53.6	Partial response	Yes				30.096		0	1	0		0
+DLBCL_DUKE_3955	Female	72.4	Complete response	No	Female			282.416		0	0	0		1
+DLBCL_DUKE_3956	Male	54.4	Complete response	Yes	No	No		222.528	3	1	1	1	0	0
+DLBCL_DUKE_3957	Female	75.9	Complete response	No	Female	No		202.16	3	0	1	1	0	1
+DLBCL_DUKE_3958	Male	57.8	Complete response	Yes				248.064		1	1	1		0
+DLBCL_DUKE_3959	Male	82.9	Complete response	No	Yes	Yes		34.656	3	0	1	0	1	1
+DLBCL_DUKE_3960	Male	35.7	Partial response	No		No		324.976		0	0	0		0
+DLBCL_DUKE_3961	Female	48.7	Complete response	No	Female			305.216			1	0		0
+DLBCL_DUKE_3962	Male	61.8	Complete response	Yes	No	No		245.632		0	1		1	1
+DLBCL_DUKE_3963	Female	53.6	Complete response	No	Female			311.6		0	0	1		0
+DLBCL_DUKE_3964	Female	82.2	No response	No	Female	No		11.856	1	0	0	0	0	1
+DLBCL_DUKE_3965	Male	33.8	Complete response	No	Yes			45.904	4	1	1	1	1	0
+DLBCL_DUKE_3966	Male	41.1	Complete response	No	No	No		226.784	0	0	0	0	0	0
+DLBCL_DUKE_3967	Female	77.9	No response	No	Female	No		9.728	3	0	1	1	0	1
+DLBCL_DUKE_3968	Male	46.4	Complete response	No	No	No		220.704	0	0	0	0	0	0
+DLBCL_DUKE_3969	Male	59	Complete response	Yes	No	No		257.488	3	0	1	1	1	0
+DLBCL_DUKE_3971	Female	70.4	Complete response	No	Female			41.04		1	1	1		1
+DLBCL_DUKE_3972	Male	19.5	Complete response	No	No	No		242.288	1	0	0	1	0	0
+DLBCL_DUKE_3973	Male	43.1	Complete response	No	No	No		162.032	0	0	0	0	0	0
+DLBCL_DUKE_3974	Male	60.1	Complete response	No				92.416		0	1	0		1
+DLBCL_DUKE_3975	Female	57.9	Complete response	No	Female	No		155.04	1	0	1	0	0	0
+DLBCL_DUKE_3976	Male	85.1	Complete response	No		No		156.864		0	1	0		1
+DLBCL_DUKE_3977	Female	38.6	Complete response	No	Female	No		216.448	3	0	1	1	1	0
+DLBCL_DUKE_3978	Female	46.5	Complete response	No	Female	No		169.024	0	0	0	0	0	0
+DLBCL_DUKE_3979	Male	74.2	Complete response	No				164.464		0	0	0		1
+DLBCL_DUKE_3980	Female	61.5		Yes	Female			24.016		0	0	0		1
+DLBCL_DUKE_3981	Male	33.3	Complete response	No				281.2		0	1	1		0
+DLBCL_DUKE_3982	Male	56.1	Complete response	Yes				24.928		0	0	0		0
+DLBCL_DUKE_3983	Female	71.3	Partial response	Yes	Female	No		38.912	3	0	1	1	0	1
+DLBCL_DUKE_3984	Female	79.6	Complete response	No	Female			173.888		0	1	1		1
+DLBCL_DUKE_3985	Female	83.2	No response	Yes	Female			2.432			1	1		1
+DLBCL_DUKE_3986	Male	33.2	Complete response	No	No	No		140.448	1	0	1	0	0	0
+DLBCL_DUKE_3987	Male	67.8	No response	No	No	No		79.952	4	1	1	0	1	1
+DLBCL_DUKE_3988	Female	67.7	Complete response	No	Female	No		231.648	3	0	1	1	0	1
+DLBCL_DUKE_3989	Male	40	Complete response	No				29.488		0	1	1		0
+DLBCL_DUKE_3990	Male	70.4	No response	No	No	No		5.472	2	0	1	0	0	1
+DLBCL_DUKE_3991	Male	68	Complete response	No				299.44		0	0	0		1
+DLBCL_DUKE_3992	Female	71	Complete response	No	Female			39.824		0	1	1		1
+DLBCL_DUKE_3993	Male	54.9	Complete response	No				158.08		0	0	0		0
+DLBCL_DUKE_3994	Male	72.9	Complete response	No				197.6		0	1	1		1
+DLBCL_DUKE_3995	Male	43.6	Complete response	No				148.352		0	1	0		0
+DLBCL_DUKE_3996	Male	62.1	Complete response	Yes				106.096		0	1	1		1
+DLBCL_DUKE_3997	Male	57.5	Complete response	No	No	No		157.168	0	0	0	0	0	0
+DLBCL_DUKE_3998	Male	64.6	Complete response	No	No	No		163.248	1	0	0	0	0	1
+DLBCL_DUKE_3999	Female	82	Complete response	No	Female			63.232		0	1	0		1
+DLBCL_DUKE_4000	Male	30.5	Complete response	No				304		0	0	0		0
