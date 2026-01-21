@@ -1,0 +1,808 @@
+"Gene","N_Patients","Pct_Patients","Silent","Missense","Truncating","Total","Pct_Silent","Pct_Trunc","Trunc_Mis_Ratio","Pattern","Pathway","Function"
+"BCL2",32,23.7,53,56,0,109,48.6,0,0,"aSHM Passenger","Apoptosis","Anti-apoptotic, aSHM target"
+"PCLO",36,26.7,19,64,6,89,21.3,6.7,0.094,"aSHM Passenger","Unknown","Presynaptic protein, frequent aSHM"
+"PIM1",38,28.1,33,47,4,84,39.3,4.8,0.085,"aSHM Passenger","Survival","Serine/threonine kinase, aSHM target"
+"CSMD3",21,15.6,17,42,8,67,25.4,11.9,0.19,"Neutral/Unclear",NA,NA
+"FAT4",21,15.6,9,52,3,64,14.1,4.7,0.058,"Hotspot/GoF","Wnt/Hippo","Protocadherin"
+"BTG1",35,25.9,22,37,3,62,35.5,4.8,0.081,"aSHM Passenger","Proliferation","Anti-proliferative, aSHM target"
+"SGK1",20,14.8,9,36,7,52,17.3,13.5,0.194,"Neutral/Unclear","Survival","Serum/glucocorticoid kinase, aSHM target"
+"KMT2D",36,26.7,2,8,38,48,4.2,79.2,4.75,"Strong LoF Selection","Chromatin","H3K4 methyltransferase, enhancer regulation"
+"USH2A",22,16.3,17,22,2,41,41.5,4.9,0.091,"aSHM Passenger","Unknown","Usher syndrome protein"
+"TTN",26,19.3,15,23,2,40,37.5,5,0.087,"aSHM Passenger","Unknown","Titin (often passenger)"
+"FAT1",20,14.8,9,27,1,37,24.3,2.7,0.037,"aSHM Passenger","Wnt/Hippo","Protocadherin"
+"LRP1B",17,12.6,10,24,2,36,27.8,5.6,0.083,"aSHM Passenger",NA,NA
+"ZFHX4",10,7.4,9,25,2,36,25,5.6,0.08,"aSHM Passenger",NA,NA
+"CREBBP",28,20.7,0,22,12,34,0,35.3,0.545,"LoF Selection","Chromatin","Histone acetyltransferase, transcriptional coactivator"
+"TP53",31,23,0,26,6,32,0,18.8,0.231,"Mixed","Cell Cycle/Apoptosis","Tumor suppressor, cell cycle checkpoint"
+"IGLL5",15,11.1,9,21,1,31,29,3.2,0.048,"aSHM Passenger","B-cell","Surrogate light chain, aSHM target"
+"MUC16",19,14.1,10,20,1,31,32.3,3.2,0.05,"aSHM Passenger",NA,NA
+"MYC",9,6.7,6,20,1,27,22.2,3.7,0.05,"aSHM Passenger","Proliferation","Transcription factor, aSHM target"
+"PCDH10",11,8.1,7,18,2,27,25.9,7.4,0.111,"aSHM Passenger",NA,NA
+"GNA13",12,8.9,3,17,6,26,11.5,23.1,0.353,"Mixed","GC Exit","G-protein, S1P signaling"
+"HIST1H1E",16,11.9,4,22,0,26,15.4,0,0,"aSHM Passenger","Chromatin","Linker histone, aSHM target"
+"ZFP36L1",17,12.6,10,8,8,26,38.5,30.8,1,"LoF Selection",NA,NA
+"CARD11",18,13.3,2,23,0,25,8,0,0,"Hotspot/GoF","NF-kB","BCR-NF-kB signaling scaffold"
+"CSMD1",15,11.1,9,14,2,25,36,8,0.143,"aSHM Passenger",NA,NA
+"XIRP2",15,11.1,6,16,2,24,25,8.3,0.125,"aSHM Passenger",NA,NA
+"BCR",11,8.1,8,13,2,23,34.8,8.7,0.154,"Neutral/Unclear",NA,NA
+"COL11A1",9,6.7,11,8,4,23,47.8,17.4,0.5,"Mixed",NA,NA
+"SLITRK5",7,5.2,6,16,1,23,26.1,4.3,0.062,"aSHM Passenger",NA,NA
+"MYD88",22,16.3,0,22,0,22,0,0,0,"Hotspot/GoF","NF-kB","TLR adaptor (L265P = ABC driver)"
+"SEMA3E",7,5.2,8,13,1,22,36.4,4.5,0.077,"aSHM Passenger",NA,NA
+"LRRN3",15,11.1,8,11,2,21,38.1,9.5,0.182,"Neutral/Unclear",NA,NA
+"CD79B",21,15.6,1,16,3,20,5,15,0.188,"Mixed","BCR/NF-kB","BCR signaling (Y196 hotspot)"
+"DTX1",14,10.4,7,10,3,20,35,15,0.3,"Mixed",NA,NA
+"LPHN3",8,5.9,6,13,1,20,30,5,0.077,"aSHM Passenger",NA,NA
+"PTPRD",8,5.9,6,11,2,19,31.6,10.5,0.182,"Neutral/Unclear",NA,NA
+"SI",7,5.2,6,11,2,19,31.6,10.5,0.182,"Neutral/Unclear",NA,NA
+"SYNE1",15,11.1,4,13,2,19,21.1,10.5,0.154,"Neutral/Unclear",NA,NA
+"ACTB",17,12.6,3,14,1,18,16.7,5.6,0.071,"aSHM Passenger",NA,NA
+"CACNA2D1",6,4.4,5,12,1,18,27.8,5.6,0.083,"aSHM Passenger",NA,NA
+"CD70",13,9.6,0,11,7,18,0,38.9,0.636,"LoF Selection",NA,NA
+"HIST1H1C",16,11.9,1,16,1,18,5.6,5.6,0.062,"Hotspot/GoF","Chromatin","Linker histone, aSHM target"
+"HIST1H2BK",14,10.4,5,12,1,18,27.8,5.6,0.083,"aSHM Passenger",NA,NA
+"LRRIQ1",9,6.7,6,10,2,18,33.3,11.1,0.2,"Neutral/Unclear",NA,NA
+"P2RY8",13,9.6,2,15,1,18,11.1,5.6,0.067,"Hotspot/GoF","GC Exit","Purinergic receptor, GC positioning"
+"UNC5D",10,7.4,5,8,5,18,27.8,27.8,0.625,"Mixed",NA,NA
+"ANKRD50",6,4.4,1,13,3,17,5.9,17.6,0.231,"Mixed",NA,NA
+"DST",20,14.8,6,11,0,17,35.3,0,0,"aSHM Passenger",NA,NA
+"EPHA7",8,5.9,3,14,0,17,17.6,0,0,"aSHM Passenger",NA,NA
+"KLHL6",12,8.9,2,15,0,17,11.8,0,0,"Hotspot/GoF",NA,NA
+"LAMA2",8,5.9,4,12,1,17,23.5,5.9,0.083,"aSHM Passenger",NA,NA
+"PCDH15",10,7.4,2,13,2,17,11.8,11.8,0.154,"Neutral/Unclear",NA,NA
+"TNFRSF14",17,12.6,0,11,6,17,0,35.3,0.545,"LoF Selection","Immune","HVEM, immune checkpoint"
+"CNTLN",6,4.4,4,10,2,16,25,12.5,0.2,"Neutral/Unclear",NA,NA
+"GRID2",8,5.9,5,10,1,16,31.2,6.2,0.1,"aSHM Passenger",NA,NA
+"PCDH17",12,8.9,7,9,0,16,43.8,0,0,"aSHM Passenger",NA,NA
+"RYR2",11,8.1,6,9,1,16,37.5,6.2,0.111,"aSHM Passenger",NA,NA
+"DMD",9,6.7,5,8,2,15,33.3,13.3,0.25,"Neutral/Unclear",NA,NA
+"FLRT2",8,5.9,5,9,1,15,33.3,6.7,0.111,"aSHM Passenger",NA,NA
+"HIST1H1B",12,8.9,3,12,0,15,20,0,0,"aSHM Passenger",NA,NA
+"HIST1H2BC",8,5.9,6,9,0,15,40,0,0,"aSHM Passenger",NA,NA
+"LAMA1",8,5.9,2,13,0,15,13.3,0,0,"Hotspot/GoF",NA,NA
+"NAV3",10,7.4,1,13,1,15,6.7,6.7,0.077,"Hotspot/GoF",NA,NA
+"PCDH11X",9,6.7,5,9,1,15,33.3,6.7,0.111,"aSHM Passenger",NA,NA
+"PXDN",7,5.2,6,6,3,15,40,20,0.5,"Mixed",NA,NA
+"BCL6",13,9.6,1,12,1,14,7.1,7.1,0.083,"Hotspot/GoF","GC Biology","GC master regulator, aSHM target"
+"CDH18",8,5.9,3,8,3,14,21.4,21.4,0.375,"Mixed",NA,NA
+"CUBN",7,5.2,3,9,2,14,21.4,14.3,0.222,"Neutral/Unclear",NA,NA
+"DNAH5",13,9.6,4,10,0,14,28.6,0,0,"aSHM Passenger",NA,NA
+"DSCAM",12,8.9,2,10,2,14,14.3,14.3,0.2,"Neutral/Unclear",NA,NA
+"EBF1",13,9.6,1,10,3,14,7.1,21.4,0.3,"Mixed",NA,NA
+"EPHA5",4,3,4,9,1,14,28.6,7.1,0.111,"aSHM Passenger",NA,NA
+"GPR98",12,8.9,4,9,1,14,28.6,7.1,0.111,"aSHM Passenger",NA,NA
+"GRIA2",7,5.2,3,9,2,14,21.4,14.3,0.222,"Neutral/Unclear",NA,NA
+"HLA-A",12,8.9,0,5,9,14,0,64.3,1.8,"Strong LoF Selection","Immune Evasion","MHC class I"
+"LRP2",14,10.4,5,9,0,14,35.7,0,0,"aSHM Passenger",NA,NA
+"MAGEC1",9,6.7,5,8,1,14,35.7,7.1,0.125,"aSHM Passenger",NA,NA
+"PIK3C2G",5,3.7,4,9,1,14,28.6,7.1,0.111,"aSHM Passenger",NA,NA
+"TENM3",9,6.7,5,9,0,14,35.7,0,0,"aSHM Passenger",NA,NA
+"TRAM1L1",5,3.7,3,10,1,14,21.4,7.1,0.1,"aSHM Passenger",NA,NA
+"CD58",9,6.7,0,4,9,13,0,69.2,2.25,"Strong LoF Selection","Immune Evasion","LFA-3, NK/T cell ligand"
+"CDH7",8,5.9,1,12,0,13,7.7,0,0,"Hotspot/GoF",NA,NA
+"COL6A6",10,7.4,5,7,1,13,38.5,7.7,0.143,"aSHM Passenger",NA,NA
+"CTNNA2",7,5.2,1,10,2,13,7.7,15.4,0.2,"Mixed",NA,NA
+"DSEL",6,4.4,1,10,2,13,7.7,15.4,0.2,"Mixed",NA,NA
+"FAT3",12,8.9,1,11,1,13,7.7,7.7,0.091,"Hotspot/GoF",NA,NA
+"HIST1H1D",11,8.1,4,9,0,13,30.8,0,0,"aSHM Passenger",NA,NA
+"HIST1H2AM",14,10.4,6,7,0,13,46.2,0,0,"aSHM Passenger",NA,NA
+"KIAA1109",6,4.4,7,6,0,13,53.8,0,0,"aSHM Passenger",NA,NA
+"MPDZ",4,3,5,8,0,13,38.5,0,0,"aSHM Passenger",NA,NA
+"SLIT2",7,5.2,5,8,0,13,38.5,0,0,"aSHM Passenger",NA,NA
+"SPATA31D1",6,4.4,5,8,0,13,38.5,0,0,"aSHM Passenger",NA,NA
+"TBL1XR1",13,9.6,0,13,0,13,0,0,0,"Hotspot/GoF",NA,NA
+"TMSB4X",16,11.9,1,7,5,13,7.7,38.5,0.714,"LoF Selection",NA,NA
+"ZNF804B",10,7.4,0,13,0,13,0,0,0,"Hotspot/GoF",NA,NA
+"ADAMTS9",9,6.7,2,10,0,12,16.7,0,0,"aSHM Passenger",NA,NA
+"BRINP3",8,5.9,3,8,1,12,25,8.3,0.125,"aSHM Passenger",NA,NA
+"DCC",9,6.7,2,10,0,12,16.7,0,0,"aSHM Passenger",NA,NA
+"DGKB",5,3.7,2,9,1,12,16.7,8.3,0.111,"aSHM Passenger",NA,NA
+"FBN2",10,7.4,1,9,2,12,8.3,16.7,0.222,"Mixed",NA,NA
+"FREM2",7,5.2,3,8,1,12,25,8.3,0.125,"aSHM Passenger",NA,NA
+"HLA-B",11,8.1,0,5,7,12,0,58.3,1.4,"Strong LoF Selection","Immune Evasion","MHC class I"
+"KLHL14",9,6.7,2,9,1,12,16.7,8.3,0.111,"aSHM Passenger",NA,NA
+"MEF2B",12,8.9,0,10,2,12,0,16.7,0.2,"Mixed",NA,NA
+"PKHD1",9,6.7,4,8,0,12,33.3,0,0,"aSHM Passenger",NA,NA
+"PTPRM",9,6.7,5,7,0,12,41.7,0,0,"aSHM Passenger",NA,NA
+"SLITRK6",8,5.9,0,11,1,12,0,8.3,0.091,"Hotspot/GoF",NA,NA
+"TACC2",11,8.1,3,8,1,12,25,8.3,0.125,"aSHM Passenger",NA,NA
+"THSD7A",9,6.7,6,5,1,12,50,8.3,0.2,"Neutral/Unclear",NA,NA
+"ZNF608",9,6.7,4,6,2,12,33.3,16.7,0.333,"Mixed",NA,NA
+"ABCA13",11,8.1,2,9,0,11,18.2,0,0,"aSHM Passenger",NA,NA
+"AHNAK2",9,6.7,4,6,1,11,36.4,9.1,0.167,"Neutral/Unclear",NA,NA
+"ANKRD30A",6,4.4,1,9,1,11,9.1,9.1,0.111,"Hotspot/GoF",NA,NA
+"CDH10",4,3,2,9,0,11,18.2,0,0,"aSHM Passenger",NA,NA
+"CNTN5",6,4.4,4,7,0,11,36.4,0,0,"aSHM Passenger",NA,NA
+"DNAH17",6,4.4,5,5,1,11,45.5,9.1,0.2,"Neutral/Unclear",NA,NA
+"FLG",10,7.4,2,9,0,11,18.2,0,0,"aSHM Passenger",NA,NA
+"GRIK2",7,5.2,1,8,2,11,9.1,18.2,0.25,"Mixed",NA,NA
+"HIST2H2BE",9,6.7,3,6,2,11,27.3,18.2,0.333,"Mixed",NA,NA
+"HMCN1",8,5.9,3,7,1,11,27.3,9.1,0.143,"aSHM Passenger",NA,NA
+"IRF8",10,7.4,2,6,3,11,18.2,27.3,0.5,"Mixed",NA,NA
+"ITPKB",10,7.4,1,9,1,11,9.1,9.1,0.111,"Hotspot/GoF",NA,NA
+"LPHN2",6,4.4,4,7,0,11,36.4,0,0,"aSHM Passenger",NA,NA
+"LRRC7",11,8.1,2,7,2,11,18.2,18.2,0.286,"Mixed",NA,NA
+"MAP2",9,6.7,2,9,0,11,18.2,0,0,"aSHM Passenger",NA,NA
+"NALCN",5,3.7,4,7,0,11,36.4,0,0,"aSHM Passenger",NA,NA
+"NEB",9,6.7,3,7,1,11,27.3,9.1,0.143,"aSHM Passenger",NA,NA
+"PCDH9",4,3,4,7,0,11,36.4,0,0,"aSHM Passenger",NA,NA
+"PREX2",7,5.2,1,9,1,11,9.1,9.1,0.111,"Hotspot/GoF",NA,NA
+"RELN",11,8.1,1,10,0,11,9.1,0,0,"Hotspot/GoF",NA,NA
+"SACS",6,4.4,5,6,0,11,45.5,0,0,"aSHM Passenger",NA,NA
+"SDK1",9,6.7,4,7,0,11,36.4,0,0,"aSHM Passenger",NA,NA
+"SLITRK3",6,4.4,1,10,0,11,9.1,0,0,"Hotspot/GoF",NA,NA
+"SOCS1",7,5.2,4,5,2,11,36.4,18.2,0.4,"Mixed","JAK-STAT","JAK-STAT inhibitor"
+"STAT3",10,7.4,1,10,0,11,9.1,0,0,"Hotspot/GoF","JAK-STAT","Transcription factor"
+"TAF1",10,7.4,3,7,1,11,27.3,9.1,0.143,"aSHM Passenger",NA,NA
+"TUSC3",7,5.2,2,8,1,11,18.2,9.1,0.125,"aSHM Passenger",NA,NA
+"VCAN",10,7.4,3,7,1,11,27.3,9.1,0.143,"aSHM Passenger",NA,NA
+"BAI3",6,4.4,2,7,1,10,20,10,0.143,"Neutral/Unclear",NA,NA
+"CADM2",9,6.7,1,9,0,10,10,0,0,"Hotspot/GoF",NA,NA
+"CEP290",3,2.2,3,4,3,10,30,30,0.75,"LoF Selection",NA,NA
+"DNAH7",10,7.4,0,9,1,10,0,10,0.111,"Neutral/Unclear",NA,NA
+"DOCK1",8,5.9,3,7,0,10,30,0,0,"aSHM Passenger",NA,NA
+"EGR1",8,5.9,5,5,0,10,50,0,0,"aSHM Passenger",NA,NA
+"EP300",10,7.4,1,7,2,10,10,20,0.286,"Mixed","Chromatin","Histone acetyltransferase"
+"EZH2",9,6.7,0,10,0,10,0,0,0,"Hotspot/GoF","Chromatin","H3K27 methyltransferase (GoF in GCB)"
+"FAM135B",7,5.2,7,2,1,10,70,10,0.5,"Neutral/Unclear",NA,NA
+"FAM47B",6,4.4,3,5,2,10,30,20,0.4,"Mixed",NA,NA
+"FAS",9,6.7,0,2,8,10,0,80,4,"Strong LoF Selection","Apoptosis","Death receptor"
+"FSTL5",4,3,3,6,1,10,30,10,0.167,"Neutral/Unclear",NA,NA
+"HGF",4,3,3,5,2,10,30,20,0.4,"Mixed",NA,NA
+"HIST1H2AC",10,7.4,4,5,1,10,40,10,0.2,"Neutral/Unclear",NA,NA
+"KIF2B",8,5.9,1,7,2,10,10,20,0.286,"Mixed",NA,NA
+"LRBA",8,5.9,3,6,1,10,30,10,0.167,"Neutral/Unclear",NA,NA
+"MUC17",8,5.9,2,7,1,10,20,10,0.143,"Neutral/Unclear",NA,NA
+"NFKBIA",6,4.4,0,6,4,10,0,40,0.667,"LoF Selection","NF-kB","IkBa, NF-kB inhibitor"
+"NLGN1",6,4.4,3,7,0,10,30,0,0,"aSHM Passenger",NA,NA
+"NRK",5,3.7,4,6,0,10,40,0,0,"aSHM Passenger",NA,NA
+"NRXN1",6,4.4,3,7,0,10,30,0,0,"aSHM Passenger",NA,NA
+"OBSCN",9,6.7,4,5,1,10,40,10,0.2,"Neutral/Unclear",NA,NA
+"PTPRK",6,4.4,3,5,2,10,30,20,0.4,"Mixed",NA,NA
+"RFTN1",8,5.9,4,4,2,10,40,20,0.5,"Mixed",NA,NA
+"ROBO2",5,3.7,2,7,1,10,20,10,0.143,"Neutral/Unclear",NA,NA
+"SEMA3A",4,3,2,7,1,10,20,10,0.143,"Neutral/Unclear",NA,NA
+"SLITRK1",5,3.7,3,6,1,10,30,10,0.167,"Neutral/Unclear",NA,NA
+"TMPRSS15",4,3,1,9,0,10,10,0,0,"Hotspot/GoF",NA,NA
+"TRPS1",6,4.4,5,4,1,10,50,10,0.25,"Neutral/Unclear",NA,NA
+"UBR5",9,6.7,1,6,3,10,10,30,0.5,"LoF Selection",NA,NA
+"ZFHX3",8,5.9,3,7,0,10,30,0,0,"aSHM Passenger",NA,NA
+"ZNF462",5,3.7,1,9,0,10,10,0,0,"Hotspot/GoF",NA,NA
+"ADAMTS16",8,5.9,0,8,1,9,0,11.1,0.125,"Neutral/Unclear",NA,NA
+"AHNAK",8,5.9,3,6,0,9,33.3,0,0,"aSHM Passenger",NA,NA
+"ATRX",9,6.7,1,7,1,9,11.1,11.1,0.143,"Neutral/Unclear",NA,NA
+"BRWD3",9,6.7,2,7,0,9,22.2,0,0,"aSHM Passenger",NA,NA
+"BTG2",4,3,1,7,1,9,11.1,11.1,0.143,"Neutral/Unclear","Proliferation","Anti-proliferative, aSHM target"
+"COL4A5",6,4.4,2,7,0,9,22.2,0,0,"aSHM Passenger",NA,NA
+"DCAF12L1",6,4.4,2,6,1,9,22.2,11.1,0.167,"Neutral/Unclear",NA,NA
+"DNAH10",7,5.2,6,2,1,9,66.7,11.1,0.5,"Neutral/Unclear",NA,NA
+"DNAH11",9,6.7,2,6,1,9,22.2,11.1,0.167,"Neutral/Unclear",NA,NA
+"DSC1",6,4.4,1,6,2,9,11.1,22.2,0.333,"Mixed",NA,NA
+"FBN1",5,3.7,1,6,2,9,11.1,22.2,0.333,"Mixed",NA,NA
+"FRAS1",8,5.9,2,6,1,9,22.2,11.1,0.167,"Neutral/Unclear",NA,NA
+"GRM7",5,3.7,0,9,0,9,0,0,0,"Hotspot/GoF",NA,NA
+"HIST1H3I",8,5.9,3,6,0,9,33.3,0,0,"aSHM Passenger",NA,NA
+"HNRNPU",7,5.2,2,5,2,9,22.2,22.2,0.4,"Mixed",NA,NA
+"HTR2C",7,5.2,5,4,0,9,55.6,0,0,"aSHM Passenger",NA,NA
+"INPP4B",2,1.5,2,6,1,9,22.2,11.1,0.167,"Neutral/Unclear",NA,NA
+"INSR",7,5.2,3,5,1,9,33.3,11.1,0.2,"Neutral/Unclear",NA,NA
+"KMT2C",7,5.2,4,3,2,9,44.4,22.2,0.667,"Mixed","Chromatin","H3K4 methyltransferase"
+"LTB",7,5.2,2,7,0,9,22.2,0,0,"aSHM Passenger",NA,NA
+"MAGI1",9,6.7,0,9,0,9,0,0,0,"Hotspot/GoF",NA,NA
+"MAGI2",7,5.2,2,7,0,9,22.2,0,0,"aSHM Passenger",NA,NA
+"MGAM",9,6.7,4,4,1,9,44.4,11.1,0.25,"Neutral/Unclear",NA,NA
+"MUC2",5,3.7,5,4,0,9,55.6,0,0,"aSHM Passenger",NA,NA
+"MUC5B",7,5.2,4,5,0,9,44.4,0,0,"aSHM Passenger",NA,NA
+"MYO10",9,6.7,5,4,0,9,55.6,0,0,"aSHM Passenger",NA,NA
+"MYO15A",9,6.7,1,8,0,9,11.1,0,0,"Hotspot/GoF",NA,NA
+"MYT1L",5,3.7,3,5,1,9,33.3,11.1,0.2,"Neutral/Unclear",NA,NA
+"NOTCH1",4,3,0,5,4,9,0,44.4,0.8,"LoF Selection","Notch","Notch receptor"
+"PCDHA6",6,4.4,2,7,0,9,22.2,0,0,"aSHM Passenger",NA,NA
+"PCDHA7",9,6.7,1,8,0,9,11.1,0,0,"Hotspot/GoF",NA,NA
+"PDZD2",9,6.7,2,7,0,9,22.2,0,0,"aSHM Passenger",NA,NA
+"POU2F2",9,6.7,0,8,1,9,0,11.1,0.125,"Neutral/Unclear",NA,NA
+"PRDM1",11,8.1,0,4,5,9,0,55.6,1.25,"Strong LoF Selection","Plasma Cell","BLIMP1, plasma cell differentiation"
+"PRKCB",7,5.2,1,8,0,9,11.1,0,0,"Hotspot/GoF",NA,NA
+"RIMS2",7,5.2,1,6,2,9,11.1,22.2,0.333,"Mixed",NA,NA
+"SPEF2",8,5.9,2,7,0,9,22.2,0,0,"aSHM Passenger",NA,NA
+"TENM2",8,5.9,3,5,1,9,33.3,11.1,0.2,"Neutral/Unclear",NA,NA
+"TSHZ3",7,5.2,4,5,0,9,44.4,0,0,"aSHM Passenger",NA,NA
+"UNC5C",5,3.7,2,7,0,9,22.2,0,0,"aSHM Passenger",NA,NA
+"ZNF600",4,3,1,8,0,9,11.1,0,0,"Hotspot/GoF",NA,NA
+"ADAMTS5",5,3.7,4,3,1,8,50,12.5,0.333,"Neutral/Unclear",NA,NA
+"ARRDC4",5,3.7,5,3,0,8,62.5,0,0,"aSHM Passenger",NA,NA
+"ATRNL1",8,5.9,2,6,0,8,25,0,0,"aSHM Passenger",NA,NA
+"B2M",8,5.9,0,0,8,8,0,100,8,"Strong LoF Selection","Immune Evasion","MHC-I component"
+"BIRC6",7,5.2,0,4,4,8,0,50,1,"Strong LoF Selection",NA,NA
+"BNC2",5,3.7,4,4,0,8,50,0,0,"aSHM Passenger",NA,NA
+"BRAF",8,5.9,1,7,0,8,12.5,0,0,"Hotspot/GoF","MAPK","Serine/threonine kinase"
+"CCNB3",8,5.9,3,4,1,8,37.5,12.5,0.25,"Neutral/Unclear",NA,NA
+"CD36",3,2.2,3,3,2,8,37.5,25,0.667,"Mixed",NA,NA
+"CDH12",5,3.7,3,4,1,8,37.5,12.5,0.25,"Neutral/Unclear",NA,NA
+"CDH19",5,3.7,3,5,0,8,37.5,0,0,"aSHM Passenger",NA,NA
+"CHD4",8,5.9,1,7,0,8,12.5,0,0,"Hotspot/GoF",NA,NA
+"CHM",5,3.7,1,6,1,8,12.5,12.5,0.167,"Neutral/Unclear",NA,NA
+"COL7A1",7,5.2,2,6,0,8,25,0,0,"aSHM Passenger",NA,NA
+"CPS1",8,5.9,2,5,1,8,25,12.5,0.2,"Neutral/Unclear",NA,NA
+"DAPK1",7,5.2,2,5,1,8,25,12.5,0.2,"Neutral/Unclear",NA,NA
+"DDX3X",7,5.2,2,6,0,8,25,0,0,"aSHM Passenger",NA,NA
+"DLC1",6,4.4,2,6,0,8,25,0,0,"aSHM Passenger",NA,NA
+"DMBT1",7,5.2,3,5,0,8,37.5,0,0,"aSHM Passenger",NA,NA
+"DSC3",4,3,1,6,1,8,12.5,12.5,0.167,"Neutral/Unclear",NA,NA
+"ELAVL2",5,3.7,0,7,1,8,0,12.5,0.143,"Neutral/Unclear",NA,NA
+"EPPK1",5,3.7,1,6,1,8,12.5,12.5,0.167,"Neutral/Unclear",NA,NA
+"FAM47A",4,3,3,5,0,8,37.5,0,0,"aSHM Passenger",NA,NA
+"GRB10",6,4.4,2,6,0,8,25,0,0,"aSHM Passenger",NA,NA
+"GRIN2B",6,4.4,2,4,2,8,25,25,0.5,"Mixed",NA,NA
+"HIST1H2AG",8,5.9,3,5,0,8,37.5,0,0,"aSHM Passenger",NA,NA
+"HIST1H2BD",8,5.9,8,0,0,8,100,0,0,"aSHM Passenger",NA,NA
+"IGSF9B",7,5.2,2,6,0,8,25,0,0,"aSHM Passenger",NA,NA
+"IL1RAPL2",5,3.7,3,4,1,8,37.5,12.5,0.25,"Neutral/Unclear",NA,NA
+"KLHL1",3,2.2,2,6,0,8,25,0,0,"aSHM Passenger",NA,NA
+"MFHAS1",5,3.7,3,5,0,8,37.5,0,0,"aSHM Passenger",NA,NA
+"MPEG1",8,5.9,4,4,0,8,50,0,0,"aSHM Passenger",NA,NA
+"MYH1",6,4.4,2,5,1,8,25,12.5,0.2,"Neutral/Unclear",NA,NA
+"MYH10",6,4.4,1,7,0,8,12.5,0,0,"Hotspot/GoF",NA,NA
+"NAV2",6,4.4,0,8,0,8,0,0,0,"Hotspot/GoF",NA,NA
+"NBEA",5,3.7,1,7,0,8,12.5,0,0,"Hotspot/GoF",NA,NA
+"NOTCH2",8,5.9,0,2,6,8,0,75,3,"Strong LoF Selection","Notch","Notch receptor (marginal zone)"
+"NRAP",7,5.2,2,5,1,8,25,12.5,0.2,"Neutral/Unclear",NA,NA
+"OCA2",7,5.2,4,4,0,8,50,0,0,"aSHM Passenger",NA,NA
+"PCDHA13",5,3.7,1,7,0,8,12.5,0,0,"Hotspot/GoF",NA,NA
+"PCDHA2",6,4.4,4,4,0,8,50,0,0,"aSHM Passenger",NA,NA
+"PCDHA5",4,3,5,3,0,8,62.5,0,0,"aSHM Passenger",NA,NA
+"PDGFC",5,3.7,2,6,0,8,25,0,0,"aSHM Passenger",NA,NA
+"PPP1R9A",5,3.7,2,4,2,8,25,25,0.5,"Mixed",NA,NA
+"PRDM9",5,3.7,2,5,1,8,25,12.5,0.2,"Neutral/Unclear",NA,NA
+"ROBO1",6,4.4,2,6,0,8,25,0,0,"aSHM Passenger",NA,NA
+"S1PR2",6,4.4,0,8,0,8,0,0,0,"Hotspot/GoF","GC Exit","S1P receptor, GC confinement"
+"SCAND3",5,3.7,0,6,2,8,0,25,0.333,"Mixed",NA,NA
+"SEMA5A",4,3,2,5,1,8,25,12.5,0.2,"Neutral/Unclear",NA,NA
+"SLC6A15",6,4.4,1,6,1,8,12.5,12.5,0.167,"Neutral/Unclear",NA,NA
+"SPEN",7,5.2,1,2,5,8,12.5,62.5,2.5,"Strong LoF Selection",NA,NA
+"TBC1D4",7,5.2,3,4,1,8,37.5,12.5,0.25,"Neutral/Unclear",NA,NA
+"TNC",6,4.4,1,7,0,8,12.5,0,0,"Hotspot/GoF",NA,NA
+"TNF",8,5.9,2,4,2,8,25,25,0.5,"Mixed",NA,NA
+"TRRAP",7,5.2,1,7,0,8,12.5,0,0,"Hotspot/GoF",NA,NA
+"USP34",7,5.2,2,5,1,8,25,12.5,0.2,"Neutral/Unclear",NA,NA
+"ZFPM2",3,2.2,1,6,1,8,12.5,12.5,0.167,"Neutral/Unclear",NA,NA
+"ZIC4",3,2.2,1,7,0,8,12.5,0,0,"Hotspot/GoF",NA,NA
+"ZNF407",6,4.4,5,2,1,8,62.5,12.5,0.5,"Neutral/Unclear",NA,NA
+"ZNF521",7,5.2,2,6,0,8,25,0,0,"aSHM Passenger",NA,NA
+"ABCC9",6,4.4,0,5,2,7,0,28.6,0.4,"Mixed",NA,NA
+"ACTG1",7,5.2,4,3,0,7,57.1,0,0,"aSHM Passenger",NA,NA
+"ADAMTS12",6,4.4,3,3,1,7,42.9,14.3,0.333,"Neutral/Unclear",NA,NA
+"AKAP6",5,3.7,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"AMBRA1",7,5.2,1,5,1,7,14.3,14.3,0.2,"Neutral/Unclear",NA,NA
+"ANK3",7,5.2,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"ANKRD30B",4,3,0,6,1,7,0,14.3,0.167,"Neutral/Unclear",NA,NA
+"AR",6,4.4,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"ARHGAP25",7,5.2,2,1,4,7,28.6,57.1,4,"Strong LoF Selection",NA,NA
+"ARID1A",4,3,2,2,3,7,28.6,42.9,1.5,"LoF Selection","Chromatin","SWI/SNF chromatin remodeling"
+"ASTN2",5,3.7,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"ASXL3",7,5.2,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"ATM",4,3,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"BCL10",6,4.4,0,3,4,7,0,57.1,1.333,"Strong LoF Selection",NA,NA
+"BMP5",4,3,1,5,1,7,14.3,14.3,0.2,"Neutral/Unclear",NA,NA
+"BRWD1",5,3.7,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"C6orf118",3,2.2,2,4,1,7,28.6,14.3,0.25,"Neutral/Unclear",NA,NA
+"CACNA1B",7,5.2,4,3,0,7,57.1,0,0,"aSHM Passenger",NA,NA
+"CACNA1C",7,5.2,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"CACNA1E",6,4.4,0,7,0,7,0,0,0,"Hotspot/GoF",NA,NA
+"CCND3",6,4.4,1,3,3,7,14.3,42.9,1,"LoF Selection",NA,NA
+"CDH11",7,5.2,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"CDH9",3,2.2,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"COL12A1",4,3,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"CXorf22",7,5.2,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"DAB2",6,4.4,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"DACH1",3,2.2,3,3,1,7,42.9,14.3,0.333,"Neutral/Unclear",NA,NA
+"DCHS2",6,4.4,1,5,1,7,14.3,14.3,0.2,"Neutral/Unclear",NA,NA
+"DNAH1",5,3.7,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"DNAH9",7,5.2,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"DPP10",3,2.2,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"DUSP2",7,5.2,2,3,2,7,28.6,28.6,0.667,"Mixed",NA,NA
+"EEF1A1",5,3.7,1,5,1,7,14.3,14.3,0.2,"Neutral/Unclear",NA,NA
+"EPHA4",4,3,3,4,0,7,42.9,0,0,"aSHM Passenger",NA,NA
+"ERBB4",4,3,2,4,1,7,28.6,14.3,0.25,"Neutral/Unclear",NA,NA
+"EYS",4,3,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"GABRG2",6,4.4,0,6,1,7,0,14.3,0.167,"Neutral/Unclear",NA,NA
+"GABRG3",3,2.2,2,4,1,7,28.6,14.3,0.25,"Neutral/Unclear",NA,NA
+"GLRB",3,2.2,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"GPR158",5,3.7,3,4,0,7,42.9,0,0,"aSHM Passenger",NA,NA
+"GUCY1A3",3,2.2,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"HEATR1",6,4.4,4,3,0,7,57.1,0,0,"aSHM Passenger",NA,NA
+"HEMGN",3,2.2,2,4,1,7,28.6,14.3,0.25,"Neutral/Unclear",NA,NA
+"HIST1H3B",7,5.2,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"HSPG2",6,4.4,2,4,1,7,28.6,14.3,0.25,"Neutral/Unclear",NA,NA
+"HVCN1",6,4.4,0,4,3,7,0,42.9,0.75,"LoF Selection",NA,NA
+"INADL",6,4.4,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"KALRN",5,3.7,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"KCNT2",7,5.2,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"KCNU1",6,4.4,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"KDR",7,5.2,3,3,1,7,42.9,14.3,0.333,"Neutral/Unclear",NA,NA
+"KIAA1549",6,4.4,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"LIFR",4,3,2,4,1,7,28.6,14.3,0.25,"Neutral/Unclear",NA,NA
+"LRFN5",6,4.4,1,5,1,7,14.3,14.3,0.2,"Neutral/Unclear",NA,NA
+"LRIG3",6,4.4,1,5,1,7,14.3,14.3,0.2,"Neutral/Unclear",NA,NA
+"LRP1",3,2.2,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"MACF1",7,5.2,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"MAP2K1",7,5.2,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"MCL1",5,3.7,3,4,0,7,42.9,0,0,"aSHM Passenger","Apoptosis","Anti-apoptotic BCL2 family"
+"MYOM2",5,3.7,4,1,2,7,57.1,28.6,2,"Mixed",NA,NA
+"NCAM2",5,3.7,3,3,1,7,42.9,14.3,0.333,"Neutral/Unclear",NA,NA
+"NEGR1",3,2.2,3,3,1,7,42.9,14.3,0.333,"Neutral/Unclear",NA,NA
+"NLRP8",7,5.2,0,6,1,7,0,14.3,0.167,"Neutral/Unclear",NA,NA
+"OTOGL",5,3.7,1,5,1,7,14.3,14.3,0.2,"Neutral/Unclear",NA,NA
+"OVCH1",4,3,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"PARD3",5,3.7,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"PCDH7",5,3.7,3,4,0,7,42.9,0,0,"aSHM Passenger",NA,NA
+"PCDHB3",7,5.2,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"PDE1C",4,3,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"PDE4DIP",7,5.2,1,5,1,7,14.3,14.3,0.2,"Neutral/Unclear",NA,NA
+"PLCB1",5,3.7,3,4,0,7,42.9,0,0,"aSHM Passenger",NA,NA
+"PLCZ1",5,3.7,0,7,0,7,0,0,0,"Hotspot/GoF",NA,NA
+"PLXNB2",5,3.7,3,4,0,7,42.9,0,0,"aSHM Passenger",NA,NA
+"PTPRZ1",5,3.7,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"RYR1",7,5.2,0,6,1,7,0,14.3,0.167,"Neutral/Unclear",NA,NA
+"SCN7A",7,5.2,3,4,0,7,42.9,0,0,"aSHM Passenger",NA,NA
+"SEMA3C",5,3.7,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"SORCS1",5,3.7,0,6,1,7,0,14.3,0.167,"Neutral/Unclear",NA,NA
+"SORCS3",6,4.4,1,4,2,7,14.3,28.6,0.5,"Mixed",NA,NA
+"SPHKAP",5,3.7,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"SPTA1",7,5.2,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"TCL1A",4,3,0,5,2,7,0,28.6,0.4,"Mixed",NA,NA
+"TDRD6",3,2.2,3,3,1,7,42.9,14.3,0.333,"Neutral/Unclear",NA,NA
+"TENM4",7,5.2,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"TJP1",6,4.4,1,4,2,7,14.3,28.6,0.5,"Mixed",NA,NA
+"TLL1",5,3.7,3,4,0,7,42.9,0,0,"aSHM Passenger",NA,NA
+"TLN2",6,4.4,2,4,1,7,28.6,14.3,0.25,"Neutral/Unclear",NA,NA
+"TMEM30A",7,5.2,0,0,7,7,0,100,7,"Strong LoF Selection",NA,NA
+"TRHDE",6,4.4,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"TYRP1",6,4.4,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"UNC13C",6,4.4,3,3,1,7,42.9,14.3,0.333,"Neutral/Unclear",NA,NA
+"USP7",6,4.4,1,5,1,7,14.3,14.3,0.2,"Neutral/Unclear",NA,NA
+"VMP1",7,5.2,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"VPS13C",4,3,1,5,1,7,14.3,14.3,0.2,"Neutral/Unclear",NA,NA
+"ZNF208",7,5.2,1,6,0,7,14.3,0,0,"Hotspot/GoF",NA,NA
+"ZNF836",5,3.7,2,5,0,7,28.6,0,0,"aSHM Passenger",NA,NA
+"ABCA4",6,4.4,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"ACSS3",2,1.5,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"ADCY2",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"ADCY5",6,4.4,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"AGAP1",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"AMPH",6,4.4,2,2,2,6,33.3,33.3,1,"LoF Selection",NA,NA
+"APBA1",3,2.2,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"ARPP21",2,1.5,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"ASXL2",5,3.7,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"ATP10D",5,3.7,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"ATP9B",5,3.7,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"BSN",6,4.4,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"C6",5,3.7,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"CAMTA1",4,3,4,2,0,6,66.7,0,0,"aSHM Passenger",NA,NA
+"CD274",5,3.7,0,2,4,6,0,66.7,2,"Strong LoF Selection",NA,NA
+"CD74",4,3,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"CDC42BPA",5,3.7,4,2,0,6,66.7,0,0,"aSHM Passenger",NA,NA
+"CDH2",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"CHD8",6,4.4,0,5,1,6,0,16.7,0.2,"Mixed",NA,NA
+"CIITA",4,3,0,6,0,6,0,0,0,"Hotspot/GoF","Immune Evasion","MHC-II transactivator"
+"CMYA5",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"CNTNAP2",4,3,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"COL14A1",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"COL27A1",6,4.4,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"CTNND2",5,3.7,4,2,0,6,66.7,0,0,"aSHM Passenger",NA,NA
+"CXCR5",4,3,1,3,2,6,16.7,33.3,0.667,"LoF Selection",NA,NA
+"DAAM2",6,4.4,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"DCAF8L1",6,4.4,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"DEPDC5",6,4.4,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"DGKI",4,3,0,5,1,6,0,16.7,0.2,"Mixed",NA,NA
+"DNAH8",7,5.2,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"DPY19L2",5,3.7,0,5,1,6,0,16.7,0.2,"Mixed",NA,NA
+"DPYD",7,5.2,0,5,1,6,0,16.7,0.2,"Mixed",NA,NA
+"DSG1",6,4.4,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"DYSF",6,4.4,3,2,1,6,50,16.7,0.5,"Mixed",NA,NA
+"EGFR",6,4.4,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"EPG5",3,2.2,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"ETV6",6,4.4,1,3,2,6,16.7,33.3,0.667,"LoF Selection",NA,NA
+"EVPL",6,4.4,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"F5",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"FIGN",1,0.7,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"FN1",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"FREM1",5,3.7,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"FRY",4,3,0,5,1,6,0,16.7,0.2,"Mixed",NA,NA
+"FSIP2",6,4.4,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"GABRA1",4,3,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"GLIS3",5,3.7,4,2,0,6,66.7,0,0,"aSHM Passenger",NA,NA
+"GPR125",6,4.4,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"GREB1",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"GRIA4",4,3,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"GRM1",5,3.7,4,2,0,6,66.7,0,0,"aSHM Passenger",NA,NA
+"HECW1",3,2.2,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"HERC1",6,4.4,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"HIST1H2AL",6,4.4,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"HIST1H2BJ",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"HIST1H2BO",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"IRS4",6,4.4,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"KCNA4",6,4.4,4,2,0,6,66.7,0,0,"aSHM Passenger",NA,NA
+"KCND2",4,3,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"KCNH7",4,3,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"KIAA1199",6,4.4,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"KIAA2022",6,4.4,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"KIF16B",3,2.2,3,2,1,6,50,16.7,0.5,"Mixed",NA,NA
+"KIF21A",2,1.5,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"KMT2A",6,4.4,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"LAMA4",5,3.7,4,1,1,6,66.7,16.7,1,"Mixed",NA,NA
+"LAMB4",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"LINGO2",6,4.4,3,2,1,6,50,16.7,0.5,"Mixed",NA,NA
+"LPHN1",6,4.4,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"LRP5",5,3.7,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"LRRC4C",5,3.7,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"LRRTM3",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"MAGEC2",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"MECOM",5,3.7,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"MGAT4C",2,1.5,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"MMP16",3,2.2,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"MON1B",3,2.2,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"MYO6",4,3,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"NELL1",2,1.5,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"NHS",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"NLRC5",6,4.4,2,2,2,6,33.3,33.3,1,"LoF Selection",NA,NA
+"NOTCH4",4,3,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"NRXN3",5,3.7,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"OLFM4",5,3.7,4,2,0,6,66.7,0,0,"aSHM Passenger",NA,NA
+"OPCML",4,3,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"OR52J3",3,2.2,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"OR56A1",5,3.7,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"PAPPA",4,3,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"PAPPA2",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"PARD3B",6,4.4,1,3,2,6,16.7,33.3,0.667,"LoF Selection",NA,NA
+"PAX5",3,2.2,0,3,3,6,0,50,1,"Strong LoF Selection",NA,NA
+"PCDH11Y",4,3,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"PCDHA1",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"PCDHA10",5,3.7,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"PCDHA3",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"PCDHB5",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"PCDHB6",6,4.4,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"PCDHB7",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"PCDHGA10",3,2.2,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"PDE3A",4,3,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"PGR",5,3.7,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"PHIP",5,3.7,0,4,2,6,0,33.3,0.5,"LoF Selection",NA,NA
+"PIWIL1",6,4.4,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"PLCH1",4,3,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"PLEC",5,3.7,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"POM121L12",3,2.2,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"PRRC2C",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"PSD3",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"PTCHD2",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"PTPRB",5,3.7,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"PTPRC",6,4.4,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"PTPRO",4,3,2,2,2,6,33.3,33.3,1,"LoF Selection",NA,NA
+"RANBP17",5,3.7,0,5,1,6,0,16.7,0.2,"Mixed",NA,NA
+"RANBP2",6,4.4,0,5,1,6,0,16.7,0.2,"Mixed",NA,NA
+"RBP3",5,3.7,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"RHOA",6,4.4,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"RIMS1",6,4.4,4,2,0,6,66.7,0,0,"aSHM Passenger",NA,NA
+"RNF148",3,2.2,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"RP1L1",6,4.4,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"RYR3",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"SALL3",6,4.4,4,2,0,6,66.7,0,0,"aSHM Passenger",NA,NA
+"SCN3A",5,3.7,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"SCN9A",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"SEMA3D",3,2.2,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"SIPA1L2",4,3,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"SLC13A1",6,4.4,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"SLC5A12",3,2.2,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"SLC5A8",5,3.7,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"SLITRK4",4,3,2,2,2,6,33.3,33.3,1,"LoF Selection",NA,NA
+"SORL1",5,3.7,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"SPAG17",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"SPATA31E1",6,4.4,2,3,1,6,33.3,16.7,0.333,"Mixed",NA,NA
+"SPTLC3",6,4.4,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"SVEP1",5,3.7,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"TCEB3B",4,3,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"TENM1",5,3.7,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"THBS2",2,1.5,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"THSD7B",5,3.7,0,5,1,6,0,16.7,0.2,"Mixed",NA,NA
+"TIAM1",4,3,2,4,0,6,33.3,0,0,"aSHM Passenger",NA,NA
+"TMEM132B",6,4.4,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"TPO",4,3,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"TPP2",6,4.4,0,3,3,6,0,50,1,"Strong LoF Selection",NA,NA
+"TPTE",6,4.4,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"TRPC5",5,3.7,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"WNK1",4,3,0,5,1,6,0,16.7,0.2,"Mixed",NA,NA
+"WSCD1",6,4.4,1,4,1,6,16.7,16.7,0.25,"Mixed",NA,NA
+"WWC3",6,4.4,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"WWOX",6,4.4,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"WWP1",2,1.5,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"XPO1",6,4.4,0,6,0,6,0,0,0,"Hotspot/GoF",NA,NA
+"ZBED1",4,3,3,2,1,6,50,16.7,0.5,"Mixed",NA,NA
+"ZFP42",2,1.5,3,3,0,6,50,0,0,"aSHM Passenger",NA,NA
+"ZIC1",3,2.2,4,2,0,6,66.7,0,0,"aSHM Passenger",NA,NA
+"ZNF106",4,3,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"ZNF184",2,1.5,1,3,2,6,16.7,33.3,0.667,"LoF Selection",NA,NA
+"ZNF91",4,3,1,5,0,6,16.7,0,0,"aSHM Passenger",NA,NA
+"ABCA2",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"ADAMTS17",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"ADAR",5,3.7,0,3,2,5,0,40,0.667,"LoF Selection",NA,NA
+"ADCY1",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"ADCY8",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"ADRA1A",3,2.2,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"AGMO",3,2.2,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"ALDH1L1",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"AMY2B",1,0.7,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"ANKRD11",3,2.2,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"ANKS1B",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"ANKS3",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"ANO3",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"ANO4",4,3,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"AOX1",5,3.7,1,2,2,5,20,40,1,"LoF Selection",NA,NA
+"APOB",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"ARHGAP10",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"ARHGAP21",2,1.5,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"ARHGAP32",6,4.4,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"ARHGEF28",5,3.7,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"ARID1B",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"ARID5B",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"ASH1L",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"ASPM",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"ATP10A",3,2.2,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"ATP8A2",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"BAZ2B",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"BCHE",1,0.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"BCL7A",3,2.2,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"BEND3",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"BICD2",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"BOD1L1",2,1.5,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"BRD1",5,3.7,0,3,2,5,0,40,0.667,"LoF Selection",NA,NA
+"BRINP1",2,1.5,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"BTBD3",5,3.7,4,1,0,5,80,0,0,"aSHM Passenger",NA,NA
+"BTK",5,3.7,1,2,2,5,20,40,1,"LoF Selection",NA,NA
+"C10orf12",5,3.7,0,1,4,5,0,80,4,"Strong LoF Selection",NA,NA
+"C10orf90",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"C1orf87",5,3.7,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"CACNA1G",5,3.7,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"CACNA2D3",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"CADPS",4,3,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"CCDC102B",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"CD163L1",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"CDC42BPG",3,2.2,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"CDH22",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"CEP112",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"CFH",2,1.5,2,1,2,5,40,40,2,"LoF Selection",NA,NA
+"CHD1",4,3,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"CHDC2",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"CHRM3",4,3,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"CIT",3,2.2,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"CKAP5",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"CLSTN3",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"CNTNAP5",3,2.2,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"COL24A1",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"COL25A1",4,3,2,1,2,5,40,40,2,"LoF Selection",NA,NA
+"COL6A1",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"COL8A1",3,2.2,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"CPNE4",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"CRIM1",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"CSGALNACT1",2,1.5,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"CSMD2",4,3,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"CSPG4",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"CTTNBP2",4,3,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"CYFIP1",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"DCDC1",3,2.2,1,1,3,5,20,60,3,"Strong LoF Selection",NA,NA
+"DFNB31",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"DHX34",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"DIAPH1",2,1.5,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"DIAPH2",5,3.7,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"DISP1",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"DNAH2",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"DNER",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"DOCK2",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"DOCK4",3,2.2,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"DOPEY1",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"DSC2",3,2.2,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"DYNC2H1",5,3.7,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"DZIP1",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"EGFLAM",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"EHBP1",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"ENPEP",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"EPHA3",2,1.5,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"EPHA6",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"ERC2",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"FAM179B",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"FAM83B",3,2.2,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"FANCA",5,3.7,3,1,1,5,60,20,1,"Mixed",NA,NA
+"FAT2",5,3.7,1,1,3,5,20,60,3,"Strong LoF Selection",NA,NA
+"FEZF1",3,2.2,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"FGFR2",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"FLG2",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"FLNB",4,3,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"FLNC",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"FLRT3",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"FMN2",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"FRYL",4,3,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"FTMT",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"FUBP1",4,3,1,2,2,5,20,40,1,"LoF Selection",NA,NA
+"GAB2",4,3,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"GABRA2",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"GALNT13",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"GBP1",4,3,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"GLI2",4,3,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"GLI3",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"GNAI2",4,3,0,5,0,5,0,0,0,"Hotspot/GoF","GC Exit","G-protein, migration"
+"GPC5",3,2.2,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"GPC6",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"GPR123",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"GPR37",3,2.2,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"GRHPR",4,3,0,2,3,5,0,60,1.5,"Strong LoF Selection",NA,NA
+"GRID1",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"GZF1",2,1.5,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"HERC2",2,1.5,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"HIST1H2AD",5,3.7,4,1,0,5,80,0,0,"aSHM Passenger",NA,NA
+"HIST1H2BG",4,3,3,0,2,5,60,40,2,"LoF Selection",NA,NA
+"HIST1H3C",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"HIST1H3J",5,3.7,4,1,0,5,80,0,0,"aSHM Passenger",NA,NA
+"HK3",5,3.7,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"HLA-C",5,3.7,0,2,3,5,0,60,1.5,"Strong LoF Selection",NA,NA
+"HSPA8",6,4.4,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"HTR1A",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"HTT",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"HYDIN",6,4.4,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"IGSF1",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"IGSF10",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"IKZF3",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"IL13RA2",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"IL4R",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"IRS2",2,1.5,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"ITGA1",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"ITGA8",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"ITGA9",4,3,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"ITSN1",4,3,3,1,1,5,60,20,1,"Mixed",NA,NA
+"ITSN2",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"JUNB",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"KCNH5",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"KDM3B",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"KIAA1432",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"KIF4A",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"KIT",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"KLHL4",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"KPRP",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"LAMA5",5,3.7,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"LAMB1",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"LAMC3",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"LIG4",3,2.2,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"LIMD2",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"LIPE",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"LPA",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"LRFN2",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"LRRK1",2,1.5,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"MAP4K4",3,2.2,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"MCM3AP",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"MDGA1",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"MDGA2",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"MDN1",5,3.7,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"MEF2C",3,2.2,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"MICAL2",4,3,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"MITF",4,3,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"MN1",5,3.7,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"MTMR1",5,3.7,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"MTMR8",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"MTOR",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"MTUS1",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"MUC4",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"MYH3",3,2.2,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"MYH4",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"MYLK",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"MYO16",1,0.7,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"MYO9A",4,3,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"NAP1L3",2,1.5,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"NBAS",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"NBPF1",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"NCKAP5",2,1.5,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"NCOR1",3,2.2,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"NCOR2",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"NDNF",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"NELL2",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"NF1",3,2.2,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"NFKBIE",4,3,0,3,2,5,0,40,0.667,"LoF Selection","NF-kB","IkBe, NF-kB inhibitor"
+"NIPBL",4,3,1,2,2,5,20,40,1,"LoF Selection",NA,NA
+"NLRP14",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"NMNAT2",5,3.7,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"NOS1",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"NOVA1",3,2.2,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"NR3C2",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"NRXN2",4,3,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"OR4C13",4,3,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"OR5T2",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"OR8J3",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"OR8U1",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"OSBPL10",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"OSBPL5",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"OXR1",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"PASD1",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"PCDH20",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"PCDHA12",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"PCDHA4",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"PCDHGA12",4,3,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"PCIF1",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"PCNT",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"PDE10A",3,2.2,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"PDS5A",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"PDZRN3",4,3,5,0,0,5,100,0,0,"aSHM Passenger",NA,NA
+"PLA2G4A",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"PLCB4",4,3,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"PLD1",2,1.5,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"PLXDC2",3,2.2,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"PLXNA1",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"PLXNA2",5,3.7,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"POTEH",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"POU2AF1",5,3.7,0,1,4,5,0,80,4,"Strong LoF Selection",NA,NA
+"PTEN",5,3.7,0,2,3,5,0,60,1.5,"Strong LoF Selection","PI3K","PI3K pathway inhibitor"
+"PTPN6",4,3,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"PTPRT",5,3.7,4,1,0,5,80,0,0,"aSHM Passenger",NA,NA
+"RASA2",4,3,0,0,5,5,0,100,5,"Strong LoF Selection",NA,NA
+"RB1CC1",2,1.5,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"RICTOR",4,3,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"RLF",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"RNF128",5,3.7,1,2,2,5,20,40,1,"LoF Selection",NA,NA
+"ROS1",3,2.2,1,2,2,5,20,40,1,"LoF Selection",NA,NA
+"RP1",5,3.7,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"RREB1",2,1.5,4,1,0,5,80,0,0,"aSHM Passenger",NA,NA
+"RTTN",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"SARDH",5,3.7,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"SCN2A",5,3.7,1,2,2,5,20,40,1,"LoF Selection",NA,NA
+"SEMA3F",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"SETBP1",3,2.2,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"SF3B1",5,3.7,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"SH3TC2",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"SHROOM2",5,3.7,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"SIN3A",4,3,0,3,2,5,0,40,0.667,"LoF Selection",NA,NA
+"SLC44A5",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"SLC7A2",5,3.7,1,2,2,5,20,40,1,"LoF Selection",NA,NA
+"SLC9A2",4,3,3,1,1,5,60,20,1,"Mixed",NA,NA
+"SNCAIP",5,3.7,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"SORCS2",5,3.7,1,2,2,5,20,40,1,"LoF Selection",NA,NA
+"SOX5",2,1.5,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"SOX6",3,2.2,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"SPG20",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"SRRM2",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"STAG2",4,3,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"STAG3",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"STARD8",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"SVIL",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"SYCP2L",4,3,1,2,2,5,20,40,1,"LoF Selection",NA,NA
+"TAF1L",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"TAGAP",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"TBC1D32",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"TBC1D8B",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"TDO2",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"THSD4",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"TJP3",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"TMC1",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"TMTC3",3,2.2,3,2,0,5,60,0,0,"aSHM Passenger",NA,NA
+"TNFAIP3",5,3.7,0,0,5,5,0,100,5,"Strong LoF Selection","NF-kB","A20, NF-kB negative regulator"
+"TNXB",6,4.4,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"TRIML1",4,3,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"TRIP11",4,3,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"TRPC4",3,2.2,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"TTC21B",3,2.2,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"TYRO3",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"UBR4",4,3,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"UGGT2",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"UHRF1BP1L",3,2.2,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"USP9X",5,3.7,1,1,3,5,20,60,3,"Strong LoF Selection",NA,NA
+"VPS13A",3,2.2,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"VPS13B",5,3.7,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"VPS13D",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"VWF",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"WBSCR17",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"WEE1",4,3,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"XPO7",6,4.4,2,2,1,5,40,20,0.5,"Mixed",NA,NA
+"YTHDC1",2,1.5,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"ZC3H12A",5,3.7,1,1,3,5,20,60,3,"Strong LoF Selection",NA,NA
+"ZFYVE16",5,3.7,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"ZNF292",4,3,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"ZNF516",4,3,1,4,0,5,20,0,0,"aSHM Passenger",NA,NA
+"ZNF676",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA
+"ZNF71",3,2.2,2,3,0,5,40,0,0,"aSHM Passenger",NA,NA
+"ZNF804A",5,3.7,1,3,1,5,20,20,0.333,"Mixed",NA,NA
+"ZNF99",5,3.7,0,4,1,5,0,20,0.25,"Mixed",NA,NA
+"ZSWIM2",5,3.7,0,5,0,5,0,0,0,"Hotspot/GoF",NA,NA

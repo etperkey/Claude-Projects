@@ -1,0 +1,193 @@
+================================================================================
+GCB-DLBCL: MOLECULAR DETERMINANTS OF STAGE
+Analysis Summary - Lacy/HMRN Dataset
+================================================================================
+
+OBJECTIVE:
+Identify genomic and transcriptional features that distinguish Limited (Stage I-II)
+from Advanced (Stage III-IV) GCB-DLBCL.
+
+--------------------------------------------------------------------------------
+DATASET OVERVIEW
+--------------------------------------------------------------------------------
+
+Source: Lacy/HMRN (GSE181063)
+Platform: Illumina HumanHT-12 WG-DASL V4.0
+
+GCB Patients with Staging:
+  - Total GCB: 516
+  - Limited stage (I-II): 136
+  - Advanced stage (III-IV): 209
+  - Excluded (intermediate/unknown): 171
+
+--------------------------------------------------------------------------------
+GENOMIC ANALYSIS RESULTS
+--------------------------------------------------------------------------------
+
+STATUS: Could not be completed
+
+REASON: No overlap between GCB expression data (516 patients) and mutation
+data (928 patients) in the Lacy/HMRN dataset. The expression and sequencing
+cohorts are largely non-overlapping.
+
+ALTERNATIVE: The Reddy/Duke dataset has both mutations and staging data
+and could be used for genomic stage determinant analysis.
+
+--------------------------------------------------------------------------------
+TRANSCRIPTIONAL ANALYSIS RESULTS
+--------------------------------------------------------------------------------
+
+Differential Expression Analysis (t-test with BH correction):
+
+Total Probes Tested: 29,372
+Significant (FDR < 0.1): 96 probes
+  - Higher in Limited stage: 36 probes
+  - Higher in Advanced stage: 60 probes
+
+Nominal Significant (p < 0.05): 4,020 probes
+Nominal Significant (p < 0.01): 1,248 probes
+
+TOP SIGNIFICANT PROBES:
+-----------------------
+Rank  Probe            Direction    FDR       Log2FC
+----  ---------------  ----------  -------   -------
+1     ILMN_1774287     Advanced    0.013     +0.080
+2     ILMN_2194619     Limited     0.031     -0.081
+3     ILMN_1665457     Limited     0.031     -0.086
+4     ILMN_1725510     Advanced    0.031     +0.046
+5     ILMN_1715401     Advanced    0.031     +0.091
+
+--------------------------------------------------------------------------------
+ANNOTATED GENES OF INTEREST
+--------------------------------------------------------------------------------
+
+SIGNIFICANT (FDR < 0.1):
+
+1. FOXO1 - Higher in Limited Stage (FDR = 0.077)
+   - Transcription factor regulating S1PR2 expression
+   - FOXO1 promotes GC retention via S1PR2 upregulation
+   - Higher FOXO1 in early disease suggests stronger retention signaling
+   - Biological implication: Early-stage GCB may have more intact
+     retention mechanisms keeping cells in lymph nodes
+
+2. PAX5 - Higher in Limited Stage (FDR = 0.087)
+   - Master B-cell transcription factor
+   - Essential for B-cell identity and differentiation
+   - Higher in early disease suggests more differentiated phenotype
+
+3. MS4A1 (CD20) - Higher in Limited Stage (FDR = 0.087)
+   - B-cell surface marker targeted by rituximab
+   - Higher expression in early disease
+   - May indicate more mature B-cell phenotype
+
+TRENDING (p < 0.05, FDR > 0.1):
+
+4. MYC - Higher in Advanced Stage (p = 0.04)
+   - Oncogenic transcription factor
+   - Associated with proliferation and aggressive disease
+   - Higher in advanced disease suggests more aggressive phenotype
+
+EGRESS PATHWAY GENES (NOT SIGNIFICANT):
+
+Gene        Direction    p-value   Note
+--------    ----------  --------   ----
+S1PR2       Limited      0.68      Retention signal receptor
+GNA13       Advanced     0.67      Retention signal mediator
+RHOA        Advanced     0.18      Retention signal effector
+CXCR4       Limited      0.50      Egress signal receptor
+SGK1        Advanced     0.46      Egress signal (FOXO1 regulator)
+GNAI2       Advanced     0.75      Egress signal mediator
+ARHGEF1     Limited      0.11      Retention signal
+P2RY8       Limited      0.60      Retention signal
+
+=> The egress/retention pathway genes themselves do NOT differ by stage,
+   but their upstream regulator FOXO1 DOES (higher in Limited stage).
+
+--------------------------------------------------------------------------------
+KEY BIOLOGICAL INSIGHTS
+--------------------------------------------------------------------------------
+
+1. TRANSCRIPTIONAL PROFILE DISTINGUISHES STAGE
+
+   Advanced-stage GCB-DLBCL shows:
+   - More proliferative signature (MYC trend)
+   - Less mature B-cell phenotype (lower PAX5, CD20)
+   - Lower FOXO1 (reduced retention signaling)
+
+   Limited-stage GCB-DLBCL shows:
+   - Higher B-cell differentiation markers
+   - Higher FOXO1 (enhanced retention signaling)
+   - More nodal-restricted phenotype
+
+2. FOXO1 AS POTENTIAL STAGE DETERMINANT
+
+   FOXO1 transcriptionally activates S1PR2, the key receptor that keeps
+   B cells in the germinal center. Higher FOXO1 in Limited stage suggests
+   that retention signaling is better preserved, potentially explaining
+   why disease remains localized.
+
+   SGK1 (when active) phosphorylates and inhibits FOXO1, promoting egress.
+   The SGK1 level doesn't differ by stage, but FOXO1 does.
+
+3. EGRESS PATHWAY GENES: MUTATIONS VS EXPRESSION
+
+   While egress pathway mutations (GNA13, RHOA, etc.) are common in GCB,
+   the expression of these genes does NOT predict stage. The functional
+   consequence of mutations (loss-of-function) may not be reflected in
+   mRNA levels.
+
+--------------------------------------------------------------------------------
+CLINICAL IMPLICATIONS
+--------------------------------------------------------------------------------
+
+1. FOXO1 as Biomarker:
+   - FOXO1 expression may help predict disease extent
+   - Could be validated as prognostic marker
+
+2. Therapeutic Considerations:
+   - FTY720 (fingolimod) targets S1PR1-mediated egress
+   - May be most relevant for Advanced-stage (low FOXO1) patients
+   - Limited-stage with high FOXO1 may already have strong retention
+
+3. B-cell Differentiation State:
+   - Advanced-stage shows less differentiated phenotype
+   - May impact rituximab response (CD20 lower)
+
+--------------------------------------------------------------------------------
+FILES GENERATED
+--------------------------------------------------------------------------------
+
+1. gcb_expression_by_stage.csv - Full DE results (29,372 probes)
+2. gcb_de_genes_by_stage_annotated.csv - DE results with gene annotations
+3. gcb_staged_tegress.csv - GCB patients with staging and tEgress scores
+4. gcb_km_stage.png - Survival by stage in GCB
+5. gcb_stage_summary.csv - Stage distribution summary
+
+--------------------------------------------------------------------------------
+LIMITATIONS
+--------------------------------------------------------------------------------
+
+1. Probe annotation incomplete - only ~15 of 96 significant probes annotated
+   Full annotation requires R/Bioconductor illuminaHumanv4.db package
+
+2. Genomic analysis blocked by data structure
+   Expression and mutation data don't overlap in this dataset
+
+3. Validation needed in independent cohort
+
+================================================================================
+CONCLUSION
+================================================================================
+
+Transcriptional analysis of GCB-DLBCL identified 96 probes (FDR < 0.1) that
+distinguish Limited from Advanced stage disease. The key finding is that
+FOXO1, a transcription factor that promotes GC retention via S1PR2, is
+significantly higher in Limited stage GCB-DLBCL. This provides a potential
+molecular explanation for why some GCB-DLBCL remains localized while other
+cases disseminate.
+
+The egress pathway genes themselves (S1PR2, GNA13, CXCR4, etc.) do not differ
+by stage at the expression level, suggesting that functional mutations rather
+than expression changes drive the retention/egress imbalance in GCB-DLBCL.
+
+================================================================================

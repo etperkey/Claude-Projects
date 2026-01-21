@@ -1,0 +1,8 @@
+"Group","N","Mean_tEgress"
+"All GCB",516,-0.132
+"Limited",136,-0.196
+"Advanced",209,-0.134
+"Nodal Only",72,-0.074
+"Extranodal",117,-0.042
+"Limited+Nodal",38,-0.118
+"Limited+Nodal+HighTegress",21,NA

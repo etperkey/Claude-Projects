@@ -1,0 +1,12 @@
+"Gene","Type","Global_N","Global_Pct","Trend","Significant"
+"GNA13","LOF",11,8.7,"Worse","No (C2 PFS p=0.04)"
+"S1PR2","LOF",6,4.7,"Worse","No"
+"S1PR1","LOF",0,0,NA,NA
+"S1PR3","LOF",0,0,NA,NA
+"P2RY8","LOF",10,7.9,"Mixed","Yes: C3 PFS (p=0.02)"
+"ARHGEF1","LOF",1,0.8,NA,"Too rare"
+"RHOA_mut","LOF",4,3.1,"Better","Too rare"
+"RHOA_del","LOF",28,22,"Better (paradox)","No"
+"CXCR4","GOF",1,0.8,NA,"Too rare"
+"GNAI2","GOF",4,3.1,"Better","No"
+"RAC2","GOF",4,3.1,"Mixed","No"

@@ -1,0 +1,140 @@
+#Patient Identifier	Cohort	Sex	Age at Diagnosis	Age IPI Factor	LDH IPI Factor	ECOG IPI Score	STAGE IPI Factor	Extralymphatic Involvement IPI Factor	IPI	CNS Involvement	Testicular Involvement	Progress Free Survival (Months)	Progression Free Status	Overall Survival (Months)	Overall Survival Status	R-CHOP like chemo
+#Identifier to uniquely specify a patient.	Cohort.	Sex	Age at Diagnosis	IPI factor age; 1 = age > 60 years; 0 = age <=60 years	IPI factor LDH; LDH > normal reference, 1;  LDH <= normal reference, 0	IPI factor ECOG; 0 = ECOG <= 1; 1 = ECOG > 1	IPI factor stage; 0 = stage I/II or 1 = stage III/IV	IPI factor Extralymphatic Involvement; 0 = E <= 1; 1 = E > 1	International Prognostic Index (IPI)	Yes or No indicator for CNS involvement	Yes or No indicator for testicular involvement	Progress Free Survival (Months)	Progression Free Status	Overall survival in months since initial diagonosis.	Overall patient survival status.	Patient received R-CHOP-like chemo; yes,no
+#STRING	STRING	STRING	NUMBER	NUMBER	NUMBER	NUMBER	NUMBER	NUMBER	NUMBER	STRING	STRING	NUMBER	STRING	NUMBER	STRING	STRING
+#1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	9	1
+PATIENT_ID	COHORT	SEX	AGE_AT_DIAGNOSIS	IPI_AGE	IPI_LDH	IPI_ECOG	IPI_STAGE	IPI_EXBM	IPI	CNS_INVOLVEMENT	TESTICULAR_INVOLVEMENT	PFS_MONTHS	PFS_STATUS	OS_MONTHS	OS_STATUS	R_CHOP_LIKE_CHEMO
+DLBCL-RICOVER_99	RICOVER	Female	64.0	1.0	0.0	0.0	1.0	1.0	3.0	No	No	109.963	0:Not Progressed	109.963	0:LIVING	Yes
+DLBCL-RICOVER_977	RICOVER	Female	77.0	1.0	1.0	1.0	1.0	0.0	4.0	No	No	73.3634	0:Not Progressed	73.3634	0:LIVING	Yes
+DLBCL-RICOVER_950	RICOVER	Male	64.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	71.1951	0:Not Progressed	71.1951	0:LIVING	Yes
+DLBCL-RICOVER_910	RICOVER	Female	75.0	1.0	0.0	0.0	1.0	0.0	2.0	No	No	74.4805	0:Not Progressed	74.4805	0:LIVING	Yes
+DLBCL-RICOVER_839	RICOVER	Male	62.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	74.1191	1:Progressed	74.1191	1:DECEASED	Yes
+DLBCL-RICOVER_773	RICOVER	Female	70.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	10.1848	1:Progressed	17.6427	1:DECEASED	Yes
+DLBCL-RICOVER_763	RICOVER	Male	63.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	76.1561	0:Not Progressed	76.1561	0:LIVING	Yes
+DLBCL-RICOVER_720	RICOVER	Male	69.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	76.7803	1:Progressed	77.5359	0:LIVING	Yes
+DLBCL-RICOVER_712	RICOVER	Female	75.0	1.0	1.0	0.0	0.0	0.0	2.0	No	No	76.9446	0:Not Progressed	76.9446	0:LIVING	Yes
+DLBCL-RICOVER_711	RICOVER	Female	65.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	6.2423	0:Not Progressed	73.7577	0:LIVING	Yes
+DLBCL-RICOVER_704	RICOVER	Male	68.0	1.0	0.0	0.0	1.0	0.0	2.0	No	No	55.8522	0:Not Progressed	55.8522	0:LIVING	Yes
+DLBCL-RICOVER_685	RICOVER	Male	62.0	1.0	0.0	0.0	0.0	0.0	1.0	No	Yes	77.4045	0:Not Progressed	77.4045	0:LIVING	Yes
+DLBCL-RICOVER_623	RICOVER	Female	62.0	1.0	1.0	1.0	1.0	0.0	4.0	No	No	10.3819	1:Progressed	16.4271	1:DECEASED	Yes
+DLBCL-RICOVER_597	RICOVER	Male	65.0	1.0	0.0	0.0	0.0	0.0	1.0	No	Yes	85.2895	0:Not Progressed	85.2895	0:LIVING	Yes
+DLBCL-RICOVER_543	RICOVER	Female	75.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	15.0472	1:Progressed	88.2793	1:DECEASED	Yes
+DLBCL-RICOVER_533	RICOVER	Male	67.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	86.4723	0:Not Progressed	86.4723	0:LIVING	Yes
+DLBCL-RICOVER_522	RICOVER	Female	62.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	80.0329	0:Not Progressed	80.0329	0:LIVING	Yes
+DLBCL-RICOVER_506	RICOVER	Female	70.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	42.0534	1:Progressed	42.0534	1:DECEASED	Yes
+DLBCL-RICOVER_496	RICOVER	Female	66.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	91.3347	0:Not Progressed	91.3347	0:LIVING	Yes
+DLBCL-RICOVER_473	RICOVER	Male	66.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	86.7023	0:Not Progressed	86.7023	0:LIVING	Yes
+DLBCL-RICOVER_467	RICOVER	Male	62.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	94.5544	0:Not Progressed	94.5544	0:LIVING	Yes
+DLBCL-RICOVER_449	RICOVER	Male	73.0	1.0	0.0	0.0	0.0	0.0	1.0	No	Yes	84.6982	0:Not Progressed	84.6982	0:LIVING	Yes
+DLBCL-RICOVER_417	RICOVER	Male	66.0	1.0	0.0	0.0	0.0	0.0	1.0	No	Yes	89.6591	0:Not Progressed	89.6591	0:LIVING	Yes
+DLBCL-RICOVER_401	RICOVER	Female	62.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	36.501	1:Progressed	83.3183	0:LIVING	Yes
+DLBCL-RICOVER_384	RICOVER	Female	66.0	1.0	1.0	0.0	0.0	0.0	2.0	No	No	93.1417	0:Not Progressed	93.1417	0:LIVING	Yes
+DLBCL-RICOVER_361	RICOVER	Female	69.0	1.0	1.0	0.0	0.0	0.0	2.0	No	No	83.3183	0:Not Progressed	83.3183	0:LIVING	Yes
+DLBCL-RICOVER_338	RICOVER	Male	64.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	94.65299999999999	0:Not Progressed	94.65299999999999	0:LIVING	Yes
+DLBCL-RICOVER_336	RICOVER	Female	71.0	1.0	1.0	1.0	1.0	0.0	4.0	No	No	66.03699999999999	0:Not Progressed	66.03699999999999	0:LIVING	Yes
+DLBCL-RICOVER_325	RICOVER	Male	68.0	1.0	1.0	0.0	0.0	0.0	2.0	No	No	15.6386	1:Progressed	53.3224	1:DECEASED	Yes
+DLBCL-RICOVER_320	RICOVER	Male	71.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	89.462	1:Progressed	89.462	1:DECEASED	Yes
+DLBCL-RICOVER_314	RICOVER	Male	67.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	98.3326	0:Not Progressed	98.3326	0:LIVING	Yes
+DLBCL-RICOVER_299	RICOVER	Female	62.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	91.3676	0:Not Progressed	91.3676	0:LIVING	Yes
+DLBCL-RICOVER_288	RICOVER	Male	62.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	98.4641	0:Not Progressed	98.4641	0:LIVING	Yes
+DLBCL-RICOVER_274	RICOVER	Male	78.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	4.9281	1:Progressed	4.9281	1:DECEASED	Yes
+DLBCL-RICOVER_269	RICOVER	Female	63.0	1.0	0.0	0.0	1.0	1.0	3.0	Yes	No	98.037	0:Not Progressed	98.037	0:LIVING	Yes
+DLBCL-RICOVER_267	RICOVER	Male	70.0	1.0	0.0	0.0	1.0	0.0	2.0	No	No	36.5667	1:Progressed	36.5667	1:DECEASED	Yes
+DLBCL-RICOVER_266	RICOVER	Female	65.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	83.1211	1:Progressed	96.7556	0:LIVING	Yes
+DLBCL-RICOVER_253	RICOVER	Female	69.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	93.1417	1:Progressed	93.1417	1:DECEASED	Yes
+DLBCL-RICOVER_224	RICOVER	Female	75.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	69.0924	1:Progressed	70.8994	1:DECEASED	Yes
+DLBCL-RICOVER_215	RICOVER	Female	63.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	28.3532	1:Progressed	43.0062	1:DECEASED	Yes
+DLBCL-RICOVER_197	RICOVER	Male	70.0	1.0	0.0	1.0	1.0	1.0	4.0	No	No	25.691999999999997	1:Progressed	25.691999999999997	1:DECEASED	Yes
+DLBCL-RICOVER_181	RICOVER	Female	69.0	1.0	1.0	0.0	1.0	1.0	4.0	No	No	6.2752	1:Progressed	6.2752	1:DECEASED	Yes
+DLBCL-RICOVER_174	RICOVER	Female	76.0	1.0	1.0	1.0	1.0	1.0	5.0	No	No	63.4743	1:Progressed	63.4743	1:DECEASED	Yes
+DLBCL-RICOVER_173	RICOVER	Male	66.0	1.0	0.0	0.0	1.0	0.0	2.0	No	Yes	102.2752	0:Not Progressed	102.2752	0:LIVING	Yes
+DLBCL-RICOVER_151	RICOVER	Female	73.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	104.6735	0:Not Progressed	104.6735	0:LIVING	Yes
+DLBCL-RICOVER_148	RICOVER	Female	70.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	13.7988	1:Progressed	32.6899	1:DECEASED	Yes
+DLBCL-RICOVER_134	RICOVER	Male	69.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	107.5975	0:Not Progressed	107.5975	0:LIVING	Yes
+DLBCL-RICOVER_1269	RICOVER	Female	74.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	59.4333	0:Not Progressed	59.4333	0:LIVING	Yes
+DLBCL-RICOVER_1263	RICOVER	Male	62.0	1.0	1.0	1.0	1.0	1.0	5.0	No	No	61.7659	0:Not Progressed	61.7659	0:LIVING	Yes
+DLBCL-RICOVER_126	RICOVER	Female	72.0	1.0	0.0	0.0	1.0	0.0	2.0	No	No	48.0986	1:Progressed	48.0986	1:DECEASED	Yes
+DLBCL-RICOVER_1237	RICOVER	Male	69.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	63.0472	0:Not Progressed	63.0472	0:LIVING	Yes
+DLBCL-RICOVER_1235	RICOVER	Male	66.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	64.4928	0:Not Progressed	64.4928	0:LIVING	Yes
+DLBCL-RICOVER_1219	RICOVER	Female	77.0	1.0	0.0	1.0	1.0	1.0	4.0	Yes	No	8.4107	1:Progressed	8.4107	1:DECEASED	Yes
+DLBCL-RICOVER_1199	RICOVER	Male	71.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	68.3696	0:Not Progressed	68.3696	0:LIVING	Yes
+DLBCL-RICOVER_1190	RICOVER	Female	75.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	64.1971	0:Not Progressed	64.1971	0:LIVING	Yes
+DLBCL-RICOVER_1169	RICOVER	Female	68.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	66.4641	0:Not Progressed	66.4641	0:LIVING	Yes
+DLBCL-RICOVER_1150	RICOVER	Female	67.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	53.0595	1:Progressed	59.038999999999994	1:DECEASED	Yes
+DLBCL-RICOVER_1106	RICOVER	Male	63.0	1.0	0.0	0.0	0.0	0.0	1.0	No	Yes	69.6509	0:Not Progressed	69.6509	0:LIVING	Yes
+DLBCL-RICOVER_1081	RICOVER	Female	67.0	1.0	0.0	0.0	1.0	0.0	2.0	No	No	73.5606	0:Not Progressed	73.5606	0:LIVING	Yes
+DLBCL-RICOVER_107	RICOVER	Female	61.0	1.0	1.0	1.0	1.0	1.0	5.0	No	No	4.8296	1:Progressed	4.8296	1:DECEASED	Yes
+DLBCL-RICOVER_1060	RICOVER	Male	71.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	67.0883	0:Not Progressed	67.0883	0:LIVING	Yes
+DLBCL-RICOVER_1032	RICOVER	Female	72.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	13.075999999999999	1:Progressed	27.2361	1:DECEASED	Yes
+DLBCL-RICOVER_102	RICOVER	Male	73.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	54.5051	1:Progressed	54.5051	1:DECEASED	Yes
+DLBCL-RICOVER_1013	RICOVER	Male	65.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	7.1622	1:Progressed	21.1253	1:DECEASED	Yes
+DLBCL-MAYO_DLBCL_7359	Mayo/Iowa	Female														na
+DLBCL-MAYO_DLBCL_5613	Mayo/Iowa	Female														na
+DLBCL-MAYO_DLBCL_3653	Mayo/Iowa	Male														na
+DLBCL-MAYO_DLBCL_234	Mayo/Iowa	Male														na
+DLBCL-LS951	Mayo/Iowa	Male	63.0	1.0	0.0	1.0	1.0	0.0	3.0	No	No	0.7	1:Progressed	1.0	1:DECEASED	Yes
+DLBCL-LS88	Mayo/Iowa	Male	61.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No			7.3	1:DECEASED	Yes
+DLBCL-LS843	Mayo/Iowa	Male	59.0	0.0	1.0	1.0	1.0	0.0	3.0	No	No	6.5	1:Progressed	13.7	1:DECEASED	Yes
+DLBCL-LS762	Mayo/Iowa	Female	88.0	1.0	1.0	1.0	1.0	0.0	4.0	No	No	1.2	1:Progressed	3.4	1:DECEASED	No
+DLBCL-LS4619	Mayo/Iowa	Male	88.0	1.0	1.0	0.0	1.0	1.0	4.0	No	No	6.0	1:Progressed	6.4	1:DECEASED	Yes
+DLBCL-LS4618	Mayo/Iowa	Male	60.0	0.0	0.0	0.0	0.0	0.0	0.0	No	No	58.3	0:Not Progressed	46.9	0:LIVING	Yes
+DLBCL-LS4616	Mayo/Iowa	Female	81.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	58.8	0:Not Progressed	47.0	0:LIVING	No
+DLBCL-LS4593	Mayo/Iowa	Female	67.0	1.0	0.0	0.0	1.0	1.0	3.0	No	No	59.0	0:Not Progressed	47.6	0:LIVING	Yes
+DLBCL-LS4592	Mayo/Iowa	Male	78.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	8.9	1:Progressed	47.6	0:LIVING	Yes
+DLBCL-LS4394	Mayo/Iowa	Male	69.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	71.1	0:Not Progressed	46.8	0:LIVING	Yes
+DLBCL-LS4323	Mayo/Iowa	Female	42.0	0.0	0.0	0.0	1.0	0.0	1.0	No	No	71.8	0:Not Progressed	35.4	0:LIVING	Yes
+DLBCL-LS4222	Mayo/Iowa	Male	65.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	70.6	0:Not Progressed	47.1	0:LIVING	Yes
+DLBCL-LS4085	Mayo/Iowa	Female	81.0	1.0	0.0	0.0	1.0	1.0	3.0	No	No	19.1	1:Progressed	19.5	1:DECEASED	Yes
+DLBCL-LS4054	Mayo/Iowa	Female	67.0	1.0	1.0	0.0	1.0	1.0	4.0	No	No	70.7	0:Not Progressed	59.7	0:LIVING	Yes
+DLBCL-LS3866	Mayo/Iowa	Female	55.0	0.0	1.0	0.0	0.0	0.0	1.0	No	No	76.6	0:Not Progressed	59.1	0:LIVING	Yes
+DLBCL-LS3820	Mayo/Iowa	Male	58.0	0.0	1.0	0.0	1.0	0.0	2.0	No	No	82.7	0:Not Progressed	61.2	0:LIVING	No
+DLBCL-LS3809	Mayo/Iowa	Female	84.0	1.0	0.0	0.0	1.0	0.0	2.0	No	No	71.3	0:Not Progressed	58.9	0:LIVING	No
+DLBCL-LS3808	Mayo/Iowa	Female	51.0	0.0	0.0	0.0	1.0	0.0	1.0	No	No	70.6	0:Not Progressed	59.2	0:LIVING	Yes
+DLBCL-LS378	Mayo/Iowa	Female	55.0	0.0	1.0	1.0	1.0	0.0	3.0	No	No	59.6	0:Not Progressed	59.9	0:LIVING	Yes
+DLBCL-LS3749	Mayo/Iowa	Male	41.0	0.0	0.0	0.0	0.0	0.0	0.0	No	No	83.0	0:Not Progressed	59.1	0:LIVING	Yes
+DLBCL-LS3615	Mayo/Iowa	Male	26.0	0.0	1.0	1.0	1.0	0.0	3.0	No	No	56.6	0:Not Progressed	56.7	0:LIVING	Yes
+DLBCL-LS3499	Mayo/Iowa	Male														na
+DLBCL-LS3387	Mayo/Iowa	Male	64.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	49.4	0:Not Progressed	49.5	0:LIVING	Yes
+DLBCL-LS3309	Mayo/Iowa	Male	74.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	59.2	0:Not Progressed	59.7	0:LIVING	Yes
+DLBCL-LS3271	Mayo/Iowa	Male	78.0	1.0	1.0	0.0	1.0	1.0	4.0	No	No	94.5	0:Not Progressed	61.3	0:LIVING	Yes
+DLBCL-LS3245	Mayo/Iowa	Male	74.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	37.5	1:Progressed	70.9	0:LIVING	Yes
+DLBCL-LS3219	Mayo/Iowa	Female														na
+DLBCL-LS3204	Mayo/Iowa	Male	75.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	72.6	0:Not Progressed	73.0	0:LIVING	Yes
+DLBCL-LS3200	Mayo/Iowa	Male	57.0	0.0	1.0	0.0	0.0	0.0	1.0	No	No	20.5	1:Progressed	58.9	0:LIVING	Yes
+DLBCL-LS3085	Mayo/Iowa	Male	55.0	0.0	1.0	0.0	1.0	1.0	3.0	No	No	84.5	0:Not Progressed	63.1	0:LIVING	Yes
+DLBCL-LS2978	Mayo/Iowa	Female	63.0	1.0	1.0	0.0	1.0	1.0	4.0	No	No	9.9	1:Progressed	10.2	1:DECEASED	Yes
+DLBCL-LS297	Mayo/Iowa	Female	67.0	1.0	1.0	0.0	1.0	1.0	4.0	No	No			10.2	1:DECEASED	Yes
+DLBCL-LS2848	Mayo/Iowa	Male	56.0	0.0	1.0	0.0	1.0	0.0	2.0	No	No	94.9	0:Not Progressed	70.8	0:LIVING	Yes
+DLBCL-LS2599	Mayo/Iowa	Female	63.0	1.0	0.0	0.0	1.0	0.0	2.0	No	No	4.9	1:Progressed	12.7	1:DECEASED	Yes
+DLBCL-LS2596	Mayo/Iowa	Female	57.0	0.0	1.0	1.0	1.0	1.0	4.0	No	No	26.4	1:Progressed	59.8	1:DECEASED	Yes
+DLBCL-LS2595	Mayo/Iowa	Male	69.0	1.0	1.0	0.0	0.0	0.0	2.0	No	No	106.8	0:Not Progressed	82.8	0:LIVING	Yes
+DLBCL-LS2590	Mayo/Iowa	Female	53.0	0.0	0.0	0.0	0.0	0.0	0.0	No	No	60.2	1:Progressed	60.7	1:DECEASED	Yes
+DLBCL-LS2367	Mayo/Iowa	Male														na
+DLBCL-LS2357	Mayo/Iowa	Male	51.0	0.0	1.0	0.0	1.0	1.0	3.0	No	No	92.3	0:Not Progressed	52.0	0:LIVING	Yes
+DLBCL-LS2328	Mayo/Iowa	Female	82.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	54.4	1:Progressed	55.8	1:DECEASED	Yes
+DLBCL-LS2325	Mayo/Iowa	Male	58.0	0.0	0.0	0.0	0.0	0.0	0.0	No	No	106.4	0:Not Progressed	83.0	0:LIVING	Yes
+DLBCL-LS2305	Mayo/Iowa	Female	75.0	1.0	1.0	1.0	1.0	0.0	4.0	No	No	109.6	0:Not Progressed	83.1	0:LIVING	Yes
+DLBCL-LS2264	Mayo/Iowa	Male	51.0	0.0	1.0	0.0	1.0	0.0	2.0	Yes	No	106.3	0:Not Progressed	83.2	0:LIVING	Yes
+DLBCL-LS2258	Mayo/Iowa	Male	59.0	0.0	1.0	0.0	1.0	0.0	2.0	No	No	54.7	1:Progressed	84.0	0:LIVING	Yes
+DLBCL-LS2245	Mayo/Iowa	Female	77.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	82.0	1:Progressed	72.3	0:LIVING	Yes
+DLBCL-LS2208	Mayo/Iowa	Male	55.0	0.0	1.0	0.0	1.0	1.0	3.0	No	Yes	7.0	1:Progressed	13.7	1:DECEASED	Yes
+DLBCL-LS2154	Mayo/Iowa	Male	28.0	0.0	1.0	0.0	1.0	1.0	3.0	No	No	99.0	0:Not Progressed	86.9	0:LIVING	Yes
+DLBCL-LS2089	Mayo/Iowa	Male	68.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	7.6	1:Progressed	20.9	1:DECEASED	Yes
+DLBCL-LS1921	Mayo/Iowa	Female	72.0	1.0	1.0	0.0	0.0	0.0	2.0	No	No	5.4	1:Progressed	95.1	0:LIVING	Yes
+DLBCL-LS1899	Mayo/Iowa	Male	55.0	0.0	0.0	0.0	0.0	0.0	0.0	No	No	106.7	0:Not Progressed	95.7	0:LIVING	Yes
+DLBCL-LS1757	Mayo/Iowa	Male	82.0	1.0	0.0	0.0	1.0	0.0	2.0	No	No	121.5	0:Not Progressed	94.8	0:LIVING	Yes
+DLBCL-LS1683	Mayo/Iowa	Male	51.0	0.0	0.0	1.0	1.0	0.0	2.0	No	No	91.9	0:Not Progressed	93.0	0:LIVING	Yes
+DLBCL-LS1668	Mayo/Iowa	Female	62.0	1.0	1.0	0.0	0.0	0.0	2.0	No	No	109.5	0:Not Progressed	95.0	0:LIVING	Yes
+DLBCL-LS1620	Mayo/Iowa	Female	65.0	1.0	1.0	1.0	0.0	0.0	3.0	No	No	7.4	1:Progressed	20.9	1:DECEASED	Yes
+DLBCL-LS1583	Mayo/Iowa	Male	76.0	1.0	0.0	0.0	1.0	0.0	2.0	No	No	14.9	1:Progressed	26.8	1:DECEASED	Yes
+DLBCL-LS155	Mayo/Iowa	Female	65.0	1.0	1.0	0.0	1.0	1.0	4.0	No	No	66.1	1:Progressed	67.4	1:DECEASED	Yes
+DLBCL-LS1546	Mayo/Iowa	Male	71.0	1.0	0.0	0.0	1.0	0.0	2.0	No	No	119.5	0:Not Progressed	95.3	0:LIVING	Yes
+DLBCL-LS148	Mayo/Iowa	Female	82.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	5.3	1:Progressed	6.2	1:DECEASED	Yes
+DLBCL-LS146	Mayo/Iowa	Male	66.0	1.0	1.0	0.0	0.0	0.0	2.0	No	No	29.8	1:Progressed	45.2	1:DECEASED	Yes
+DLBCL-LS1395	Mayo/Iowa	Male	59.0	0.0	0.0	0.0	1.0	0.0	1.0	No	No	27.6	1:Progressed	120.4	0:LIVING	Yes
+DLBCL-LS1304	Mayo/Iowa	Male	72.0	1.0	0.0	0.0	1.0	0.0	2.0	No	No	16.4	1:Progressed	33.9	1:DECEASED	Yes
+DLBCL-LS1098	Mayo/Iowa	Male	70.0	1.0	0.0	0.0	0.0	0.0	1.0	No	No	129.9	0:Not Progressed	107.0	0:LIVING	Yes
+DLBCL-LS1065	Mayo/Iowa	Male	68.0	1.0	1.0	0.0	1.0	1.0	4.0	No	No			12.7	1:DECEASED	Yes
+DLBCL-DFCI_DLBCL_Goe17	Goettingen	Male	30.0	0.0	1.0	0.0	1.0	1.0	3.0	No	No	31.0	1:Progressed	109.93333329999999	1:DECEASED	Yes
+DLBCL-DFCI_DLBCL_Goe16	Goettingen	Female	38.0	0.0	1.0	0.0	0.0	1.0	2.0	No	No	5.6333333329999995	1:Progressed	9.866666667	1:DECEASED	Yes
+DLBCL-DFCI_DLBCL_Goe08	Goettingen	Female	59.0	0.0	1.0	1.0	1.0	0.0	3.0	No	No					No
+DLBCL-DFCI_DLBCL_Goe05	Goettingen	Female	63.0	1.0	1.0	0.0	1.0	0.0	3.0	No	No	127.46666670000002	0:Not Progressed	127.46666670000002	0:LIVING	Yes
