@@ -1,0 +1,192 @@
+# CNGB Controlled Data Application Form - COMPLETED
+
+============================================================
+SECTION I: CONTACT INFORMATION
+============================================================
+
+Title: [SELECT ONE: Dr. / Prof. / Mr. / Ms.]
+
+Name of Principal Investigator (PI):
+>>> Eric Perkey
+
+Institutional E-mail Address:
+>>> [YOUR INSTITUTIONAL EMAIL]
+
+Institutional Telephone Number/Cellphone:
+>>> [YOUR PHONE NUMBER]
+
+Complete Address:
+>>> [YOUR INSTITUTIONAL ADDRESS]
+
+Primary Affiliation:
+>>> [YOUR INSTITUTION NAME - e.g., University of X, Department of Y]
+
+Any foreign parties involved:
+>>> NO
+(Note: Select YES only if non-Chinese collaborators will access raw data)
+
+Name of Authorized Institutional Representative:
+>>> [YOUR DEPARTMENT HEAD OR INSTITUTIONAL OFFICIAL]
+
+Institutional Representative E-mail:
+>>> [THEIR EMAIL]
+
+============================================================
+SECTION II: PROJECT INFORMATION
+============================================================
+
+A. PROJECT TITLE
+------------------------------------------------------------
+>>> Integrated Genomic and Transcriptomic Analysis of Follicular
+    Lymphoma for Identification of Prognostic Biomarkers and
+    Therapeutic Targets
+
+B. DATA REQUIREMENT
+------------------------------------------------------------
+CNSA Project IDs:
+>>> CNP0002472 (Whole Exome Sequencing data)
+>>> CNP0002473 (RNA-seq Transcriptome data)
+
+Statement of needs:
+>>> We require access to the whole exome sequencing (WES) data from
+    149 follicular lymphoma patients and matched RNA-seq transcriptome
+    data from 63 patients to conduct integrated multi-omics analysis.
+    This dataset uniquely provides paired genomic and transcriptomic
+    data across FL histologic grades (FL1-2, FL3A, FL3B), enabling
+    investigation of genotype-phenotype relationships in FL progression.
+
+C. LAY SUMMARY OF THE PROJECT (Research Purpose, Plan, Cycle)
+------------------------------------------------------------
+>>> Follicular lymphoma (FL) is the most common indolent B-cell
+    non-Hodgkin lymphoma, affecting approximately 15,000 new patients
+    annually in the United States alone. Despite advances in treatment,
+    clinical outcomes remain highly variable, with some patients
+    experiencing early progression or transformation to aggressive
+    disease. Current prognostic tools (FLIPI, m7-FLIPI) have limited
+    precision in predicting individual patient outcomes.
+
+    RESEARCH PURPOSE:
+    This project aims to identify molecular biomarkers that predict
+    clinical outcomes in FL by integrating whole exome sequencing
+    with transcriptomic profiling. Specifically, we will:
+
+    1. Characterize the mutational landscape across FL histologic
+       grades to identify grade-specific driver mutations
+    2. Correlate somatic mutations with gene expression programs
+       to understand functional consequences of genomic alterations
+    3. Develop integrated genomic-transcriptomic signatures that
+       predict disease progression and transformation risk
+    4. Validate findings against publicly available FL cohorts
+       (GSE119214, GSE16131) with clinical outcome data
+
+    RESEARCH PLAN:
+    Phase 1 (Months 1-3): Data preprocessing, quality control, and
+    harmonization of WES and RNA-seq data
+    Phase 2 (Months 4-6): Mutation calling, variant annotation, and
+    differential expression analysis by histologic grade
+    Phase 3 (Months 7-9): Integration of genomic and transcriptomic
+    data using multi-omics analytical frameworks
+    Phase 4 (Months 10-12): Biomarker development, validation, and
+    manuscript preparation
+
+    RESEARCH CYCLE: 12 months
+
+D. LAY DATA UTILIZATION PLAN
+------------------------------------------------------------
+How CNGBdb Controlled Data will be used:
+>>> The WES data will be processed through established somatic mutation
+    calling pipelines (Mutect2, Strelka2) to identify single nucleotide
+    variants and indels. Mutation frequencies will be compared across
+    FL grades. The RNA-seq data will undergo differential expression
+    analysis (DESeq2) and pathway enrichment (GSEA) to identify
+    transcriptional programs associated with each grade. Integration
+    will be performed using Multi-Omics Factor Analysis (MOFA) and
+    correlation networks to link mutations with expression changes.
+
+Cloud computing plan:
+>>> Data will be stored and analyzed on institutional high-performance
+    computing clusters with appropriate security controls. No external
+    cloud services will be used for raw data storage. If cloud computing
+    becomes necessary, we will use approved institutional cloud
+    resources with encryption and access controls.
+
+Data management after project completion:
+>>> Upon project completion, all raw sequencing data will be securely
+    deleted from our systems. Only derived summary statistics,
+    aggregated results, and publication-ready figures will be retained.
+    A data destruction certificate will be provided to CNGBdb upon request.
+
+Submit output data to CNGBdb:
+>>> [X] YES
+    (We agree to deposit any novel processed datasets or signatures
+    derived from this analysis back to CNGBdb for community benefit)
+
+E. BACKGROUND OF PRINCIPAL INVESTIGATOR/INSTITUTION
+------------------------------------------------------------
+>>> [YOUR INSTITUTION] is a [research university/medical center] with
+    extensive experience in cancer genomics research. The institution
+    maintains secure computing infrastructure compliant with data
+    protection requirements, including encrypted storage, access logging,
+    and regular security audits.
+
+    The Principal Investigator has [X years] of experience in
+    computational biology and cancer genomics, with specific expertise
+    in lymphoma research. Recent publications include [list 1-2 relevant
+    publications if applicable]. The PI's laboratory maintains active
+    collaborations with clinical hematology-oncology teams, ensuring
+    translational relevance of research findings.
+
+    The institution has established protocols for handling controlled
+    genomic data, including mandatory training for all personnel
+    accessing sensitive datasets.
+
+F. EXTERNAL COLLABORATORS AND FUNDERS
+------------------------------------------------------------
+List of personnel who will access the data:
+>>> 1. [PI NAME] - Principal Investigator
+>>> 2. [Add any lab members, postdocs, students who need access]
+
+Are collaborators or funders foreign entities?
+>>> NO
+
+Funding source (if applicable):
+>>> [List funding source, or "Institutional funds" if no external funding]
+
+G. ETHICS
+------------------------------------------------------------
+Does your country/region require ethics review?
+>>> [X] DOES NOT
+    (This is secondary analysis of existing de-identified data;
+    most institutions do not require IRB approval for such analyses)
+
+    OR if your institution requires it:
+
+>>> [ ] DOES - Research Project approved by IRB/REC
+    (Attach approval letter if selected)
+
+============================================================
+SECTION III: SIGNATURES
+============================================================
+
+Sign (Principal Investigator): ____________________________
+
+Date (dd-mm-yyyy): ___/___/______
+
+
+Sign (Authorized Institutional Representative): ____________________________
+
+Date (dd-mm-yyyy): ___/___/______
+
+============================================================
+SUBMISSION INSTRUCTIONS
+============================================================
+
+1. Copy this content into the official Word document form
+2. Fill in all [BRACKETED] placeholders with your information
+3. Print, sign, and scan OR use digital signatures
+4. Email to: datasubs@cngb.org
+5. CC: CNGBdb@cngb.org
+
+Subject line: "Controlled Data Application - CNP0002472 & CNP0002473"
+
+============================================================
