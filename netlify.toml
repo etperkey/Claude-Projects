@@ -3,7 +3,6 @@
   publish = "build"
   command = "npm run build"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[build.environment]
+  GIT_LFS_ENABLED = "false"
+  GIT_LFS_SKIP_SMUDGE = "1"
