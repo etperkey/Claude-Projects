@@ -42,10 +42,10 @@ function Publications() {
     {
       id: 5,
       title: 'Fibroblastic niches prime T cell alloimmunity through Delta-like Notch ligands',
-      authors: 'Chung J*, Ebens C*, Perkey E*, et al.',
+      authors: 'Chung J*, Ebens C*, Perkey E, et al.',
       journal: 'Journal of Clinical Investigation',
       year: 2017,
-      badge: 'Co-First Author',
+      badge: 'Key Contribution',
       pmid: '28319044'
     },
     {
@@ -104,7 +104,7 @@ function Publications() {
         </div>
 
         <p className="publications-intro">
-          First-author and co-first-author publications highlighting my research contributions.
+          Publications highlighting my research contributions.
           * denotes equal contribution.
         </p>
 
