@@ -1,0 +1,95 @@
+================================================================================
+CELL LINE ACCESSIONS COMPLETE REFERENCE
+B-CELL LYMPHOMA CELL LINE DATABASE
+================================================================================
+
+GENERATED: 2026-02-03
+SOURCE: Cellosaurus (https://www.cellosaurus.org)
+VERIFIED: 54 cell lines systematically queried
+
+================================================================================
+DELIVERABLES
+================================================================================
+
+1. cell_line_accessions_complete.csv - Machine-readable table
+2. cell_line_accessions_complete.txt - Human-readable summary
+3. README_ACCESSIONS.md - Quick start guide
+4. ACCESSIONS_SUMMARY.md - Executive summary
+5. ACCESSIONS_INTEGRATION_GUIDE.md - Integration instructions
+6. scripts/load_cell_line_accessions.py - Python utilities
+7. ACCESSIONS_INDEX.txt - This file
+
+================================================================================
+QUICK SUMMARY
+================================================================================
+
+Total lines: 54
+Found in Cellosaurus: 52 (96%)
+Have DSMZ: 37 (69%)
+Have ATCC: 21 (39%)
+Have BOTH: 13 (24%)
+Japanese only: 5 (9%)
+Not found: 2 (4%)
+
+================================================================================
+TOP 13 LINES WITH BOTH DSMZ AND ATCC
+================================================================================
+
+1. REC-1           DSMZ: ACC-584       ATCC: CRL-3004
+2. NU-DUL-1        DSMZ: ACC-579       ATCC: CRL-2969
+3. CA46            DSMZ: ACC-73        ATCC: CRL-1648
+4. SU-DHL-5        DSMZ: ACC-571       ATCC: CRL-2958
+5. RL              DSMZ: ACC-613       ATCC: CRL-2261
+6. JeKo-1          DSMZ: ACC-553       ATCC: CRL-3006
+7. WSU-NHL         DSMZ: ACC-58        ATCC: CRL-11584
+8. DG-75           DSMZ: ACC-83        ATCC: CRL-2625
+9. JiyoyeP-2003    DSMZ: ACC-590       ATCC: CCL-87
+10. BC-1           DSMZ: ACC-677       ATCC: CRL-2230
+11. BC-2           DSMZ: ACC-678       ATCC: CRL-2231
+12. BC-3           DSMZ: ACC-679       ATCC: CRL-3615
+13. MAVER-1        DSMZ: ACC-717       ATCC: CRL-3008
+
+================================================================================
+KEY FINDINGS
+================================================================================
+
+Strengths:
+- 96% in Cellosaurus (52/54)
+- 69% have DSMZ accessions
+- 39% have ATCC accessions
+- 24% have BOTH (highest reproducibility)
+
+Challenges:
+- 2 lines not in any database
+- 5 lines Japanese-only collections
+- 2 lines with discontinued catalog numbers
+
+Recommendations:
+1. Prioritize both DSMZ and ATCC lines
+2. DSMZ more comprehensive for lymphoma
+3. Japanese collections require special request
+4. Contact authors for missing lines
+
+================================================================================
+EXTERNAL REFERENCES
+================================================================================
+
+Cellosaurus: https://www.cellosaurus.org/
+DSMZ: https://www.dsmz.de/
+ATCC: https://www.atcc.org/
+JCRB: https://www.jcrb.riken.jp/
+DepMap: https://depmap.org/
+
+================================================================================
+FILES IN PROJECT
+================================================================================
+
+C:\Users\ericp\onedrive\desktop\claude-projects\claude-project-18\
+- cell_line_accessions_complete.csv
+- cell_line_accessions_complete.txt
+- README_ACCESSIONS.md
+- ACCESSIONS_SUMMARY.md
+- ACCESSIONS_INTEGRATION_GUIDE.md
+- ACCESSIONS_INDEX.txt
+- scripts/load_cell_line_accessions.py
+

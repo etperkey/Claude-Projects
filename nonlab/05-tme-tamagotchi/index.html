@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TME Tamagotchi</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0c0c14;
+      background-image:
+        radial-gradient(ellipse at 50% 30%, rgba(80,40,120,0.15) 0%, transparent 70%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Press Start 2P', 'Courier New', monospace;
+      overflow-x: hidden;
+    }
+
+    /* Tamagotchi egg shell — retro arcade colors */
+    #device {
+      position: relative;
+      width: 560px;
+      height: 920px;
+      background: linear-gradient(160deg, #e8d5f5, #c9a0dc, #a070b8, #8855a8);
+      border-radius: 50% 50% 46% 46% / 55% 55% 38% 38%;
+      box-shadow:
+        0 0 50px rgba(80,40,160,0.15),
+        0 10px 40px rgba(0,0,0,0.5),
+        inset 0 3px 6px rgba(255,255,255,0.3),
+        inset 0 -6px 12px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 36px 20px 28px;
+    }
+
+    /* Brand label on egg */
+    #brand {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      color: #4a1a6b;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+      letter-spacing: 5px;
+      margin-bottom: 8px;
+      user-select: none;
+    }
+
+    /* Speaker grille — dots */
+    #speaker {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+    #speaker .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #7a4a9a;
+      box-shadow: inset 0 1px 1px rgba(0,0,0,0.3);
+    }
+
+    /* Screen bezel — CRT style inside egg */
+    #bezel {
+      width: 420px;
+      height: 520px;
+      background: #0a0a14;
+      border-radius: 20px;
+      border: 3px solid #2a2a3e;
+      padding: 10px 12px;
+      box-shadow:
+        inset 0 0 30px rgba(0,0,0,0.8),
+        0 0 1px rgba(140,200,80,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      /* CRT scanline overlay */
+      position: relative;
+    }
+    #bezel::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 12px;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Stat gauges row */
+    #gauges {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px 8px;
+      padding: 4px 0;
+    }
+
+    .gauge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .gauge-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 6px;
+      color: #8bc34a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    .gauge-bar {
+      width: 100%;
+      height: 6px;
+      background: #0a0a14;
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid #1a2a1a;
+    }
+    .gauge-fill {
+      height: 100%;
+      background: #8bc34a;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+      box-shadow: 0 0 4px currentColor;
+    }
+    .gauge-value {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: #5a7a2a;
+    }
+
+    /* Canvas screen */
+    #screen-wrap {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #040a04;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid #0a1a0a;
+      box-shadow: inset 0 0 20px rgba(0,10,0,0.8);
+    }
+
+    #game-canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Notification bar */
+    #notification {
+      min-height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: #8bc34a;
+      text-shadow: 0 0 4px rgba(140,200,80,0.4);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      padding: 2px 4px;
+    }
+
+    /* Buttons — arcade style */
+    #buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      width: 92px;
+      height: 52px;
+      border: none;
+      border-radius: 26px;
+      background: linear-gradient(145deg, #9a6abf, #7a4a9f);
+      color: #e8d5f5;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      cursor: pointer;
+      box-shadow:
+        0 4px 0 #5a2a7a,
+        0 6px 12px rgba(0,0,0,0.3),
+        inset 0 1px 2px rgba(255,255,255,0.2);
+      text-transform: uppercase;
+      letter-spacing: 0px;
+      user-select: none;
+      transition: transform 0.05s, box-shadow 0.05s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      border: 1px solid #aa7acc;
+    }
+    .btn .label {
+      font-size: 7px;
+      line-height: 1.3;
+    }
+    .btn .cost {
+      font-size: 5px;
+      opacity: 0.6;
+      color: #d4bce8;
+      min-height: 8px;
+    }
+    .btn:hover {
+      background: linear-gradient(145deg, #aa7acc, #8a5aaf);
+      border-color: #bb8add;
+    }
+    .btn:active {
+      transform: translateY(3px);
+      box-shadow:
+        0 1px 0 #5a2a7a,
+        0 2px 6px rgba(0,0,0,0.3),
+        inset 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .btn:disabled:hover {
+      background: linear-gradient(145deg, #9a6abf, #7a4a9f);
+      border-color: #aa7acc;
+    }
+
+    /* Info row below buttons */
+    #info-row {
+      display: flex;
+      gap: 20px;
+      margin-top: 16px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: #4a1a6b;
+      user-select: none;
+    }
+
+    /* Unused overlay classes (screens are on canvas now) */
+    .screen-overlay { display: none; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      #device {
+        width: 96vw;
+        height: auto;
+        min-height: 92vh;
+        padding: 24px 12px 24px;
+        border-radius: 44% 44% 42% 42% / 48% 48% 34% 34%;
+      }
+      #bezel { width: 92%; height: auto; min-height: 380px; }
+      .btn { width: 74px; height: 44px; }
+      .btn .label { font-size: 6px; }
+      #buttons { gap: 8px; }
+    }
+    @media (max-height: 940px) {
+      #device { height: 96vh; padding-top: 24px; }
+      #bezel { height: auto; flex: 1; min-height: 0; }
+      .btn { height: 44px; }
+      #info-row { margin-top: 10px; }
+      #brand { margin-bottom: 4px; }
+      #speaker { margin-bottom: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="device">
+    <div id="brand">TME-GOTCHI</div>
+    <div id="speaker">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+
+    <div id="bezel">
+      <div id="gauges"></div>
+      <div id="screen-wrap">
+        <canvas id="game-canvas" width="480" height="432"></canvas>
+      </div>
+      <div id="notification">&nbsp;</div>
+    </div>
+
+    <div id="buttons">
+      <button class="btn" id="btn-feed">
+        <span class="label">Feed</span><span class="cost">20 NRG</span>
+      </button>
+      <button class="btn" id="btn-mutate">
+        <span class="label">Mutate</span><span class="cost">30 NRG</span>
+      </button>
+      <button class="btn" id="btn-recruit">
+        <span class="label">Recruit</span><span class="cost">10 CYT</span>
+      </button>
+      <button class="btn" id="btn-rest">
+        <span class="label">Rest</span><span class="cost">free</span>
+      </button>
+    </div>
+
+    <div id="info-row">
+      <span id="tick-display">Tick: 0</span>
+      <span id="phase-display">Phase: Early</span>
+      <span id="alert-display">Alert: 0</span>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

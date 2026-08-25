@@ -1,0 +1,89 @@
+// All tuning numbers in one place
+
+export const CANVAS = {
+  WIDTH: 480,
+  HEIGHT: 432,
+  SPRITE_SCALE: 3, // pixel-art sprites drawn at 3x
+};
+
+export const TICK = {
+  INTERVAL_MS: 3000,
+};
+
+export const TUMOR = {
+  INITIAL_CELLS: 100,
+  WIN_THRESHOLD: 10000,
+  MAX_ATP: 100,
+  INITIAL_ATP: 50,
+  ATP_REGEN_PER_TICK: 8,
+  BASE_GROWTH_RATE: 0.08, // fraction of cells per tick (exponential)
+  ANGIOGENESIS_GROWTH_BONUS: 0.002, // per angiogenesis point — compounds on top of base
+  REST_ATP_GAIN: 30,
+  REST_APOPTOSIS_GAIN: 3,
+  APOPTOSIS_DEATH_TICK: 30,
+  APOPTOSIS_MIN_RESISTANCE: 20,
+};
+
+export const STATS = {
+  MAX_IMMUNOSUPPRESSION: 100,
+  MAX_ANGIOGENESIS: 100,
+  MAX_APOPTOSIS_RESISTANCE: 100,
+  MAX_INFILTRATION: 100,
+  IMMUNOSUPPRESSION_DECAY: 3,
+  ANGIOGENESIS_DECAY: 1,
+  INITIAL_APOPTOSIS_RESISTANCE: 10,
+  INITIAL_ANGIOGENESIS: 20,
+  INITIAL_IMMUNOSUPPRESSION: 10,
+};
+
+export const ACTIONS = {
+  FEED_COST: 20,
+  MUTATE_COST: 30,
+  MUTATE_COOLDOWN: 3,
+  MUTATE_FAIL_CHANCE: 0.20,
+  MUTATE_FAIL_CELL_LOSS: 0.10, // lose 10% of cells on fail
+  RECRUIT_CYTOKINE_COST: 10,
+};
+
+export const IMMUNE = {
+  BASE_ALERT_PER_TICK: 1,
+  ALERT_PER_500_CELLS: 0.5,
+  MAX_ALERT: 100,
+  // Thresholds for recruiting immune cells
+  CD8_THRESHOLD: 10,
+  NK_THRESHOLD: 25,
+  M1_THRESHOLD: 40,
+  DC_THRESHOLD: 60,
+  // Recruitment rates (cells per tick once threshold met)
+  CD8_RECRUIT_RATE: 1,
+  NK_RECRUIT_RATE: 0.5,
+  M1_RECRUIT_RATE: 0.5,
+  DC_RECRUIT_RATE: 0.3,
+  // T cell exhaustion
+  EXHAUSTION_PER_TICK_SUPPRESSED: 2, // when immunosuppression > 60
+  EXHAUSTION_DECAY: 0.5,
+  EXHAUSTION_WIN_THRESHOLD: 100,
+};
+
+export const PHASES = {
+  EARLY_END: 30,
+  MID_END: 80,
+  // Late: 80+
+  THERAPY_START: 80,
+  THERAPY_WARN_TICKS: 5,
+};
+
+export const CYTOKINES = {
+  MAX_STOCKPILE: 50,
+  INITIAL_STOCKPILE: 5,
+};
+
+export const GRAVEYARD = {
+  MAX_ENTRIES: 50,
+};
+
+export const RECRUIT_ALLIES = {
+  M2_SUPPRESSION_PER_TICK: 2,
+  TREG_SUPPRESSION_PER_TICK: 3,
+  MDSC_INFILTRATION_REDUCTION: 1,
+};

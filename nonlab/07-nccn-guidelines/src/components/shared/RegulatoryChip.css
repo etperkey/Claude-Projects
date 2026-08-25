@@ -1,0 +1,80 @@
+.regulatory-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.regulatory-chip.reg-approved {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #6ee7b7;
+}
+.regulatory-chip.reg-accelerated {
+  background: #fef9c3;
+  color: #713f12;
+  border-color: #fde047;
+}
+.regulatory-chip.reg-breakthrough {
+  background: #ede9fe;
+  color: #3b0764;
+  border-color: #c4b5fd;
+}
+.regulatory-chip.reg-crl {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border-color: #fca5a5;
+}
+.regulatory-chip.reg-withdrawn {
+  background: #f3f4f6;
+  color: #6b7280;
+  border-color: #d1d5db;
+  text-decoration: line-through;
+}
+.regulatory-chip.reg-trial {
+  background: #e0e7ff;
+  color: #3730a3;
+  border-color: #a5b4fc;
+}
+
+/* Full (expanded) variant shown in NodeDetailPanel */
+.regulatory-chip-full {
+  display: block;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-top: 8px;
+  white-space: normal;
+}
+
+.regulatory-chip-full .regulatory-notes {
+  margin-top: 4px;
+  font-weight: 400;
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.regulatory-chip-full .regulatory-source {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.regulatory-chip-full .regulatory-source a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.regulatory-chip-full .regulatory-source a:hover {
+  opacity: 0.75;
+}

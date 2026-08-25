@@ -1,0 +1,1298 @@
+/* App container */
+.app-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #1a1a2e;
+}
+
+.app-container.fullscreen {
+  background: #000;
+}
+
+/* Top bar */
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+.title {
+  color: #e0d0f0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.title-short {
+  display: none;
+}
+
+@media (max-width: 420px) {
+  .title-full {
+    display: none;
+  }
+  .title-short {
+    display: inline;
+  }
+}
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Control panel */
+.control-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 16px;
+}
+
+.control-group {
+  display: flex;
+  gap: 4px;
+}
+
+.mode-btn, .ctrl-btn, .speed-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ccc;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+
+.mode-btn:hover, .ctrl-btn:hover, .speed-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.mode-btn.active, .speed-btn.active {
+  background: rgba(120, 80, 200, 0.5);
+  border-color: rgba(160, 120, 230, 0.6);
+  color: #fff;
+}
+
+.speed-group {
+  align-items: center;
+}
+
+.speed-label {
+  color: #999;
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+.stage-indicator {
+  color: #aaa;
+  font-size: 13px;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+.progress-bar {
+  width: 80px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c4dff, #b388ff);
+  transition: width 0.1s linear;
+}
+
+/* Bottom bar — wraps controls + narration together */
+.bottom-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 740px;
+  width: 90%;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+  overflow: hidden;
+}
+
+/* Stage narration */
+.stage-narration {
+  padding: 8px 20px 12px;
+  text-align: center;
+}
+
+.narration-title {
+  color: #e0d0f0;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.narration-text {
+  color: #bbb;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Parameter panel */
+.parameter-panel {
+  position: absolute;
+  right: 12px;
+  top: 52px;
+  width: 240px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #e0d0f0;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.reset-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #aaa;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.reset-btn:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.param-row {
+  margin-bottom: 8px;
+}
+
+.param-row label {
+  display: block;
+  color: #999;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.param-row input[type="range"] {
+  width: calc(100% - 45px);
+  vertical-align: middle;
+  accent-color: #7c4dff;
+}
+
+.param-value {
+  display: inline-block;
+  width: 40px;
+  text-align: right;
+  color: #ccc;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.stats-section {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat {
+  color: #aaa;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+/* Legend */
+.legend {
+  position: absolute;
+  left: 12px;
+  top: 52px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+
+.legend-title {
+  color: #e0d0f0;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.legend-swatch {
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.legend-swatch.circle-small {
+  width: 8px;
+  height: 8px;
+}
+
+.legend-swatch.circle-med {
+  width: 11px;
+  height: 11px;
+}
+
+.legend-swatch.circle-large {
+  width: 14px;
+  height: 14px;
+}
+
+.legend-swatch.star {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.legend-label {
+  color: #bbb;
+  font-size: 12px;
+}
+
+.legend-toggle {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #aaa;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.legend-toggle:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.legend-toggle.active {
+  background: rgba(120, 80, 200, 0.4);
+  border-color: rgba(160, 120, 230, 0.5);
+  color: #e0d0f0;
+}
+
+/* Cell info tooltip */
+.cell-tooltip {
+  position: fixed;
+  width: 260px;
+  padding: 12px;
+  background: rgba(20, 10, 40, 0.92);
+  backdrop-filter: blur(12px);
+  border-radius: 10px;
+  border: 1px solid rgba(160, 120, 230, 0.3);
+  z-index: 20;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.tooltip-close {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.tooltip-type {
+  color: #e0d0f0;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.tooltip-desc {
+  color: #aaa;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.tooltip-stats {
+  color: #ccc;
+  font-size: 12px;
+}
+
+.tooltip-stats div {
+  margin-bottom: 2px;
+}
+
+/* Pathway overlay */
+.pathway-overlay-controls {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #aaa;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.toggle-label input[type="checkbox"] {
+  accent-color: #7c4dff;
+}
+
+/* Presentation mode button */
+.presentation-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #aaa;
+  font-size: 16px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.presentation-btn:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Show UI button (when UI is hidden) */
+.show-ui-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #888;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.show-ui-btn:hover {
+  color: #ccc;
+}
+
+/* Tracked cell panel */
+.tracked-panel {
+  position: absolute;
+  left: 12px;
+  bottom: 100px;
+  width: 220px;
+  max-height: 320px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 214, 0, 0.3);
+  z-index: 15;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.tracked-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tracked-title {
+  color: #ffd600;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tracked-close {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.tracked-stats {
+  padding: 6px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #ccc;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.tracked-stats strong {
+  color: #fff;
+}
+
+.tracked-events {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 12px;
+}
+
+.events-label {
+  color: #888;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.tracked-event {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 3px 0;
+  font-size: 11px;
+  color: #bbb;
+}
+
+.ev-icon {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.ev-shm { color: #ff9800; }
+.ev-csr { color: #00e5ff; }
+.ev-selected { color: #4caf50; }
+.ev-apoptosis { color: #f44336; }
+.ev-recycle { color: #7c4dff; }
+.ev-differentiate { color: #ffc107; }
+.ev-empty { color: #666; font-style: italic; }
+
+.tracked-hint {
+  padding: 4px 12px 6px;
+  color: #666;
+  font-size: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Track selector overlay */
+.track-selector-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 5, 25, 0.92);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+}
+
+.track-selector-content {
+  text-align: center;
+  max-width: 640px;
+  padding: 40px;
+}
+
+.track-selector-title {
+  color: #e0d0f0;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  letter-spacing: 0.5px;
+}
+
+.track-selector-subtitle {
+  color: #888;
+  font-size: 16px;
+  margin: 0 0 36px;
+}
+
+.track-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.track-card {
+  flex: 1;
+  max-width: 280px;
+  padding: 28px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  color: inherit;
+  font-family: inherit;
+}
+
+.track-card:hover {
+  background: rgba(120, 80, 200, 0.15);
+  border-color: rgba(160, 120, 230, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(120, 80, 200, 0.2);
+}
+
+.track-card-icon {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.track-card-title {
+  color: #e0d0f0;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.track-card-subtitle {
+  color: #b388ff;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.track-card-desc {
+  color: #999;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.play-both-btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 32px;
+  background: rgba(120, 80, 200, 0.3);
+  border: 1px solid rgba(160, 120, 230, 0.4);
+  border-radius: 10px;
+  color: #e0d0f0;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.play-both-btn:hover {
+  background: rgba(120, 80, 200, 0.5);
+  border-color: rgba(160, 120, 230, 0.6);
+  transform: translateY(-1px);
+}
+
+.play-both-hint {
+  font-size: 11px;
+  font-weight: 400;
+  color: #888;
+}
+
+/* Sandbox controls — bottom-center, compact bar */
+.sandbox-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+
+/* Track selector action row */
+.track-selector-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: stretch;
+  margin-bottom: 28px;
+}
+
+.sandbox-btn {
+  background: rgba(80, 160, 120, 0.3);
+  border-color: rgba(120, 200, 160, 0.4);
+}
+
+.sandbox-btn:hover {
+  background: rgba(80, 160, 120, 0.5);
+  border-color: rgba(120, 200, 160, 0.6);
+}
+
+/* Tooltip track button */
+.tooltip-track-btn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 5px 0;
+  background: rgba(120, 80, 200, 0.4);
+  border: 1px solid rgba(160, 120, 230, 0.4);
+  color: #e0d0f0;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.tooltip-track-btn:hover {
+  background: rgba(120, 80, 200, 0.6);
+  border-color: rgba(160, 120, 230, 0.6);
+}
+
+/* Easter egg */
+.easter-egg-section {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.easter-egg-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+  padding: 8px;
+  color: #e0d0f0;
+  font-family: inherit;
+}
+
+.easter-egg-btn:hover {
+  opacity: 0.8;
+}
+
+.easter-egg-content {
+  margin-top: 12px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  max-width: 800px;
+  width: 100%;
+}
+
+.easter-egg-player {
+  flex: 0 0 320px;
+  position: sticky;
+  top: 12px;
+}
+
+.easter-egg-lyrics {
+  flex: 1;
+  max-height: 350px;
+  overflow-y: auto;
+  text-align: left;
+  color: #c0b0d8;
+  font-size: 13px;
+  line-height: 1.6;
+  padding-right: 12px;
+}
+
+.easter-egg-lyrics h3 {
+  color: #e0d0f0;
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.easter-egg-lyrics .lyrics-subtitle {
+  color: #888;
+  font-style: italic;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.easter-egg-lyrics .lyrics-heading {
+  color: #b388ff;
+  font-weight: 600;
+  font-size: 12px;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.easter-egg-lyrics .lyrics-chorus {
+  font-style: italic;
+  color: #d4b0ff;
+}
+
+.easter-egg-lyrics::-webkit-scrollbar {
+  width: 4px;
+}
+
+.easter-egg-lyrics::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+
+.easter-egg-lyrics::-webkit-scrollbar-thumb {
+  background: rgba(160, 120, 230, 0.3);
+  border-radius: 2px;
+}
+
+@media (max-width: 700px) {
+  .easter-egg-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  .easter-egg-player {
+    flex: none;
+    width: 100%;
+    max-width: 320px;
+    position: static;
+  }
+}
+
+/* Track indicator pill in top bar */
+.title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.track-pill {
+  background: rgba(120, 80, 200, 0.3);
+  border: 1px solid rgba(160, 120, 230, 0.3);
+  color: #b388ff;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+/* Track indicator in control panel */
+.track-indicator {
+  color: #b388ff;
+  font-weight: 600;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  /* Top bar — single compact row */
+  .top-bar {
+    padding: 4px 8px;
+    gap: 4px;
+  }
+
+  .title {
+    font-size: 13px;
+  }
+
+  .title-group {
+    gap: 6px;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .track-pill {
+    font-size: 9px;
+    padding: 1px 6px;
+    display: none;
+  }
+
+  .top-right {
+    gap: 3px;
+    flex-shrink: 0;
+  }
+
+  .legend-toggle {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .toggle-label {
+    font-size: 10px;
+  }
+
+  .toggle-label span {
+    font-size: 10px;
+  }
+
+  /* Pathway overlay — abbreviate */
+  .pathway-overlay-controls .toggle-label span {
+    display: none;
+  }
+  .pathway-overlay-controls .toggle-label::after {
+    content: 'Chem';
+  }
+
+  /* Bottom bar — compact, height-capped so it doesn't push off screen */
+  .bottom-bar {
+    width: 96%;
+    max-width: none;
+    bottom: 4px;
+    border-radius: 10px;
+    max-height: 50vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Control panel — compact single row */
+  .control-panel {
+    padding: 4px 6px;
+    gap: 4px;
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
+
+  .mode-btn, .ctrl-btn, .speed-btn {
+    padding: 4px 7px;
+    font-size: 11px;
+  }
+
+  .speed-label {
+    font-size: 9px;
+    margin-right: 2px;
+  }
+
+  .stage-indicator {
+    font-size: 10px;
+    padding: 0 3px;
+  }
+
+  .track-indicator {
+    display: none;
+  }
+
+  .progress-bar {
+    width: 50px;
+  }
+
+  /* Hide fractional speeds */
+  .speed-group .speed-btn[data-speed="0.25"],
+  .speed-group .speed-btn[data-speed="0.5"] {
+    display: none;
+  }
+
+  /* Stage narration — compact, scrollable within capped bottom bar */
+  .stage-narration {
+    padding: 4px 10px 6px;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Fade gradient only when content overflows */
+  .stage-narration.narration-overflow {
+    mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+    padding-bottom: 0;
+  }
+
+  .stage-narration.narration-overflow .narration-text {
+    padding-bottom: 14px;
+  }
+
+  .stage-narration::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .stage-narration::-webkit-scrollbar-thumb {
+    background: rgba(160, 120, 230, 0.3);
+    border-radius: 2px;
+  }
+
+  .narration-title {
+    font-size: 12px;
+    margin-bottom: 1px;
+  }
+
+  .narration-text {
+    font-size: 10px;
+    line-height: 1.3;
+  }
+
+  /* Control panel should not shrink */
+  .control-panel {
+    flex-shrink: 0;
+  }
+
+  /* Legend — compact, positioned above bottom bar */
+  .legend {
+    top: auto;
+    bottom: 150px;
+    left: auto;
+    right: 4px;
+    padding: 4px 8px;
+    max-width: 130px;
+    border-radius: 8px;
+  }
+
+  .legend-title {
+    font-size: 9px;
+    margin-bottom: 2px;
+  }
+
+  .legend-item {
+    gap: 4px;
+    margin-bottom: 0;
+  }
+
+  .legend-label {
+    font-size: 8px;
+    line-height: 1.2;
+  }
+
+  .legend-swatch.circle-small { width: 5px; height: 5px; }
+  .legend-swatch.circle-med { width: 7px; height: 7px; }
+  .legend-swatch.circle-large { width: 9px; height: 9px; }
+  .legend-swatch.star { width: 7px; height: 7px; }
+
+  /* Parameter panel — compact overlay */
+  .parameter-panel {
+    top: 36px;
+    right: 4px;
+    width: 180px;
+    padding: 6px;
+  }
+
+  .panel-header {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .param-row label {
+    font-size: 9px;
+  }
+
+  .param-value {
+    font-size: 9px;
+    width: 30px;
+  }
+
+  .param-row {
+    margin-bottom: 4px;
+  }
+
+  .stat {
+    font-size: 9px;
+  }
+
+  /* Tracked cell panel — top-right to avoid all bottom overlap */
+  .tracked-panel {
+    left: 4px;
+    bottom: auto;
+    top: 36px;
+    width: 160px;
+    max-height: 180px;
+  }
+
+  .tracked-header {
+    padding: 4px 6px;
+  }
+
+  .tracked-title {
+    font-size: 10px;
+  }
+
+  .tracked-stats {
+    padding: 3px 6px;
+    font-size: 9px;
+    line-height: 1.3;
+  }
+
+  .tracked-events {
+    padding: 3px 6px;
+  }
+
+  .events-label {
+    font-size: 8px;
+  }
+
+  .tracked-event {
+    font-size: 9px;
+    gap: 3px;
+    padding: 1px 0;
+  }
+
+  .tracked-hint {
+    padding: 2px 6px 4px;
+    font-size: 8px;
+  }
+
+  /* Cell tooltip — smaller on mobile */
+  .cell-tooltip {
+    width: 190px;
+    padding: 8px;
+  }
+
+  .tooltip-type {
+    font-size: 12px;
+  }
+
+  .tooltip-desc {
+    font-size: 10px;
+  }
+
+  .tooltip-stats {
+    font-size: 10px;
+  }
+
+  /* Track selector — stack cards vertically */
+  .track-selector-content {
+    padding: 20px 16px;
+    max-width: 100%;
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+
+  .track-selector-title {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+
+  .track-selector-subtitle {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .track-cards {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+    align-items: center;
+  }
+
+  .track-card {
+    max-width: 300px;
+    width: 100%;
+    padding: 16px 14px;
+  }
+
+  .track-card-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+
+  .track-card-title {
+    font-size: 16px;
+  }
+
+  .track-card-subtitle {
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+
+  .track-card-desc {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .play-both-btn {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+
+  .play-both-hint {
+    font-size: 10px;
+  }
+
+  /* Easter egg — smaller */
+  .easter-egg-btn {
+    font-size: 16px;
+    padding: 6px;
+  }
+
+  .easter-egg-player {
+    flex: 0 0 auto;
+    max-width: 280px;
+  }
+
+  .easter-egg-lyrics {
+    font-size: 11px;
+    max-height: 250px;
+  }
+
+  .easter-egg-lyrics h3 {
+    font-size: 14px;
+  }
+
+  /* Sandbox controls — compact */
+  .sandbox-controls {
+    bottom: 4px;
+    padding: 4px 8px;
+    gap: 6px;
+  }
+
+  /* Track selector actions — stack vertically */
+  .track-selector-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Tooltip track button */
+  .tooltip-track-btn {
+    font-size: 10px;
+    padding: 4px 0;
+  }
+
+  /* Show UI button */
+  .show-ui-btn {
+    bottom: 6px;
+    right: 6px;
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+}
+
+/* Extra small screens (< 420px) */
+@media (max-width: 420px) {
+  /* Abbreviate title to prevent wrapping */
+  .title {
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  /* Even more compact top bar */
+  .top-bar {
+    padding: 3px 6px;
+  }
+
+  .legend-toggle {
+    font-size: 9px;
+    padding: 2px 4px;
+  }
+
+  .mode-btn {
+    padding: 3px 5px;
+    font-size: 10px;
+  }
+
+  .ctrl-btn, .speed-btn {
+    padding: 3px 5px;
+    font-size: 10px;
+  }
+
+  .stage-indicator {
+    font-size: 9px;
+  }
+
+  .speed-label {
+    display: none;
+  }
+
+  .narration-text {
+    font-size: 9px;
+  }
+
+  .narration-title {
+    font-size: 11px;
+  }
+
+  /* Tracked panel — minimal */
+  .tracked-panel {
+    width: 135px;
+    max-height: 140px;
+  }
+
+  .tracked-header {
+    padding: 3px 5px;
+  }
+
+  .tracked-title {
+    font-size: 9px;
+  }
+
+  .tracked-stats {
+    font-size: 8px;
+    padding: 2px 5px;
+  }
+
+  .tracked-events {
+    padding: 2px 5px;
+  }
+
+  .tracked-event {
+    font-size: 8px;
+  }
+
+  .tracked-hint {
+    display: none;
+  }
+
+  /* Legend — smaller and higher above bottom bar */
+  .legend {
+    padding: 3px 6px;
+    max-width: 110px;
+    bottom: 140px;
+  }
+
+  .legend-title {
+    font-size: 8px;
+  }
+
+  .legend-label {
+    font-size: 7px;
+  }
+
+  .legend-swatch.circle-small { width: 4px; height: 4px; }
+  .legend-swatch.circle-med { width: 6px; height: 6px; }
+  .legend-swatch.circle-large { width: 7px; height: 7px; }
+  .legend-swatch.star { width: 6px; height: 6px; }
+
+  /* Track selector */
+  .track-selector-title {
+    font-size: 18px;
+  }
+
+  .track-selector-subtitle {
+    font-size: 12px;
+    margin-bottom: 14px;
+  }
+
+  .track-card {
+    padding: 12px 10px;
+  }
+
+  .track-card-title {
+    font-size: 14px;
+  }
+
+  .track-card-desc {
+    font-size: 10px;
+  }
+}

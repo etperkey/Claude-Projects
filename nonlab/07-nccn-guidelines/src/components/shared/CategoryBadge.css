@@ -1,0 +1,30 @@
+.category-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.category-badge.cat-1 {
+  background: #dcfce7;
+  color: var(--color-cat1);
+}
+
+.category-badge.cat-2a {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.category-badge.cat-2b {
+  background: #fefce8;
+  color: #a16207;
+}
+
+.category-badge.cat-3 {
+  background: #fef2f2;
+  color: var(--color-cat3);
+}

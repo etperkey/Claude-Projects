@@ -1,0 +1,113 @@
+.guideline-list-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+}
+
+.guideline-list-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.guideline-list-header h1 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-xs);
+}
+
+.guideline-list-header p {
+  color: var(--color-text-secondary);
+}
+
+.disclaimer-banner {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  font-size: var(--font-size-sm);
+  color: #92400e;
+  line-height: 1.5;
+}
+
+.disclaimer-banner a {
+  color: #d97706;
+  font-weight: 500;
+}
+
+.guideline-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.guideline-card {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s, border-color 0.2s;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.guideline-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+  text-decoration: none;
+}
+
+.guideline-card-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.guideline-card-body h2 {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-xs);
+}
+
+.guideline-card-subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.guideline-card-meta {
+  display: flex;
+  gap: var(--spacing-md);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.guideline-card-version {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.guideline-card-pages {
+  padding: 2px 0;
+}
+
+.guideline-card-nccn {
+  display: inline-block;
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.guideline-card-nccn:hover {
+  color: var(--color-primary-hover);
+}
+
+@media (max-width: 500px) {
+  .guideline-cards {
+    grid-template-columns: 1fr;
+  }
+}

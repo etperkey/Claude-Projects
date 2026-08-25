@@ -1,0 +1,37 @@
+.sort-controls .sort-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+
+.sort-controls .sort-row:last-child {
+  margin-bottom: 0;
+}
+
+.sort-controls label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  min-width: 45px;
+}
+
+.sort-controls select {
+  flex: 1;
+  padding: 4px 6px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  color: var(--text-primary);
+  font-size: 0.65rem;
+}
+
+.sort-controls select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+.sort-controls .direction-btn {
+  flex: 1;
+  text-align: center;
+  font-size: 0.65rem;
+}

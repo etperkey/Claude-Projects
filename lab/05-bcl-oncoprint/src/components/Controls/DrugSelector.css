@@ -1,0 +1,131 @@
+.drug-selector {
+  position: relative;
+  margin: 4px 0 8px 0;
+}
+
+.drug-selector-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  background: var(--bg-secondary);
+  transition: border-color 0.15s ease;
+}
+
+.drug-selector-trigger:hover {
+  border-color: var(--accent-primary);
+}
+
+.selected-drug-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drug-placeholder {
+  color: var(--text-muted);
+}
+
+.drug-arrow {
+  font-size: 0.5rem;
+  color: var(--text-muted);
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.drug-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 2px;
+}
+
+.drug-search {
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.7rem;
+  outline: none;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  box-sizing: border-box;
+}
+
+.drug-search::placeholder {
+  color: var(--text-muted);
+}
+
+.drug-list {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.drug-group-header {
+  padding: 4px 8px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  position: sticky;
+  top: 0;
+}
+
+.drug-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.65rem;
+  transition: background 0.1s ease;
+}
+
+.drug-item:hover {
+  background: var(--bg-hover);
+}
+
+.drug-item.active {
+  background: var(--accent-bg);
+}
+
+.drug-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.drug-target {
+  color: var(--text-muted);
+  font-size: 0.6rem;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+.drug-no-results {
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.drug-count {
+  padding: 3px 8px;
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-color);
+  text-align: right;
+}

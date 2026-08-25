@@ -1,0 +1,26 @@
+.oncoprint-grid-wrapper {
+  overflow: auto;
+  min-height: 300px;
+}
+
+.oncoprint-svg {
+  display: block;
+}
+
+.oncoprint-svg .oncoprint-cell rect {
+  transition: opacity 0.1s;
+}
+
+.oncoprint-svg .oncoprint-cell:hover rect:first-child {
+  stroke: var(--accent-blue);
+  stroke-width: 2px;
+}
+
+.oncoprint-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--text-secondary);
+  font-style: italic;
+}

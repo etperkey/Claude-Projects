@@ -1,0 +1,16 @@
+# Large DepMap source CSVs (downloaded by build scripts)
+scripts/*.csv
+
+# Dependencies
+node_modules/
+
+# Build output
+build/
+
+# Environment
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db

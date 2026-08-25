@@ -1,0 +1,123 @@
+CELL LINE ACCESSIONS FOR B-CELL LYMPHOMA DATASET
+================================================
+
+Legend:
+CVCL = Cellosaurus ID
+DSMZ = Deutsche Sammlung von Mikroorganismen und Zellkulturen (German Collection)
+ATCC = American Type Culture Collection
+N/A = Not available in database
+UNVERIFIED = Could not confirm matching cell line name
+
+REMAINING LINES (30+ lines needing accessions):
+=============================================
+
+| Cell Line | Type | CVCL ID | DSMZ ACC | ATCC | Notes |
+|-----------|------|---------|----------|------|-------|
+| REC-1 | MCL | CVCL_1884 | ACC-584 | CRL-3004 | VERIFIED - Both DSMZ and ATCC available |
+| GRANTA-519 | MCL | CVCL_1818 | ACC-342 | N/A | VERIFIED - DSMZ only |
+| OCI-LY3 | DLBCL_ABC | CVCL_8800 | ACC-761 | N/A | VERIFIED - DSMZ only |
+| Toledo | DLBCL_GCB | CVCL_3611 | N/A | CRL-2631 | VERIFIED - ATCC only |
+| NU-DUL-1 | DLBCL_ABC | CVCL_1877 | ACC-579 | CRL-2969 | VERIFIED - Both DSMZ and ATCC available |
+| BL-41 | Burkitt | CVCL_1087 | ACC-160 | N/A | VERIFIED - DSMZ only |
+| RI-1 | DLBCL_ABC | CVCL_1885 | ACC-585 | N/A | VERIFIED - DSMZ only |
+| MEC-1 | CLL | CVCL_1870 | ACC-497 | N/A | VERIFIED - DSMZ only |
+| CA46 | Burkitt | CVCL_1101 | ACC-73 | CRL-1648 | VERIFIED - Both DSMZ and ATCC available |
+| ST486 | Burkitt | CVCL_1712 | N/A | CRL-1647 | VERIFIED - ATCC only |
+| SU-DHL-5 | DLBCL_GCB | CVCL_1735 | ACC-571 | CRL-2958 | VERIFIED - Both DSMZ and ATCC available |
+| RL | DLBCL_GCB | CVCL_1660 | ACC-613 | CRL-2261 | VERIFIED - Both DSMZ and ATCC available |
+| HT | DLBCL_GCB | CVCL_5T93 | N/A | N/A | UNVERIFIED - No DSMZ or ATCC numbers found |
+| BCP-1 | PEL | CVCL_0107 | N/A | CRL-2294 | VERIFIED - ATCC only |
+| BJAB | Burkitt | CVCL_5711 | ACC-757 | N/A | VERIFIED - DSMZ only |
+| BL-2 | Burkitt | CVCL_1966 | ACC-625 | N/A | VERIFIED - DSMZ only |
+| CI | CLL | CVCL_Y548 | ACC-770 | N/A | VERIFIED - DSMZ only |
+| DOGKIT | Burkitt | CVCL_2023 | ACC-629 | N/A | VERIFIED - DSMZ only |
+| DOGUM | Burkitt | CVCL_2024 | ACC-644 | N/A | VERIFIED - DSMZ only |
+| GUMBUS | Burkitt | CVCL_2051 | ACC-630 | N/A | VERIFIED - DSMZ only |
+| P3HR-1 | Burkitt | CVCL_2676 | N/A | HTB-62 | VERIFIED - ATCC only |
+| MEC2 | CLL | CVCL_1871 | ACC-500 | N/A | VERIFIED - DSMZ only |
+| OCILY-132 | Other | N/A | N/A | N/A | NOT IN CELLOSAURUS - Search returned 0 hits |
+| JeKo-1 | MCL | CVCL_1865 | ACC-553 | CRL-3006 | VERIFIED - Both DSMZ and ATCC available |
+| U-2904 | DLBCL_ABC | CVCL_X504 | ACC-768 | N/A | VERIFIED - DSMZ only |
+| U-2940 | DLBCL_GCB | CVCL_1897 | ACC-634 | N/A | VERIFIED - DSMZ only |
+| WSU-NHL | DLBCL_GCB | CVCL_1793 | ACC-58 | CRL-11584 | VERIFIED - Both DSMZ and ATCC available |
+| WSU-FSCCL | FL | CVCL_1903 | ACC-612 | N/A | VERIFIED - DSMZ only |
+| KARPAS 1718 | MZL | CVCL_2539 | N/A | N/A | UNVERIFIED - ECACC (08072401) only |
+| KARPAS-231 | DLBCL_GCB | CVCL_1822 | ACC-562 (discontinued) | N/A | VERIFIED - DSMZ only (discontinued) |
+| PGA-1 | CLL | CVCL_Y545 | ACC-766 | N/A | VERIFIED - DSMZ only |
+| ROS-50 | Other | CVCL_1887 | ACC-557 | N/A | VERIFIED - DSMZ only |
+| ULA | Other | CVCL_1854 | ACC-627 | N/A | VERIFIED - DSMZ only |
+| U-2946 | Other | CVCL_X503 | ACC-795 | N/A | VERIFIED - DSMZ only |
+| WILL-1 | Other | CVCL_1900 | ACC-651 | N/A | VERIFIED - DSMZ only |
+| CTB-1 | Other | CVCL_1149 | N/A | N/A | UNVERIFIED - RCB only (RCB1316) |
+| EJ-1 | Other | CVCL_2893 | N/A | N/A | UNVERIFIED - JCRB/RCB only |
+| CCLF_HEME_0001_T | Other | N/A | N/A | N/A | NOT IN CELLOSAURUS - Search returned 0 hits |
+| WA-OSEL | CLL | CVCL_Y549 | ACC-767 | N/A | VERIFIED - DSMZ only |
+| DG-75 | Burkitt | CVCL_0244 | ACC-83 | CRL-2625 | VERIFIED - Both DSMZ and ATCC available |
+| EB-3 | Burkitt | CVCL_1185 | N/A | CCL-85 | VERIFIED - ATCC only |
+| JiyoyeP-2003 | Burkitt | CVCL_1317 | ACC-590 | CCL-87 | VERIFIED - Both DSMZ and ATCC available |
+| MN-60 | Burkitt | CVCL_1421 | ACC-138 | N/A | VERIFIED - DSMZ only |
+| P32-ISH | Burkitt | CVCL_3119 | N/A | N/A | UNVERIFIED - JCRB only (JCRB0095) |
+| Ramos-2G6-4C10 | Burkitt | CVCL_1646 | N/A | CRL-1923 | VERIFIED - ATCC only |
+| TL-1 | Burkitt | CVCL_B371 | N/A | N/A | UNVERIFIED - RCB/TKG only |
+| BC-1 | PEL | CVCL_1079 | ACC-677 | CRL-2230 | VERIFIED - Both DSMZ and ATCC available |
+| BC-2 | PEL | CVCL_1856 | ACC-678 | CRL-2231 | VERIFIED - Both DSMZ and ATCC available |
+| BC-3 | PEL | CVCL_1080 | ACC-679 | CRL-3615 | VERIFIED - Both DSMZ and ATCC available |
+| CRO-AP2 | PEL | CVCL_1147 | ACC-48 | N/A | VERIFIED - DSMZ only |
+| JSC-1 | PEL | CVCL_3728 | N/A | CRL-2769 (discontinued) | VERIFIED - ATCC only (discontinued) |
+| SLVL | MZL | CVCL_3169 | N/A | N/A | UNVERIFIED - JCRB/RCB only |
+| MAVER-1 | MCL | CVCL_1831 | ACC-717 | CRL-3008 | VERIFIED - Both DSMZ and ATCC available |
+| JMP-1 | MCL | CVCL_UJ14 | N/A | CRL-3378 | VERIFIED - ATCC only |
+
+
+SUMMARY STATISTICS:
+===================
+
+Total lines searched: 54
+- Successfully verified in Cellosaurus: 52
+- Not found in Cellosaurus: 2 (OCILY-132, CCLF_HEME_0001_T)
+- Only in JCRB/RCB/TKG/Japanese collections: 3 (CTB-1, EJ-1, TL-1, P32-ISH, SLVL)
+
+Lines with BOTH DSMZ and ATCC:
+REC-1, NU-DUL-1, CA46, SU-DHL-5, RL, JeKo-1, WSU-NHL, DG-75, JiyoyeP-2003, 
+BC-1, BC-2, BC-3, MAVER-1
+(13 total)
+
+Lines with DSMZ only (no ATCC):
+GRANTA-519, OCI-LY3, BL-41, RI-1, MEC-1, BJAB, BL-2, CI, DOGKIT, DOGUM, GUMBUS,
+MEC2, U-2904, U-2940, WSU-FSCCL, KARPAS-231, PGA-1, ROS-50, ULA, U-2946, WILL-1,
+WA-OSEL, MN-60, CRO-AP2
+(24 total)
+
+Lines with ATCC only (no DSMZ):
+Toledo, ST486, BCP-1, P3HR-1, EB-3, Ramos-2G6-4C10, JSC-1, JMP-1
+(8 total)
+
+Lines with no DSMZ or ATCC (but in Cellosaurus with other collections):
+HT, KARPAS 1718, CTB-1, EJ-1, P32-ISH, SLVL, TL-1
+(7 total)
+
+Lines NOT in Cellosaurus:
+OCILY-132, CCLF_HEME_0001_T
+(2 total)
+
+
+RECOMMENDED NEXT STEPS:
+======================
+
+1. For OCILY-132 and CCLF_HEME_0001_T:
+   - Search Google Scholar for original publications
+   - Contact Cancer Cell Collections or original authors
+   - May require alternate naming conventions
+
+2. For Japanese-only lines (CTB-1, EJ-1, TL-1, P32-ISH, SLVL):
+   - Available through JCRB (Japanese Collection of Research Bioresources)
+   - May have DSMZ/ATCC equivalents - check literature
+
+3. For lines with DSMZ only:
+   - Consider requesting through DSMZ for most reproducibility
+   - Check if ATCC has them under different names
+
+4. For KarpasMetaCarpus 1718 (KARPAS 1718):
+   - Currently only ECACC (08072401)
+   - Verify if this is European equivalent to DSMZ/ATCC
+

@@ -1,0 +1,271 @@
+.changelog-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px 40px;
+  color: #1a1a2e;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.cl-header h1 {
+  font-size: 26px;
+  margin: 0 0 6px;
+}
+
+.cl-subtitle {
+  color: #64748b;
+  font-size: 14px;
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+.cl-section {
+  margin-top: 28px;
+}
+
+.cl-section h2 {
+  font-size: 18px;
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Summary cards */
+.cl-summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.cl-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.cl-card-num {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.cl-card-label {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* Filters */
+.cl-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.cl-filter {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.cl-filter:hover {
+  background: #f1f5f9;
+}
+
+.cl-filter.active {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+/* Timeline */
+.cl-year {
+  margin-bottom: 24px;
+}
+
+.cl-year-heading {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0 0 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.cl-events {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cl-event {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cl-event:last-child {
+  border-bottom: none;
+}
+
+.cl-event-date {
+  font-size: 12px;
+  color: #64748b;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  padding-top: 2px;
+}
+
+.cl-event-body {
+  min-width: 0;
+}
+
+.cl-event-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+.cl-event-disease {
+  font-weight: 600;
+  color: #1e293b;
+  text-decoration: none;
+}
+
+.cl-event-disease:hover {
+  text-decoration: underline;
+  color: #2563eb;
+}
+
+.cl-event-node {
+  font-size: 14px;
+  color: #0f172a;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.cl-event-notes {
+  font-size: 12px;
+  color: #475569;
+  line-height: 1.45;
+  margin-top: 3px;
+}
+
+.cl-event-source {
+  font-size: 11px;
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: underline;
+  margin-top: 4px;
+  display: inline-block;
+}
+
+/* Status chips - match RegulatoryChip palette */
+.cl-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.cl-chip-approved {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #6ee7b7;
+}
+
+.cl-chip-accelerated {
+  background: #fef9c3;
+  color: #713f12;
+  border-color: #fde047;
+}
+
+.cl-chip-breakthrough {
+  background: #ede9fe;
+  color: #5b21b6;
+  border-color: #c4b5fd;
+}
+
+.cl-chip-crl {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border-color: #fca5a5;
+}
+
+.cl-chip-withdrawn {
+  background: #f3f4f6;
+  color: #4b5563;
+  border-color: #d1d5db;
+  text-decoration: line-through;
+}
+
+.cl-chip-trial {
+  background: #e0e7ff;
+  color: #3730a3;
+  border-color: #a5b4fc;
+}
+
+.cl-chip-beyond {
+  background: #7c3aed;
+  color: #ffffff;
+  border-color: #7c3aed;
+}
+
+.cl-chip-withdrawn-node {
+  background: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+}
+
+/* Versions table */
+.cl-versions {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.cl-versions th,
+.cl-versions td {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cl-versions th {
+  font-weight: 600;
+  color: #475569;
+  background: #f8fafc;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cl-versions code {
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.cl-versions a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.cl-versions a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "tme-tamagotchi",
+  "version": "1.0.0",
+  "description": "Play as a tumor cell surviving the immune system - Tamagotchi style",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
